@@ -4,15 +4,14 @@
 
     <parent>
 		<groupId>org.jeets</groupId>
-		<artifactId>jeets-persistence</artifactId>
-		<version>0.1</version>
+		<artifactId>jeets-models</artifactId>
+		<version>${jeets-repo-release}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-	<artifactId>jeets-pu-traccar-hibernate</artifactId>
+	<artifactId>jeets-pu-traccar-jpa</artifactId>
+	<!-- matches Traccar release version -->
+	<version>3.14</version>
 	<packaging>jar</packaging>
-
-	<name>jeets-pu-traccar-hibernate</name>
-	<url>http://jeets.de</url>
 
 </project>

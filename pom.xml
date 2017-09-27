@@ -20,7 +20,7 @@
     <groupId>org.jeets</groupId>
     <artifactId>jeets-sources</artifactId>
     <!-- first complete successful run with GIT -->
-    <version>2017.09.24</version>
+    <version>${jeets-repo-release}</version>
     <packaging>pom</packaging>
     <name>The JEE Tracking System - JeeTS</name>
     <description>
@@ -41,20 +41,22 @@
     </prerequisites>
 
     <properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jeets-repo-release>2017.09.27</jeets-repo-release>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
 
         <!-- Adjust with Camel parent with listed versions -->
-        <hibernate-version>5.2.4.Final</hibernate-version>
-    	<slf4j-version>1.7.22</slf4j-version>
-   	    <commons-logging-version>1.2</commons-logging-version>
+        <slf4j-version>1.7.22</slf4j-version>
+   	   <commons-logging-version>1.2</commons-logging-version>
         <junit-version>4.12</junit-version>
 
         <!-- move down to persistence ? -->
+        <hibernate-version>5.2.4.Final</hibernate-version>
         <h2database-version>1.3.176</h2database-version>
         <postgresql-version>9.4-1200-jdbc41</postgresql-version>
-    	<netty-version>4.1.15.Final</netty-version>
+    	   <netty-version>4.1.15.Final</netty-version>
     </properties>
 
 <!-- add Camel and Wildfly dependency management !? -->
@@ -90,16 +92,16 @@
             </activation>
             <modules>
                <!-- All the modules that require nothing but each other -->
-				<module>jeets-persistence</module>
-    	        <module>jeets-protocols</module>
-        	    <module>jeets-tracker</module>
+            	<module>jeets-models</module>
+
+            	<module>jeets-tracker</module>
             	<module>jeets-player</module>
-				<module>jeets-dcs</module>
-				<module>jeets-etl</module>
-				<!-- this etl is designed to work with traccar
-					  Instructions to move the decoder into traccar ...
-				<module>jeets-etl-traccar</module>		 -->
-				<module>jeets-dcs2amq</module>
+			<module>jeets-dcs</module>
+			<module>jeets-etl</module>
+			<!-- this etl is designed to work with traccar
+				  Instructions to move the decoder into traccar ...
+			<module>jeets-etl-traccar</module>		 -->
+			<module>jeets-dcs2amq</module>
             </modules>
         </profile>
         <profile>
@@ -113,8 +115,7 @@
                 </property>
             </activation>
             <modules>
-                <!-- ONLY FOR DEBUGGING. Uncomment default above to create this project. To be removed! -->
-				<module>jeets-etl-traccar</module>
+			<module>jeets-asdf</module>
             </modules>
         </profile>
     </profiles>

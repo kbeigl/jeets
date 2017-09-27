@@ -21,30 +21,26 @@
     <parent>
 	    <groupId>org.jeets</groupId>
 	    <artifactId>jeets-sources</artifactId>
-	    <version>2017.09.24</version>
+		<version>${jeets-repo-release}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>jeets-persistence</artifactId>
+    <artifactId>jeets-models</artifactId>
     <packaging>pom</packaging>
 
-    <name>Persistence Units for Traccar Database Model</name>
-    <description>Aggregator for various Persistence Units for Traccar Database</description>
-
-    <properties>
-        <!-- Skip artifact deployment
-        <maven.deploy.skip>true</maven.deploy.skip>
-         -->
-    </properties>
+    <name>System Dataformats</name>
+    <description>Dataformats for different Tracking Software Components</description>
 
     <modules>
        <module>jeets-pu-traccar-hibernate</module>
 	   <module>jeets-pu-traccar-jpa</module>
-<!--   to be introduced with Wildfly implementations and projects ...
+	   <module>jeets-protocols</module>
+	   <!-- to be introduced with Wildfly ...
 	   <module>jeets-pu-traccar-ejb</module>	 -->
     </modules>
 
     <dependencies>
+    <!-- verify (unnecessary) dependencies for protocols -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
