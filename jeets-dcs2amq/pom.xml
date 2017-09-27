@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  * Copyright 2017 The Java EE Tracking System
+  * Copyright 2017 Kristof Beiglböck kbeigl@jeets.org
+  *
+  * The JeeTS Project licenses this file to you under the Apache License,
+  * version 2.0 (the "License"); you may not use this file except in compliance
+  * with the License. You may obtain a copy of the License at:
+  *
+  *   http://www.apache.org/licenses/LICENSE-2.0
+  *
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  * License for the specific language governing permissions and limitations
+  * under the License.
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.jeets</groupId>
+  <artifactId>jeets-dcs2amq</artifactId>
+  <version>0.2</version>
+  <packaging>jar</packaging>
+
+  <url>http://jeets.org</url>
+  <description>JeeTS Device Communication Server to ActiveMQ</description>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <camel.version>2.19.0</camel.version>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <log4j2.version>2.7</log4j2.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <!-- Camel BOM -->
+      <dependency>
+        <groupId>org.apache.camel</groupId>
+        <artifactId>camel-parent</artifactId>
+        <version>${camel.version}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+	<dependency>
+		<groupId>org.jeets</groupId>
+		<artifactId>jeets-protocols</artifactId>
+		<version>0.7</version>
+	</dependency>
+
+    <dependency>
+	  <groupId>org.apache.camel</groupId>
+	  <artifactId>camel-netty4</artifactId>
+	</dependency>
+
+    <!-- temporarily for with test scope -->
+	<!-- Camel, Spring and ActiveMQ dependencies includes: camel-jms, -spring, 
+		spring-beans, -jms, -context etc., activemq-spring, -pool, -client -->
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-camel</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!-- 
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-broker</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-client</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.xbean</groupId>
+      <artifactId>xbean-spring</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+	 -->
+    <!-- for testing -->
+    <!-- camel-test-spring ?  spring-context ? -->
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+	<dependency>
+		<groupId>org.apache.logging.log4j</groupId>
+		<artifactId>log4j-api</artifactId>
+		<scope>test</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.logging.log4j</groupId>
+		<artifactId>log4j-core</artifactId>
+		<scope>test</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.logging.log4j</groupId>
+		<artifactId>log4j-slf4j-impl</artifactId>
+		<scope>test</scope>
+	</dependency>
+	
+  </dependencies>
+
+  <build>
+    <defaultGoal>install</defaultGoal>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.6.1</version>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.0.2</version>
+        <configuration>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+
+      <!-- this is important to terminate target\surefire\surefirebooterXXX.jar  
+      	if test is cancelled with <CTRL> + <C>. Otherwise port remains blocked -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.20</version>
+        <configuration>
+          <shutdown>kill</shutdown>
+        </configuration>
+      </plugin>
+      
+      <!-- generate components meta-data and validate component includes documentation etc -->
+      <plugin>
+        <groupId>org.apache.camel</groupId>
+        <artifactId>camel-package-maven-plugin</artifactId>
+        <version>${camel.version}</version>
+        <executions>
+          <execution>
+            <id>prepare</id>
+            <goals>
+              <goal>prepare-components</goal>
+            </goals>
+            <phase>generate-resources</phase>
+          </execution>
+          <execution>
+            <id>validate</id>
+            <goals>
+              <goal>validate-components</goal>
+            </goals>
+            <phase>prepare-package</phase>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- to generate the MANIFEST-FILE of the bundle
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <version>3.3.0</version>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Bundle-SymbolicName>org.jeets.jeets-dcs2amq</Bundle-SymbolicName>
+            <Export-Service>org.apache.camel.spi.ComponentResolver;component=jeets-dcs2amq</Export-Service>
+          </instructions>
+        </configuration>
+      </plugin>
+       -->
+       
+    </plugins>
+  </build>
+</project>

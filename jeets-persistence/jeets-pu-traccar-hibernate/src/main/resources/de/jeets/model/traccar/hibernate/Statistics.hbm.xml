@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 26.11.2016 13:04:29 by Hibernate Tools 5.2.0.Beta1 -->
+<hibernate-mapping>
+    <class name="org.jeets.model.traccar.hibernate.Statistics" table="statistics" schema="public" optimistic-lock="version">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="assigned" />
+        </id>
+        <property name="capturetime" type="timestamp">
+            <column name="capturetime" length="29" not-null="true" />
+        </property>
+        <property name="activeusers" type="int">
+            <column name="activeusers" not-null="true" />
+        </property>
+        <property name="activedevices" type="int">
+            <column name="activedevices" not-null="true" />
+        </property>
+        <property name="requests" type="int">
+            <column name="requests" not-null="true" />
+        </property>
+        <property name="messagesreceived" type="int">
+            <column name="messagesreceived" not-null="true" />
+        </property>
+        <property name="messagesstored" type="int">
+            <column name="messagesstored" not-null="true" />
+        </property>
+        <property name="attributes" type="string">
+            <column name="attributes" length="4096" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

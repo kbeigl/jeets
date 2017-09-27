@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  * Copyright 2017 The Jee Tracking System
+  * Copyright 2017 Kristof Beiglböck kbeigl@roaf.de
+  *
+  * The JeeTS Project licenses this file to you under the Apache License,
+  * version 2.0 (the "License"); you may not use this file except in compliance
+  * with the License. You may obtain a copy of the License at:
+  *
+  *   http://www.apache.org/licenses/LICENSE-2.0
+  *
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  * License for the specific language governing permissions and limitations
+  * under the License.
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>de.jeets</groupId>
+  <artifactId>jeets-etl-traccar</artifactId>
+  <version>0.1</version>
+  <packaging>jar</packaging>
+
+  <name>jeets-etl-traccar</name>
+  <url>http://jeets.de</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <netty.version>4.1.6.Final</netty.version>
+    <junit.version>4.12</junit.version>		<!-- 3.8.1 -->
+    <!-- Note that activemq dependency is only used for testing! -->
+    <activemq.version>5.14.0</activemq.version>
+    <log4j.version>1.2.17</log4j.version>
+    <log4j2.version>2.7</log4j2.version>
+    <!-- needed for camel tests (move up?)
+    <maven.compiler.source>1.7</maven.compiler.source>
+    <maven.compiler.target>1.7</maven.compiler.target>
+     -->
+  </properties>
+
+  <dependencies>
+	<dependency>
+		<groupId>de.jeets</groupId>
+		<artifactId>jeets-protocols</artifactId>
+		<version>0.1</version>
+	</dependency>
+	<!-- artifactId protobuf-java included in protocols -->
+	<!-- plain netty version, maybe v3 !?!) -->
+	<dependency>
+	    <groupId>io.netty</groupId>
+	    <artifactId>netty-all</artifactId>
+	    <version>${netty.version}</version>
+	</dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.1.7</version>
+      <scope>runtime</scope>
+    </dependency>
+	<dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+	    <version>${junit.version}</version>
+		<scope>test</scope>
+	</dependency>
+
+    <!-- logging -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <version>${log4j2.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>${log4j2.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-slf4j-impl</artifactId>
+      <version>${log4j2.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!-- TODO: run-example.sh invokes this plugin to launch an example. -->
+      <plugin>
+        <groupId>kr.motd.maven</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.5.0.Final</version>
+        <configuration>
+          <executable>${java.home}/bin/java</executable>
+          <commandlineArgs>
+            ${argLine.common}
+            ${argLine.alpnAgent}
+            -classpath %classpath
+            ${argLine.leak}
+            ${argLine.coverage}
+            ${argLine.example}
+            ${exampleClass}
+          </commandlineArgs>
+        </configuration>
+      </plugin>
+      
+      <plugin>
+        <!-- NOTE: We don't need a groupId specification because the group is
+             org.apache.maven.plugins ...which is assumed by default. -->
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.0.0</version>
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+          <archive>
+            <manifest>
+			  <mainClass>de.jeets.server.netty.TrackingServer</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id> <!-- this is used for inheritance merges -->
+            <phase>package</phase> <!-- bind to the packaging phase -->
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      
+    </plugins>
+  </build>
+</project>

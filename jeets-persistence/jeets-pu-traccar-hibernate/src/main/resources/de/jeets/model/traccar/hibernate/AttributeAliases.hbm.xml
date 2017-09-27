@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 26.11.2016 13:04:29 by Hibernate Tools 5.2.0.Beta1 -->
+<hibernate-mapping>
+    <class name="org.jeets.model.traccar.hibernate.AttributeAliases" table="attribute_aliases" schema="public" optimistic-lock="version">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="devices" class="org.jeets.model.traccar.hibernate.Devices" fetch="select">
+            <column name="deviceid" not-null="true" />
+        </many-to-one>
+        <property name="attribute" type="string">
+            <column name="attribute" length="128" not-null="true" />
+        </property>
+        <property name="alias" type="string">
+            <column name="alias" length="128" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

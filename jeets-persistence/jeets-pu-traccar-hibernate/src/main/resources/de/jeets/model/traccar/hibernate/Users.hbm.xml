@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 26.11.2016 13:04:29 by Hibernate Tools 5.2.0.Beta1 -->
+<hibernate-mapping>
+    <class name="org.jeets.model.traccar.hibernate.Users" table="users" schema="public" optimistic-lock="version">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="assigned" />
+        </id>
+        <property name="name" type="string">
+            <column name="name" length="128" not-null="true" />
+        </property>
+        <property name="email" type="string">
+            <column name="email" length="128" not-null="true" unique="true" />
+        </property>
+        <property name="hashedpassword" type="string">
+            <column name="hashedpassword" length="128" not-null="true" />
+        </property>
+        <property name="salt" type="string">
+            <column name="salt" length="128" not-null="true" />
+        </property>
+        <property name="readonly" type="boolean">
+            <column name="readonly" not-null="true" />
+        </property>
+        <property name="admin" type="boolean">
+            <column name="admin" not-null="true" />
+        </property>
+        <property name="map" type="string">
+            <column name="map" length="128" />
+        </property>
+        <property name="distanceunit" type="string">
+            <column name="distanceunit" length="128" />
+        </property>
+        <property name="speedunit" type="string">
+            <column name="speedunit" length="128" />
+        </property>
+        <property name="latitude" type="double">
+            <column name="latitude" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="longitude" type="double">
+            <column name="longitude" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="zoom" type="int">
+            <column name="zoom" not-null="true" />
+        </property>
+        <property name="twelvehourformat" type="boolean">
+            <column name="twelvehourformat" not-null="true" />
+        </property>
+        <property name="attributes" type="string">
+            <column name="attributes" length="4096" />
+        </property>
+        <property name="coordinateformat" type="string">
+            <column name="coordinateformat" length="128" />
+        </property>
+        <set name="userGroups" table="user_group" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="userid" not-null="true" />
+            </key>
+            <one-to-many class="org.jeets.model.traccar.hibernate.UserGroup" />
+        </set>
+        <set name="notificationses" table="notifications" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="userid" not-null="true" />
+            </key>
+            <one-to-many class="org.jeets.model.traccar.hibernate.Notifications" />
+        </set>
+        <set name="userDevices" table="user_device" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="userid" not-null="true" />
+            </key>
+            <one-to-many class="org.jeets.model.traccar.hibernate.UserDevice" />
+        </set>
+        <set name="userGeofences" table="user_geofence" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="userid" not-null="true" />
+            </key>
+            <one-to-many class="org.jeets.model.traccar.hibernate.UserGeofence" />
+        </set>
+    </class>
+</hibernate-mapping>

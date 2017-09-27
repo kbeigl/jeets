@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 26.11.2016 13:04:29 by Hibernate Tools 5.2.0.Beta1 -->
+<hibernate-mapping>
+    <class name="org.jeets.model.traccar.hibernate.GroupGeofence" table="group_geofence" schema="public" optimistic-lock="version">
+        <composite-id name="id" class="org.jeets.model.traccar.hibernate.GroupGeofenceId">
+            <key-property name="groupid" type="int">
+                <column name="groupid" />
+            </key-property>
+            <key-property name="geofenceid" type="int">
+                <column name="geofenceid" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="geofences" class="org.jeets.model.traccar.hibernate.Geofences" update="false" insert="false" fetch="select">
+            <column name="geofenceid" not-null="true" />
+        </many-to-one>
+        <many-to-one name="groups" class="org.jeets.model.traccar.hibernate.Groups" update="false" insert="false" fetch="select">
+            <column name="groupid" not-null="true" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>
