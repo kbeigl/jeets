@@ -1,0 +1,6 @@
+
+Place WildFly (JBoss?) BOM here
+
+check for conflicts with Camel BOM
+
+use Camel, if it includes WildFly ...

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   * Copyright 2017 The JEE Tracking System - JeeTS
-  * Copyright 2017 Kristof Beiglböck kbeigl@jeets.org
+  * Copyright 2017 Kristof Beiglböck kbeigl@roaf.de
   *
   * The JeeTS Project licenses this file to you under the Apache License,
   * version 2.0 (the "License"); you may not use this file except in compliance
@@ -18,51 +18,70 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.jeets</groupId>
-  <artifactId>jeets-player</artifactId>
+
+    <parent>
+	   <groupId>org.jeets</groupId>
+	   <artifactId>jeets-clients</artifactId>
+	   <version>${jeets-repo-release}</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+  <artifactId>jeets-tracker</artifactId>
   <version>0.1</version>
   <packaging>jar</packaging>
 
-  <name>jeets-player</name>
+  <name>jeets-tracker</name>
   <url>http://jeets.org</url>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <junit.version>4.12</junit.version>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-  </properties>
-
   <dependencies>
-  
-     <!-- tracker includes netty, protobuffer and PU -->
+    <!-- JeeTS -->
+	<!-- includes com.google.protobuf -->
 	<dependency>
 		<groupId>org.jeets</groupId>
-		<artifactId>jeets-tracker</artifactId>
+		<artifactId>jeets-protocols</artifactId>
 		<version>0.1</version>
 	</dependency>
-    <!-- external proprietary data source / to be removed from player -->
-    <!-- MUST BE PLACED AFTER org.jeets TO AVOID VERSION CONFLICTS -->
-    <!-- currently deactivated, conflict with protocol, tracker, player jboss.logging version etc.
+
+	<!-- use this for developing -->
 	<dependency>
-    	<groupId>de.jeets</groupId>
-    	<artifactId>geofox-api-rest-client</artifactId>
-    	<version>29.47.01</version>
+	    <groupId>io.netty</groupId>
+	    <artifactId>netty-all</artifactId>
+	    <version>${netty-version}</version>
 	</dependency>
+	<!-- reduce components for deployment
+    <dependency>
+        <groupId>io.netty</groupId>
+        <artifactId>netty-transport</artifactId>
+        <version>${netty.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>io.netty</groupId>
+        <artifactId>netty-handler</artifactId>
+        <version>${netty.version}</version>
+    </dependency>
 	 -->
-	<!-- place in top level pom of repo -->
+	 
 	<dependency>
 		<groupId>junit</groupId>
 		<artifactId>junit</artifactId>
-	    <version>${junit.version}</version>
+	    <version>${junit-version}</version>
 		<scope>test</scope>
 	</dependency>
+    <!-- H2 in-memory database for testing only -->
+    <dependency>
+        <groupId>com.h2database</groupId>
+        <artifactId>h2</artifactId>
+        <version>${h2database-version}</version>
+        <scope>test</scope>
+    </dependency>
+    
   </dependencies>
 
   <build>
     <plugins>
       <plugin>
-        <!-- default groupId: org.apache.maven.plugins -->
+        <!-- NOTE: We don't need a groupId specification because the group is
+             org.apache.maven.plugins ...which is assumed by default. -->
         <artifactId>maven-assembly-plugin</artifactId>
         <version>3.0.0</version>
         <configuration>
@@ -71,7 +90,7 @@
           </descriptorRefs>
           <archive>
             <manifest>
-              <mainClass>org.jeets.player.sources.HibernateFactory</mainClass>
+              <mainClass>org.jeets.tracker.Main</mainClass>
             </manifest>
           </archive>
         </configuration>

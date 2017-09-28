@@ -93,15 +93,8 @@
             <modules>
                <!-- All the modules that require nothing but each other -->
             	<module>jeets-models</module>
-
-            	<module>jeets-tracker</module>
-            	<module>jeets-player</module>
-			<module>jeets-dcs</module>
-			<module>jeets-etl</module>
-			<!-- this etl is designed to work with traccar
-				  Instructions to move the decoder into traccar ...
-			<module>jeets-etl-traccar</module>		 -->
-			<module>jeets-dcs2amq</module>
+            	<module>jeets-clients</module>
+            	<module>jeets-server-jse</module>
             </modules>
         </profile>
         <profile>
