@@ -20,7 +20,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.jeets</groupId>
   <artifactId>jeets-player</artifactId>
-  <version>0.3</version>
+  <version>0.1</version>
   <packaging>jar</packaging>
 
   <name>jeets-player</name>
@@ -39,7 +39,7 @@
 	<dependency>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-tracker</artifactId>
-		<version>0.7</version>
+		<version>0.1</version>
 	</dependency>
     <!-- external proprietary data source / to be removed from player -->
     <!-- MUST BE PLACED AFTER org.jeets TO AVOID VERSION CONFLICTS -->

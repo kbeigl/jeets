@@ -21,7 +21,7 @@
 
   <groupId>org.jeets</groupId>
   <artifactId>jeets-dcs</artifactId>
-  <version>0.4</version>
+  <version>0.1</version>
   <packaging>jar</packaging>
 
   <!-- <name>Camel JeeTS-DCS Component</name> -->
@@ -63,7 +63,7 @@
 	<dependency>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-protocols</artifactId>
-		<version>0.7</version>
+		<version>0.1</version>
 	</dependency>
 
     <dependency>

@@ -27,7 +27,7 @@
   </parent>
 
   <artifactId>jeets-tracker</artifactId>
-  <version>0.7</version>
+  <version>0.1</version>
   <packaging>jar</packaging>
 
   <name>jeets-tracker</name>
@@ -39,7 +39,7 @@
 	<dependency>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-protocols</artifactId>
-		<version>0.7</version>
+		<version>0.1</version>
 	</dependency>
 
 	<!-- use this for developing -->

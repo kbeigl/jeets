@@ -22,7 +22,7 @@
 
   <groupId>org.jeets</groupId>
   <artifactId>jeets-etl</artifactId>
-  <version>0.5</version>
+  <version>0.1</version>
   <packaging>jar</packaging>
 
   <name>jeets-etl</name>
@@ -67,7 +67,7 @@
 	<dependency>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-dcs</artifactId>
-		<version>0.4</version>
+		<version>0.1</version>
 	</dependency>
 
     <dependency>

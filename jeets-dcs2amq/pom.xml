@@ -21,7 +21,7 @@
 
   <groupId>org.jeets</groupId>
   <artifactId>jeets-dcs2amq</artifactId>
-  <version>0.2</version>
+  <version>0.1</version>
   <packaging>jar</packaging>
 
   <url>http://jeets.org</url>
@@ -53,7 +53,7 @@
 	<dependency>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-protocols</artifactId>
-		<version>0.7</version>
+		<version>0.1</version>
 	</dependency>
 
     <dependency>
