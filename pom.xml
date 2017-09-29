@@ -28,6 +28,8 @@
 	</description>
 	<url>http://www.jeets.org/</url>
 
+	<!-- currently the complete repository needs to be compiled top down
+		How can I run clients only? Works for models and subprojects!? -->
 	<licenses>
 		<license>
 			<name>Apache License, Version 2.0</name>
@@ -41,7 +43,7 @@
 	</prerequisites>
 
 	<properties>
-		<jeets-repo-release>2017.09.28</jeets-repo-release>
+		<jeets-repo-release>2017.09.29</jeets-repo-release>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.7</maven.compiler.source>
@@ -59,14 +61,12 @@
 		<netty-version>4.1.15.Final</netty-version>
 	</properties>
 
-	<!-- add Camel and Wildfly dependency management !? -->
+	<!-- add Camel (and Wildfly?) dependency management !? -->
 
-	<!-- <build> <pluginManagement> <plugins> </plugins> </pluginManagement> 
-		<plugins> <plugin> </plugin> </plugins> </build> -->
-
-	<!-- USAGE: mvn <goals> uses ONLY 'default' profile mvn <goals> -Prequires-postgres 
-		uses 'default' AND 'requires-postgres' profile mvn <goals> -P!default,requires-postgres 
-		! don't use 'default', ONLY 'requires-postgres' profile -->
+	<!-- USAGE: 
+		mvn <goals> uses ONLY 'default' profile 
+		mvn <goals> -Prequires-postgres uses 'default' AND 'requires-postgres' profile 
+		mvn <goals> -P!default,requires-postgres ! don't use 'default', ONLY 'requires-postgres' profile -->
 	<profiles>
 		<profile>
 			<id>default</id>
@@ -82,19 +82,6 @@
 				<module>jeets-models</module>
 				<module>jeets-clients</module>
 				<module>jeets-server-jse</module>
-			</modules>
-		</profile>
-		<profile>
-			<id>clients</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-				<property>
-					<name>default</name>
-					<value>disabled</value>
-				</property>
-			</activation>
-			<modules>
-				<module>jeets-clients</module>
 			</modules>
 		</profile>
 		<profile>

@@ -21,8 +21,7 @@
     <parent>
 	    <groupId>org.jeets</groupId>
 	    <artifactId>jeets-sources</artifactId>
-		<version>${jeets-repo-release}</version>
-        <relativePath>../pom.xml</relativePath>
+		<version>${project.version}</version>
     </parent>
 
     <artifactId>jeets-server-jse</artifactId>
