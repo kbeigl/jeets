@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-sources</artifactId>
-		<version>${project.version}</version>
+		<version>${jeets-repo-release}</version>
 	</parent>
 
 	<artifactId>jeets-clients</artifactId>

@@ -5,7 +5,6 @@
 	   <groupId>org.jeets</groupId>
 	   <artifactId>jeets-models</artifactId>
  		<version>${jeets-repo-release}</version>
-<!--    <relativePath>../pom.xml</relativePath>  -->
     </parent>
 
     <artifactId>jeets-protocols</artifactId>

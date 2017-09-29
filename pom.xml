@@ -29,7 +29,8 @@
 	<url>http://www.jeets.org/</url>
 
 	<!-- currently the complete repository needs to be compiled top down
-		How can I run clients only? Works for models and subprojects!? -->
+		How can I run 'clients' etc. only? (depends on 'models')
+		Works for 'models' and subprojects!? -->
 	<licenses>
 		<license>
 			<name>Apache License, Version 2.0</name>
@@ -64,9 +65,10 @@
 	<!-- add Camel (and Wildfly?) dependency management !? -->
 
 	<!-- USAGE: 
-		mvn <goals> uses ONLY 'default' profile 
-		mvn <goals> -Prequires-postgres uses 'default' AND 'requires-postgres' profile 
-		mvn <goals> -P!default,requires-postgres ! don't use 'default', ONLY 'requires-postgres' profile -->
+		mvn <goals>                              uses ONLY 'default' profile 
+		mvn <goals> -Prequires-postgres          uses 'default' AND 'requires-postgres' profile 
+		mvn <goals> -P!default,requires-postgres don't! use 'default', ONLY 'requires-postgres' profile
+	 -->
 	<profiles>
 		<profile>
 			<id>default</id>

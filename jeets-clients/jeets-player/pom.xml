@@ -23,7 +23,6 @@
 	   <groupId>org.jeets</groupId>
 	   <artifactId>jeets-clients</artifactId>
 	   <version>${jeets-repo-release}</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
 
   <artifactId>jeets-player</artifactId>
