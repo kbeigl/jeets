@@ -14,103 +14,103 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.jeets</groupId>
-    <artifactId>jeets-sources</artifactId>
-    <!-- first complete successful run with GIT -->
-    <version>${jeets-repo-release}</version>
-    <packaging>pom</packaging>
-    <name>The JEE Tracking System - JeeTS</name>
-    <description>
-         Main POM to compile and test all JeeTS sources with dependencies.
-    </description>
-    <url>http://www.jeets.org/</url>
+	<groupId>org.jeets</groupId>
+	<artifactId>jeets-sources</artifactId>
+	<version>${jeets-repo-release}</version>
+	<packaging>pom</packaging>
+	<name>Java EE Tracking Software - JeeTS</name>
+	<description>
+		Main POM to compile and test all JeeTS sources with dependencies.
+	</description>
+	<url>http://www.jeets.org/</url>
 
-    <licenses>
-        <license>
-            <name>Apache License, Version 2.0</name>
-            <distribution>repo</distribution>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-        </license>
-    </licenses>
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<distribution>repo</distribution>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+		</license>
+	</licenses>
 
-    <prerequisites><!-- just for information: not inherited in child poms -->
-        <maven>3.0</maven><!-- prerequisite of some plugins -->
-    </prerequisites>
+	<prerequisites><!-- just for information: not inherited in child poms -->
+		<maven>3.0</maven><!-- prerequisite of some plugins -->
+	</prerequisites>
 
-    <properties>
-        <jeets-repo-release>2017.09.27</jeets-repo-release>
+	<properties>
+		<jeets-repo-release>2017.09.28</jeets-repo-release>
 
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
 
-        <!-- Adjust with Camel parent with listed versions -->
-        <slf4j-version>1.7.22</slf4j-version>
-   	   <commons-logging-version>1.2</commons-logging-version>
-        <junit-version>4.12</junit-version>
+		<!-- Adjust with Camel parent with listed versions -->
+		<slf4j-version>1.7.22</slf4j-version>
+		<commons-logging-version>1.2</commons-logging-version>
+		<junit-version>4.12</junit-version>
 
-        <!-- move down to persistence ? -->
-        <hibernate-version>5.2.4.Final</hibernate-version>
-        <h2database-version>1.3.176</h2database-version>
-        <postgresql-version>9.4-1200-jdbc41</postgresql-version>
-    	   <netty-version>4.1.15.Final</netty-version>
-    </properties>
+		<!-- move down to persistence ? -->
+		<hibernate-version>5.2.4.Final</hibernate-version>
+		<h2database-version>1.3.176</h2database-version>
+		<postgresql-version>9.4-1200-jdbc41</postgresql-version>
+		<netty-version>4.1.15.Final</netty-version>
+	</properties>
 
-<!-- add Camel and Wildfly dependency management !? -->
+	<!-- add Camel and Wildfly dependency management !? -->
 
-<!-- <build>
-        <pluginManagement>
-            <plugins>
-            </plugins>
-        </pluginManagement>
-        <plugins>
-            <plugin>
-            </plugin>
-        </plugins>
-    </build> -->
+	<!-- <build> <pluginManagement> <plugins> </plugins> </pluginManagement> 
+		<plugins> <plugin> </plugin> </plugins> </build> -->
 
-	<!-- USAGE:
-		mvn <goals>
-			uses ONLY 'default' profile
-		mvn <goals> -Prequires-postgres
-			uses 'default' AND 'requires-postgres' profile
-		mvn <goals> -P!default,requires-postgres 
-			! don't use 'default', ONLY 'requires-postgres' profile
-	 -->
-    <profiles>
-        <profile>
-            <id>default</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-                <property>
-                    <name>default</name>
-                    <value>!disabled</value>
-                </property>
-            </activation>
-            <modules>
-               <!-- All the modules that require nothing but each other -->
-            	<module>jeets-models</module>
-            	<module>jeets-clients</module>
-            	<module>jeets-server-jse</module>
-            </modules>
-        </profile>
-        <profile>
-            <!-- All the quickstarts that require Postgres to be running -->
-            <id>requires-postgres</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-                <property>
-                    <name>requires-postgres</name>
-                    <value>disabled</value>
-                </property>
-            </activation>
-            <modules>
-			<module>jeets-asdf</module>
-            </modules>
-        </profile>
-    </profiles>
+	<!-- USAGE: mvn <goals> uses ONLY 'default' profile mvn <goals> -Prequires-postgres 
+		uses 'default' AND 'requires-postgres' profile mvn <goals> -P!default,requires-postgres 
+		! don't use 'default', ONLY 'requires-postgres' profile -->
+	<profiles>
+		<profile>
+			<id>default</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+				<property>
+					<name>default</name>
+					<value>!disabled</value>
+				</property>
+			</activation>
+			<modules>
+				<!-- All the modules that require nothing but each other -->
+				<module>jeets-models</module>
+				<module>jeets-clients</module>
+				<module>jeets-server-jse</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>clients</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+				<property>
+					<name>default</name>
+					<value>disabled</value>
+				</property>
+			</activation>
+			<modules>
+				<module>jeets-clients</module>
+			</modules>
+		</profile>
+		<profile>
+			<!-- All the quickstarts that require Postgres to be running -->
+			<id>requires-postgres</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+				<property>
+					<name>requires-postgres</name>
+					<value>disabled</value>
+				</property>
+			</activation>
+			<modules>
+				<module>jeets-asdf</module>
+			</modules>
+		</profile>
+	</profiles>
 
 </project>

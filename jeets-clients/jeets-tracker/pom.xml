@@ -22,8 +22,8 @@
     <parent>
 	   <groupId>org.jeets</groupId>
 	   <artifactId>jeets-clients</artifactId>
-	   <version>${jeets-repo-release}</version>
-        <relativePath>../pom.xml</relativePath>
+ 		<version>${jeets-repo-release}</version>
+<!--    <relativePath>../pom.xml</relativePath>  -->
     </parent>
 
   <artifactId>jeets-tracker</artifactId>
@@ -34,8 +34,6 @@
   <url>http://jeets.org</url>
 
   <dependencies>
-    <!-- JeeTS -->
-	<!-- includes com.google.protobuf -->
 	<dependency>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-protocols</artifactId>

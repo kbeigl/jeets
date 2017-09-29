@@ -21,11 +21,11 @@
     <parent>
 	    <groupId>org.jeets</groupId>
 	    <artifactId>jeets-sources</artifactId>
-		<version>${jeets-repo-release}</version>
-        <relativePath>../pom.xml</relativePath>
+ 		<version>${jeets-repo-release}</version>
+<!--    <relativePath>../pom.xml</relativePath>  -->
     </parent>
 
-    <artifactId>jeets-models</artifactId>
+	<artifactId>jeets-models</artifactId>
     <packaging>pom</packaging>
 
     <name>System Dataformats</name>
