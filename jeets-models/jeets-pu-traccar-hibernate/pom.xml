@@ -5,15 +5,12 @@
     <parent>
 	   <groupId>org.jeets</groupId>
 	   <artifactId>jeets-models</artifactId>
-	   <version>${jeets-repo-release}</version>
-        <relativePath>../pom.xml</relativePath>
+		<version>2017.09.30</version>
+<!-- 	<version>${jeets-repo-release}</version>  -->
     </parent>
 
 	<artifactId>jeets-pu-traccar-hibernate</artifactId>
 	<version>0.1</version>
 	<packaging>jar</packaging>
-
-	<name>jeets-pu-traccar-hibernate</name>
-	<url>http://jeets.de</url>
 
 </project>

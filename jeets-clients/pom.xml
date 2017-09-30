@@ -19,11 +19,13 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.jeets</groupId>
-		<artifactId>jeets-sources</artifactId>
-		<version>${jeets-repo-release}</version>
-	</parent>
+    <parent>
+	    <groupId>org.jeets</groupId>
+		<artifactId>jeets-parent</artifactId>
+		<version>2017.09.30</version>
+<!-- 	<version>${jeets-repo-release}</version>  -->
+    	<relativePath>../parent</relativePath>
+    </parent>
 
 	<artifactId>jeets-clients</artifactId>
 	<packaging>pom</packaging>

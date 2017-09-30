@@ -22,7 +22,8 @@
     <parent>
 	   <groupId>org.jeets</groupId>
 	   <artifactId>jeets-clients</artifactId>
-	   <version>${jeets-repo-release}</version>
+		<version>2017.09.30</version>
+ <!-- 	<version>${jeets-repo-release}</version>  -->
     </parent>
 
   <artifactId>jeets-player</artifactId>

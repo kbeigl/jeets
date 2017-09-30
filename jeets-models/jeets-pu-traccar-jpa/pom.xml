@@ -3,10 +3,10 @@
   <modelVersion>4.0.0</modelVersion>
 
     <parent>
-		<groupId>org.jeets</groupId>
-		<artifactId>jeets-models</artifactId>
-		<version>${jeets-repo-release}</version>
-        <relativePath>../pom.xml</relativePath>
+	   <groupId>org.jeets</groupId>
+	   <artifactId>jeets-models</artifactId>
+		<version>2017.09.30</version>
+<!-- 	<version>${jeets-repo-release}</version>  -->
     </parent>
 
 	<artifactId>jeets-pu-traccar-jpa</artifactId>

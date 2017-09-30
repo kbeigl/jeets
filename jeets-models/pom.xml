@@ -20,15 +20,17 @@
 
     <parent>
 	    <groupId>org.jeets</groupId>
-	    <artifactId>jeets-sources</artifactId>
-		<version>${jeets-repo-release}</version>
+		<artifactId>jeets-parent</artifactId>
+		<version>2017.09.30</version>
+<!-- 	<version>${jeets-repo-release}</version>  -->
+    	<relativePath>../parent</relativePath>
     </parent>
 
 	<artifactId>jeets-models</artifactId>
     <packaging>pom</packaging>
 
     <name>System Dataformats</name>
-    <description>Dataformats for different Tracking Software Components</description>
+    <description>Dataformats for Tracking Software Components</description>
 
     <modules>
        <module>jeets-pu-traccar-hibernate</module>

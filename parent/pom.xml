@@ -18,13 +18,19 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.jeets</groupId>
-	<artifactId>jeets</artifactId>
-	<version>2017.09.30</version>
+    <parent>
+	    <groupId>org.jeets</groupId>
+	    <artifactId>jeets</artifactId>
+		<version>2017.09.30</version>
+<!-- 	<version>${jeets-repo-release}</version>  -->
+    </parent>
+
+	<artifactId>jeets-parent</artifactId>
 	<packaging>pom</packaging>
-	<name>Java EE Tracking Software - JeeTS</name>
+	<name>JeeTS Parent</name>
 	<description>
-		Main POM to compile, test and build all JeeTS sources with dependencies.
+		Parent POM to compile and test all JeeTS sources with
+		dependencies.
 	</description>
 	<url>http://www.jeets.org/</url>
 
@@ -41,25 +47,39 @@
 	</prerequisites>
 
 	<properties>
-		<jeets-repo-release>2017.09.30</jeets-repo-release>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
+
+		<!-- Adjust with Camel parent with listed versions -->
+		<slf4j-version>1.7.22</slf4j-version>
+		<commons-logging-version>1.2</commons-logging-version>
+		<junit-version>4.12</junit-version>
+
+		<!-- move down to persistence ? -->
+		<hibernate-version>5.2.4.Final</hibernate-version>
+		<h2database-version>1.3.176</h2database-version>
+		<postgresql-version>9.4-1200-jdbc41</postgresql-version>
+		<netty-version>4.1.15.Final</netty-version>
 	</properties>
 
-	<developers>
-		<developer>
-			<name>Java EE Tracking Software - JeeTS</name>
-			<email>kbeigl@jeets.org</email>
-			<url>http://jeets.org</url>
-		</developer>
-	</developers>
-
-	<modules>
-		<module>parent</module>
-		<module>jeets-models</module>
-		<module>jeets-clients</module>
-	<!-- 
-		<module>jeets-server-jse</module>
-	 -->
-	 </modules>
-
+<!-- 
+	<profiles>
+		<profile>
+			<id>default</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+				<property>
+					<name>default</name>
+					<value>!disabled</value>
+				</property>
+			</activation>
+			<modules>
+				<module>../jeets-models</module>
+				<module>../jeets-clients</module>
+				<module>jeets-server-jse</module>
+			</modules>
+		</profile>
+	</profiles>
+ -->
+ 
 </project>
