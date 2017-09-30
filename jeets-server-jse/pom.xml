@@ -20,8 +20,10 @@
 
     <parent>
 	    <groupId>org.jeets</groupId>
-	    <artifactId>jeets-sources</artifactId>
-		<version>${project.version}</version>
+		<artifactId>jeets-parent</artifactId>
+		<version>2017.09.30</version>
+<!-- 	<version>${jeets-repo-release}</version>  -->
+    	<relativePath>../parent</relativePath>
     </parent>
 
     <artifactId>jeets-server-jse</artifactId>

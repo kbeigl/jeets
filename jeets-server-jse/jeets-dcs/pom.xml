@@ -19,7 +19,13 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.jeets</groupId>
+    <parent>
+	   <groupId>org.jeets</groupId>
+	   <artifactId>jeets-server-jse</artifactId>
+		<version>2017.09.30</version>
+ <!-- 	<version>${jeets-repo-release}</version>  -->
+    </parent>
+
   <artifactId>jeets-dcs</artifactId>
   <version>0.1</version>
   <packaging>jar</packaging>
