@@ -14,9 +14,7 @@ import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 
 /**
- * The TraccarClient is responsible to send Protobuffer Messages from the
- * Traccar protocol class and receive an Acknowledge to be used for cleaning up
- * the local database.
+ * Sender Component to setup Netty and send a binary Traccar message.
  * 
  * @author kbeigl@jeets.org
  */
@@ -24,15 +22,12 @@ public class TraccarSender {
 
     static final boolean SSL = System.getProperty("ssl") != null;
 
-	/**
-	 * @param protobuffer position 
-	 * @throws SSLException
-	 * @throws InterruptedException
-	 */
+    /**
+     * Currently every invocation sets up the complete Netty 'chain' and creates
+     * a new connection. The return value of null indicates that the
+     * transmission was not successful.
+     */
     public static Acknowledge transmitTraccarObject(Object traccarObject, String host, int port) {
-	    
-//      TODO: check if traccarObject belongs to Traccar protocol and <T extends GeneratedMessageV3>
-        
         final SslContext sslCtx = setSslContext();
         Acknowledge ack;
         EventLoopGroup group = new NioEventLoopGroup();
@@ -41,14 +36,12 @@ public class TraccarSender {
             b.group(group)
              .channel(NioSocketChannel.class)
              .handler(new TraccarAckInitializer<SocketChannel>(sslCtx, host, port));
-
             Channel ch = b.connect(host, port).sync().channel();
             TraccarMessageHandler handler = ch.pipeline().get(TraccarMessageHandler.class);
             ack = handler.sendTraccarObject(traccarObject);
             ch.close();
-
-        } catch (InterruptedException e) {
-			e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
 			return null;
 		} finally {
             group.shutdownGracefully();

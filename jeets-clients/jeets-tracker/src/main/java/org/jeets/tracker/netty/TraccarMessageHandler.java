@@ -16,7 +16,6 @@ import io.netty.channel.SimpleChannelInboundHandler;
  */
 public class TraccarMessageHandler extends SimpleChannelInboundHandler<Acknowledge> {
 
-    // Stateful properties
     private volatile Channel channel;
 
     private final BlockingQueue<Acknowledge> ackmsgs = new LinkedBlockingQueue<Acknowledge>();
@@ -26,19 +25,14 @@ public class TraccarMessageHandler extends SimpleChannelInboundHandler<Acknowled
     }
 
     /**
-     * Send any Object from Traccar Protocol class. Note that the receiver is
-     * (currently) configured for a concrete class per host and port!
-     * 
-     * @param traccarObject
-     * @return
+     * Send any Object from Traccar Protocol class.
      */
     public Acknowledge sendTraccarObject(Object traccarObject) {
-//      TODO: validate traccarObject (belongs to Traccar protocol, extends GeneratedMessageV3)
+//      TODO: validate traccarObject (belongs to Traccar protocol, i.e. extends GeneratedMessageV3)
         channel.writeAndFlush(traccarObject);
         Acknowledge ackmsg = waitForAcknowledge();
         return ackmsg;
     }
-    
 /*
     public Acknowledge sendTraccarPosition(Position position) {
         channel.writeAndFlush(position);

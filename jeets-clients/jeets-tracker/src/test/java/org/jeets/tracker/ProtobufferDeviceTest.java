@@ -37,13 +37,6 @@ public class ProtobufferDeviceTest {
     private ServerBootstrap server;
     private Bootstrap client;
 
-//    @Test
-//    preparation test for player with listener
-//    remove static stuff !?
-//    public void testTracker() {
-//        new Tracker(host, port, uniqueId) ... see Main.main
-//    }
-
     @Test
     public void testProtobufferDevice() {
         Traccar.Device.Builder deviceBuilder = Samples.createDeviceWithPositionWithOneEvent();

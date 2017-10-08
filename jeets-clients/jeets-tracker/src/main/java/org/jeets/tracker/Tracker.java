@@ -4,16 +4,17 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import org.jeets.tracker.netty.TraccarSender;
 import org.jeets.protocol.Traccar;
+import org.jeets.protocol.Traccar.Device.Builder;
 
 /**
  * The JeeTS Tracker sends Protobuffer Messages, i.e. POJOs defined in the
- * *.proto file. External clients can only transmit Positions while the Tracker
+ * *.proto file. External clients can only add Positions while the Tracker
  * internally adds Device with uniqueId and potential Tracker Events!
  * 
  * @author kbeigl@jeets.org
@@ -29,61 +30,121 @@ import org.jeets.protocol.Traccar;
  * to send by a time interval (flush database). Accordingly the Tracker can clean up
  * the List after successful ACK or retry if not successful.
  */
-public class Tracker implements ProtoPositionListener {
+public class Tracker {
 
-//  add configuration file --------------------------------
     private String uniqueId = "pb.device";
     private String host = "localhost";
     private int port = 5200;
-//  public Tracker( ) { properties() }
-//  -------------------------------------------------------
+    private boolean messageLoopRunning = false;
 
+    /**
+     * The Tracker is created with host, port and uniqueId and will send
+     * positions as long as the queue is not empty.
+     */
     public Tracker( String host, int port, String uniqueId ) {
         this.host = host;
         this.port = port;
         this.uniqueId = uniqueId;
     }
 
-//  add methods to add positions to the tracker, i.e. positionList
-//  consider LinkedList and other Collections for this purpose
-//  in any case the provided fixtimes must be in chronological order
-    private List<Traccar.Position.Builder> positionBuilderList = new ArrayList<>();
-
     /**
-     * Convenience method to send a single Position.
-     * Useful for development, may be removed in future!
+     * The external user of the Tracker simply adds a new Position Builder to
+     * the Tracker's internal Queue. Then the internal Tracker logic takes care
+     * of sending positions and retries in case of connection problems.
      * 
-     * The position is wrapped in the Device, i.e. this Tracker.
-     * Note the a position should provide the FixTime and 
-     * the Tracker adds the DeviceTime immediately before sending.
+     * @param protoPositionBuilder
      */
-    private void transmitSingleTraccarPosition(Traccar.Position.Builder protoPosition) {
-        Traccar.Device.Builder devBuilder = createDeviceBuilder();
-//      set Device-,i.e. Tracker time just before transmission
-        protoPosition.setDevicetime(new Date().getTime());
-        devBuilder.addPosition(protoPosition);
-        Traccar.Device protoDevice = devBuilder.build();
-        Traccar.Acknowledge ack = TraccarSender.transmitTraccarObject(protoDevice, host, port);
-        System.out.println(new Date() + " received Acknowledge: " + ack );
+    public void sendPositionProto(Traccar.Position.Builder protoPositionBuilder) {
+//      simply add pos to queue and ..
+        messageQueue.add(protoPositionBuilder);
+//      .. let the loop take care of the rest
+//      check if its running or start it
+        if (!messageLoopRunning) {  // TODO: do this right!
+            Thread t = new Thread(new MessageLoop(), "MessageLoop");
+            t.start();
+        }
     }
 
     /**
-     * Transmit methods are private and triggered internally by configuration.
+     * All newly added Positions are collected in a Queue. Then the Tracker
+     * internally submits the positions to the server - as connectivity allows.
      */
-    private void transmitTraccarDevice(Traccar.Device protoDevice) {
-        Traccar.Acknowledge ack = TraccarSender.transmitTraccarObject(protoDevice, host, port);
-        System.out.println("received Acknowledge: " + ack  + " at " + new Date().getTime());
-    }
-    
+    private Queue<Traccar.Position.Builder> messageQueue = new LinkedList<Traccar.Position.Builder>();
+    private Traccar.Device.Builder devBuilder;
+    private int maxNrOfPositions = 2;
+
     /**
-     * Create a Traccar.Device message builder with tracker's uniquId
-     * which should be registered on the server.
+     * All Positions are collected in a MessageQueue and the MessageLoop takes
+     * care of sending them whenever connectivity allows it.
+     *
+     * @author kbeigl@jeets.org
      */
-    private Traccar.Device.Builder createDeviceBuilder() {
-        Traccar.Device.Builder deviceBuilder = Traccar.Device.newBuilder();
-//      override ?
-        deviceBuilder.setUniqueid(uniqueId);
-        return deviceBuilder;
+    private class MessageLoop implements Runnable {
+        public void run() {
+            System.out.println("Starting MessageLoop thread");
+            messageLoopRunning = true;  // TODO: do this right!
+            try {
+//              only transmit if queue has more msgs
+                while (!messageQueue.isEmpty()) {
+                    boolean transmitted = false;
+//                  try transmitting until msgs are acknowledged
+                    while (!transmitted) {
+//                      keep trying and add newly queued msgs until maxNrOfPositions
+                        fillDeviceBuilder();
+                        System.out.println("'" + uniqueId + "' sending " + devBuilder.getPositionCount()
+                                + " Positions to '" + host + ":" + port + "' at " + new Date().getTime()
+                                + " (" + messageQueue.size() + " msgs queued)");
+                        if (transmitTraccarDevice(devBuilder)) {
+                            transmitted = true;
+                            devBuilder = null;
+//                          reset and continue with new msgs from queue, fillDev, transmit
+                        } else {
+                            System.err.println("Transmission failed, trying again in 10 seconds");
+                            Thread.sleep(10000); // int tryAgainInMillis = 10000;
+                        }
+                    }
+                }
+            } catch (InterruptedException e) {
+                System.err.println("MessageLoop was interrupted!");
+                e.printStackTrace();
+            }
+            messageLoopRunning = false;
+            System.out.println("MessageLoop done.");
+        }
+    }
+
+    private boolean transmitTraccarDevice(Builder devBuilder) {
+//      set devicetime just before transmission - every time
+        for (int pos = 0; pos < devBuilder.getPositionCount(); pos++) {
+            devBuilder.getPositionBuilder(pos).setDevicetime(new Date().getTime());
+        }
+//      keep devBuilder if transmission goes wrong
+        Traccar.Device protoDevice = devBuilder.build();
+//      use in/for ACK?: java.util.UUID xTraceID = java.util.UUID.randomUUID();
+        Traccar.Acknowledge ack = TraccarSender.transmitTraccarObject(protoDevice, host, port);
+        if (ack == null) 
+            return false;
+        else {
+            System.out.println("received Acknowledge: " + ack + " at " + new Date());
+            return true;
+        }
+    }
+
+    /**
+     * The DeviceBuilder represents the message to be sent. As long as the
+     * message can't be sent due to connectivity problems the DeviceBuilder can
+     * be filled from the queue to a maximum number of messages. After it was
+     * sent a new DeviceBuilder can be created and filled ...
+     */
+    private void fillDeviceBuilder() {
+        if (devBuilder == null) {
+            devBuilder = Traccar.Device.newBuilder().setUniqueid(uniqueId);
+        }
+        while (!messageQueue.isEmpty())
+            if (devBuilder.getPositionCount() < maxNrOfPositions)
+                devBuilder.addPosition(messageQueue.remove());
+            else break;
+        System.out.println("DeviceBuilder filled with " + devBuilder.getPositionCount() + " positions.");
     }
 
     /**
@@ -93,7 +154,9 @@ public class Tracker implements ProtoPositionListener {
      * and will be sent to [hostname:port]. <br>
      * A return message (ACK) is not implemented.
      * 
-     * @author kbeigl
+     * The method is static and does not require a Tracker instance.
+     * 
+     * @author kbeigl@jeets.org
      */
     public static void transmitProtocolString(String protocolMessage, String host, int port) {
         try (
@@ -110,13 +173,4 @@ public class Tracker implements ProtoPositionListener {
         }
     }
     
-    @Override
-    public void transmitPositionProto(Traccar.Position.Builder protoPosition) {
-//      System.out.println("Tracker received " + protoPosition.toString());
-//      temporary
-        System.out.println("Device '" + uniqueId + "' sending ProtoPosition to '" + host + ":" + port +"'");
-        transmitSingleTraccarPosition(protoPosition);
-//      TODO: add pos to positionList .. house keeping ..
-    }
-
 }
