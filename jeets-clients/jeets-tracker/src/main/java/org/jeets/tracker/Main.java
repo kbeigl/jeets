@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.jeets.protocol.Traccar;
 import org.jeets.protocol.Traccar.Position.Builder;
+import org.jeets.protocol.util.Samples;
 
 /**
  * This class is for stand alone tests of the JeeTS Tracker. 
@@ -82,6 +83,8 @@ public class Main {
         positionBuilder = Traccar.Position.newBuilder();
         positionBuilder.setValid(true)
         .setLatitude(49.02847401d).setLongitude(12.10734587d).setAltitude(370d);
+        Traccar.Event.Builder eventBuilder = Samples.createAlarmEventProto();
+        positionBuilder.addEvent(eventBuilder);
         positions.add(positionBuilder);
 
         positionBuilder = Traccar.Position.newBuilder();
