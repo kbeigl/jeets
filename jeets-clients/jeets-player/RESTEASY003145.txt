@@ -3,10 +3,12 @@ If you run into the error RESTEASY003145:
 
 F:\virtex\repo.jeets\jeets-player>java -jar target\jeets-player-0.2-jar-with-dependencies.jar
 Problems determining version differences. 
-RESTEASY003145: Unable to find a MessageBodyReader of content-type application/json and type class de.hvv.response.InitResponse
+RESTEASY003145: Unable to find a MessageBodyReader of content-type application/json 
+                and type class de.hvv.response.InitResponse
 
 you can currently fix this manually:
-https://stackoverflow.com/questions/12175564/unable-to-find-a-messagebodyreader-of-content-type-application-json-and-type-cla
+https://stackoverflow.com/questions/12175564
+/unable-to-find-a-messagebodyreader-of-content-type-application-json-and-type-cla
 
 *1*
 Just adding the line 

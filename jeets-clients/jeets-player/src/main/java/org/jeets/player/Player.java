@@ -104,6 +104,7 @@ public class Player {
     /**
      * requires existing and valid positionEntities member!
      */
+//  Util class ?
     private void convertJpaToProtoPositions() {
         protoPositionBuilders = new ArrayList<>();
         for (Position positionEntity : positionEntities) {

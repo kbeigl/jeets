@@ -27,8 +27,7 @@ public class HibernateFactory {
 //    private String fromDate = "2017-05-20", fromTime = "16:10:00";
 //    private String   toDate = "2017-05-20",   toTime = "17:43:00";
 
-//  TODO
-    String jdbcUrl = "jdbc:postgresql://localhost:5432/traccar3.10",
+    String jdbcUrl = "jdbc:postgresql://localhost:5432/traccar3.14",
     hbm2ddlAuto = "create",  // "create-drop";
     persistenceUnit = "jeets-pu-traccar-jpa";
 
