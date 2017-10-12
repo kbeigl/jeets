@@ -1,0 +1,85 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<!-- PARENT FOR ARTEFACT ??? -->
+	<parent>
+		<groupId>org.jeets</groupId>
+		<artifactId>jeets-clients</artifactId>
+		<version>2017.09.30</version>
+		<!-- <version>${jeets-repo-release}</version> -->
+	</parent>
+
+	<artifactId>my-tracker-player</artifactId>
+	<version>0.1</version>
+	<packaging>jar</packaging>
+
+	<name>my-tracker-player</name>
+	<url>http://jeets.org</url>
+
+	<properties>
+		<!-- move to parent! -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<junit.version>4.12</junit.version>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
+
+	<dependencies>
+
+		<!-- tracker includes netty, protobuffer and PU -->
+		<dependency>
+			<groupId>org.jeets</groupId>
+			<artifactId>jeets-tracker</artifactId>
+			<version>0.1</version>
+		</dependency>
+		<!-- external proprietary data source / to be removed from player -->
+		<!-- MUST BE PLACED AFTER org.jeets TO AVOID VERSION CONFLICTS -->
+		<!-- currently deactivated, conflict with protocol, tracker, player jboss.logging 
+			version etc. -->
+		<dependency>
+			<groupId>de.jeets</groupId>
+			<artifactId>geofox-api-rest-client</artifactId>
+			<version>29.74.01</version>
+		</dependency>
+
+		<!-- place in top level pom of repo -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<!-- default groupId: org.apache.maven.plugins -->
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.0.0</version>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<archive>
+						<manifest>
+							<mainClass>org.jeets.player.sources.HibernateFactory</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id> <!-- this is used for inheritance merges -->
+						<phase>package</phase> <!-- bind to the packaging phase -->
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
