@@ -3,7 +3,8 @@ package java8.timeapi;
 	import java.time.temporal.ChronoUnit;
 
 	import java.time.LocalDate;
-	import java.time.LocalTime;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 	import java.time.Duration;
 	import java.time.Period;
 
@@ -43,5 +44,7 @@ package java8.timeapi;
 	      Duration duration = Duration.between(time1, time2);
 			
 	      System.out.println("Duration: " + duration);
+	      
+	      LocalDateTime dt;
 	   }
 	}

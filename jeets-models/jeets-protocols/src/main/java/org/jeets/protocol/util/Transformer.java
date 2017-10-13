@@ -1,5 +1,6 @@
 package org.jeets.protocol.util;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -13,9 +14,6 @@ import org.jeets.protocol.Traccar.EventType;
 
 public class Transformer {
 
-//  implement .hash .equals and test !
-//  involve Ack !?
-    
 //  TODO: align and cleanup main/resources/ProtobufferDeviceDecoder
 //      .transfromPositionProtoToEntity 
 //  <-> .transformDeviceProtoToPositionEntities
@@ -109,6 +107,14 @@ public class Transformer {
         return eventBuilder;
     }
     
+//  currently not used 
+    public void entitiesToProtoPositions(List<Position> positionEntities) {
+        List<Traccar.Position.Builder> protoPositionBuilders = new ArrayList<>();
+        for (Position positionEntity : positionEntities) {
+            protoPositionBuilders.add(entityToProtoPosition(positionEntity));
+        }
+    }
+
     /**
      * Transform Position Entity to modifiable Position Builder.
      */

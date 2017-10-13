@@ -21,7 +21,7 @@
     <parent>
 	    <groupId>org.jeets</groupId>
 	    <artifactId>jeets</artifactId>
-		<version>2017.09.30</version>
+		<version>2017.10.13</version>
 <!-- 	<version>${jeets-repo-release}</version>  -->
     </parent>
 
