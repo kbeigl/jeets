@@ -15,7 +15,15 @@ import org.jeets.model.traccar.jpa.Position;
 import org.jeets.player.Player;
 import org.jeets.player.SampleReceiver;
 
-public class DatabaseFactory {
+/**
+ * This class was moved and reengineered in my-tracker-player as
+ * DatabaseFactory. Create a test case with h2, insert mini track and replay to
+ * SampleReceiver as a template for a DBfactory...
+ * 
+ * @author kbeigl@jeets.org
+ */
+@Deprecated
+public class TrackFactory {
 
 //  String[] args:
     private String server; // = "127.0.0.1"; // "demo.traccar.org"
@@ -38,7 +46,7 @@ public class DatabaseFactory {
     public static void main(String[] args) 
     {
 //      1. create Position-Entity List
-        DatabaseFactory db = new DatabaseFactory();
+        TrackFactory db = new TrackFactory();
         db.parseArgs(args);
         List<Position> positionEntities = 
                 db.selectPositionList(db.fromUniqueId, db.fromDate, db.toDate);

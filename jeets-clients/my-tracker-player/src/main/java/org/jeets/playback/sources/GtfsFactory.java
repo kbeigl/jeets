@@ -1,4 +1,4 @@
-package org.jeets.player.sources;
+package org.jeets.playback.sources;
 
 /**
  * This is the generalized GTFS Factory (General Transit Feed Specification)

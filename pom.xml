@@ -20,7 +20,7 @@
 
 	<groupId>org.jeets</groupId>
 	<artifactId>jeets</artifactId>
-	<version>2017.10.13</version>
+	<version>2017.10.15</version>
 	<packaging>pom</packaging>
 	<name>Java EE Tracking Software - JeeTS</name>
 	<description>
@@ -41,7 +41,7 @@
 	</prerequisites>
 
 	<properties>
-		<jeets-repo-release>2017.10.13</jeets-repo-release>
+		<jeets-repo-release>2017.10.15</jeets-repo-release>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 

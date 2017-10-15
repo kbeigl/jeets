@@ -3,11 +3,12 @@ package org.jeets.player;
 import org.jeets.model.traccar.jpa.Position;
 
 /**
- * SampleReceiver used for demo in main method. The Tracker is the 'natural'
- * receiver of Postion Entities filled by the devices sensors.
+ * SampleReceiver used for demo in main method. The Tracker is the 'normal'
+ * receiver of Position Entities filled by the devices sensors.
  * 
  * @author kbeigl@jeets.org
  */
+//  TODO: move to test folder and add tests
 public class SampleReceiver implements PlaybackListener {
 
     @Override

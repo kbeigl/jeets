@@ -53,6 +53,9 @@ public class Player {
      * 2. programTimersForPlayback with extensive use of java8 timeapi 'datemath'
      */
     public void startPlayback() { 
+//      TODO: create PlaybackThread class, set tracker ...
+//      PlaybackThread playback = 
+//      playback.setPositions ..
         Thread t = new Thread(new PlaybackThread(), "PlaybackThread");
         t.start();
     }
@@ -68,8 +71,7 @@ public class Player {
                 System.out.println(new Date() + " pos#" + positionNr + ": " + positionEntity.getFixtime());
                 
                 System.out.println("sending " + positionEntity + " to listeners");
-                sendPositions(positionEntity);
-//              fireProtoPosition(position);
+                sendPosition(positionEntity);
 
                 if (positionNr < positionEntities.size()-1) { 
                     // exclude last position (-1) and use next (+1) position to determine millis
@@ -86,8 +88,12 @@ public class Player {
             System.out.println("Player stopped: Reached end of track");
         }
     }
-    
-    private void sendPositions(Position positionEntity) {
+
+    /**
+     * Send the current (timestamp 'now') position to listeners.
+     * @param positionEntity
+     */
+    private void sendPosition(Position positionEntity) {
         for (PlaybackListener listener : listeners)
             listener.receivePositionEntity(positionEntity);
     }
