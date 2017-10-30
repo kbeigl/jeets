@@ -6,10 +6,18 @@ import java.util.Date;
 import java.util.List;
 
 import org.jeets.model.traccar.jpa.Position;
-import org.jeets.playback.sources.DatabaseFactory;
+import org.jeets.playback.database.DatabaseFactory;
+import org.jeets.playback.gtfs.GtfsFactoryWithViews;
 import org.jeets.player.Player;
-import org.jeets.player.SampleReceiver;
+import org.jeets.tracker.Tracker;
 
+/**
+ * This class provides a simple implementation for three different Track
+ * sources. After generating a new project with 'mvn generate' the developer can
+ * run each implementation, choose one to work on and delete the others.
+ * 
+ * @author kbeigl@jeets.org
+ */
 public class Main {
 
 //  server parameters for all factories
@@ -17,42 +25,62 @@ public class Main {
     // static final int PORT = Integer.parseInt(System.getProperty("port","5200"));
     // load traccar's default.xml for available protocols and ports!!
 
+    /**
+     * Different factory implementations to create a Position List. 
+     */
+    public enum EntityFactory {
+        DATABASE, GTFS, GTFS_VIEWS, REST
+    }    
+
     public static void main(String[] args) {
 
-        List<Position> positionEntities;
+        List<Position> positionEntities = null;
         Main main = new Main();
-        {   // 1. create position list with any factory
+        // 1. create position list with any factory
+        {
+//          TODO: extract a single interface for GTFS and REST to Transit Data
+            switch (EntityFactory.DATABASE) {
+            case DATABASE:
+                positionEntities = main.selectPositionsFromDB( /* add params or SQL statement */ );
+                break;
+            case GTFS_VIEWS:    // temporary, intermediate dev step, to be removed 
+//              A factory can also be used to constantly create traffic by creating a player for each vehicle.
+                GtfsFactoryWithViews gtfs = new GtfsFactoryWithViews();
+//              using carefully an manually selected parameters
+//              positionEntities = 
+                    gtfs.getNextTrip("U1", "Fuhlsbüttel", "Farmsen", new Date());
+//              do this inside gtfsFactory (?)
+                gtfs.closeConnection();
+                break;
+                
+//          case GTFS:
+//              break;
 
-//          a. DB factory
-            positionEntities = main.selectPositionsFromDB();
-
-//          b. GTFS-DB factory
-//          c. REST API factory (GeoFox -> confidential !!)
-        
+            case REST:
+//              GeoFox -> confidential !
+//              move GeoFoxFactory.main here (change Builder- to Entity List)
+//              positionBuilders = geoFox.getLiveTrack(lineKey, departureString, viaString, departureOffset);
+                break;
+            default:
+                break;
+            }
         }
 //      position list ready for playback
         System.out.println(positionEntities.size() + " positions retrieved ");
         
-        // 2. prepare Position-Entity List (do this internally ? / in Player !)
+        // 2. prepare Position-Entity List (move this to Player ?!)
         preparePositionsForReplay(positionEntities);
         
         // 3. create Player
         Player player = new Player(positionEntities);
-        // player.setPositionEntities(positionEntities);
 
-//      Tracker and Server parameters 
-        String server = "localhost";
-        int port = 5200; // traccar: <entry key='pb.device.port'>5200</entry>
-        String toUniqueId = "pb.device.echo";   // must be registered!
-        
-        // 4. create Tracker as Player Listener !
-        PlaybackReceiver receiver = new PlaybackReceiver();
+        // 4. create Client with Tracker
+        // uniqueId must be registered (for each player) and can defer from database selection
+        Tracker tracker = new Tracker("localhost", 5200, "pb.device.echo"); 
+        Client receiver = new Client( tracker );
         player.addListener(receiver);
-
-        // 5. play
         player.startPlayback();
 
-        // 6. done
         System.out.println("End Main");
         return;
     }
@@ -75,6 +103,11 @@ public class Main {
         }
     }
 
+    /**
+     * Hard coded parameters for database access.
+     * <p>
+     * Should be replaced with program logic.
+     */
     private List<Position> selectPositionsFromDB() {
 
         String jdbcUrl = "jdbc:postgresql://localhost:5432/traccar3.14";

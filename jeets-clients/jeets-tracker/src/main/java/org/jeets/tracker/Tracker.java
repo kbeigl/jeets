@@ -9,8 +9,10 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import org.jeets.tracker.netty.TraccarSender;
+import org.jeets.model.traccar.jpa.Position;
 import org.jeets.protocol.Traccar;
 import org.jeets.protocol.Traccar.Device.Builder;
+import org.jeets.protocol.util.Transformer;
 
 /**
  * The JeeTS Tracker sends Protobuffer Messages, i.e. POJOs defined in the
@@ -63,6 +65,13 @@ public class Tracker {
             Thread t = new Thread(new MessageLoop(), "MessageLoop");
             t.start();
         }
+    }
+
+    /**
+     * Alternative Position format supported by Tracker.
+     */
+    public void sendPositionEntity(Position positionEntity) {
+        sendPositionProto(Transformer.entityToProtoPosition(positionEntity));
     }
 
     /**

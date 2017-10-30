@@ -19,7 +19,7 @@ package java8.timeapi;
 	      ZonedDateTime date1 = ZonedDateTime.parse("2007-12-03T10:15:30+05:30[Asia/Karachi]");
 	      System.out.println("date1: " + date1);
 			
-	      ZoneId id = ZoneId.of("Europe/Paris");
+	      ZoneId id = ZoneId.of("Europe/Berlin");
 	      System.out.println("ZoneId: " + id);
 			
 	      ZoneId currentZone = ZoneId.systemDefault();

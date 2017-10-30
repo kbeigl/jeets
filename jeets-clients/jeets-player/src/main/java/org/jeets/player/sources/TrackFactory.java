@@ -16,7 +16,7 @@ import org.jeets.player.Player;
 import org.jeets.player.SampleReceiver;
 
 /**
- * This class was moved and reengineered in my-tracker-player as
+ * This class was moved and reengineered in my-jeets-client as
  * DatabaseFactory. Create a test case with h2, insert mini track and replay to
  * SampleReceiver as a template for a DBfactory...
  * 

@@ -35,7 +35,7 @@
 	<modules>
 		<module>jeets-tracker</module>
 		<module>jeets-player</module>
-		<module>my-tracker-player</module>
+		<module>my-jeets-client</module>
 	</modules>
 
 </project>

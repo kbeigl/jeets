@@ -34,19 +34,6 @@ public class Player {
 //      prepare ...
     }
 
-    /* add useful parameters: 
-     * default: startImmediately -> ignore date and time -> use deltas only
-     * ignoreDay -> use time of day only
-     * live -> play exact time stamps, i.e. fix times
-     * sendOriginal time stamps
-     * repeat track n times
-     * player.set( config ); // speed x2 x4 x0.5 etc.
-     *   
-     * options: time factor!!, start stop pause FF   << < || > >>
-     *  or for transits: play live, 
-     *  play daytimes (ignore date,day,weekday,year to watch your daily trip to work)
-     */
-
     /* To decide:
      * 1. run playback in a Thread
      * OR
@@ -68,9 +55,8 @@ public class Player {
             for (int positionNr = 0; positionNr < positionEntities.size(); positionNr++) {
 //              replace Date with 0 and add System.currentTimeMillis()
                 Position positionEntity = positionEntities.get(positionNr);
-                System.out.println(new Date() + " pos#" + positionNr + ": " + positionEntity.getFixtime());
-                
-                System.out.println("sending " + positionEntity + " to listeners");
+                System.out.println(new Date() + "sending pos#" + positionNr 
+                        + " fixed at " + positionEntity.getFixtime());
                 sendPosition(positionEntity);
 
                 if (positionNr < positionEntities.size()-1) { 
