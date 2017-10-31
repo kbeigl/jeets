@@ -121,6 +121,7 @@ public class Transformer {
     public static Traccar.Position.Builder entityToProtoPosition(Position positionEntity) {
         Traccar.Position.Builder positionBuilder = Traccar.Position.newBuilder();
         // see java8.timeapi package !!
+//      required attribute for transmission => NullPointerException !!
         positionBuilder.setDevicetime(positionEntity.getDevicetime().getTime()); // no millis ?
         positionBuilder.setFixtime(positionEntity.getFixtime().getTime()); 
         positionBuilder.setValid(positionEntity.isValid());

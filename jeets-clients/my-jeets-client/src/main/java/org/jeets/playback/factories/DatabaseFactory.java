@@ -1,4 +1,4 @@
-package org.jeets.playback.database;
+package org.jeets.playback.factories;
 
 import java.util.Date;
 import java.util.HashMap;

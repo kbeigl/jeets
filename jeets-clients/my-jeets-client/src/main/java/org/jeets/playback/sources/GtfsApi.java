@@ -1,4 +1,4 @@
-package org.jeets.playback.gtfs;
+package org.jeets.playback.sources;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -37,7 +37,11 @@ import org.jeets.model.gtfs.GtfsTrip;
  * 
  * Methods will be modified to return GTFS Entities from the new PU.
  */
-public class GtfsFactory {
+public class GtfsApi {
+
+//  TODO: extract Gtfs API, Interface and apply on top of GeoFox REST API
+//  TODO: create Gtfs Persistence Unit a rewrite factory with Gtfs Entities
+//        create Foreign Keys in database before generating PU
 
     public List<GtfsShape> getShapes(GtfsTrip trip) {
 
@@ -123,10 +127,10 @@ public class GtfsFactory {
      * A StopTime has a Trip (trip_id) and a Trip has a Route (route_id).
      */
     public GtfsTrip getNextTrip(GtfsRoute route, List<GtfsStop> fromStops, List<GtfsStop> toStops,
-            ZonedDateTime zonedDateTime) {
+            ZonedDateTime zonedDeparture) {
 
 //      preparations
-        List<String> serviceIds = getServicesForDay(zonedDateTime);
+        List<String> serviceIds = getServicesForDay(zonedDeparture);
         StringBuffer ids = new StringBuffer("(");
         for (String serviceId : serviceIds) {
             ids.append( "'" + serviceId + "'," );
@@ -138,7 +142,7 @@ public class GtfsFactory {
         String fromStopIds = createStopIdString(fromStops);
         String   toStopIds = createStopIdString(  toStops);
         
-        String departureTime = DateTimeFormatter.ofPattern("HH:mm:ss").format(zonedDateTime);
+        String departureTime = DateTimeFormatter.ofPattern("HH:mm:ss").format(zonedDeparture);
         
 //      TODO: account for midnight !!
 //      if you want to find all trips between 12:00 AM and 1:00 AM on 30 Jan. 2014, 
@@ -209,6 +213,9 @@ public class GtfsFactory {
         String day = DateTimeFormatter.ofPattern("yyyyMMdd").format(zonedDateTime);
         String weekday = getWeekday(zonedDateTime);
 //      logger.info("Query date (weekday): " + queryDay + " (" + queryWeekday + ")");
+//      1. main set of service IDs for the day
+//      2. EXCEPT service IDs to be excluded  
+//      3. UNION  service IDs to be added
         String query = "SELECT calendar.service_id"
                 + "  FROM calendar "
                 + " WHERE start_date <= '" + day + "' "
@@ -321,6 +328,9 @@ public class GtfsFactory {
         return agency;
     }
     
+    /**
+     * A route is a group of trips that are displayed to riders as a single service.
+     */
     public List<GtfsRoute> getRoutes(int routeTypeKey) {
 
         String query = "select * from routes where route_type = " + routeTypeKey;
@@ -380,7 +390,7 @@ public class GtfsFactory {
     /**
      * Set up database connection at construction time.
      */
-    public GtfsFactory(String dbUrl, String dbUser, String dbPassword) {
+    public GtfsApi(String dbUrl, String dbUser, String dbPassword) {
         connection = getConnection(dbUrl, dbUser, dbPassword);
     }
 
@@ -413,7 +423,7 @@ public class GtfsFactory {
         }
     }
 
-    private static Log logger = LogFactory.getLog(GtfsFactory.class);
+    private static Log logger = LogFactory.getLog(GtfsApi.class);
 
     /**
      * Get weekday in a String format for a (postgres) query.

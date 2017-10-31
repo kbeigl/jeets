@@ -1,4 +1,4 @@
-package org.jeets.playback.rest;
+package org.jeets.playback.factories;
 
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -13,8 +13,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jeets.protocol.Traccar;
-import org.jeets.protocol.Traccar.Position.Builder;
+import org.jeets.model.traccar.jpa.Position;
 
 import de.hvv.pojo.Coordinate;
 import de.hvv.pojo.CourseElement;
@@ -28,43 +27,31 @@ import de.hvv.response.DLResponse;
 import de.hvv.rest.GeoFoxCustomApi;
 import de.hvv.rest.GeoFoxException;
 
-public class GeoFox {
+public class GeoFoxFactory {
 
-    public List<Builder> getLiveTrack(String lineKey, String departureString, String viaString, int departureOffset)
+    public List<Position> getLiveTrack(String lineKey, String departureString, String viaString, int departureOffset)
             throws GeoFoxException {
 
-        GTITime time = getTimeFromNow(departureOffset);
-        Departure departure = locateVehicle(lineKey, departureString, viaString, time);
-        logger.info("found train departing from " + departureString + " at " 
-                + time + " plus " + departure.getTimeOffset() + " minutes");
-//      logger.info(departure);
-
-        int serviceId = departure.getServiceId();
-//      if (serviceId = -1) ..
-//      must be exact stations, with direction = destination
-        SDName origin = getStation(departure.getLine().origin);
-        String destination = departure.getLine().direction;
-        List<CourseElement> departureCourse =
-                getDepartureCourse(serviceId, lineKey, origin, destination);
-       
+//      from proprietary format
+        List<CourseElement> departureCourse = 
+                getCourseElements(lineKey, departureString, viaString, departureOffset);
+        
         logger.info("found " + departureCourse.size() + " CourseElements");
         CourseElement firstElement = departureCourse.get(0);
-        logger.info("CourseElement#0 " + firstElement);
         String depTime = firstElement.getDepTime();  // + firstElement.getArrDelay()
         String originName = firstElement.getFromStation().getName();
-//      check past ..
         logger.info("train left origin " + originName + " at " + depTime);
-//      .. or near future (restart vehicleLocation to find already moving train!?)
-//      System.out.println("train will leave origin " + originName + " at " + depTime); 
         
-//      prepare Track for GPS Player:
-        return composeCourseTrack(departureCourse);
+//      to jeets format
+        List<Position> jpaPositions = composeCourseTrack( departureCourse );
+        
+        return jpaPositions;
     }
 
-//  TODO: change to List<Position Entity> for Player compatibility 
-    private List<Builder> composeCourseTrack(List<CourseElement> courseElements) {
+//  prepare Track for GPS Player:
+    private List<Position> composeCourseTrack(List<CourseElement> courseElements) {
 
-        List<Builder> protoPositionBuilders = new ArrayList<>();
+        List<Position> jpaPositions = new ArrayList<>();
         for (CourseElement course : courseElements) {
             List<Coordinate> path = course.getPath().track;
             // calculate complete (pythagoras!) distance via path
@@ -96,9 +83,9 @@ public class GeoFox {
 //          logger.info("path.size: " + path.size() );
             for (int i = 0; i < path.size(); i++) {
                 Coordinate coordinate = path.get(i);
-                Builder positionBuilder = Traccar.Position.newBuilder();
-                positionBuilder.setLongitude(coordinate.getX());
-                positionBuilder.setLatitude(coordinate.getY());
+                Position position = new Position();
+                position.setLongitude(coordinate.getX());
+                position.setLatitude(coordinate.getY());
                 if (i == 0) { // first
                     depDate = new Date(depDateTime.toInstant().toEpochMilli());
                     // output for GPS Player: (use println to avoid logger overhead)
@@ -114,17 +101,33 @@ public class GeoFox {
                             && (coordinate.getY() == toStationCoordinate.getY()))
                         System.out.println(coordinate + "\t at " + sdfDate.format( depDate ) 
                         + "\tstop  " + course.getToStation().getName());
-//                      TODO: add STATION_STOP event and attribute stationName = ...
 //                  else
 //                      System.out.println(coordinate + "\t at " + sdfDate.format( depDate ));
                         // logger.info(coordinate + "\t" + deltaMs + " ms at " + depDate );
                 }
-                positionBuilder.setFixtime(depDate.getTime());
-                protoPositionBuilders.add(positionBuilder);
+                position.setFixtime(depDate);
+                jpaPositions.add(position);
             }
 //          logger.info( course.getToStation().getCoordinate() + " " + course.getArrTime());
         }
-        return protoPositionBuilders;
+        return jpaPositions;
+    }
+
+    private List<CourseElement> getCourseElements(String lineKey, String departureString, String viaString, int departureOffset)
+            throws GeoFoxException {
+        GTITime time = getTimeFromNow(departureOffset);
+        Departure departure = locateVehicle(lineKey, departureString, viaString, time);
+        logger.info("found train departing from " + departureString + " at " 
+                + time + " plus " + departure.getTimeOffset() + " minutes");
+
+        int serviceId = departure.getServiceId();
+//      must be exact stations, with direction = destination
+        SDName origin = getStation(departure.getLine().origin);
+        String destination = departure.getLine().direction;
+        List<CourseElement> departureCourse =
+                getDepartureCourse(serviceId, lineKey, origin, destination);
+       
+        return departureCourse;
     }
 
     private List<CourseElement> getDepartureCourse(int serviceId, String lineKey, SDName station, String destinationString)
@@ -244,7 +247,7 @@ public class GeoFox {
     private DateTimeFormatter geofoxDateTime = DateTimeFormatter.ofPattern(geofoxDateTimeFormat);
     private DateTimeFormatter outputDateTime = DateTimeFormatter.ofPattern("dd. MMM HH:mm:ss.SSS");
 
-    private static Log logger = LogFactory.getLog(GeoFox.class);
+    private static Log logger = LogFactory.getLog(GeoFoxFactory.class);
     private GeoFoxCustomApi geofox = new GeoFoxCustomApi("beiglb","I@/0(tGf=S%B");
 
 }

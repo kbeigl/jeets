@@ -5,11 +5,17 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.jeets.client.MyClientDevice;
 import org.jeets.model.traccar.jpa.Position;
-import org.jeets.playback.database.DatabaseFactory;
-import org.jeets.playback.gtfs.GtfsFactoryWithViews;
+import org.jeets.playback.factories.DatabaseFactory;
+import org.jeets.playback.factories.GeoFoxFactory;
+import org.jeets.playback.factories.TransitFactory;
 import org.jeets.player.Player;
 import org.jeets.tracker.Tracker;
+
+import de.hvv.rest.GeoFoxException;
 
 /**
  * This class provides a simple implementation for three different Track
@@ -20,56 +26,94 @@ import org.jeets.tracker.Tracker;
  */
 public class Main {
 
-//  server parameters for all factories
-    // static final String HOST = System.getProperty("host", "127.0.0.1");
-    // static final int PORT = Integer.parseInt(System.getProperty("port","5200"));
-    // load traccar's default.xml for available protocols and ports!!
+    /* Dev Note 9.6.17
+     * Currently the jar-with-deps requires a manual change
+     * as described in RESTEASY003145.txt !!
+     * 
+     * Dev Note 6.6.17
+     * The Factory can be launched from command line for server development
+     * currently the time stamps are not LIVE > analyze AND implement Timer scheduling !
+     * currently the time stamps are (sometimes?) from the previous day! 
+     * -> debug geofox / gtfs (midnight handling)
+     */
+
+    /* server parameters for all factories
+     * static final String HOST = System.getProperty("host", "127.0.0.1");
+     * static final int PORT = Integer.parseInt(System.getProperty("port","5200"));
+     * load traccar's default.xml for available protocols and ports!!
+     */
 
     /**
      * Different factory implementations to create a Position List. 
      */
     public enum EntityFactory {
-        DATABASE, GTFS, GTFS_VIEWS, REST
+        DATABASE, GTFS, REST
     }    
 
     public static void main(String[] args) {
 
         List<Position> positionEntities = null;
         Main main = new Main();
+        // A factory can also be used to constantly create traffic 
+        // by creating a player for each vehicle.
         // 1. create position list with any factory
         {
-//          TODO: extract a single interface for GTFS and REST to Transit Data
-            switch (EntityFactory.DATABASE) {
+            switch (EntityFactory.REST) {
             case DATABASE:
-                positionEntities = main.selectPositionsFromDB( /* add params or SQL statement */ );
-                break;
-            case GTFS_VIEWS:    // temporary, intermediate dev step, to be removed 
-//              A factory can also be used to constantly create traffic by creating a player for each vehicle.
-                GtfsFactoryWithViews gtfs = new GtfsFactoryWithViews();
-//              using carefully an manually selected parameters
-//              positionEntities = 
-                    gtfs.getNextTrip("U1", "Fuhlsbüttel", "Farmsen", new Date());
-//              do this inside gtfsFactory (?)
-                gtfs.closeConnection();
-                break;
+//              use Traccar Persistence Unit to query database
                 
-//          case GTFS:
-//              break;
+//              add input params or SQL statement
+                
+                positionEntities = main.selectPositionsFromDB();
+                break;
 
+//              TODO: extract a single interface for GTFS and REST to Transit Data
+//              manually selected and hard coded parameters (works for HVV)
+            case GTFS:
+//              use TransitFactory with access to GTFS API 
+                int routeType = 1;
+                String routeShortName = "U1";
+                String stop1 = "Farmsen", stop2 = "Fuhlsbüttel";
+
+                TransitFactory factory = new TransitFactory();
+                positionEntities = factory.getNextTrack(routeType, routeShortName, stop1, stop2);
+                
+                break;
             case REST:
-//              GeoFox -> confidential !
-//              move GeoFoxFactory.main here (change Builder- to Entity List)
-//              positionBuilders = geoFox.getLiveTrack(lineKey, departureString, viaString, departureOffset);
+//              use GeoFoxFactory with access to GeoFox API -> CONFIDENTIAL !
+                String lineKey = "HHA-U:U1_HHA-U",  
+                departureString = "Jungfernstieg",
+                viaString = "Hallerstraße";
+                int departureOffset = 35; // [min]
+                
+                GeoFoxFactory geoFox = new GeoFoxFactory();
+                try {
+                    positionEntities = geoFox.getLiveTrack(lineKey, departureString, viaString, departureOffset);
+                } catch (GeoFoxException e) {
+                    logger.error("Problems with GeoFox REST service: " + e.getMessage());
+                    logger.error("For a manual fix of RESTEASY003145 see RESTEASY003145.txt in this project");
+                }
+                
                 break;
             default:
                 break;
             }
         }
+        
+//      at this point all shape Positions should exist and 
+//      the station for arr and dep (same coord) should have timestamps
+        
+//      next the Positions between the stations/stops, i.e. CourseElement/path
+//      should be enriched with timestamps
+//        see GeoFox.composeCourseTrack for existing code !!
+        
 //      position list ready for playback
         System.out.println(positionEntities.size() + " positions retrieved ");
         
         // 2. prepare Position-Entity List (move this to Player ?!)
+//      don't do this for a live track for a transit vehicle !! > branch
         preparePositionsForReplay(positionEntities);
+        // optimize track by adding altitude and calculating course and speed
         
         // 3. create Player
         Player player = new Player(positionEntities);
@@ -77,7 +121,8 @@ public class Main {
         // 4. create Client with Tracker
         // uniqueId must be registered (for each player) and can defer from database selection
         Tracker tracker = new Tracker("localhost", 5200, "pb.device.echo"); 
-        Client receiver = new Client( tracker );
+        // client device sends infos via tracker to server port
+        MyClientDevice receiver = new MyClientDevice( tracker );
         player.addListener(receiver);
         player.startPlayback();
 
@@ -139,4 +184,5 @@ public class Main {
         return date;
     }
 
+    private static Log logger = LogFactory.getLog(Main.class);
 }
