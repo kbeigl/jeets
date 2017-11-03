@@ -1,7 +1,12 @@
 package org.jeets.playback;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -54,41 +59,44 @@ public class Main {
 
         List<Position> positionEntities = null;
         Main main = new Main();
-        // A factory can also be used to constantly create traffic 
-        // by creating a player for each vehicle.
+        // A factory can also be used to create traffic 
+        // by creating a player for each vehicle constantly.
         // 1. create position list with any factory
         {
+//          selected transit parameters
+            int routeType = 1;
+            String routeShortName = "U1";
+            String departureStop = "Farmsen", viaStop = "Fuhlsbüttel";
+            String lineKey = "HHA-U:" + routeShortName + "_HHA-U";
+
+            Instant depart = new Date().toInstant();  // now
+//          override with specific time
+//          String startDateString = "2017-11-03 14:30:38";
+//          WRONG result 18:00 at Farmsen !! correct via GeoFox !!
+
             switch (EntityFactory.REST) {
             case DATABASE:
-//              use Traccar Persistence Unit to query database
-                
+//              2a. use Traccar Persistence Unit to query database
 //              add input params or SQL statement
-                
                 positionEntities = main.selectPositionsFromDB();
                 break;
 
 //              TODO: extract a single interface for GTFS and REST to Transit Data
 //              manually selected and hard coded parameters (works for HVV)
             case GTFS:
-//              use TransitFactory with access to GTFS API 
-                int routeType = 1;
-                String routeShortName = "U1";
-                String stop1 = "Farmsen", stop2 = "Fuhlsbüttel";
-
+//              2b. use TransitFactory with access to GTFS API 
                 TransitFactory factory = new TransitFactory();
-                positionEntities = factory.getNextTrack(routeType, routeShortName, stop1, stop2);
+//              routeType could be skipped and a (localized) Date parameter should be added
+                positionEntities = factory.getNextTrack(routeType, routeShortName, departureStop, viaStop, depart);
                 
                 break;
             case REST:
-//              use GeoFoxFactory with access to GeoFox API -> CONFIDENTIAL !
-                String lineKey = "HHA-U:U1_HHA-U",  
-                departureString = "Jungfernstieg",
-                viaString = "Hallerstraße";
-                int departureOffset = 35; // [min]
-                
+//              2c. use GeoFoxFactory with access to GeoFox API -> CONFIDENTIAL !
+                ZoneId currentZone = ZoneId.of("Europe/Berlin");  // hardcoded, may be available
+                ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(depart, currentZone);
                 GeoFoxFactory geoFox = new GeoFoxFactory();
                 try {
-                    positionEntities = geoFox.getLiveTrack(lineKey, departureString, viaString, departureOffset);
+                    positionEntities = geoFox.getNextTrack(lineKey, departureStop, viaStop, zonedDateTime);
                 } catch (GeoFoxException e) {
                     logger.error("Problems with GeoFox REST service: " + e.getMessage());
                     logger.error("For a manual fix of RESTEASY003145 see RESTEASY003145.txt in this project");
@@ -102,19 +110,28 @@ public class Main {
         
 //      at this point all shape Positions should exist and 
 //      the station for arr and dep (same coord) should have timestamps
-        
 //      next the Positions between the stations/stops, i.e. CourseElement/path
 //      should be enriched with timestamps
 //        see GeoFox.composeCourseTrack for existing code !!
+        
+        DateFormat df = new SimpleDateFormat("dd.MM.yy HH:mm:ss"); 
+        for (int pos = 0; pos < positionEntities.size(); pos++) {
+//      for (int pos = 0; pos < 20; pos++) {
+            Position position = positionEntities.get(pos);
+            String dateString = df.format(position.getFixtime());
+            System.out.println( pos + ". " + dateString + "\t" 
+                    + position.getLatitude() + "\t" + position.getLongitude() 
+                    + "\t" + position.getAddress());
+        }
         
 //      position list ready for playback
         System.out.println(positionEntities.size() + " positions retrieved ");
         
         // 2. prepare Position-Entity List (move this to Player ?!)
 //      don't do this for a live track for a transit vehicle !! > branch
-        preparePositionsForReplay(positionEntities);
+        setFixtimesStartingNow(positionEntities);
         // optimize track by adding altitude and calculating course and speed
-        
+/*
         // 3. create Player
         Player player = new Player(positionEntities);
 
@@ -125,26 +142,21 @@ public class Main {
         MyClientDevice receiver = new MyClientDevice( tracker );
         player.addListener(receiver);
         player.startPlayback();
-
+ */
         System.out.println("End Main");
         return;
     }
 
     /**
-     * Modify Positions for 'live' playback.
-     * <p>
-     * The Fixtimes should not be sent from the past time and are therefore set
-     * to the time they are actually played to listeners. <br>
-     * Many other modifications according to the setup can be added as needed.
+     * As Fixtimes should not be sent from the past time and they should be set
+     * to the time they are actually played to listeners.
      */
-    private static void preparePositionsForReplay(List<Position> positionEntities) {
+    private static void setFixtimesStartingNow(List<Position> positionEntities) {
         long msOffset = new Date().getTime() - positionEntities.get(0).getFixtime().getTime();
         for (Position position : positionEntities) {
             // adjust fixtimes starting first position from 'now'
             Date newFixtime = new Date(position.getFixtime().getTime() + msOffset);
             position.setFixtime(newFixtime);
-            // clear attributes {..} to null
-            // not needed: clear servertime
         }
     }
 

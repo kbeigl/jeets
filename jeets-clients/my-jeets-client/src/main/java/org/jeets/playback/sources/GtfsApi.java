@@ -299,7 +299,7 @@ public class GtfsApi {
             e.printStackTrace();
         }
 
-        logger.info("returning " + stops.size() + " stops");
+        logger.debug("returning " + stops.size() + " stops");
         return stops;   // may be null
     }
 
@@ -355,7 +355,7 @@ public class GtfsApi {
             e.printStackTrace();
         }
 
-        logger.info("returning " + routes.size() + " routes for routeType " + routeTypeKey);
+        logger.debug("returning " + routes.size() + " routes for routeType " + routeTypeKey);
         return routes;
     }
 

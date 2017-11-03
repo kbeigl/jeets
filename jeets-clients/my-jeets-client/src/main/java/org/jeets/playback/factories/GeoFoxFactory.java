@@ -29,12 +29,12 @@ import de.hvv.rest.GeoFoxException;
 
 public class GeoFoxFactory {
 
-    public List<Position> getLiveTrack(String lineKey, String departureString, String viaString, int departureOffset)
-            throws GeoFoxException {
+    public List<Position> getNextTrack(String lineKey, String departureString, 
+            String viaString, ZonedDateTime zonedDateTime) throws GeoFoxException {
 
-//      from proprietary format
+//      from proprietary format ..
         List<CourseElement> departureCourse = 
-                getCourseElements(lineKey, departureString, viaString, departureOffset);
+                getCourseElements(lineKey, departureString, viaString, zonedDateTime);
         
         logger.info("found " + departureCourse.size() + " CourseElements");
         CourseElement firstElement = departureCourse.get(0);
@@ -42,14 +42,47 @@ public class GeoFoxFactory {
         String originName = firstElement.getFromStation().getName();
         logger.info("train left origin " + originName + " at " + depTime);
         
-//      to jeets format
-        List<Position> jpaPositions = composeCourseTrack( departureCourse );
-        
+//      .. to jeets format
+        List<Position> jpaPositions = 
+//                createAllPositionsWithTimes( departureCourse );
+//        AKTUELLE BAUSTELLE
+//      simplify List to the GTFS List without calculating paths here
+                createOnlyStopsWithTimes( departureCourse );
+
         return jpaPositions;
     }
 
 //  prepare Track for GPS Player:
-    private List<Position> composeCourseTrack(List<CourseElement> courseElements) {
+    private List<Position> createOnlyStopsWithTimes(List<CourseElement> courseElements) {
+
+        List<Position> jpaPositions = new ArrayList<>();
+        for (CourseElement courseEl : courseElements) {
+
+            DateTimeFormatter departureTime = DateTimeFormatter.ofPattern("HH:mm:ss");
+            
+            SDName fromStation = courseEl.getFromStation();
+            ZonedDateTime depDateTime = ZonedDateTime.parse(courseEl.getDepTime(), geofoxDateTime);
+            Date depDate = new Date(depDateTime.toInstant().toEpochMilli());
+
+            SDName toStation = courseEl.getToStation();
+            ZonedDateTime arrDateTime = ZonedDateTime.parse(courseEl.getArrTime(), geofoxDateTime);
+            Date arrDate = new Date(arrDateTime.toInstant().toEpochMilli());
+
+//          logic for departure of first station
+//            and ADD arrival at last toStation (change to array loop)
+
+            Position position = new Position();
+            position.setLongitude(fromStation.getCoordinate().getX());
+            position.setLatitude (fromStation.getCoordinate().getY());
+            position.setAddress(fromStation.getName());
+            position.setFixtime(depDate);
+            
+            jpaPositions.add(position);
+        }
+        return jpaPositions;
+    }
+
+    private List<Position> createAllPositionsWithTimes(List<CourseElement> courseElements) {
 
         List<Position> jpaPositions = new ArrayList<>();
         for (CourseElement course : courseElements) {
@@ -113,9 +146,10 @@ public class GeoFoxFactory {
         return jpaPositions;
     }
 
-    private List<CourseElement> getCourseElements(String lineKey, String departureString, String viaString, int departureOffset)
-            throws GeoFoxException {
-        GTITime time = getTimeFromNow(departureOffset);
+    private List<CourseElement> getCourseElements(String lineKey, String departureString, 
+            String viaString, ZonedDateTime zonedDateTime) throws GeoFoxException {
+
+        GTITime time = getGtiTime(zonedDateTime);
         Departure departure = locateVehicle(lineKey, departureString, viaString, time);
         logger.info("found train departing from " + departureString + " at " 
                 + time + " plus " + departure.getTimeOffset() + " minutes");
@@ -126,7 +160,7 @@ public class GeoFoxFactory {
         String destination = departure.getLine().direction;
         List<CourseElement> departureCourse =
                 getDepartureCourse(serviceId, lineKey, origin, destination);
-       
+
         return departureCourse;
     }
 
@@ -212,31 +246,19 @@ public class GeoFoxFactory {
         return stations.get(0);
     }
 
-    /**
-     * Get Time in (minutes) from now. Use negative minutes to go back in time.
-     * 
-     * @return GTITime object
-     */
-    public GTITime getTimeFromNow(int minutes) {
+    public GTITime getGtiTime(ZonedDateTime zonedDateTime) {
 
         GTITime gtiTime = new GTITime();
-        if (minutes == 0)
-            return gtiTime;
 
-//      TODO: time zone "Europe/Berlin"
-        LocalDateTime currentTime = LocalDateTime.now();
-        currentTime = currentTime.plusMinutes(minutes);
-//      currentTime = currentTime.minusMinutes(minutes);
-
-        LocalDate date = currentTime.toLocalDate();
+        LocalDate date = zonedDateTime.toLocalDate();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         String formattedDate = date.format(formatter);
         gtiTime.date = formattedDate;
 
-        LocalTime time = currentTime.toLocalTime();
+        LocalTime time = zonedDateTime.toLocalTime();
         formatter = DateTimeFormatter.ofPattern("HH:mm");
         String formattedTime = time.format(formatter);
-        // logger.info("gtiTime.time = " + formattedTime);
+        logger.info("gtiTime.time = " + formattedTime);
         gtiTime.time = formattedTime;
 
         return gtiTime;
