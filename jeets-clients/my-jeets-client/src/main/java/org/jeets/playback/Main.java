@@ -15,12 +15,12 @@ import org.apache.commons.logging.LogFactory;
 import org.jeets.client.MyClientDevice;
 import org.jeets.model.traccar.jpa.Position;
 import org.jeets.playback.factories.DatabaseFactory;
-import org.jeets.playback.factories.GeoFoxFactory;
+//import org.jeets.playback.factories.GeoFoxFactory;
 import org.jeets.playback.factories.TransitFactory;
 import org.jeets.player.Player;
 import org.jeets.tracker.Tracker;
 
-import de.hvv.rest.GeoFoxException;
+//import de.hvv.rest.GeoFoxException;
 
 /**
  * This class provides a simple implementation for three different Track
@@ -40,6 +40,7 @@ public class Main {
      * currently the time stamps are not LIVE > analyze AND implement Timer scheduling !
      * currently the time stamps are (sometimes?) from the previous day! 
      * -> debug geofox / gtfs (midnight handling)
+     * see ...-status.txt file in this project
      */
 
     /* server parameters for all factories
@@ -63,49 +64,47 @@ public class Main {
         // by creating a player for each vehicle constantly.
         // 1. create position list with any factory
         {
-//          selected transit parameters
-            int routeType = 1;
+//          manually selected and hard coded transit parameters (works for HVV)
+            int routeType = 1;  // could be removed
             String routeShortName = "U1";
             String departureStop = "Farmsen", viaStop = "Fuhlsbüttel";
             String lineKey = "HHA-U:" + routeShortName + "_HHA-U";
 
             Instant depart = new Date().toInstant();  // now
-//          override with specific time
-//          String startDateString = "2017-11-03 14:30:38";
+//          String startDateString = "2017-11-03T14:30:38Z";
 //          WRONG result 18:00 at Farmsen !! correct via GeoFox !!
+//          COORECT RESULTS FOR FARMSEN 18:10
+//          override with specific time
+//          String startDateString = "2017-11-03T18:08:00Z";
+//          depart= Instant.parse(startDateString);   
 
-            switch (EntityFactory.REST) {
+            switch (EntityFactory.DATABASE) {
             case DATABASE:
 //              2a. use Traccar Persistence Unit to query database
 //              add input params or SQL statement
                 positionEntities = main.selectPositionsFromDB();
                 break;
-
-//              TODO: extract a single interface for GTFS and REST to Transit Data
-//              manually selected and hard coded parameters (works for HVV)
             case GTFS:
 //              2b. use TransitFactory with access to GTFS API 
                 TransitFactory factory = new TransitFactory();
 //              routeType could be skipped and a (localized) Date parameter should be added
                 positionEntities = factory.getNextTrack(routeType, routeShortName, departureStop, viaStop, depart);
-                
                 break;
             case REST:
 //              2c. use GeoFoxFactory with access to GeoFox API -> CONFIDENTIAL !
-                ZoneId currentZone = ZoneId.of("Europe/Berlin");  // hardcoded, may be available
-                ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(depart, currentZone);
+/*
                 GeoFoxFactory geoFox = new GeoFoxFactory();
                 try {
-                    positionEntities = geoFox.getNextTrack(lineKey, departureStop, viaStop, zonedDateTime);
+                    positionEntities = geoFox.getNextTrack(lineKey, departureStop, viaStop, depart);
                 } catch (GeoFoxException e) {
                     logger.error("Problems with GeoFox REST service: " + e.getMessage());
                     logger.error("For a manual fix of RESTEASY003145 see RESTEASY003145.txt in this project");
                 }
-                
+ */
                 break;
-            default:
-                break;
-            }
+        default:
+            break;
+        }
         }
         
 //      at this point all shape Positions should exist and 
@@ -114,7 +113,36 @@ public class Main {
 //      should be enriched with timestamps
 //        see GeoFox.composeCourseTrack for existing code !!
         
-        DateFormat df = new SimpleDateFormat("dd.MM.yy HH:mm:ss"); 
+        System.out.println(positionEntities.size() + " positions retrieved ");
+        // this should only be applied to DATABASE 
+        // while Transit should be played back by actual time stamps
+        setFixtimesStartingNow(positionEntities);
+        // optimize track by adding altitude and calculating course and speed
+//      listTrack(positionEntities);
+
+        // 2. create Player
+        Player player = new Player(positionEntities);
+        // 3. create Client with Tracker
+        // uniqueId must be registered (for each player) and can defer from database selection
+        Tracker tracker = new Tracker("localhost", 5200, "pb.device.echo"); 
+        // client device sends infos via tracker to server port
+        MyClientDevice receiver = new MyClientDevice( tracker );
+        player.addListener(receiver);
+        player.startPlayback();
+
+        System.out.println("End Main");
+        return;
+    }
+    
+    private static boolean areEqual(Position gtfs, Position gfox) {
+        if (gtfs.getFixtime().equals(gfox)) return true;
+//      etc.
+        return false;
+    }
+
+    private static DateFormat df = new SimpleDateFormat("dd.MM.yy HH:mm:ss");
+
+    private static void listTrack(List<Position> positionEntities) {
         for (int pos = 0; pos < positionEntities.size(); pos++) {
 //      for (int pos = 0; pos < 20; pos++) {
             Position position = positionEntities.get(pos);
@@ -123,28 +151,6 @@ public class Main {
                     + position.getLatitude() + "\t" + position.getLongitude() 
                     + "\t" + position.getAddress());
         }
-        
-//      position list ready for playback
-        System.out.println(positionEntities.size() + " positions retrieved ");
-        
-        // 2. prepare Position-Entity List (move this to Player ?!)
-//      don't do this for a live track for a transit vehicle !! > branch
-        setFixtimesStartingNow(positionEntities);
-        // optimize track by adding altitude and calculating course and speed
-/*
-        // 3. create Player
-        Player player = new Player(positionEntities);
-
-        // 4. create Client with Tracker
-        // uniqueId must be registered (for each player) and can defer from database selection
-        Tracker tracker = new Tracker("localhost", 5200, "pb.device.echo"); 
-        // client device sends infos via tracker to server port
-        MyClientDevice receiver = new MyClientDevice( tracker );
-        player.addListener(receiver);
-        player.startPlayback();
- */
-        System.out.println("End Main");
-        return;
     }
 
     /**
@@ -171,11 +177,17 @@ public class Main {
         String persistenceUnit = "jeets-pu-traccar-jpa";
         DatabaseFactory db = new DatabaseFactory(jdbcUrl, persistenceUnit);
 
-        String fromDevice = "pb.device";
-        Date fromDate = parseDate("2017-05-20 16:10:00");
-        Date   toDate = parseDate("2017-05-20 17:43:00");
+//      String fromDevice = "pb.device";
+//      Date fromDate = parseDate("2017-05-20 16:10:00");
+//      Date   toDate = parseDate("2017-05-20 17:43:00");
+        
+//      line 'U1' with full geometry :)
+        String fromDevice = "HHA-U:U1_HHA-U";
+        Date fromDate = parseDate("2017-06-05 13:09:00");
+        Date   toDate = parseDate("2017-06-08 16:36:00");
+
         List<Position> positionEntities = db.selectPositionList(fromDevice, fromDate, toDate);
-//      System.out.println(positionEntities.size() + " positions " + "for device " + fromDevice);
+        System.out.println(positionEntities.size() + " positions " + "for device " + fromDevice);
 
 //      DEBUG: main method doesn't terminate (here) > close db, EMgr .. ?
 

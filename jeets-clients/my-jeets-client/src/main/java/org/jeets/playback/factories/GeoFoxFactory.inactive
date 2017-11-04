@@ -2,9 +2,10 @@ package org.jeets.playback.factories;
 
 import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -30,7 +31,11 @@ import de.hvv.rest.GeoFoxException;
 public class GeoFoxFactory {
 
     public List<Position> getNextTrack(String lineKey, String departureString, 
-            String viaString, ZonedDateTime zonedDateTime) throws GeoFoxException {
+            String viaString, Instant depart) throws GeoFoxException {
+
+//      TODO retrieve zone from REST API
+        ZoneId currentZone = ZoneId.of("Europe/Berlin");  // hardcoded, may be available
+        ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(depart, currentZone);
 
 //      from proprietary format ..
         List<CourseElement> departureCourse = 
@@ -58,12 +63,12 @@ public class GeoFoxFactory {
         List<Position> jpaPositions = new ArrayList<>();
         for (CourseElement courseEl : courseElements) {
 
-            DateTimeFormatter departureTime = DateTimeFormatter.ofPattern("HH:mm:ss");
-            
             SDName fromStation = courseEl.getFromStation();
             ZonedDateTime depDateTime = ZonedDateTime.parse(courseEl.getDepTime(), geofoxDateTime);
             Date depDate = new Date(depDateTime.toInstant().toEpochMilli());
 
+            // TODO create 2 stops from one for arr and dep time 
+            // (and subtract about 30 secs to simulate train stop)
             SDName toStation = courseEl.getToStation();
             ZonedDateTime arrDateTime = ZonedDateTime.parse(courseEl.getArrTime(), geofoxDateTime);
             Date arrDate = new Date(arrDateTime.toInstant().toEpochMilli());

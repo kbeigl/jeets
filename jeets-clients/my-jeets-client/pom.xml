@@ -42,12 +42,13 @@
 		<!-- external proprietary data source / to be removed from player -->
 		<!-- MUST BE PLACED AFTER org.jeets TO AVOID VERSION CONFLICTS -->
 		<!-- currently deactivated, conflict with protocol, tracker, player jboss.logging 
-			version etc. -->
+			version etc.
 		<dependency>
 			<groupId>de.jeets</groupId>
 			<artifactId>geofox-api-rest-client</artifactId>
 			<version>29.74.01</version>
 		</dependency>
+		 -->
 
 		<!-- place in top level pom of repo -->
 		<dependency>

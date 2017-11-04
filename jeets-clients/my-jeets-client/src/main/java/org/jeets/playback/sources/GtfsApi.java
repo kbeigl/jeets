@@ -121,7 +121,6 @@ public class GtfsApi {
         return stopTimes;
     }
 
-
     /*
      * The connection between a Route and a StopTime is a Trip.
      * A StopTime has a Trip (trip_id) and a Trip has a Route (route_id).

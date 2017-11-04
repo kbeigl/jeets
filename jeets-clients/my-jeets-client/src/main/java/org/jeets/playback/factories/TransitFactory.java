@@ -138,7 +138,7 @@ public class TransitFactory {
             Position position = null;
             
             // skip first arrival position
-            if (i > 0) { // arrival
+//            if (i > 0) { // arrival
                 position = new Position();
                 position.setLatitude (stop.getStopLat());
                 position.setLongitude(stop.getStopLon());
@@ -147,16 +147,16 @@ public class TransitFactory {
 //              Note: Address will not be transmitted (helpful here)
                 position.setAddress(stop.getStopName());
                 positions.add(position);
-            }
+//            }
             // skip last departure position
-            if (i < tripStops.size() - 2) { // departure
+//            if (i < tripStops.size() - 2) { // departure
                 position = new Position();
                 position.setLatitude(stop.getStopLat());
                 position.setLongitude(stop.getStopLon());
                 Date depDate = createDate( zonedDateTime, stopTime.getDepartureTime() ) ;
                 position.setFixtime(depDate);
                 position.setAddress(stop.getStopName());
-            }
+//            }
 
         }
         
