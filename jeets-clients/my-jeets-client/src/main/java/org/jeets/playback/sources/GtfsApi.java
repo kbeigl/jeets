@@ -365,7 +365,7 @@ public class GtfsApi {
      */
     public String getRouteType(int routeTypeKey) {
 
-        String query = "select * from route_type " + " where route_type = " + routeTypeKey;
+        String query = "select * from route_type where route_type = " + routeTypeKey;
         String description = "";
 
         Statement stmt = null;

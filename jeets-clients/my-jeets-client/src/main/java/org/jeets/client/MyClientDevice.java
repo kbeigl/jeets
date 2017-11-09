@@ -31,6 +31,7 @@ public class MyClientDevice implements PlaybackListener {
     @Override
     public void receivePositionEntity(Position positionEntity) {
         // required attribute for transmission!
+        // countercheck tracker.transmitTraccarDevice (remove here?)
         positionEntity.setDevicetime(new Date());
         logger.info("Device now is at position: " + positionEntity);
         // position is sent to server as simple as

@@ -4,9 +4,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+//import java.time.LocalDateTime;
+//import java.time.ZoneId;
+//import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -65,7 +65,7 @@ public class Main {
         // 1. create position list with any factory
         {
 //          manually selected and hard coded transit parameters (works for HVV)
-            int routeType = 1;  // could be removed
+            int routeType = 1;  // should be removed
             String routeShortName = "U1";
             String departureStop = "Farmsen", viaStop = "Fuhlsbüttel";
             String lineKey = "HHA-U:" + routeShortName + "_HHA-U";
@@ -78,7 +78,7 @@ public class Main {
 //          String startDateString = "2017-11-03T18:08:00Z";
 //          depart= Instant.parse(startDateString);   
 
-            switch (EntityFactory.DATABASE) {
+            switch (EntityFactory.GTFS) {
             case DATABASE:
 //              2a. use Traccar Persistence Unit to query database
 //              add input params or SQL statement
@@ -102,9 +102,9 @@ public class Main {
                 }
  */
                 break;
-        default:
-            break;
-        }
+            default:
+                break;
+            }
         }
         
 //      at this point all shape Positions should exist and 
