@@ -30,7 +30,7 @@
 	<artifactId>jeets-clients</artifactId>
 	<packaging>pom</packaging>
 
-	<name>Client Tracking Components</name>
+	<name>--- Client Tracking Components ---</name>
 
 	<modules>
 		<module>jeets-tracker</module>

@@ -29,7 +29,7 @@
 	<artifactId>jeets-models</artifactId>
     <packaging>pom</packaging>
 
-    <name>System Dataformats</name>
+    <name>--- System Dataformats ---</name>
     <description>Dataformats for Tracking Software Components</description>
 
     <modules>
@@ -38,6 +38,7 @@
 	   <module>jeets-protocols</module>
 	   <!-- to be introduced with Wildfly ...
 	   <module>jeets-pu-traccar-ejb</module>	 -->
+	   <module>jeets-pu-gtfs-jpa</module>
     </modules>
 
     <dependencies>

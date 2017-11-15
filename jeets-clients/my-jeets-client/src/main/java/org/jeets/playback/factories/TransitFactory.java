@@ -77,11 +77,6 @@ public class TransitFactory {
         }
         logger.info("selected Route: " + selectedRoute.getRouteShortName() + ": " + selectedRoute.getRouteLongName());
 
-        // agency ----------------------------------
-        // for legal notice, URL, language and time zone
-        GtfsAgency agency = gtfs.getRouteAgency(selectedRoute.getAgencyId());
-        logger.info("For agency " + agency);
-
         // stops -----------------------------------
         List<GtfsStop> fromStops = null, toStops = null;
         fromStops = gtfs.findStationsInRoute(fromStop, selectedRoute.getRouteId());
@@ -95,6 +90,11 @@ public class TransitFactory {
             return null; // can't continue
         }
         logger.debug("Found " + (fromStops.size() + toStops.size()) + " valid stops in route " + selectedRoute.getRouteId());
+
+        // agency ----------------------------------
+        // for legal notice, URL, language and time zone
+        GtfsAgency agency = gtfs.getRouteAgency(selectedRoute.getAgencyId());
+        logger.info("For agency " + agency);
 
         // convert PC time to agencies time zone
         ZoneId currentZone = ZoneId.of(agency.getAgencyTimezone());

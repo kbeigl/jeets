@@ -150,7 +150,7 @@ public class GtfsApi {
 //      Between 24:00:00 and 25:00:00 for trips with service on 20140129
 //      In Searching for Trips (page 53) you can see how to apply this to your trip searches.
         String query = "SELECT t.* "    // trip entity
-                + "  FROM route_trips t, stop_times dep, stop_times arr "
+                + "  FROM trips t, stop_times dep, stop_times arr "
                 + " WHERE t.service_id IN " + ids
 //              departures (from)
                 + "   AND dep.trip_id = t.trip_id "
@@ -169,7 +169,8 @@ public class GtfsApi {
                 + "   AND arr.drop_off_type = 0 "
                 + "   AND dep.departure_time < arr.arrival_time "
                 + " ORDER BY dep.departure_time "
-                + " LIMIT 1";   // get first, i.e. next trip only
+//              get first, i.e. next trip only
+                + " LIMIT 1";   
         
         GtfsTrip trip = new GtfsTrip();
         Statement stmt = null;

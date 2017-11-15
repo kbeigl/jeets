@@ -78,11 +78,12 @@ public class Main {
 //          String startDateString = "2017-11-03T18:08:00Z";
 //          depart= Instant.parse(startDateString);   
 
-            switch (EntityFactory.GTFS) {
+//          switch manualy during development
+            switch (EntityFactory.DATABASE) {
             case DATABASE:
 //              2a. use Traccar Persistence Unit to query database
 //              add input params or SQL statement
-                positionEntities = main.selectPositionsFromDB();
+                positionEntities = main.selectPositionsFromDB(lineKey);
                 break;
             case GTFS:
 //              2b. use TransitFactory with access to GTFS API 
@@ -170,8 +171,9 @@ public class Main {
      * Hard coded parameters for database access.
      * <p>
      * Should be replaced with program logic.
+     * @param device 
      */
-    private List<Position> selectPositionsFromDB() {
+    private List<Position> selectPositionsFromDB(String device) {
 
         String jdbcUrl = "jdbc:postgresql://localhost:5432/traccar3.14";
         String persistenceUnit = "jeets-pu-traccar-jpa";
@@ -182,12 +184,13 @@ public class Main {
 //      Date   toDate = parseDate("2017-05-20 17:43:00");
         
 //      line 'U1' with full geometry :)
-        String fromDevice = "HHA-U:U1_HHA-U";
+//      String device = "HHA-U:U1_HHA-U";
+//      data must exist in DB ;)
         Date fromDate = parseDate("2017-06-05 13:09:00");
         Date   toDate = parseDate("2017-06-08 16:36:00");
 
-        List<Position> positionEntities = db.selectPositionList(fromDevice, fromDate, toDate);
-        System.out.println(positionEntities.size() + " positions " + "for device " + fromDevice);
+        List<Position> positionEntities = db.selectPositionList(device, fromDate, toDate);
+        System.out.println(positionEntities.size() + " positions " + "for device " + device);
 
 //      DEBUG: main method doesn't terminate (here) > close db, EMgr .. ?
 
