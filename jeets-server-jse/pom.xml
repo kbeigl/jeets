@@ -29,7 +29,7 @@
     <artifactId>jeets-server-jse</artifactId>
     <packaging>pom</packaging>
 
-    <name>Server Tracking Components (JSE)</name>
+    <name>--- Server Tracking Components (JSE) ---</name>
 
     <modules>
 		<module>jeets-dcs</module>

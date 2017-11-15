@@ -19,6 +19,7 @@ package org.jeets.etl;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.spring.SpringRouteBuilder;
+import org.jeets.etl.steps.GeocodeEnricher;
 import org.jeets.etl.steps.NetworkDevice;
 import org.jeets.model.traccar.jpa.Device;
 import org.slf4j.Logger;
@@ -26,7 +27,7 @@ import org.slf4j.LoggerFactory;
 
 public class EtlRoute extends SpringRouteBuilder {
 
-//  use Camel .log instead
+    // use Camel .log instead
     private static final Logger LOG = LoggerFactory.getLogger(EtlRoute.class);
     // "etl.device.port"
     static final int PORT = Integer.parseInt(System.getProperty("port", "5200"));
@@ -34,17 +35,16 @@ public class EtlRoute extends SpringRouteBuilder {
     public void configure() throws Exception {
         LOG.info("configure EtlRoutes .. ");
 //      @formatter:off
-        from("seda:jeets-dcs")
+//      getContext().setTracing(true);
 
-        .log("${body}")
-        .enrich("direct:geocode")
-        .log("${body}")
-        .log("${header.address}")
+        from("seda:jeets-dcs")
         
-//      send a shallow copy (and geocode might be added later!)
-//      .multicast().parallelProcessing().to("jpa:y", "mq:z")
+        .split(simple("${body.positions}"))
+            .log("Split line Position at (${body.latitude},${body.longitude})")
+            .enrich("direct:geocode", GeocodeEnricher.setAddress())   
+            .log("added new Address \"${body.address}\"")
+        .end()
         
-//      .convertBodyTo(Device.class)
         .process(new Processor() {
             public void process(Exchange exchange) throws Exception {
                 Device device = (Device) exchange.getIn().getBody();
@@ -54,15 +54,12 @@ public class EtlRoute extends SpringRouteBuilder {
         })
         .to("jpa:org.jeets.model.traccar.jpa.Device?usePersist=true");
 
-        /* content enrichment with Camel Google Geocoder
-         *  input:
-         * output:
-         */
+        /* content enrichment with Camel Google Geocoder */
         from("direct:geocode")
-        .to("geocoder:latlng:40.714224,-73.961452")
+        .toD("geocoder:latlng:${body.latitude},${body.longitude}")  // body = position
         .log("Location ${header.CamelGeocoderAddress} "
-                + "is at lat/lng: ${header.CamelGeocoderLatlng} and "
-                + "in country ${header.CamelGeoCoderCountryShort}");
+                + "is at ${header.CamelGeocoderLatlng} "
+                + "in ${header.CamelGeoCoderCountryShort}");
 //      @formatter:on
     }
 
