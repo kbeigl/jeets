@@ -10,7 +10,7 @@ public class AckResponder implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
         Device devEntity =  (Device) exchange.getIn().getBody(Device.class);
-        System.out.println("AckResponder.process getIn jpa.Device.uniqueid " + devEntity.getUniqueid());
+//      LOG.info("AckResponder.process getIn jpa.Device.uniqueid " + devEntity.getUniqueid());
 //      LOG.info("DcsProcessor received Device: {} at {}", devProto.getUniqueid(), new Date().getTime());
 /*
 //      TODO: validate transformation

@@ -23,7 +23,7 @@
     <parent>
 	   <groupId>org.jeets</groupId>
 	   <artifactId>jeets-server-jse</artifactId>
-		<version>2017.11.09</version>
+		<version>2017.11.18</version>
  <!-- 	<version>${jeets-repo-release}</version>  -->
     </parent>
 
@@ -39,35 +39,13 @@
     <camel.osgi.export.pkg>org.apache.camel.example.etl.*</camel.osgi.export.pkg>
     <!-- to avoid us import bunch other package -->
     <camel.osgi.dynamic>*</camel.osgi.dynamic>
-    <!-- link with DCS -->
-    <camel.version>2.19.0</camel.version>
     <openjpa-version>2.4.1</openjpa-version>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <exec-maven-plugin-version>1.5.0</exec-maven-plugin-version>
     <build-helper-maven-plugin-version>1.10</build-helper-maven-plugin-version>
     <lifecycle-mapping-version>1.0.0</lifecycle-mapping-version>
-
-    <!-- compare and merge with DCS
-	<log4j.version>1.2.17</log4j.version>
-	<log4j2.version>2.7</log4j2.version>
-	<junit.version>4.12</junit.version>
-    virtual dependency only used by Eclipse m2e
-     -->
   </properties>
-
-  <dependencyManagement>
-    <dependencies>
-      <!-- Camel BOM -->
-      <dependency>
-        <groupId>org.apache.camel</groupId>
-        <artifactId>camel-parent</artifactId>
-        <version>${camel.version}</version>
-        <scope>import</scope>
-        <type>pom</type>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 
   <dependencies>
 	<dependency>
@@ -115,23 +93,6 @@
 	  <scope>test</scope>
 	</dependency>
 	 -->
-
-    <!-- logging runtime <> test ! -->
-	<dependency>
-		<groupId>org.apache.logging.log4j</groupId>
-		<artifactId>log4j-api</artifactId>
-		<scope>runtime</scope>
-	</dependency>
-	<dependency>
-		<groupId>org.apache.logging.log4j</groupId>
-		<artifactId>log4j-core</artifactId>
-		<scope>runtime</scope>
-	</dependency>
-	<dependency>
-		<groupId>org.apache.logging.log4j</groupId>
-		<artifactId>log4j-slf4j-impl</artifactId>
-		<scope>runtime</scope>
-	</dependency>
 
   </dependencies>
 

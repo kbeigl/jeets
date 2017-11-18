@@ -14,35 +14,77 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-	    <groupId>org.jeets</groupId>
+	<parent>
+		<groupId>org.jeets</groupId>
 		<artifactId>jeets-parent</artifactId>
-		<version>2017.11.09</version>
-<!-- 	<version>${jeets-repo-release}</version>  -->
-    	<relativePath>../parent</relativePath>
-    </parent>
+		<version>2017.11.18</version>
+		<!-- <version>${jeets-repo-release}</version> -->
+		<relativePath>../parent</relativePath>
+	</parent>
 
-    <artifactId>jeets-server-jse</artifactId>
-    <packaging>pom</packaging>
+	<artifactId>jeets-server-jse</artifactId>
+	<packaging>pom</packaging>
 
-    <name>--- Server Tracking Components (JSE) ---</name>
+	<name>--- Server Tracking Components (JSE) ---</name>
 
-    <modules>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<camel.version>2.19.0</camel.version>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<log4j2.version>2.7</log4j2.version>
+	</properties>
+
+	<dependencyManagement>
+		<!-- Camel BOM for all modules -->
+		<dependencies>
+			<dependency>
+				<groupId>org.apache.camel</groupId>
+				<artifactId>camel-parent</artifactId>
+				<version>${camel.version}</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<modules>
 		<module>jeets-dcs</module>
 		<module>jeets-etl</module>
-		<!-- this etl is designed to work with traccar
-			  Instructions to move the decoder into traccar ...
-		<module>jeets-etl-traccar</module>		 -->
-		<module>jeets-dcs2amq</module>
-    </modules>
+		<!-- this etl is designed to work with traccar Instructions to move the 
+			decoder into traccar ... <module>jeets-etl-traccar</module> -->
+		<module>jeets-dcs-amq</module>
+		<module>jeets-geo-router</module>
+	</modules>
 
-    <!-- 
-    <dependencies>
-    </dependencies>
-	-->
+	<dependencies>
+
+		<!-- logging runtime <> test ! -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<scope>test</scope>
+			<!-- <scope>runtime</scope> -->
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<scope>test</scope>
+			<!-- <scope>runtime</scope> -->
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+			<scope>test</scope>
+			<!-- <scope>runtime</scope> -->
+		</dependency>
+
+	</dependencies>
 
 </project>

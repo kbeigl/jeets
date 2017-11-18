@@ -21,7 +21,7 @@ import org.apache.camel.FailedToCreateRouteException;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.component.netty4.BaseNettyTest;
-// org.apache.camel.model.dataformat.ProtobufDataFormat;   ??
+//     org.apache.camel.model.dataformat.ProtobufDataFormat;   ??
 import org.apache.camel.dataformat.protobuf.ProtobufDataFormat;
 import org.junit.Test;
 import org.jeets.dcs.ProtoBean;

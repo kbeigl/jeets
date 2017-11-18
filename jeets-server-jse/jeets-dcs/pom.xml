@@ -15,14 +15,15 @@
   * License for the specific language governing permissions and limitations
   * under the License.
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
     <parent>
 	   <groupId>org.jeets</groupId>
 	   <artifactId>jeets-server-jse</artifactId>
-		<version>2017.11.09</version>
+		<version>2017.11.18</version>
  <!-- 	<version>${jeets-repo-release}</version>  -->
     </parent>
 
@@ -33,37 +34,6 @@
   <!-- <name>Camel JeeTS-DCS Component</name> -->
   <url>http://jeets.org</url>
   <description>JeeTS Device Communication Server (Camel Component)</description>
-
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <camel.version>2.19.0</camel.version>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-	<log4j2.version>2.7</log4j2.version>
-	
-    <!-- compare and merge with ETL
-	<log4j.version>1.2.17</log4j.version>
-	<junit.version>4.12</junit.version>
-    virtual dependency only used by Eclipse m2e 
-    <lifecycle-mapping-version>1.0.0</lifecycle-mapping-version>
-    <build-helper-maven-plugin-version>1.10</build-helper-maven-plugin-version>
-    <exec-maven-plugin-version>1.5.0</exec-maven-plugin-version>
-     -->
-  </properties>
-
-  <dependencyManagement>
-    <dependencies>
-      <!-- Camel BOM -->
-      <dependency>
-        <groupId>org.apache.camel</groupId>
-        <artifactId>camel-parent</artifactId>
-        <version>${camel.version}</version>
-        <scope>import</scope>
-        <type>pom</type>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 
   <dependencies>
 	<dependency>
@@ -76,6 +46,7 @@
 	  <groupId>org.apache.camel</groupId>
 	  <artifactId>camel-netty4</artifactId>
 	</dependency>
+	
 	<!-- only for test demo -->
 	<dependency>
 	  <groupId>org.apache.camel</groupId>
@@ -83,7 +54,7 @@
 	  <scope>test</scope>
 	</dependency>
 
-    <!-- for testing -->
+    <!-- for testing (camel-spring-test?) -->
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-test</artifactId>
@@ -96,23 +67,6 @@
       <artifactId>apt</artifactId>
     </dependency>
     
-    <!-- logging runtime <> test ! -->
-	<dependency>
-		<groupId>org.apache.logging.log4j</groupId>
-		<artifactId>log4j-api</artifactId>
-		<scope>test</scope>
-	</dependency>
-	<dependency>
-		<groupId>org.apache.logging.log4j</groupId>
-		<artifactId>log4j-core</artifactId>
-		<scope>test</scope>
-	</dependency>
-	<dependency>
-		<groupId>org.apache.logging.log4j</groupId>
-		<artifactId>log4j-slf4j-impl</artifactId>
-		<scope>test</scope>
-	</dependency>
-	
   </dependencies>
 
   <build>

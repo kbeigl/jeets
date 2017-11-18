@@ -36,8 +36,7 @@ public class CamelDcsToJmsTest extends CamelTestSupport {
     private static boolean activeMqVmTransport = true;
     
     /* TODO camel-example-spring-jms:
-     * 1. replace broker and camel config with camel-server.xml
-     * 2. implement spring remoting on different VM (?)
+     * replace broker and camel config with camel-server.xml
      */
 
     /**
@@ -45,17 +44,14 @@ public class CamelDcsToJmsTest extends CamelTestSupport {
      * forward it to an 'out' queue.
      */
     @Test
-    public void testDeviceEntityToJms() throws Exception {
-//      CamelContext provided as 'context' member by CamelTestSupport
+    public void testDeviceToJms() throws Exception {
 
-        ActiveMQConnectionFactory activeMqConnectionFactory = getConnectionFactory(activeMqVmTransport);
-
-//      cast to JMS spec
+        // cast to JMS spec
         ConnectionFactory connectionFactory = activeMqConnectionFactory;
 
-        // explicit 'test-' component name
-        context.addComponent("test-jms", 
-                JmsComponent.jmsComponentAutoAcknowledge(connectionFactory));
+        // CamelContext is provided as 'context' member instance by
+        // CamelTestSupport. Explicit 'test-' component name
+        context.addComponent("test-jms", JmsComponent.jmsComponentAutoAcknowledge(connectionFactory));
 
         LOG.info("create and add DcsRoute ...");
         context.addRoutes(new RouteBuilder() {
@@ -71,6 +67,7 @@ public class CamelDcsToJmsTest extends CamelTestSupport {
                 Samples.createDeviceEntity());
 
         Thread.sleep(1000);
+//      template.stop();
         context.stop();
     }
 
@@ -80,12 +77,15 @@ public class CamelDcsToJmsTest extends CamelTestSupport {
      * createRegistry method). Uses 'activemq' instead of 'jms' component.
      */
     @Test
-    public void testDcsToActiveMqRoute() throws Exception {
+    public void testDeviceFromNettyToAmq() throws Exception {
         LOG.info("create and add DcsRoute ...");
+//      from "netty4:tcp://localhost:{port}?serverInitializerFactory=#device&sync=true"
+//      .to "activemq:queue:device.in" :
         context.addRoutes(new DcsToAmqRoute() );
         context.addRoutes(new RouteBuilder() {
             public void configure() throws Exception {
                 from("activemq:queue:device.in?connectionFactory=#activeMqConnectionFactory")
+//              optional process for logging only
                 .process(new Processor() {
                     public void process(Exchange exchange) throws Exception {
                         Device device = (Device) exchange.getIn().getBody();
@@ -112,13 +112,15 @@ public class CamelDcsToJmsTest extends CamelTestSupport {
         assertEquals(1, device.getPositions().size());
     }
 
+    ActiveMQConnectionFactory activeMqConnectionFactory;
+
     @Override
     protected JndiRegistry createRegistry() throws Exception {
         JndiRegistry registry = super.createRegistry();
         registry.bind("device", new DeviceProtoExtractor(null));    // request  to server
         registry.bind("ack", new AckProtoExtractor(null));          // response to client
         
-        ActiveMQConnectionFactory activeMqConnectionFactory = 
+        activeMqConnectionFactory = 
                 org.jeets.dcsToAmq.CamelDcsToJmsTest.getConnectionFactory(activeMqVmTransport);
 
         registry.bind("activeMqConnectionFactory", activeMqConnectionFactory);
@@ -151,7 +153,7 @@ public class CamelDcsToJmsTest extends CamelTestSupport {
                     ActiveMQConnection.DEFAULT_BROKER_URL);
         }
         amqFactory.setTrustAllPackages(true);
-//      these don't work:
+//      these don't work (also try in xml:
 //      List<String> trustedPersistenceUnit = new ArrayList<String>();
 //      trustedPersistenceUnit.add("org.jeets.model.traccar.jpa");
 //      amqFactory.setTrustedPackages(trustedPersistenceUnit);
