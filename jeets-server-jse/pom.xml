@@ -28,6 +28,9 @@
 	</parent>
 
 	<artifactId>jeets-server-jse</artifactId>
+	<!-- temporary subversion for this directory
+	     can be removed and streamlined with main repo version -->
+	<version>2017.11.19</version>
 	<packaging>pom</packaging>
 
 	<name>--- Server Tracking Components (JSE) ---</name>

@@ -7,12 +7,12 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-server-jse</artifactId>
-		<version>2017.11.18</version>
+		<version>2017.11.19</version>
 		<!-- <version>${jeets-repo-release}</version> -->
 	</parent>
 
 	<artifactId>jeets-geo-router</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>0.1</version>
 	<packaging>jar</packaging>
 
 	<dependencies>
@@ -42,12 +42,11 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.6.1</version>
-				<!-- should be set in parent
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
-				 -->
+				<!-- should be set in parent properties 
+				<configuration> 
+					<source>1.8</source> 
+					<target>1.8</target> 
+				</configuration> -->
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -62,8 +61,24 @@
 			<plugin>
 				<groupId>org.apache.camel</groupId>
 				<artifactId>camel-maven-plugin</artifactId>
-				<version>2.19.0</version>
+				<!-- remove? -->
+				<version>${camel.version}</version>
 			</plugin>
+
+			<!-- run via 'mvn compile exec:java' -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+          		<version>1.1.1</version>
+				<configuration>
+				<!-- we use Camel spring Main class as the server got all  
+					what it needs to start in the camel-context.xml file -->
+					<mainClass>org.apache.camel.spring.Main</mainClass>
+					<includePluginDependencies>false</includePluginDependencies>
+					<commandlineArgs>-ac META-INF/spring/camel-context.xml</commandlineArgs>
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</build>
 
