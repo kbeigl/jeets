@@ -14,6 +14,7 @@ public class DcsRoute extends RouteBuilder { // plain Camel without Swing!
         // Protocol buffer route without ProtoExtractor
         // from("netty4:tcp://localhost:" + PORT + "?decoder=#decoder&sync=false").unmarshal()
         // .protobuf(SampleMessage.getDefaultInstance()) ...
+        // see org.jeets.dcs.CamelProtobufTest
 
         from("netty4:tcp://localhost:" + PORT + "?serverInitializerFactory=#device&sync=true")
 //      TODO: add {{}} like in localhost:{{port}}

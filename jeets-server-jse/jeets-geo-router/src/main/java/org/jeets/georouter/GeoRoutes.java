@@ -8,36 +8,28 @@ public class GeoRoutes extends SpringRouteBuilder {
 
     // use Camel .log instead (check examples directory)
     private static final Logger LOG = LoggerFactory.getLogger(GeoRoutes.class);
-    // "..device.port"
-    static final int PORT = Integer.parseInt(System.getProperty("port", "5200"));
 
     public void configure() throws Exception {
-        LOG.info("configure GeoRoutes .. ");
+        LOG.info("configure GeoRoutes .. ");    // log sample
+
+        getContext().setTracing(true);
+
+//      simulates DCS output device.in
 //      @formatter:off
-//      getContext().setTracing(true);
+        from("file:src/data?noop=true")     // multiple!? source files
+        .to("activemq:queue:device.in");
 
-//      from jms/amq ? device.in => DCS output
-//      currently copies files with every test or start
-        from("file:src/data?noop=true")
+//      actual geo-router
+        from("activemq:queue:device.in")
             .choice()
-            .when(xpath("person/city = 'London'"))
-//              .log ..
-                .to("file:target/messages/uk")
+            .when(xpath("person/city = 'London'"))  // hvv - Hamburg
+                .to("activemq:topic:hvv.device.in")
             .otherwise()
-                .to("file:target/messages/others");
+                .to("activemq:topic:gts.device.in");  // any device not in Hamburg
 
-//        .to("jms:incomingOrders");
-        
-//        from("jms:incomingOrders")
-//            .choice()
-//            .when(header("CamelFileName").endsWith(".xml"))
-//                .to("jms:topic:xmlOrders")
-//            .when(header("CamelFileName").regex("^.*(csv|csl)$"))
-//                .to("jms:topic:csvOrders");
-//            .otherwise ?
-//        
-//        from("jms:topic:xmlOrders").to("jms:accounting");
-//        from("jms:topic:xmlOrders").to("jms:production");
+//      Starting points for succeeding jeets-modules
+        from("activemq:topic:hvv.device.in").to("file:target/devices/hvv");     // to WildFly
+        from("activemq:topic:gts.device.in").to("file:target/devices/gts");   // distribute to *Handlers and *Managers
 //      @formatter:on
     }
 

@@ -1,12 +1,9 @@
 package org.jeets.dcsToAmq;
 
 import org.apache.activemq.camel.component.ActiveMQComponent;
-import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
-import org.jeets.model.traccar.jpa.Device;
-import org.jeets.model.traccar.util.Samples;
 import org.junit.Test;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

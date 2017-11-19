@@ -34,10 +34,6 @@ public class CamelDcsToJmsTest extends CamelTestSupport {
      * or override individual getConnectionFactory(..) methods.
      */
     private static boolean activeMqVmTransport = true;
-    
-    /* TODO camel-example-spring-jms:
-     * replace broker and camel config with camel-server.xml
-     */
 
     /**
      * Most simple test case to send a Device Entity to an 'in' queue and
@@ -120,9 +116,7 @@ public class CamelDcsToJmsTest extends CamelTestSupport {
         registry.bind("device", new DeviceProtoExtractor(null));    // request  to server
         registry.bind("ack", new AckProtoExtractor(null));          // response to client
         
-        activeMqConnectionFactory = 
-                org.jeets.dcsToAmq.CamelDcsToJmsTest.getConnectionFactory(activeMqVmTransport);
-
+        activeMqConnectionFactory = getConnectionFactory(activeMqVmTransport);
         registry.bind("activeMqConnectionFactory", activeMqConnectionFactory);
 //      cast to JMS spec
 //      ConnectionFactory connectionFactory = activeMqConnectionFactory;

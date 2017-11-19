@@ -24,6 +24,10 @@
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-spring</artifactId>
 		</dependency>
+	    <dependency>
+	      <groupId>org.apache.activemq</groupId>
+	      <artifactId>activemq-camel</artifactId>
+	    </dependency>
 
 		<!-- testing -->
 		<dependency>
@@ -42,11 +46,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.6.1</version>
-				<!-- should be set in parent properties 
-				<configuration> 
-					<source>1.8</source> 
-					<target>1.8</target> 
-				</configuration> -->
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -75,7 +74,7 @@
 					what it needs to start in the camel-context.xml file -->
 					<mainClass>org.apache.camel.spring.Main</mainClass>
 					<includePluginDependencies>false</includePluginDependencies>
-					<commandlineArgs>-ac META-INF/spring/camel-context.xml</commandlineArgs>
+					<commandlineArgs>-ac META-INF/spring/camel-amq.xml</commandlineArgs>
 				</configuration>
 			</plugin>
 
