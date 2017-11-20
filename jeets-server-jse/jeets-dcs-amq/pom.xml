@@ -44,14 +44,9 @@
 	  <groupId>org.apache.camel</groupId>
 	  <artifactId>camel-netty4</artifactId>
 	</dependency>
-
-    <!-- temporarily for with test scope -->
-	<!-- Camel, Spring and ActiveMQ dependencies includes: camel-jms, -spring, 
-		spring-beans, -jms, -context etc., activemq-spring, -pool, -client -->
     <dependency>
       <groupId>org.apache.activemq</groupId>
       <artifactId>activemq-camel</artifactId>
-      <scope>test</scope>
     </dependency>
 
     <!-- for testing -->

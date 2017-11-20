@@ -14,9 +14,10 @@ public class GeoRoutes extends SpringRouteBuilder {
 
         getContext().setTracing(true);
 
-//      simulates DCS output device.in
 //      @formatter:off
+//      simulates DCS
         from("file:src/data?noop=true")     // multiple!? source files
+//      DCS output device.in
         .to("activemq:queue:device.in");
 
 //      actual geo-router

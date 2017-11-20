@@ -2,7 +2,6 @@ package org.jeets.dcsToAmq;
 
 import javax.jms.ConnectionFactory;
 
-import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -29,11 +28,6 @@ import org.slf4j.LoggerFactory;
 public class CamelDcsToJmsTest extends CamelTestSupport {
 
     private static final Logger LOG = LoggerFactory.getLogger(CamelDcsToJmsTest.class);
-    /**
-     * Use this to manually switch from vm: (true) to tcp: (false)
-     * or override individual getConnectionFactory(..) methods.
-     */
-    private static boolean activeMqVmTransport = true;
 
     /**
      * Most simple test case to send a Device Entity to an 'in' queue and
@@ -49,7 +43,6 @@ public class CamelDcsToJmsTest extends CamelTestSupport {
         // CamelTestSupport. Explicit 'test-' component name
         context.addComponent("test-jms", JmsComponent.jmsComponentAutoAcknowledge(connectionFactory));
 
-        LOG.info("create and add DcsRoute ...");
         context.addRoutes(new RouteBuilder() {
             public void configure() {
                 from("test-jms:queue:device.in")
@@ -59,8 +52,7 @@ public class CamelDcsToJmsTest extends CamelTestSupport {
 
         ProducerTemplate template = context.createProducerTemplate();
         context.start();
-        template.sendBody("test-jms:queue:device.in", 
-                Samples.createDeviceEntity());
+        template.sendBody("test-jms:queue:device.in", Samples.createDeviceEntity());
 
         Thread.sleep(1000);
 //      template.stop();
@@ -73,7 +65,7 @@ public class CamelDcsToJmsTest extends CamelTestSupport {
      * createRegistry method). Uses 'activemq' instead of 'jms' component.
      */
     @Test
-    public void testDeviceFromNettyToAmq() throws Exception {
+    public void testDeviceFromNettyToAmqToMock() throws Exception {
         LOG.info("create and add DcsRoute ...");
 //      from "netty4:tcp://localhost:{port}?serverInitializerFactory=#device&sync=true"
 //      .to "activemq:queue:device.in" :
@@ -92,6 +84,8 @@ public class CamelDcsToJmsTest extends CamelTestSupport {
                 .to("mock:result");
             }
         });
+
+//      now send message from client
         MockEndpoint mock = getMockEndpoint("mock:result");
         Traccar.Acknowledge response = (Traccar.Acknowledge) template   // Traccar.Device
                 .requestBody("netty4:tcp://localhost:5200?clientInitializerFactory=#ack&sync=true", 
@@ -113,46 +107,20 @@ public class CamelDcsToJmsTest extends CamelTestSupport {
     @Override
     protected JndiRegistry createRegistry() throws Exception {
         JndiRegistry registry = super.createRegistry();
-        registry.bind("device", new DeviceProtoExtractor(null));    // request  to server
-        registry.bind("ack", new AckProtoExtractor(null));          // response to client
         
-        activeMqConnectionFactory = getConnectionFactory(activeMqVmTransport);
+//      settings from Main.main
+        registry.bind("device", new DeviceProtoExtractor(null));    // request  to server
+        activeMqConnectionFactory = Main.getConnectionFactory(Main.activeMqVmTransport);
         registry.bind("activeMqConnectionFactory", activeMqConnectionFactory);
+
 //      cast to JMS spec
 //      ConnectionFactory connectionFactory = activeMqConnectionFactory;
 //      registry.bind("mqConnectionFactory", connectionFactory);
 
-        return registry;
-    }
+        // for response test
+        registry.bind("ack", new AckProtoExtractor(null));           
 
-    /**
-     * Test with embedded VM- or TCP- transport.
-     * <p>
-     * For TCP testing the external ActiveMQ has to be running. <br>
-     * For Maven runs the vm: transport should be activated to avoid project
-     * external dependencies. <br>
-     * Developers can manually switch to the external ActiveMQ.
-     * 
-     * @param activeMqVmTransport - true=vm false=tcp
-     */
-    public static ActiveMQConnectionFactory getConnectionFactory(boolean activeMqVmTransport) {
-        ActiveMQConnectionFactory amqFactory;
-        if (activeMqVmTransport) {
-            amqFactory = new ActiveMQConnectionFactory("vm://localhost?broker.persistent=false");
-        }
-        else { // tcp://localhost:61616
-            amqFactory = new ActiveMQConnectionFactory(
-                    ActiveMQConnection.DEFAULT_USER,
-                    ActiveMQConnection.DEFAULT_PASSWORD, 
-                    ActiveMQConnection.DEFAULT_BROKER_URL);
-        }
-        amqFactory.setTrustAllPackages(true);
-//      these don't work (also try in xml:
-//      List<String> trustedPersistenceUnit = new ArrayList<String>();
-//      trustedPersistenceUnit.add("org.jeets.model.traccar.jpa");
-//      amqFactory.setTrustedPackages(trustedPersistenceUnit);
-//      amqFactory.setTrustedPackages(Arrays.asList("org.jeets.model.traccar.jpa"));
-        return amqFactory;
+        return registry;
     }
 
 }
