@@ -1,4 +1,4 @@
-package org.jeets.dcsToAmq;
+package org.jeets.georouter;
 
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
@@ -25,7 +25,8 @@ public class Main {
         registry.put("activeMqConnectionFactory", activeMqConnectionFactory);
 
         CamelContext context = new DefaultCamelContext(registry);
-        context.addRoutes(new DcsToAmqRoute());
+        context.addRoutes(new DcsRoutes());
+//      context.addRoutes(new GeoRoutes());
         context.start();
     }
     
@@ -33,7 +34,7 @@ public class Main {
      * Use this to manually switch from vm: (true) to tcp: (false)
      * or override individual getConnectionFactory(..) methods.
      */
-    static boolean activeMqVmTransport = false;
+    static boolean activeMqVmTransport = true;
 
     /**
      * Test with embedded VM- or TCP- transport.
