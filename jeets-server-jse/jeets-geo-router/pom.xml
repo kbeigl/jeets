@@ -15,14 +15,15 @@
   * License for the specific language governing permissions and limitations
   * under the License.
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
     <parent>
 	   <groupId>org.jeets</groupId>
 	   <artifactId>jeets-server-jse</artifactId>
-		<version>2017.11.19</version>
+		<version>2017.11.23</version>
  <!-- 	<version>${jeets-repo-release}</version>  -->
     </parent>
 
@@ -31,7 +32,7 @@
   <packaging>jar</packaging>
 
   <url>http://jeets.org</url>
-  <description>JeeTS Device Communication Server to ActiveMQ</description>
+  <description>JeeTS Geo Router</description>
 
   <dependencies>
 	<dependency>
@@ -40,11 +41,6 @@
 		<version>0.1</version>
 	</dependency>
 
-	<!-- TO BE REMOVED -->
-    <dependency>
-	  <groupId>org.apache.camel</groupId>
-	  <artifactId>camel-netty4</artifactId>
-	</dependency>
     <dependency>
       <groupId>org.apache.activemq</groupId>
       <artifactId>activemq-camel</artifactId>

@@ -5,7 +5,6 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.camel.CamelContext;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.impl.SimpleRegistry;
-import org.jeets.dcsToAmq.steps.DeviceProtoExtractor;
 
 /**
  * plain Camel start without xml 
@@ -16,16 +15,14 @@ public class Main {
 
     public static void main(String args[]) throws Exception {
 //      JndiRegistry registry = new JndiRegistry();
+//      registry.bind( not .put );
         ActiveMQConnectionFactory activeMqConnectionFactory = 
                 getConnectionFactory(activeMqVmTransport);
-//      registry.bind( not .put );
-        
         SimpleRegistry registry = new SimpleRegistry();
-        registry.put("device", new DeviceProtoExtractor(null));
         registry.put("activeMqConnectionFactory", activeMqConnectionFactory);
 
         CamelContext context = new DefaultCamelContext(registry);
-        context.addRoutes(new DcsRoutes());
+//      context.addRoutes(new DcsRoutes());
 //      context.addRoutes(new GeoRoutes());
         context.start();
     }

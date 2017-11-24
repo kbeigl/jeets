@@ -1,4 +1,4 @@
-package org.jeets.georouter;
+package org.jeets.georouter.steps;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;

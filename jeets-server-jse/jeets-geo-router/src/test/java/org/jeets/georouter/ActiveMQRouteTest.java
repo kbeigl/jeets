@@ -15,44 +15,35 @@ import org.apache.activemq.camel.component.ActiveMQComponent;
 
 public class ActiveMQRouteTest extends CamelTestSupport {
     
+    private boolean tracing = true;
     protected MockEndpoint testEndpoint;
     protected String component = "activemq:", mqType = "queue:", inbox = "device.in",
             startEndpointUri = component + mqType + inbox, testEndpointUri = "mock:result";
 
     @Test
-    public void testJmsRouteWithDeviceMessage() throws Exception {
+    public void testDeviceToTileRouter() throws Exception {
+        
+//        how to send 
+//        org.jeets.protocol.util.Samples.createDeviceWithPositionWithOneEvent()
+//        to MQ device.in ?
+        
+    }
+
+    @Test
+    public void testAmqRouteWithDeviceMessage() throws Exception {
 //      send jpa Entity (not Protobuffer!)
         Device device = Samples.createDeviceEntity();
 //      Samples.createDeviceWithPositionWithTwoEvents();
 //      Samples.createDeviceWithTwoPositions();
-
+//      create test cases
         testEndpoint.expectedMessageCount(1);
         testEndpoint.message(0).header("cheese").isEqualTo(123);
         testEndpoint.message(0).body().isInstanceOf(Device.class);
-
+//      send message
         template.sendBodyAndHeader(startEndpointUri, device, "cheese", 123);
 //        template.sendBody(startEndpointUri, device);
-
+//      validate test cases
         testEndpoint.assertIsSatisfied();
-    }
-
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-        testEndpoint = (MockEndpoint) context.getEndpoint(testEndpointUri);
-    }
-
-    protected CamelContext createCamelContext() throws Exception {
-        CamelContext camelContext = super.createCamelContext();
-//      we need to add trusted packages
-        ActiveMQConnectionFactory activeMqConnectionFactory = 
-                Main.getConnectionFactory(true);
-        ActiveMQComponent activeMQComponent = new ActiveMQComponent();
-        activeMQComponent.setConnectionFactory(activeMqConnectionFactory);
-//        ConnectionFactory connectionFactory = activeMqConnectionFactory;
-//        activeMQComponent.setConnectionFactory(connectionFactory);
-        camelContext.addComponent("activemq", activeMQComponent);
-        return camelContext;
     }
 
     protected RouteBuilder createRouteBuilder() throws Exception {
@@ -65,4 +56,31 @@ public class ActiveMQRouteTest extends CamelTestSupport {
             }
         };
     }
+
+    /**
+     * get Endpoint for testing
+     */
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+        testEndpoint = (MockEndpoint) context.getEndpoint(testEndpointUri);
+    }
+
+    /**
+     * register ActiveMQComponent with main method
+     */
+    protected CamelContext createCamelContext() throws Exception {
+        CamelContext camelContext = super.createCamelContext();
+//      we need to add trusted packages
+        ActiveMQConnectionFactory activeMqConnectionFactory = 
+                Main.getConnectionFactory(true);
+        ActiveMQComponent activeMQComponent = new ActiveMQComponent();
+        activeMQComponent.setConnectionFactory(activeMqConnectionFactory);
+//        ConnectionFactory connectionFactory = activeMqConnectionFactory;
+//        activeMQComponent.setConnectionFactory(connectionFactory);
+        camelContext.addComponent("activemq", activeMQComponent);
+        camelContext.setTracing(tracing);
+        return camelContext;
+    }
+
 }
