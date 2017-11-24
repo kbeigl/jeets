@@ -1,5 +1,7 @@
-package org.jeets.georouter.steps;
+package org.jeets.georouter.nodes;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.camel.Exchange;
@@ -29,13 +31,25 @@ public class TileMapper implements Processor {
         
         Position position = (Position) positions.toArray()[ positions.size()-1 ];
         LOG.info("map last position ({},{}) to tiles ..", position.getLatitude(), position.getLongitude());
+        List<String> tileRecipients = new ArrayList<String>();
 //      tile area covers 13 - village to 16 - small road
 //      see wiki.openstreetmap.org/wiki/Zoom_levels
         for (int zoom = 13; zoom < 17; zoom++) {
             String tileString = getTileString(position.getLatitude(), position.getLongitude(), zoom);
 //          LOG.info("tileString {}", tileString);
             exchange.getIn().setHeader("tileZ" + zoom, tileString);
+            tileRecipients.add(tileString);
         }
+        
+//      tileRecipients toArray:
+        String component = "activemq:";
+        String recipientArray = 
+                component + "z13x4371y2812, " +
+                component + "z14x8742y5624, " +
+                component + "z15x17485y11248, " +
+                component + "z16x34971y22497";
+        
+        exchange.getIn().setHeader("tileRecipients", recipientArray);
     }
 
     /**

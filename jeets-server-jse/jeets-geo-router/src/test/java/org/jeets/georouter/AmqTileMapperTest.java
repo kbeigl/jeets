@@ -6,7 +6,7 @@ import org.apache.camel.builder.RouteBuilder;
 
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
-import org.jeets.georouter.steps.TileMapper;
+import org.jeets.georouter.nodes.TileMapper;
 import org.jeets.model.traccar.jpa.Device;
 import org.jeets.model.traccar.util.Samples;
 import org.junit.Before;
@@ -15,11 +15,12 @@ import org.junit.Test;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.camel.component.ActiveMQComponent;
 
-public class ActiveMQRouteTest extends CamelTestSupport {
+public class AmqTileMapperTest extends CamelTestSupport {
     
     private boolean routeTracing = true;
     protected MockEndpoint testEndpoint;
-    protected String component = "activemq:", mqType = "queue:", inbox = "device.in",
+    protected String component = "activemq:", mqType = "queue:", 
+            inbox = "tiles.device.in",
             startEndpointUri = component + mqType + inbox, testEndUri = "mock:result",
             testStartUri = "activemq:queue:test.in";
 
@@ -33,10 +34,14 @@ public class ActiveMQRouteTest extends CamelTestSupport {
                 from(startEndpointUri)
                 .routeId(routeName)
                 .process(new TileMapper())
-                
-//              now route recipient list
-                
-                .to(testStartUri);
+//              now route recipient list with header
+//              tileRecipients=activemq:z13x4371y2812, activemq:z14x8742y5624, ..
+                .to(testStartUri)
+//              this works (check localhost MQ frontend)
+//              TODO: add tile endpoint tests
+//              .recipientList(header("tileRecipients"))
+//              .parallelProcessing()
+                ;
             }
         });
         
@@ -81,12 +86,15 @@ public class ActiveMQRouteTest extends CamelTestSupport {
 //      return Samples.createDeviceWithTwoPositions();
     }
 
+    /**
+     * only create test route at end of each test
+     */
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() throws Exception {
                 from(testStartUri)
-                .to("activemq:queue:test.b");
-                from("activemq:queue:test.b")
+//              .to("activemq:queue:test");
+//              from("activemq:queue:test")
                 .to(testEndUri);
             }
         };

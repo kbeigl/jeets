@@ -21,6 +21,9 @@ public class Main {
         SimpleRegistry registry = new SimpleRegistry();
         registry.put("activeMqConnectionFactory", activeMqConnectionFactory);
         CamelContext context = new DefaultCamelContext(registry);
+        
+//      or see AmQTileMapperTest
+//      camelContext.addComponent("activemq", activeMQComponent);
 
 //      include GeoRouteR
 //      context.addRoutes(new GeoRouteS());
