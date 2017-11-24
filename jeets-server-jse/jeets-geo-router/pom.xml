@@ -18,96 +18,104 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-	   <groupId>org.jeets</groupId>
-	   <artifactId>jeets-server-jse</artifactId>
-		<version>2017.11.23</version>
- <!-- 	<version>${jeets-repo-release}</version>  -->
-    </parent>
-
-  <artifactId>jeets-geo-router</artifactId>
-  <version>0.1</version>
-  <packaging>jar</packaging>
-
-  <url>http://jeets.org</url>
-  <description>JeeTS Geo Router</description>
-
-  <dependencies>
-	<dependency>
+	<parent>
 		<groupId>org.jeets</groupId>
-		<artifactId>jeets-protocols</artifactId>
-		<version>0.1</version>
-	</dependency>
+		<artifactId>jeets-server-jse</artifactId>
+		<version>2017.11.23</version>
+		<!-- <version>${jeets-repo-release}</version> -->
+	</parent>
 
-    <dependency>
-      <groupId>org.apache.activemq</groupId>
-      <artifactId>activemq-camel</artifactId>
-    </dependency>
+	<artifactId>jeets-geo-router</artifactId>
+	<version>0.1</version>
+	<packaging>jar</packaging>
 
-    <!-- for testing -->
-    <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-	
-  </dependencies>
+	<url>http://jeets.org</url>
+	<description>JeeTS Geo Router</description>
 
-  <build>
-    <defaultGoal>install</defaultGoal>
+	<dependencies>
+<!-- 
+		<dependency>
+			<groupId>org.jeets</groupId>
+			<artifactId>jeets-protocols</artifactId>
+			<version>0.1</version>
+		</dependency>
+ -->
+		<dependency>
+			<groupId>org.jeets</groupId>
+			<artifactId>jeets-pu-traccar-jpa</artifactId>
+			<version>3.14</version>
+		</dependency>
 
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.6.1</version>
-      </plugin>
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-camel</artifactId>
+		</dependency>
 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>3.0.2</version>
-        <configuration>
-          <encoding>UTF-8</encoding>
-        </configuration>
-      </plugin>
+		<!-- for testing -->
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-test</artifactId>
+			<scope>test</scope>
+		</dependency>
 
-      <!-- this is important to terminate target\surefire\surefirebooterXXX.jar  
-      	if test is cancelled with <CTRL> + <C>. Otherwise port remains blocked!! -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.20</version>
-        <configuration>
-          <shutdown>kill</shutdown>
-        </configuration>
-      </plugin>
-      
-      <!-- generate components meta-data and validate component includes documentation etc -->
-      <plugin>
-        <groupId>org.apache.camel</groupId>
-        <artifactId>camel-package-maven-plugin</artifactId>
-        <version>${camel.version}</version>
-        <executions>
-          <execution>
-            <id>prepare</id>
-            <goals>
-              <goal>prepare-components</goal>
-            </goals>
-            <phase>generate-resources</phase>
-          </execution>
-          <execution>
-            <id>validate</id>
-            <goals>
-              <goal>validate-components</goal>
-            </goals>
-            <phase>prepare-package</phase>
-          </execution>
-        </executions>
-      </plugin>
+	</dependencies>
 
-    </plugins>
-  </build>
+	<build>
+		<defaultGoal>install</defaultGoal>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.6.1</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.0.2</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+
+			<!-- this is important to terminate target\surefire\surefirebooterXXX.jar 
+				if test is cancelled with <CTRL> + <C>. Otherwise port remains blocked!! -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.20</version>
+				<configuration>
+					<shutdown>kill</shutdown>
+				</configuration>
+			</plugin>
+
+			<!-- generate components meta-data and validate component includes documentation 
+				etc -->
+			<plugin>
+				<groupId>org.apache.camel</groupId>
+				<artifactId>camel-package-maven-plugin</artifactId>
+				<version>${camel.version}</version>
+				<executions>
+					<execution>
+						<id>prepare</id>
+						<goals>
+							<goal>prepare-components</goal>
+						</goals>
+						<phase>generate-resources</phase>
+					</execution>
+					<execution>
+						<id>validate</id>
+						<goals>
+							<goal>validate-components</goal>
+						</goals>
+						<phase>prepare-package</phase>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+	</build>
 </project>

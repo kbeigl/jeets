@@ -20,10 +20,11 @@ public class Main {
                 getConnectionFactory(activeMqVmTransport);
         SimpleRegistry registry = new SimpleRegistry();
         registry.put("activeMqConnectionFactory", activeMqConnectionFactory);
-
         CamelContext context = new DefaultCamelContext(registry);
-//      context.addRoutes(new DcsRoutes());
-//      context.addRoutes(new GeoRoutes());
+
+//      include GeoRouteR
+//      context.addRoutes(new GeoRouteS());
+
         context.start();
     }
     

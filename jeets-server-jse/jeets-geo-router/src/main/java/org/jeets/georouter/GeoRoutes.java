@@ -18,6 +18,15 @@ public class GeoRoutes extends RouteBuilder {
 //      from("activemq:queue:device.in")
         from("activemq:device.in?connectionFactory=#activeMqConnectionFactory")
         
+//      .process(new GeoRouteR())
+//      .choice()
+//      .when(body().matches(2))
+//      .when(xpath("person/city = 'London'"))  // hvv - Hamburg
+//          .to("activemq:topic:hvv.device.in?connectionFactory=#activeMqConnectionFactory")
+//      .otherwise()
+//          .to("activemq:topic:gts.device.in?connectionFactory=#activeMqConnectionFactory")
+//      .end();
+
         .choice()
         .when(xpath("person/city = 'London'"))  // hvv - Hamburg
             .to("activemq:topic:hvv.device.in")
