@@ -28,7 +28,7 @@ public class TileMapper implements Processor {
         Set<Position> positions = device.getPositions();        
         LOG.info("received jpa.Device {} with {} positions.", 
                 device.getUniqueid(), positions.size());
-        
+//      a Set doesn't have a guaranteed order :(
         Position position = (Position) positions.toArray()[ positions.size()-1 ];
         LOG.info("map last position ({},{}) to tiles ..", position.getLatitude(), position.getLongitude());
         List<String> tileRecipients = new ArrayList<String>();
@@ -40,15 +40,12 @@ public class TileMapper implements Processor {
             exchange.getIn().setHeader("tileZ" + zoom, tileString);
             tileRecipients.add(tileString);
         }
-        
-//      tileRecipients toArray:
         String component = "activemq:";
-        String recipientArray = 
-                component + "z13x4371y2812, " +
-                component + "z14x8742y5624, " +
-                component + "z15x17485y11248, " +
-                component + "z16x34971y22497";
-        
+        String recipientArray = "";
+        for (String recipient : tileRecipients) {
+            recipientArray += component + recipient + ", ";
+        }
+        recipientArray = recipientArray.substring(0, recipientArray.length() - 2);        
         exchange.getIn().setHeader("tileRecipients", recipientArray);
     }
 
@@ -67,7 +64,6 @@ public class TileMapper implements Processor {
             ytile = 0;
         if (ytile >= (1 << zoom))
             ytile = ((1 << zoom) - 1);
-//      return ("x" + xtile + "y" + ytile);
         return ("z" + zoom + "x" + xtile + "y" + ytile);
     }
 

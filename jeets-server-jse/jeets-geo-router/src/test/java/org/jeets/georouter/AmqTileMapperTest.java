@@ -19,11 +19,10 @@ public class AmqTileMapperTest extends CamelTestSupport {
     
     private boolean routeTracing = true;
     protected MockEndpoint testEndpoint;
-    protected String component = "activemq:", mqType = "queue:", 
-            inbox = "tiles.device.in",
+    protected String component = "activemq:", mqType = "queue:", inbox = "tiles.device.in",
             startEndpointUri = component + mqType + inbox, testEndUri = "mock:result",
             testStartUri = "activemq:queue:test.in";
-
+    
     @Test
     public void testDeviceToTileMapper() throws Exception {
         String routeName = "TileRoute";
@@ -59,6 +58,8 @@ public class AmqTileMapperTest extends CamelTestSupport {
         assertEquals("z14x8742y5624", message.getIn().getHeader("tileZ14"));
         assertEquals("z15x17485y11248", message.getIn().getHeader("tileZ15"));
         assertEquals("z16x34971y22497", message.getIn().getHeader("tileZ16"));
+        
+        Thread.sleep(1000);
         
         context.stopRoute(routeName);
         context.removeRoute(routeName);

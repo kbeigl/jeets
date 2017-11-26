@@ -2,40 +2,33 @@ package org.jeets.georouter;
 
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.camel.component.ActiveMQComponent;
 import org.apache.camel.CamelContext;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.impl.SimpleRegistry;
 
-/**
- * plain Camel start without xml 
- */
 public class Main {
     
 //  TODO: add switch between vm and tcp to args on command line
 
     public static void main(String args[]) throws Exception {
-//      JndiRegistry registry = new JndiRegistry();
-//      registry.bind( not .put );
-        ActiveMQConnectionFactory activeMqConnectionFactory = 
-                getConnectionFactory(activeMqVmTransport);
-        SimpleRegistry registry = new SimpleRegistry();
-        registry.put("activeMqConnectionFactory", activeMqConnectionFactory);
-        CamelContext context = new DefaultCamelContext(registry);
-        
-//      or see AmQTileMapperTest
-//      camelContext.addComponent("activemq", activeMQComponent);
 
+        SimpleRegistry registry = new SimpleRegistry();
+        CamelContext context = new DefaultCamelContext(registry);
+        ActiveMQComponent activemq = getAmqComponent(vmTransport);
+        context.addComponent("activemq", activemq);
+        
 //      include GeoRouteR
 //      context.addRoutes(new GeoRouteS());
 
-        context.start();
+//        context.start();
     }
     
     /**
      * Use this to manually switch from vm: (true) to tcp: (false)
      * or override individual getConnectionFactory(..) methods.
      */
-    static boolean activeMqVmTransport = true;
+    static boolean vmTransport = true;
 
     /**
      * Test with embedded VM- or TCP- transport.
@@ -45,11 +38,11 @@ public class Main {
      * external dependencies. <br>
      * Developers can manually switch to the external ActiveMQ.
      * 
-     * @param activeMqVmTransport - true=vm false=tcp
+     * @param vmTransport - true=vm false=tcp
      */
-    public static ActiveMQConnectionFactory getConnectionFactory(boolean activeMqVmTransport) {
+    public static ActiveMQConnectionFactory getConnectionFactory(boolean vmTransport) {
         ActiveMQConnectionFactory amqFactory;
-        if (activeMqVmTransport) {
+        if (vmTransport) {
             amqFactory = new ActiveMQConnectionFactory("vm://localhost?broker.persistent=false");
         }
         else { // tcp://localhost:61616
@@ -66,5 +59,18 @@ public class Main {
 //      amqFactory.setTrustedPackages(Arrays.asList("org.jeets.model.traccar.jpa"));
         return amqFactory;
     }
+    
+    public static ActiveMQComponent getAmqComponent(boolean vmTransport) {
+        ActiveMQConnectionFactory activeMqConnectionFactory = 
+                Main.getConnectionFactory(vmTransport);
+        ActiveMQComponent activeMQComponent = new ActiveMQComponent();
+        activeMQComponent.setConnectionFactory(activeMqConnectionFactory);
+//        ConnectionFactory connectionFactory = activeMqConnectionFactory;
+//        activeMQComponent.setConnectionFactory(connectionFactory);
+        return activeMQComponent;
+    }
 
+
+    
+    
 }
