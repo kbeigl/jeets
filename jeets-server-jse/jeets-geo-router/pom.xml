@@ -35,17 +35,15 @@
 	<description>JeeTS Geo Router</description>
 
 	<dependencies>
-<!-- 
-		<dependency>
-			<groupId>org.jeets</groupId>
-			<artifactId>jeets-protocols</artifactId>
-			<version>0.1</version>
-		</dependency>
- -->
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-pu-traccar-jpa</artifactId>
 			<version>3.14</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.locationtech.jts</groupId>
+		    <artifactId>jts-core</artifactId>
+		    <version>1.15.0</version>
 		</dependency>
 
 		<dependency>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- http://www.apache.org/licenses/LICENSE-2.0 -->
+<positions>
+	<position station="1">
+		<fixtime>04.11.17 00:37:29</fixtime>
+		<latitude>53.56985</latitude>
+		<longitude>10.057684</longitude>
+		<address>Wandsbeker Chaussee</address>
+	</position>
+	<position station="2">
+		<fixtime>04.11.17 00:39:29</fixtime>
+		<latitude>53.567647</latitude>
+		<longitude>10.046565</longitude>
+		<address>Ritterstraße</address>
+	</position>
+	<position station="3">
+		<fixtime>04.11.17 00:41:29</fixtime>
+		<latitude>53.564706</latitude>
+		<longitude>10.035504</longitude>
+		<address>Wartenau</address>
+	</position>
+	<position station="4">
+		<fixtime>04.11.17 00:42:29</fixtime>
+		<latitude>53.559529</latitude>
+		<longitude>10.027395</longitude>
+		<address>Lübecker Straße</address>
+	</position>
+	<position station="5">
+		<fixtime>04.11.17 00:43:29</fixtime>
+		<latitude>53.556626</latitude>
+		<longitude>10.019024</longitude>
+		<address>Lohmühlenstraße</address>
+	</position>
+	<position station="6">
+		<fixtime>04.11.17 00:45:29</fixtime>
+		<latitude>53.55206</latitude>
+		<longitude>10.009756</longitude>
+		<address>Hauptbahnhof Süd</address>
+	</position>
+</positions>
+
+<!-- TOGO
+ 7 04.11.17 00:47:29	53.549034	10.006214	Steinstraße
+ 8 04.11.17 00:48:29	53.547669	10.000825	Meßberg
+ 9 04.11.17 00:50:29	53.552546	9.993471	Jungfernstieg
+10 04.11.17 00:51:29	53.558853	9.989303	Stephansplatz (Oper/CCH)
+11 04.11.17 00:54:29	53.572764	9.989055	Hallerstraße
+12 04.11.17 00:56:29	53.581794	9.988088	Klosterstern
+13 04.11.17 00:58:29	53.588735	9.990741	Kellinghusenstraße
+-->
