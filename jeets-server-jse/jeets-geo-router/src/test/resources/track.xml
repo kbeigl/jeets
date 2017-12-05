@@ -1,41 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- http://www.apache.org/licenses/LICENSE-2.0 -->
-<position station ="1">
-  <fixtime>04.11.17 00:37:29</fixtime>
-  <latitude>53.56985</latitude>
-  <longitude>10.057684</longitude>
-  <address>Wandsbeker Chaussee</address>
-</position>
-<position station ="2">
-  <fixtime>04.11.17 00:39:29</fixtime>
-  <latitude>53.567647</latitude>
-  <longitude>10.046565</longitude>
-  <address>Ritterstraße</address>
-</position>
-<position station ="3">
-  <fixtime>04.11.17 00:41:29</fixtime>
-  <latitude>53.564706</latitude>
-  <longitude>10.035504</longitude>
-  <address>Wartenau</address>
-</position>
-<position station ="4">
-  <fixtime>04.11.17 00:42:29</fixtime>
-  <latitude>53.559529</latitude>
-  <longitude>10.027395</longitude>
-  <address>Lübecker Straße</address>
-</position>
-<position station ="5">
-  <fixtime>04.11.17 00:43:29</fixtime>
-  <latitude>53.556626</latitude>
-  <longitude>10.019024</longitude>
-  <address>Lohmühlenstraße</address>
-</position>
-<position station ="6">
-  <fixtime>04.11.17 00:45:29</fixtime>
-  <latitude>53.55206</latitude>
-  <longitude>10.009756</longitude>
-  <address>Hauptbahnhof Süd</address>
-</position>
+<positions>
+	<position station="1">
+		<fixtime>04.11.17 00:37:29</fixtime>
+		<latitude>53.56985</latitude>
+		<longitude>10.057684</longitude>
+		<address>Wandsbeker Chaussee</address>
+	</position>
+	<position station="2">
+		<fixtime>04.11.17 00:39:29</fixtime>
+		<latitude>53.567647</latitude>
+		<longitude>10.046565</longitude>
+		<address>Ritterstraße</address>
+	</position>
+	<position station="3">
+		<fixtime>04.11.17 00:41:29</fixtime>
+		<latitude>53.564706</latitude>
+		<longitude>10.035504</longitude>
+		<address>Wartenau</address>
+	</position>
+	<position station="4">
+		<fixtime>04.11.17 00:42:29</fixtime>
+		<latitude>53.559529</latitude>
+		<longitude>10.027395</longitude>
+		<address>Lübecker Straße</address>
+	</position>
+	<position station="5">
+		<fixtime>04.11.17 00:43:29</fixtime>
+		<latitude>53.556626</latitude>
+		<longitude>10.019024</longitude>
+		<address>Lohmühlenstraße</address>
+	</position>
+	<position station="6">
+		<fixtime>04.11.17 00:45:29</fixtime>
+		<latitude>53.55206</latitude>
+		<longitude>10.009756</longitude>
+		<address>Hauptbahnhof Süd</address>
+	</position>
+</positions>
 
 <!-- TOGO
  7 04.11.17 00:47:29	53.549034	10.006214	Steinstraße

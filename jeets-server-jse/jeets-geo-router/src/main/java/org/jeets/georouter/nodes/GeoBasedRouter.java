@@ -31,25 +31,54 @@ public class GeoBasedRouter  implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        String header = "gts";  // default
+        String header = "gts"; // default
         Device device = (Device) exchange.getIn().getBody();
         List<Position> positions = new ArrayList<Position>(device.getPositions());
         LOG.info("Device message has {} positions", positions.size());
-        
-        LOG.info("create JTS geometries ..");
-//      if (positions.size() < 1) { // do nothing
-        if (positions.size() == 1) {
-            Point devPoint = createPoint( positions.get(0) );
-            
-        } else if (positions.size() > 1) {
-            LineString devTrack = createLinestring( device );
-            
+
+        Geometry deviceGeo = null;
+        if (positions.size() > 0) { // noop
+            if (positions.size() == 1) {
+                deviceGeo = createPoint(positions.get(0));
+            } else if (positions.size() > 1) {
+                deviceGeo = createLinestring(positions);
+            }
+            if (relateGeometries(deviceGeo))
+                exchange.getIn().setHeader("senddevice", "hvv");
         }
-        
-        if (relateDeviceToGeometry(device))
-            exchange.getIn().setHeader("senddevice", "hvv");
-        
+
         exchange.getIn().setHeader("senddevice", header);
+    }
+
+    /**
+     * Various JTS methods to relate geometries.
+     */
+    private boolean relateGeometries(Geometry deviceGeo) {
+        if (hvvGeometry == null)
+            hvvGeometry = createHvvPolygon(); 
+
+        // Geometry relationships are represented by the 
+        // following functions returning true or false:
+//      if (hvvGeometry.disjoint(deviceGeo)) return false;
+
+//        touches(Geometry) - geometry have to just touch, crossing or overlap will not work
+//        intersects(Geometry)
+//        crosses(Geometry)
+//        within(Geometry) - geometry has to be full inside
+//        overlaps(Geometry) - has to actually overlap the edge, being within or touching will not work
+//        covers(Geometry)
+//        coveredBy(Geometry)
+//        relate(Geometry, String) - allows general check of relationship see dim9 page
+//        relate(Geometry)
+
+        // too strict (false for all track sections)
+        if (hvvGeometry.contains(deviceGeo))
+            return true;
+        
+        
+        
+        LOG.info("hvvGeometry does not contain deviceGeo");
+        return false;
     }
 
     private Point createPoint(Position position) {
@@ -57,48 +86,25 @@ public class GeoBasedRouter  implements Processor {
                 new Coordinate(position.getLongitude(), position.getLatitude()));
     }
 
-    private LineString createLinestring(Device device) {
+    private Geometry createLinestring(List<Position> positions) {
+        Coordinate[] coordinates = new Coordinate[positions.size()];
+        int counter = 0;
+        for (Position pos : positions) {
+            coordinates[counter++] = new Coordinate(pos.getLatitude(), pos.getLongitude());
+        }
+        return new GeometryFactory().createLineString(coordinates);
+    }
 
-//      TODO: LINESTRING from at least two Positions in Device
-//      Coordinate[] coordinates = new Coordinate[] {
-//      new Coordinate(0, 0), new Coordinate(10, 10), new Coordinate(20, 20) };
-//      Geometry lineGeo = new GeometryFactory().createLineString(coordinates);
+//  WARNING! lat and lon are swapped in Traccar representation!!
+    private String wktHvvPolygon = "POLYGON((" // x-lon, y-lat
+            + " 9.989269158916906 53.57541694442838 ,  9.998318508390481 53.55786417233634, "
+            + "10.037949531036517 53.562496767906936, 10.021498582439857 53.5451640563584, "
+            + "10.00793733366056  53.54138991423747 ,  9.985634869615584 53.540103457327746, "
+            + " 9.970257661419355 53.54332802925086 ,  9.965966126995527 53.55373112988562, "
+            + " 9.989269158916906 53.57541694442838 ))";
+    Geometry hvvGeometry;
     
-        return null;
-    }
-
-    //  improve method terminology
-    private boolean relateDeviceToGeometry(Device device) {
-//      create once at object creation time
-        Polygon hvvPolygon = createHvvPolygon(); 
-//        hvvPolygon.
-//      Geometry g3 = hvvPolygon.intersection(coordGeo);
-
-        Set<Position> positions = device.getPositions();
-        Position position = (Position) positions.toArray()[ positions.size()-1 ];
-        LOG.info("Position: " + position.getLongitude() + " ," + position.getLatitude());
-        
-        Coordinate coord = new Coordinate(position.getLongitude(), position.getLatitude());
-        Geometry coordGeo = new GeometryFactory().createPoint(coord);
-        
-        if (hvvPolygon.contains(coordGeo))
-            return true;
-        
-        return false;
-    }
-
     private Polygon createHvvPolygon() {
-//      WARNING! lat and lon are swapped in Traccar representation!!
-//      workaround: create poly(lat,lon), then create poly from coord loop and swap there
-        String wktHvvPolygon = "POLYGON(("  // x-lon, y-lat
-                + " 9.989269158916906 53.57541694442838 ,  9.998318508390481  53.55786417233634, "
-                + "10.037949531036517 53.562496767906936, 10.021498582439857  53.5451640563584, "
-                + "10.00793733366056  53.54138991423747 ,  9.985634869615584  53.540103457327746, "
-                + " 9.970257661419355 53.54332802925086 ,  9.965966126995527  53.55373112988562, "
-                + " 9.989269158916906 53.57541694442838 ))";
-        
-//      Geometry could be skipped (cast directly to Polygon)
-        Geometry hvvGeometry = null;
         try {
             hvvGeometry = new WKTReader().read(wktHvvPolygon);
         } catch (ParseException e) {

@@ -29,7 +29,7 @@
 
 	<artifactId>jeets-server-jse</artifactId>
 	<!-- subversion for this directory -->
-	<version>2017.11.23</version>
+	<version>2017.12.03</version>
 	<packaging>pom</packaging>
 
 	<name>--- Server Tracking Components (JSE) ---</name>
