@@ -1,6 +1,8 @@
 package org.jeets.georouter;
 
 import org.apache.camel.CamelContext;
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 
 import org.apache.camel.component.mock.MockEndpoint;
@@ -39,10 +41,10 @@ public class GeoRouterTest extends CamelTestSupport {
         });
         
         testEndpoint.expectedMessageCount(3);
-        testEndpoint.message(0).header("senddevice").isEqualTo("gts");
-        testEndpoint.message(1).header("senddevice").isEqualTo("hvv");
+        testEndpoint.message(0).header("senddevice").isEqualTo("hvv");
+        testEndpoint.message(1).header("senddevice").isEqualTo("gts");
         testEndpoint.message(2).header("senddevice").isEqualTo("gts");
-        
+
         List<Position> positions = createTrack();
         List<Device> devices = divideTrack(positions);
         for (Device device : devices) {
