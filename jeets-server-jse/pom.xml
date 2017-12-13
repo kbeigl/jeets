@@ -59,6 +59,7 @@
 	<modules>
 		<module>jeets-dcs</module>
 		<module>jeets-etl</module>
+		<module>jeets-manager</module>
 		<!-- this etl is designed to work with traccar Instructions to move the 
 			decoder into traccar ... <module>jeets-etl-traccar</module> -->
 		<module>jeets-dcs-amq</module>

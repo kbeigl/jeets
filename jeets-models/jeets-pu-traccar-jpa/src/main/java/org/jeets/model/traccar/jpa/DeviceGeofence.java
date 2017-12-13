@@ -18,16 +18,17 @@ import javax.persistence.Table;
 @Table(name = "device_geofence", schema = "public")
 public class DeviceGeofence implements java.io.Serializable {
 
+    private static final long serialVersionUID = 1L;
     private DeviceGeofenceId id;
-    private Devices devices;
-    private Geofences geofences;
+    private Device device;
+    private Geofence geofences;
 
     public DeviceGeofence() {
     }
 
-    public DeviceGeofence(DeviceGeofenceId id, Devices devices, Geofences geofences) {
+    public DeviceGeofence(DeviceGeofenceId id, Device device, Geofence geofences) {
         this.id = id;
-        this.devices = devices;
+        this.device = device;
         this.geofences = geofences;
     }
 
@@ -45,21 +46,21 @@ public class DeviceGeofence implements java.io.Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "deviceid", nullable = false, insertable = false, updatable = false)
-    public Devices getDevices() {
-        return this.devices;
+    public Device getDevice() {
+        return this.device;
     }
 
-    public void setDevices(Devices devices) {
-        this.devices = devices;
+    public void setDevice(Device device) {
+        this.device = device;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "geofenceid", nullable = false, insertable = false, updatable = false)
-    public Geofences getGeofences() {
+    public Geofence getGeofences() {
         return this.geofences;
     }
 
-    public void setGeofences(Geofences geofences) {
+    public void setGeofences(Geofence geofences) {
         this.geofences = geofences;
     }
 

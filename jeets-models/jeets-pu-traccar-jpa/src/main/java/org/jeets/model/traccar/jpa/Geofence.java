@@ -7,8 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+//import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -17,42 +16,43 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "geofences", schema = "public")
-public class Geofences implements java.io.Serializable {
+//@NamedQuery(name = "findGeofenceById", query = "SELECT g FROM Geofence g WHERE g.id = :id")
+public class Geofence implements java.io.Serializable {
 
+    private static final long serialVersionUID = 1L;
     private int id;
-    private Calendars calendars;
+//    private Calendars calendars;
     private String name;
     private String description;
     private String area;
     private String attributes;
     private Set<DeviceGeofence> deviceGeofences = new HashSet<DeviceGeofence>(0);
-    private Set<GroupGeofence> groupGeofences = new HashSet<GroupGeofence>(0);
-    private Set<UserGeofence> userGeofences = new HashSet<UserGeofence>(0);
+//    private Set<GroupGeofence> groupGeofences = new HashSet<GroupGeofence>(0);
+//    private Set<UserGeofence> userGeofences = new HashSet<UserGeofence>(0);
 
-    public Geofences() {
+    public Geofence() {
     }
 
-    public Geofences(int id, String name, String area) {
+    public Geofence(int id, String name, String area) {
         this.id = id;
         this.name = name;
         this.area = area;
     }
 
-    public Geofences(int id, Calendars calendars, String name, String description, String area, String attributes,
+    public Geofence(int id, Calendars calendars, String name, String description, String area, String attributes,
             Set<DeviceGeofence> deviceGeofences, Set<GroupGeofence> groupGeofences, Set<UserGeofence> userGeofences) {
         this.id = id;
-        this.calendars = calendars;
+//        this.calendars = calendars;
         this.name = name;
         this.description = description;
         this.area = area;
         this.attributes = attributes;
         this.deviceGeofences = deviceGeofences;
-        this.groupGeofences = groupGeofences;
-        this.userGeofences = userGeofences;
+//        this.groupGeofences = groupGeofences;
+//        this.userGeofences = userGeofences;
     }
 
     @Id
-
     @Column(name = "id", unique = true, nullable = false)
     public int getId() {
         return this.id;
@@ -61,7 +61,7 @@ public class Geofences implements java.io.Serializable {
     public void setId(int id) {
         this.id = id;
     }
-
+/*
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "calendarid")
     public Calendars getCalendars() {
@@ -71,7 +71,7 @@ public class Geofences implements java.io.Serializable {
     public void setCalendars(Calendars calendars) {
         this.calendars = calendars;
     }
-
+ */
     @Column(name = "name", nullable = false, length = 128)
     public String getName() {
         return this.name;
@@ -116,7 +116,7 @@ public class Geofences implements java.io.Serializable {
     public void setDeviceGeofences(Set<DeviceGeofence> deviceGeofences) {
         this.deviceGeofences = deviceGeofences;
     }
-
+/*
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "geofences")
     public Set<GroupGeofence> getGroupGeofences() {
         return this.groupGeofences;
@@ -134,5 +134,5 @@ public class Geofences implements java.io.Serializable {
     public void setUserGeofences(Set<UserGeofence> userGeofences) {
         this.userGeofences = userGeofences;
     }
-
+ */
 }

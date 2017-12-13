@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  * Copyright 2017 The Java EE Tracking System
+  * Copyright 2017 Kristof Beiglböck kbeigl@jeets.org
+  *
+  * The JeeTS Project licenses this file to you under the Apache License,
+  * version 2.0 (the "License"); you may not use this file except in compliance
+  * with the License. You may obtain a copy of the License at:
+  *
+  *   http://www.apache.org/licenses/LICENSE-2.0
+  *
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  * License for the specific language governing permissions and limitations
+  * under the License.
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+	   <groupId>org.jeets</groupId>
+	   <artifactId>jeets-server-jse</artifactId>
+		<version>2017.12.03</version>
+ <!-- 	<version>${jeets-repo-release}</version>  -->
+    </parent>
+
+  <artifactId>jeets-manager</artifactId>
+  <version>0.1</version>
+  <packaging>jar</packaging>
+
+  <name>jeets-manager</name>
+  <url>http://jeets.org</url>
+  <description>JeeTS Entity Management</description>
+
+  <properties>
+    <openjpa-version>2.4.1</openjpa-version>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <exec-maven-plugin-version>1.5.0</exec-maven-plugin-version>
+    <build-helper-maven-plugin-version>1.10</build-helper-maven-plugin-version>
+    <lifecycle-mapping-version>1.0.0</lifecycle-mapping-version>
+  </properties>
+
+  <dependencies>
+	<dependency>
+		<groupId>org.jeets</groupId>
+		<artifactId>jeets-pu-traccar-jpa</artifactId>
+		<version>3.14.1</version>
+	</dependency>
+
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-spring</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-jpa</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.openjpa</groupId>
+      <artifactId>openjpa</artifactId>
+      <version>${openjpa-version}</version>
+    </dependency>
+
+	<dependency>
+	  <groupId>org.apache.camel</groupId>
+	  <artifactId>camel-test-spring</artifactId>
+	  <scope>test</scope>
+	</dependency>
+
+  </dependencies>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <!-- Eclipse m2e Lifecycle Management -->
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>${lifecycle-mapping-version}</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.apache.openjpa</groupId>
+                    <artifactId>openjpa-maven-plugin</artifactId>
+                    <versionRange>${openjpa-version}</versionRange>
+                    <goals>
+                      <goal>enhance</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore/>
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <!-- Will enhance classes as we run in a non JEE env -->
+      <plugin>
+        <groupId>org.apache.openjpa</groupId>
+        <artifactId>openjpa-maven-plugin</artifactId>
+        <version>${openjpa-version}</version>
+        <configuration>
+          <!-- 
+          <persistenceXmlFile>${project.basedir}/src/main/resources/META-INF/persistence.xml</persistenceXmlFile>
+          <includes>org/apache/camel/example/etl/*Entity.class</includes>
+           -->
+          <addDefaultConstructor>true</addDefaultConstructor>
+          <enforcePropertyRestrictions>true</enforcePropertyRestrictions>
+        </configuration>
+        <executions>
+          <execution>
+            <id>enhancer</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>enhance</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Allows the example to be run via 'mvn camel:run' -->
+      <plugin>
+        <groupId>org.apache.camel</groupId>
+        <artifactId>camel-maven-plugin</artifactId>
+        <version>${camel.version}</version>
+      </plugin>
+
+      <!-- Allows the example to be run via 'mvn compile exec:java' -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>${exec-maven-plugin-version}</version>
+        <configuration>
+          <!-- replace with org.apache.camel.spring.Main 
+          	and remove this: -->
+          <mainClass>org.jeets.manager.Main</mainClass>
+          <includePluginDependencies>false</includePluginDependencies>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

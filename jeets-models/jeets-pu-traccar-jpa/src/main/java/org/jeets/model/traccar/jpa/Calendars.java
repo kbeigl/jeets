@@ -21,7 +21,7 @@ public class Calendars implements java.io.Serializable {
     private String name;
     private String attributes;
     private byte[] data;
-    private Set<Geofences> geofenceses = new HashSet<Geofences>(0);
+    private Set<Geofence> geofenceses = new HashSet<Geofence>(0);
     private Set<UserCalendar> userCalendars = new HashSet<UserCalendar>(0);
 
     public Calendars() {
@@ -34,7 +34,7 @@ public class Calendars implements java.io.Serializable {
         this.data = data;
     }
 
-    public Calendars(int id, String name, String attributes, byte[] data, Set<Geofences> geofenceses,
+    public Calendars(int id, String name, String attributes, byte[] data, Set<Geofence> geofenceses,
             Set<UserCalendar> userCalendars) {
         this.id = id;
         this.name = name;
@@ -83,11 +83,11 @@ public class Calendars implements java.io.Serializable {
     }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "calendars")
-    public Set<Geofences> getGeofenceses() {
+    public Set<Geofence> getGeofenceses() {
         return this.geofenceses;
     }
 
-    public void setGeofenceses(Set<Geofences> geofenceses) {
+    public void setGeofenceses(Set<Geofence> geofenceses) {
         this.geofenceses = geofenceses;
     }
 

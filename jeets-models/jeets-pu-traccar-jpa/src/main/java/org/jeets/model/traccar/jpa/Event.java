@@ -22,6 +22,7 @@ import javax.persistence.TemporalType;
 @Table(name = "events", schema = "public")
 public class Event implements java.io.Serializable {
 
+    private static final long serialVersionUID = 1L;
     private int id;
     private Device device;
     private String type;
@@ -116,6 +117,12 @@ public class Event implements java.io.Serializable {
 
     public void setAttributes(String attributes) {
         this.attributes = attributes;
+    }
+
+    @Override
+    public String toString() {
+        return "Event [id=" + id + ", device=" + device + ", type=" + type + ", servertime=" + servertime
+                + ", positionid=" + positionid + ", geofenceid=" + geofenceid + ", attributes=" + attributes + "]";
     }
 
 }

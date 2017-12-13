@@ -19,13 +19,13 @@ import javax.persistence.Table;
 public class GroupGeofence implements java.io.Serializable {
 
     private GroupGeofenceId id;
-    private Geofences geofences;
+    private Geofence geofences;
     private Groups groups;
 
     public GroupGeofence() {
     }
 
-    public GroupGeofence(GroupGeofenceId id, Geofences geofences, Groups groups) {
+    public GroupGeofence(GroupGeofenceId id, Geofence geofences, Groups groups) {
         this.id = id;
         this.geofences = geofences;
         this.groups = groups;
@@ -45,11 +45,11 @@ public class GroupGeofence implements java.io.Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "geofenceid", nullable = false, insertable = false, updatable = false)
-    public Geofences getGeofences() {
+    public Geofence getGeofences() {
         return this.geofences;
     }
 
-    public void setGeofences(Geofences geofences) {
+    public void setGeofences(Geofence geofences) {
         this.geofences = geofences;
     }
 

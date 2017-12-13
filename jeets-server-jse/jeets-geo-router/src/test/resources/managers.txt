@@ -1,0 +1,194 @@
+
+
+  chp managers
+  ============
+  Enterprise Dynamics ;)
+  Now we'll use the jeets-etl project as a seed component
+  We create an envelope for *Managers of some kind
+  Manager stands for Traccar Mgrs, JEE EMgrs -> DB and TRX (and JMS)!!
+  The next jeets component creates TRX environent 
+	for one or more, sequential or paralell managers
+	accessing the same Entity !!
+  For the external environent you can add MQ start and endpoints
+
+  see ETL example > applied to Device ORM
+  from(...) 
+  .to(jpa:device)      persist/merge un/managed
+                       1:1 relation ??
+      :                permission y/n 
+  from(jpa:device)                                 
+  .to(GFmgr.class)     @Consume (jpa:device)
+      :                check dev.getGeofence!! here
+      :                dev.setGeofence
+      :                @Produce
+      :
+   .persist            finally save modifications, close trx etc.
+
+   -- end of component --
+
+jpa-component
+-------------
+Camel adds the following message headers to the exchange:
+CamelJpaTemplate     JpaTemplate
+CamelEntityManager	EntityManager
+
+
+spring.io
+---------
+Chapter 6. Aspect Oriented Programming with Spring
+6.1. Introduction
+
+Aspect-Oriented Programming (AOP) complements Object-Oriented Programming (OOP) by providing another way of thinking about program structure. The key unit of modularity in OOP is the class, whereas in AOP the unit of modularity is the aspect. Aspects enable the modularization of concerns such as transaction management that cut across multiple types and objects.
+
+One of the key components of Spring is the AOP framework. While the Spring IoC container does not depend on AOP, meaning you do not need to use AOP if you don't want to, AOP complements Spring IoC to provide a very capable middleware solution.
+
+
+camel jpa
+---------
+Its strongly advised to configure the JPA component to use a specific EntityManagerFactory instance. 
+
+-----------------------------------------------
+
+Camel iA
+--------
+chp 9
+It turns out that the message is lost because you’re not using transactions. By default,
+the JMS consumer uses auto-acknowledge mode, which means the client acknowledges the
+message when it’s received, and the message is dequeued from the JMS broker.
+What you must do instead is use transacted acknowledge mode. We’ll look at how to do
+this in section 9.3, but first we’ll discuss how transactions work in Camel.
+
+You may already be familiar with this principle, and transactions in Camel use the
+same principle at a higher level of abstraction. In Camel transactions, you don’t
+invoke begin and commit methods from Java code—you use declarative transactions,
+which are configured in the Spring XML file. We’ll look at the details of how this works
+in the next section, so don’t worry if it’s still a bit unclear.
+
+What are the benefits of defining transactions declaratively? With Spring’s approach,
+you configure all this in the Spring XML regardless of which runtime environment
+you’re using. This removes the need for changing Java code to match the targeted environment.
+Spring also makes it easy to set up diverse environments using minimal configuration.
+Spring’s transaction support is a great piece of technology, and that’s why
+Camel leverages it instead of rolling out it’s own transaction framework.
+
+9.2.1 About Spring’s transaction support
+Figure 9.3 Spring’s TransactionManager
+
+from("activemq:queue:partners")
+.transacted()
+.beanRef("partner", "toSql")
+.to("jdbc:myDataSource");
+
+The example we’ve just covered uses what are called local transactions, because
+they’re based on using only a single resource in the transaction—Spring was only
+orchestrating the JMS broker. But there was also the database resource, which, in the
+example, was not under transactional control. Leveraging both the JMS broker and
+the database as resources participating in the same transaction requires more work,
+and the next section explains about using single and multiple resources in a transaction.
+
+To be absolutely sure that both the JMS broker
+and the database are in sync in terms of the transaction, you must use the much
+heavier global transactions.
+
+from("direct:orderToDB")
+.transacted("PROPAGATION_REQUIRED")
+.beanRef("orderDAO", "auditOrder")		DAO
+.to("direct:saveOrderInDB");
+
+
+
+
+
+
+
+Cookbook
+--------
+
+In order to use the ConsumeMdb class in Camel, it must be defined as a bean in the same
+Spring application context as the Camel context.
+
+<beans xmlns="http://www.springframework.org/schema/beans" ...>
+	<bean id="activemq" ...>
+		<property name="brokerURL" value="vm://myBroker?...."/>
+	</bean>
+
+	JTA AND JPA > EMgr
+	
+	@Consume'rs wired together with endpoint URIs
+	@Produce ..
+	
+??	<bean class="org.jeets.managers.DataManager"/>
+	<bean class="org.jeets.managers.PermissionsManager"/>
+	<bean class="org.jeets.managers.UsersManager"/>
+	<bean class="org.jeets.managers.GroupsManager"/>
+	<bean class="org.jeets.managers.DeviceManager"/>
+	<bean class="org.jeets.managers.GeofenceManager"/>
+	<bean class="org.jeets.managers.NotificationManager"/>
+
+	<camelContext xmlns="http://camel.apache.org/schema/spring"/>
+</beans>
+
+	POJO Consuming: http://camel.apache.org/pojo-consuming.html
+	Bean Component: http://camel.apache.org/bean.html
+	Bean Binding: http://camel.apache.org/bean-binding.html
+
+----------------------------------
+
+traccar.proto file:
+
+//  TYPE_GEOFENCE_ENTER = ;
+//  TYPE_GEOFENCE_EXIT = ;
+
+----------------------------------
+Context.get
+        if (config.hasKey("database.url")) {
+21          dataManager = new DataManager(config);
+		  
+ 7          usersManager = new UsersManager(dataManager);
+ 9          groupsManager = new GroupsManager(dataManager);
+33          deviceManager = new DeviceManager(dataManager);
+        }
+
+48      identityManager = deviceManager;
+        interface! (.getLastPosition..)
+	   
+98      permissionsManager = new PermissionsManager(dataManager, usersManager);
+==      ==================
+15      connectionManager = new ConnectionManager();
+
+	   starting point for jeets-entity- managers
+	   
+    <entry key='geocoder.enable'>true</entry>
+			:
+    <entry key='event.enable'>true</entry>
+
+        if (config.getBoolean("geocoder.enable")) {
+			:
+        if (config.getBoolean("event.enable")) {
+	                          ============
+     *      geofenceManager = new GeofenceManager(dataManager);
+            calendarManager = new CalendarManager(dataManager);
+     *      notificationManager = new NotificationManager(dataManager);
+	   
+---------------- permission example in ConnectionManager --------------
+	   
+    public synchronized void updateDevice(Device device) {
+        for (long userId : Context.getPermissionsManager().getDeviceUsers(device.getId())) {
+            if (listeners.containsKey(userId)) {
+                for (UpdateListener listener : listeners.get(userId)) {
+                    listener.onUpdateDevice(device);
+                }
+            }
+        }
+    }
+
+    public synchronized void updatePosition(Position position) {
+        long deviceId = position.getDeviceId();
+        for (long userId : Context.getPermissionsManager().getDeviceUsers(deviceId)) {
+            if (listeners.containsKey(userId)) {
+                for (UpdateListener listener : listeners.get(userId)) {
+                    listener.onUpdatePosition(position);
+                }
+            }
+        }
+    }

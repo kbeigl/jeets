@@ -20,7 +20,11 @@
 		<class>org.jeets.model.traccar.jpa.Device</class>
 		<class>org.jeets.model.traccar.jpa.Event</class>
 		<class>org.jeets.model.traccar.jpa.Position</class>
-		
+		<!-- added 12.12.2017 -->
+		<class>org.jeets.model.traccar.jpa.DeviceGeofence</class>
+		<class>org.jeets.model.traccar.jpa.DeviceGeofenceId</class>
+		<class>org.jeets.model.traccar.jpa.Geofence</class>
+
 	<!-- generated for model 3.14 (partial snapshot of 3.15)
 		<class>org.jeets.model.traccar.jpa.Attributes</class>
 		<class>org.jeets.model.traccar.jpa.Calendars</class>
@@ -31,12 +35,9 @@
 		<class>org.jeets.model.traccar.jpa.DeviceAttributeId</class>
 		<class>org.jeets.model.traccar.jpa.DeviceDriver</class>
 		<class>org.jeets.model.traccar.jpa.DeviceDriverId</class>
-		<class>org.jeets.model.traccar.jpa.DeviceGeofence</class>
-		<class>org.jeets.model.traccar.jpa.DeviceGeofenceId</class>
 		<class>org.jeets.model.traccar.jpa.Devices</class>
 		<class>org.jeets.model.traccar.jpa.Drivers</class>
 		<class>org.jeets.model.traccar.jpa.Events</class>
-		<class>org.jeets.model.traccar.jpa.Geofences</class>
 		<class>org.jeets.model.traccar.jpa.GroupAttribute</class>
 		<class>org.jeets.model.traccar.jpa.GroupAttributeId</class>
 		<class>org.jeets.model.traccar.jpa.GroupDriver</class>

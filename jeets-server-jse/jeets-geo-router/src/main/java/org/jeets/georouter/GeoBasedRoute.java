@@ -7,25 +7,28 @@ import org.slf4j.LoggerFactory;
 
 public class GeoBasedRoute extends RouteBuilder {
 
-    // use Camel .log instead (check examples directory)
     private static final Logger LOG = LoggerFactory.getLogger(GeoBasedRoute.class);
     static String routeName = "GeoRoute";
     public static String startUri = "activemq:queue:device.in";
     static String cbrUriOne = "activemq:topic:hvv.device.in";
     static String cbrUriTwo = "activemq:topic:gts.device.in";
+    private String wktPolygon = "POLYGON(())";
+    private String targetTopic = "gts";
 
+    public GeoBasedRoute(String referencePolygon, String topic) {
+        wktPolygon = referencePolygon;
+        targetTopic = topic;
+    }
+    
     public void configure() throws Exception {
         LOG.info("configure GeoRoutes .. ");
-
 //        getContext().setTracing(true);
 //      @formatter:off
-//      pick up all device messages from DCSs
         from(startUri)
         .routeId(routeName)
-//      distribute devices to Geozones via CBR EIP
-        .process(new GeoBasedRouter())
+        .process(new GeoBasedRouter(wktPolygon, targetTopic))
         .choice()
-            .when(header("senddevice").isEqualTo("hvv"))
+            .when(header("senddevice").isEqualTo(targetTopic))
                 .to(cbrUriOne)      // JEE
             .otherwise()
                 .to(cbrUriTwo);     // JSE

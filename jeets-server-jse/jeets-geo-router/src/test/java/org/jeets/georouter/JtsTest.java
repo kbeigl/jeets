@@ -1,5 +1,6 @@
 package org.jeets.georouter;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.LineString;
@@ -21,15 +22,17 @@ public class JtsTest {
         LineString track1 = (LineString) createJtsGeometry("LINESTRING (10.057684 53.56985, 10.046565 53.567647, 10.035504 53.564706)");
         LOG.info(track1.toText());
         geometriesRelate(hvvPoly, track1);
+        Assert.assertTrue(hvvPoly.disjoint(track1));
         
         LineString track2 = (LineString) createJtsGeometry("LINESTRING (10.027395 53.559529, 10.019024 53.556626, 10.009756 53.55206, 10.006214 53.549034, 10.000825 53.547669, 9.993471 53.552546)");
         LOG.info(track2.toText());
         geometriesRelate(hvvPoly, track2);
+        Assert.assertTrue(hvvPoly.contains(track2));
         
         LineString track3 = (LineString) createJtsGeometry("LINESTRING (9.989303 53.558853, 9.989055 53.572764, 9.988088 53.581794, 9.990741 53.588735)");
         LOG.info(track3.toText());
         geometriesRelate(hvvPoly, track3);
-
+        Assert.assertTrue(hvvPoly.intersects(track3));
     }
 
     private boolean geometriesRelate(Geometry geoA, Geometry geoB) {

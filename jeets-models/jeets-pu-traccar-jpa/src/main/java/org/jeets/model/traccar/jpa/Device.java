@@ -1,7 +1,9 @@
 package org.jeets.model.traccar.jpa;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -26,6 +28,19 @@ import javax.persistence.UniqueConstraint;
 @NamedQuery(name = "findDeviceByUniqueId", query = "SELECT d FROM Device d WHERE d.uniqueid = :uniqueid")
 public class Device implements java.io.Serializable {
 
+    private String toString(Collection<?> collection, int maxLen) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("[");
+        int i = 0;
+        for (Iterator<?> iterator = collection.iterator(); iterator.hasNext() && i < maxLen; i++) {
+            if (i > 0)
+                builder.append(", ");
+            builder.append(iterator.next());
+        }
+        builder.append("]");
+        return builder.toString();
+    }
+
     private static final long serialVersionUID = 1L;
     private int id;
     private String name;
@@ -39,12 +54,12 @@ public class Device implements java.io.Serializable {
     private String category;
     private Set<Event> events = new HashSet<Event>(0);
     private Set<Position> positions = new HashSet<Position>(0);
+    private Set<DeviceGeofence> deviceGeofences = new HashSet<DeviceGeofence>(0);
 //    not used for JeeTS yet
 //    private Group group;
 //    private Set<DeviceDriver> deviceDrivers = new HashSet<DeviceDriver>(0);
 //    private Set<DeviceAttribute> deviceAttributes = new HashSet<DeviceAttribute>(0);
 //    private Set<UserDevice> userDevices = new HashSet<UserDevice>(0);
-//    private Set<DeviceGeofence> deviceGeofences = new HashSet<DeviceGeofence>(0);
     
     public Device() {
     }
@@ -61,7 +76,7 @@ public class Device implements java.io.Serializable {
             String attributes, String phone, String model, String contact, String category, 
 //            Set<DeviceDriver> deviceDrivers, Set<DeviceAttribute> deviceAttributes, 
 //            Set<UserDevice> userDevices, 
-//            Set<DeviceGeofence> deviceGeofences, 
+            Set<DeviceGeofence> deviceGeofences, 
 //            Set<AttributeAlias> attributeAliaseses, 
             Set<Event> events, Set<Position> positions) {
         this.id = id;
@@ -78,7 +93,7 @@ public class Device implements java.io.Serializable {
 //        this.deviceDrivers = deviceDrivers;
 //        this.deviceAttributes = deviceAttributes;
 //        this.userDevices = userDevices;
-//        this.deviceGeofences = deviceGeofences;
+        this.deviceGeofences = deviceGeofences;
         this.events = events;
         this.positions = positions;
     }
@@ -214,8 +229,8 @@ public class Device implements java.io.Serializable {
     public void setUserDevices(Set<UserDevice> userDevices) {
         this.userDevices = userDevices;
     }
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "devices")
+ */
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "device")
     public Set<DeviceGeofence> getDeviceGeofences() {
         return this.deviceGeofences;
     }
@@ -223,7 +238,7 @@ public class Device implements java.io.Serializable {
     public void setDeviceGeofences(Set<DeviceGeofence> deviceGeofences) {
         this.deviceGeofences = deviceGeofences;
     }
- */
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "devices", cascade = CascadeType.PERSIST)
     public Set<Event> getEvents() {
         return this.events;
@@ -240,6 +255,17 @@ public class Device implements java.io.Serializable {
 
     public void setPositions(Set<Position> positions) {
         this.positions = positions;
+    }
+
+    @Override
+    public String toString() {
+        final int maxLen = 3;
+        return "Device [id=" + id + ", name=" + name + ", uniqueid=" + uniqueid + ", lastupdate=" + lastupdate
+                + ", positionid=" + positionid + ", attributes=" + attributes + ", phone=" + phone + ", model=" + model
+                + ", contact=" + contact + ", category=" + category + ", events="
+                + (events != null ? toString(events, maxLen) : null) + ", positions="
+                + (positions != null ? toString(positions, maxLen) : null) + ", deviceGeofences="
+                + (deviceGeofences != null ? toString(deviceGeofences, maxLen) : null) + "]";
     }
 
 }

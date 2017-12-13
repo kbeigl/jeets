@@ -1,6 +1,8 @@
 package org.jeets.model.traccar.jpa;
 
 import java.util.List;
+import java.util.Set;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -44,8 +46,7 @@ public class PostgresTesting extends TestCase {
         entityManager = entityManagerFactory.createEntityManager();
         {
             List<Device> result;
-            result = entityManager.createQuery("from Device", Device.class)
-                    .getResultList();
+            result = entityManager.createQuery("from Device", Device.class).getResultList();
             assertTrue(result.size() > 0);
             
             result = entityManager.createNamedQuery("findDeviceByUniqueId", Device.class)
@@ -57,6 +58,14 @@ public class PostgresTesting extends TestCase {
 //          TODO: filter by where position = ..
             List<Event> eventList = entityManager.createQuery("from Event", Event.class).getResultList();            
             assertTrue(eventList.size() > 0);
+
+//          17.12.12 - added Geofences
+            Set<DeviceGeofence> geofenceIds = device.getDeviceGeofences();
+            for (DeviceGeofence deviceGeofence : geofenceIds) {
+                Geofence geofence = deviceGeofence.getGeofences();
+                System.out.println(geofence.getArea());
+            }
+        
         }
         entityManager.close();
     }

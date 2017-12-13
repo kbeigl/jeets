@@ -27,18 +27,22 @@ public class GeoBasedRouter implements Processor {
 
     private static final Logger LOG = LoggerFactory.getLogger(GeoBasedRouter.class);
 
+    public GeoBasedRouter(String wktGeometry, String targetTopic) {
+        referencePolygon = (Polygon) createJtsGeometry(wktGeometry);
+        sendTo = targetTopic;
+    }
+
+    private Polygon referencePolygon;
+    private String sendTo = "testtopic";
+
     @Override
     public void process(Exchange exchange) throws Exception {
-        String headerName = "senddevice";
-        String headerValue = "gts";
-        String sendTo = "hvv";
+        String headerName = "senddevice", headerValue = "gts";
 
         Device device = (Device) exchange.getIn().getBody();
         List<Position> positions = new ArrayList<Position>(device.getPositions());
-        LOG.info("Device message has {} positions", positions.size());
-
         if (positions.size() > 0) { // noop
-            Polygon hvvPolygon = (Polygon) createJtsGeometry(wktHvvPolygon); 
+            Polygon hvvPolygon = referencePolygon; 
             if (positions.size() == 1) {
                 Point devicePoint = createPoint(positions.get(0));
                 if (geometriesRelate(hvvPolygon, devicePoint)) {
@@ -56,14 +60,18 @@ public class GeoBasedRouter implements Processor {
     }
 
     /**
-     * Various JTS methods to relate geometries.
+     * Various JTS methods to relate geometries for different use cases.
      */
     private boolean geometriesRelate(Geometry geoA, Geometry geoB) {
-//        LOG.info("relate A " + geoA.toText());
-//        LOG.info("    to B " + geoB.toText());
-        LOG.info("disjoint   " + geoA.disjoint(geoB) + "\t" + geoB.disjoint(geoA));
-        return geoA.disjoint(geoB);
-//        return false;
+        if (geoA.disjoint(geoB))   return false;
+        if (geoA.intersects(geoB)) return true;
+        if (geoA.contains(geoB)) return true;
+        if (geoA.crosses(geoB)) return true;
+        if (geoA.covers(geoB)) return true;
+//      order!!
+        if (geoB.within(geoA)) return true;
+        
+        return false;
     }
 
     private Point createPoint(Position position) {
@@ -79,18 +87,7 @@ public class GeoBasedRouter implements Processor {
         }
         return new GeometryFactory().createLineString(coordinates);
     }
-
-//  NOTE! lat and lon are swapped in Traccar representation!!
-    private String wktHvvPolygon = "POLYGON((" // x-lon, y-lat
-            + " 9.989269158916906 53.57541694442838 ,  9.998318508390481 53.55786417233634, "
-            + "10.037949531036517 53.562496767906936, 10.021498582439857 53.5451640563584, "
-            + "10.00793733366056  53.54138991423747 ,  9.985634869615584 53.540103457327746, "
-            + " 9.970257661419355 53.54332802925086 ,  9.965966126995527 53.55373112988562, "
-            + " 9.989269158916906 53.57541694442838 ))";
-
-    /**
-     * validation geometry can be created dynamically (external resource..)
-     */
+    
     private Geometry createJtsGeometry(String wktString) {
         Geometry jtsGeo = null;
         try {
