@@ -74,10 +74,10 @@ Camel leverages it instead of rolling out it’s own transaction framework.
 9.2.1 About Spring’s transaction support
 Figure 9.3 Spring’s TransactionManager
 
-from("activemq:queue:partners")
-.transacted()
-.beanRef("partner", "toSql")
-.to("jdbc:myDataSource");
+	from("activemq:queue:partners")
+	.transacted()
+	.beanRef("partner", "toSql")
+	.to("jdbc:myDataSource");
 
 The example we’ve just covered uses what are called local transactions, because
 they’re based on using only a single resource in the transaction—Spring was only
@@ -90,18 +90,13 @@ To be absolutely sure that both the JMS broker
 and the database are in sync in terms of the transaction, you must use the much
 heavier global transactions.
 
-from("direct:orderToDB")
-.transacted("PROPAGATION_REQUIRED")
-.beanRef("orderDAO", "auditOrder")		DAO
-.to("direct:saveOrderInDB");
+	from("direct:orderToDB")
+	.transacted("PROPAGATION_REQUIRED")
+	.beanRef("orderDAO", "auditOrder")		DAO
+	.to("direct:saveOrderInDB");
 
 
-
-
-
-
-
-Cookbook
+CCookbook
 --------
 
 In order to use the ConsumeMdb class in Camel, it must be defined as a bean in the same

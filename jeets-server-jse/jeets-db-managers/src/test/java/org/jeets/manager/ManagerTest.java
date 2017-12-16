@@ -10,14 +10,10 @@ import org.jeets.model.traccar.jpa.Device;
 import org.jeets.model.traccar.util.Samples;
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class ManagerTest extends CamelSpringTestSupport {
-    
-    private static final Logger LOG = LoggerFactory.getLogger(ManagerTest.class);
 
     /* Test is currently persisting to postgres !! */
     @Test
@@ -27,6 +23,7 @@ public class ManagerTest extends CamelSpringTestSupport {
             @Override
             public void configure() throws Exception {
                 from("direct:managed.end")
+//              from("jpa:org.jeets.model.traccar.jpa.Device")
                 .process(new Processor() {
                     @Override
                     public void process(Exchange exchange) throws Exception {
@@ -39,10 +36,8 @@ public class ManagerTest extends CamelSpringTestSupport {
         });
         
 //      testEndpoint.expectedMessageCount(1);
-//      testEndpoint.message(0).header("senddevice").isEqualTo("gts");
 
         Device device = createDevice();
-//      device.setUniqueid("testDevice");   // set unregistered uniqueId
         System.out.println("create and send Device\n" + device);
         template.sendBody("direct:device.in", device );
 
@@ -52,7 +47,8 @@ public class ManagerTest extends CamelSpringTestSupport {
         context.removeRoute(routeName);
     }
     
-    private Device createDevice() {
+    /* use one method for all tests */
+    static Device createDevice() {
 //      return Samples.createDeviceEntity();
         return Samples.createDeviceWithTwoPositions();
 //      return Samples.createDeviceWithPositionWithTwoEvents();

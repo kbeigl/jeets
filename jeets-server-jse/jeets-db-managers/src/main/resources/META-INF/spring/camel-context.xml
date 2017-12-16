@@ -19,17 +19,56 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="
         http://www.springframework.org/schema/beans 
-        http://www.springframework.org/schema/beans/spring-beans.xsd
+        	http://www.springframework.org/schema/beans/spring-beans.xsd
         http://camel.apache.org/schema/spring 
-        http://camel.apache.org/schema/spring/camel-spring.xsd">
+        	http://camel.apache.org/schema/spring/camel-spring.xsd
+        http://activemq.apache.org/schema/core 
+        	http://activemq.apache.org/schema/core/activemq-core.xsd">
 
   <camelContext id="camel" trace="true" xmlns="http://camel.apache.org/schema/spring">
     <routeBuilder ref="ManagedRoute"/>
     <!-- or list packages to look for routes: 
     <package>org.jeets.server.etl</package> -->
   </camelContext>
-  
-  <bean id="ManagedRoute" class="org.jeets.manager.ManagedRoute" />
+
+	<bean id="ManagedRoute" class="org.jeets.manager.ManagedRoute" />
+	<bean class="org.jeets.etl.steps.ManagerDao" />
+	
+	<!-- enables interpretation of the @PersistenceUnit/@PersistenceContext annotations providing convenient
+         access to EntityManagerFactory/EntityManager -->
+	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
+ 
+	<bean id="connectionFactory" class="org.apache.activemq.spring.ActiveMQConnectionFactory">
+		<!-- <property name="brokerURL" value="tcp://localhost:61616" /> -->
+		<property name="brokerURL" value="vm://localhost?broker.persistent=false"/>
+		<property name="trustedPackages">
+			<list>
+				<value>org.jeets.model.traccar.jpa</value>
+				<value>java.util</value>	<!-- HashSet where? why? -->
+			</list>
+		</property>
+	</bean>
+
+	<bean id="jmsConfig" class="org.apache.camel.component.jms.JmsConfiguration">
+		<property name="connectionFactory" ref="connectionFactory" />
+	</bean>
+
+	<bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+		<property name="configuration" ref="jmsConfig" />
+	</bean>
+
+  <!-- 
+	<broker xmlns="http://activemq.apache.org/schema/core" useJmx="true" persistent="false" 
+  			useShutdownHook="false" brokerName="myBroker" id="broker">
+	    <transportConnectors>
+	      <transportConnector uri="vm://myBroker"/>
+	    </transportConnectors>
+	</broker>
+	<bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent"
+		depends-on="broker">
+		<property name="brokerURL" value="vm://myBroker" />
+	</bean>
+ -->
 
   <bean id="jpa" class="org.apache.camel.component.jpa.JpaComponent">
     <property name="entityManagerFactory" ref="entityManagerFactory" />

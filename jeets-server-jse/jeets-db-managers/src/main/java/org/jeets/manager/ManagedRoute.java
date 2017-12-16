@@ -26,15 +26,11 @@ import org.slf4j.LoggerFactory;
 
 public class ManagedRoute extends SpringRouteBuilder {
 
-    // use Camel .log instead
-    private static final Logger LOG = LoggerFactory.getLogger(ManagedRoute.class);
-    // "etl.device.port"
-    static final int PORT = Integer.parseInt(System.getProperty("port", "5200"));
-
     public void configure() throws Exception {
 //      @formatter:off
 //      getContext().setTracing(true);
 
+//      etl approach to get hold of the endpoints entitymanager
         from("direct:device.in")
         .process(new Processor() {
             public void process(Exchange exchange) throws Exception {

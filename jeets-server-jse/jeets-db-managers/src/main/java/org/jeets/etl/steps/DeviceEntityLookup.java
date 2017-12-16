@@ -105,7 +105,7 @@ public final class DeviceEntityLookup {
                     dev.setUniqueid(uniqueId);
                     LOG.info("A new Device with uniqueID {} WILL BE REGISTERED.", uniqueId);
                 } else {
-                    dev = list.get(0);
+                    dev = list.get(0);  // managed
                     LOG.info("Found a registered Device with uniqueId {}.", uniqueId);
                 }
                 return dev;

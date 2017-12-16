@@ -27,11 +27,11 @@
  <!-- 	<version>${jeets-repo-release}</version>  -->
     </parent>
 
-  <artifactId>jeets-manager</artifactId>
+  <artifactId>jeets-db-managers</artifactId>
   <version>0.1</version>
   <packaging>jar</packaging>
 
-  <name>jeets-manager</name>
+  <name>jeets-db-managers</name>
   <url>http://jeets.org</url>
   <description>JeeTS Entity Management</description>
 
@@ -55,6 +55,7 @@
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-spring</artifactId>
     </dependency>
+    <!-- ..spring-jpa ..? -->
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-jpa</artifactId>
@@ -63,6 +64,10 @@
       <groupId>org.apache.openjpa</groupId>
       <artifactId>openjpa</artifactId>
       <version>${openjpa-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-camel</artifactId>
     </dependency>
 
 	<dependency>
