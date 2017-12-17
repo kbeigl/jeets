@@ -121,8 +121,10 @@ public class Event implements java.io.Serializable {
 
     @Override
     public String toString() {
-        return "Event [id=" + id + ", device=" + device + ", type=" + type + ", servertime=" + servertime
-                + ", positionid=" + positionid + ", geofenceid=" + geofenceid + ", attributes=" + attributes + "]";
+        return "Event [id=" + id + ", device=" + device + ", type=" + type 
+                + ", servertime=" + servertime + ", positionid=" + positionid 
+                + ", geofenceid=" + geofenceid + ", attributes=" + attributes 
+                + "]";
     }
 
 }

@@ -246,27 +246,27 @@ public class Device implements java.io.Serializable {
 
     @Override
     public String toString() {
-        final int maxLen = 3;
+//      final int maxLen = 3;
         return "Device [id=" + id + ", name=" + name + ", uniqueid=" + uniqueid + ", lastupdate=" + lastupdate
                 + ", positionid=" + positionid + ", attributes=" + attributes + ", phone=" + phone + ", model=" + model
-                + ", contact=" + contact + ", category=" + category + ", "
+                + ", contact=" + contact + ", category=" + category + ", ..."
 //                + "events=" + (events != null ? toString(events, maxLen) : null) + ", positions="
 //                + (positions != null ? toString(positions, maxLen) : null) + ", deviceGeofences="
 //                + (deviceGeofences != null ? toString(deviceGeofences, maxLen) : null) 
                 + "]";
     }
 
-    private String toString(Collection<?> collection, int maxLen) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("[");
-        int i = 0;
-        for (Iterator<?> iterator = collection.iterator(); iterator.hasNext() && i < maxLen; i++) {
-            if (i > 0)
-                builder.append(", ");
-            builder.append(iterator.next());
-        }
-        builder.append("]");
-        return builder.toString();
-    }
+//    private String toString(Collection<?> collection, int maxLen) {
+//        StringBuilder builder = new StringBuilder();
+//        builder.append("[");
+//        int i = 0;
+//        for (Iterator<?> iterator = collection.iterator(); iterator.hasNext() && i < maxLen; i++) {
+//            if (i > 0)
+//                builder.append(", ");
+//            builder.append(iterator.next());
+//        }
+//        builder.append("]");
+//        return builder.toString();
+//    }
 
 }
