@@ -1,4 +1,4 @@
-package org.jeets.etl.steps;
+package org.jeets.managers;
 
 import java.util.List;
 
@@ -13,8 +13,6 @@ import org.jeets.model.traccar.jpa.Device;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//@Component  //  use this class through Spring IoC.
-//@Transactional
 public class ManagerDao {
 
     private static final Logger LOG = LoggerFactory.getLogger(ManagerDao.class);
@@ -39,21 +37,31 @@ public class ManagerDao {
             e.printStackTrace();
         }
 //      throw new EntityNotFoundException(entityClass.getSimpleName(), id);
-        System.out.println("returned " + gtsDevice);
 //      check isManaged?
+        System.out.println("returned " + gtsDevice);
+//      retrieve Database positions only!
         System.out.println("positions " + gtsDevice.getPositions().size());   // ERROR
-
+/*      move this?
+        for (Position position : inDevice.getPositions()) {
+            position.setDevice(gtsDevice);
+        }
+        gtsDevice.setPositions(inDevice.getPositions());
+//      gtsDevice.setEvents(null);   // TODO
+        gtsDevice.setLastupdate(inDevice.getLastupdate());
+ */
         return new String[] {"direct:manager1.out"};    // testing single endpoint
 //                          ,"activemq:manager2.out"};
     }
     
     private Device lookupDevice(Exchange exchange, final String uniqueId) throws Exception {
+//      TODO: return unique Device! not List.
         List<Device> list = em.createNamedQuery("findDeviceByUniqueId", Device.class)
                 .setParameter("uniqueid", uniqueId).getResultList();
         Device dev;
         if (list.isEmpty()) { // throw NoResultException
             dev = new Device(); // or return null ..
             dev.setUniqueid(uniqueId);
+//          dev.setName("<unregistered>");
             LOG.info("A new Device WILL BE REGISTERED {}", dev);
         } else {
             dev = list.get(0); // managed
@@ -62,29 +70,5 @@ public class ManagerDao {
         System.out.println("found device: " + dev);
         return dev;
     }
-
-/*
-    private Device findDeviceByUniqueId(Exchange exchange, final String uniqueId) throws Exception {
-        TransactionTemplate transactionTemplate = exchange.getContext().getRegistry()
-                .lookupByNameAndType("transactionTemplate", TransactionTemplate.class);
-        return transactionTemplate.execute(new TransactionCallback<Device>() {
-            public Device doInTransaction(TransactionStatus status) {
-                em.joinTransaction();
-                List<Device> list = em.createNamedQuery("findDeviceByUniqueId", Device.class)
-                        .setParameter("uniqueid", uniqueId).getResultList();
-                Device dev;
-                if (list.isEmpty()) {   // throw NoResultException
-                    dev = new Device(); // or return null ..
-                    dev.setUniqueid(uniqueId);
-                    LOG.info("A new Device WILL BE REGISTERED {}", dev);
-                } else {
-                    dev = list.get(0);  // managed
-                    LOG.info("Found a registered Device {}", dev);
-                }
-                return dev;
-            }
-        });
-    }
- */
 
 }

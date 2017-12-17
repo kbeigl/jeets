@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package org.jeets.manager;
+package org.jeets.managers;
 
 import junit.framework.TestCase;
 import org.apache.camel.spring.Main;

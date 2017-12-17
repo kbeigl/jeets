@@ -20,7 +20,7 @@
 
 	<groupId>org.jeets</groupId>
 	<artifactId>jeets</artifactId>
-	<version>2017.11.18</version>
+	<version>2017.12.17</version>
 	<packaging>pom</packaging>
 	<name>=== JeeTS - Java EE Tracking Software ===</name>
 	<description>
@@ -54,6 +54,7 @@
 	</developers>
 
 	<modules>
+		<!-- TODO: upgrade JPA with Geofences to 3.14.1 FOR ALL PROJECTS (Dez'17) -->
 		<module>parent</module>
 		<module>jeets-models</module>
 		<module>jeets-clients</module>

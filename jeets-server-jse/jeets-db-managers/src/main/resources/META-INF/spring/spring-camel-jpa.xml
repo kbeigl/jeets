@@ -23,31 +23,31 @@
         http://camel.apache.org/schema/spring 
         	http://camel.apache.org/schema/spring/camel-spring.xsd">
 
+	<!-- REQUIRED !! -->
 	<camelContext id="camel" trace="true" xmlns="http://camel.apache.org/schema/spring">
-		<routeBuilder ref="ManagedRoute" />
-		<!-- or list packages to look for routes: 
-		<package>org.jeets.server.etl</package> -->
+		<!-- <routeBuilder ref="ManagedRoute" /> -->
+		<!-- or list packages to look for routes: <package>org.jeets.server.etl</package> -->
 	</camelContext>
-	<bean id="ManagedRoute" class="org.jeets.manager.ManagedRoute" />
 
-	<bean class="org.jeets.etl.steps.ManagerDao" />
-	
+	<bean class="org.jeets.managers.ManagerDao" />
+
 	<!-- access to EntityManagerFactory/EntityManager -->
-	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
-	<!-- <bean id="persistenceExceptionTranslationPostProcessor"
-      class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" /> -->
+	<bean
+		class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+	<!-- <bean id="persistenceExceptionTranslationPostProcessor" 
+	class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" /> -->
 
-  <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
-    <property name="persistenceUnitName" value="jeets-pu-traccar-jpa" />
-    <property name="jpaVendorAdapter" ref="jpaAdapter" />
-  </bean>
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
+		<property name="persistenceUnitName" value="jeets-pu-traccar-jpa" />
+		<property name="jpaVendorAdapter" ref="jpaAdapter" />
+	</bean>
 
-  <bean id="jpaAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
-  <!-- 
-  <bean id="jpaAdapter" class="org.springframework.orm.jpa.vendor.OpenJpaVendorAdapter" />
-    <property name="databasePlatform" value="org.apache.openjpa.jdbc.sql.DerbyDictionary" />
-    <property name="database" value="DERBY" />
-  </bean>  -->
+	<bean id="jpaAdapter"
+		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+	<!-- <bean id="jpaAdapter" class="org.springframework.orm.jpa.vendor.OpenJpaVendorAdapter" /> 
+		<property name="databasePlatform" value="org.apache.openjpa.jdbc.sql.DerbyDictionary" /> 
+		<property name="database" value="DERBY" /> </bean> -->
 
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />

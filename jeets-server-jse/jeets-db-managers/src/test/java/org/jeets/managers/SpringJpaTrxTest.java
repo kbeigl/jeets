@@ -1,4 +1,4 @@
-package org.jeets.manager;
+package org.jeets.managers;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;

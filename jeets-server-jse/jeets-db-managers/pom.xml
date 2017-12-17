@@ -23,7 +23,7 @@
     <parent>
 	   <groupId>org.jeets</groupId>
 	   <artifactId>jeets-server-jse</artifactId>
-		<version>2017.12.03</version>
+		<version>2017.12.18</version>
  <!-- 	<version>${jeets-repo-release}</version>  -->
     </parent>
 
@@ -79,9 +79,7 @@
         <artifactId>exec-maven-plugin</artifactId>
         <version>${exec-maven-plugin-version}</version>
         <configuration>
-          <!-- replace with org.apache.camel.spring.Main 
-          	and remove this: -->
-          <mainClass>org.jeets.manager.Main</mainClass>
+          <mainClass>org.apache.camel.spring.Main</mainClass>
           <includePluginDependencies>false</includePluginDependencies>
         </configuration>
       </plugin>
