@@ -15,6 +15,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class SpringJpaTrxTest extends CamelSpringTestSupport {
 
     @Test
+//  currently this Test relies on postgres and creates records !
     public void testSpringJpaTrx() throws Exception {
         context.addRoutes(new RouteBuilder() {
             @Override
@@ -23,8 +24,8 @@ public class SpringJpaTrxTest extends CamelSpringTestSupport {
                 .process(new Processor() {
                     @Override
                     public void process(Exchange exchange) throws Exception {
-                        Device device = (Device) exchange.getIn().getBody();
-                        System.out.println("Device from 'direct:manager1.out'\n" + device);
+                        System.out.println("Device from 'direct:manager1.out'\n" 
+                                + (Device) exchange.getIn().getBody());
                     }
                 })
                 .to(testEndpoint);

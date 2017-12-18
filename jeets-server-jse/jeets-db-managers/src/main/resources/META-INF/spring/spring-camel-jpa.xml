@@ -17,11 +17,14 @@
   -->
 <beans xmlns="http://www.springframework.org/schema/beans" 
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
   xsi:schemaLocation="
         http://www.springframework.org/schema/beans 
         	http://www.springframework.org/schema/beans/spring-beans.xsd
         http://camel.apache.org/schema/spring 
-        	http://camel.apache.org/schema/spring/camel-spring.xsd">
+        	http://camel.apache.org/schema/spring/camel-spring.xsd
+        http://www.springframework.org/schema/tx 
+            http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 	<!-- REQUIRED !! -->
 	<camelContext id="camel" trace="true" xmlns="http://camel.apache.org/schema/spring">
@@ -29,13 +32,14 @@
 		<!-- or list packages to look for routes: <package>org.jeets.server.etl</package> -->
 	</camelContext>
 
-	<bean class="org.jeets.managers.ManagerDao" />
+	<bean id="ManagersRoute" class="org.jeets.managers.ManagersRoute" />
+	<bean id="ManagersDao" class="org.jeets.managers.ManagersDao" />
 
 	<!-- access to EntityManagerFactory/EntityManager -->
 	<bean
 		class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
-	<!-- <bean id="persistenceExceptionTranslationPostProcessor" 
-	class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" /> -->
+	<bean id="persistenceExceptionTranslationPostProcessor" 
+	class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" /> 
 
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
@@ -52,7 +56,8 @@
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
-
+	<tx:annotation-driven transaction-manager="transactionManager"/> 
+	
 	<bean id="transactionTemplate"
 		class="org.springframework.transaction.support.TransactionTemplate">
 		<property name="transactionManager" ref="transactionManager" />
