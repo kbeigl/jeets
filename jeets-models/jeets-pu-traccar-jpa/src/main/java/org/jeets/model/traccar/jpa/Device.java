@@ -1,9 +1,7 @@
 package org.jeets.model.traccar.jpa;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,8 +11,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-//import javax.persistence.JoinColumn;
-//import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
@@ -217,6 +213,7 @@ public class Device implements java.io.Serializable {
         this.userDevices = userDevices;
     }
  */
+    
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "device")
     public Set<DeviceGeofence> getDeviceGeofences() {
         return this.deviceGeofences;
@@ -226,6 +223,7 @@ public class Device implements java.io.Serializable {
         this.deviceGeofences = deviceGeofences;
     }
 
+//  device <> devices !?
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "devices", cascade = CascadeType.PERSIST)
     public Set<Event> getEvents() {
         return this.events;

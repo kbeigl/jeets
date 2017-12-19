@@ -27,12 +27,12 @@
             http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 	<!-- REQUIRED !! -->
-	<camelContext id="camel" trace="true" xmlns="http://camel.apache.org/schema/spring">
+	<camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">	<!-- trace="true"  -->
 		<!-- <routeBuilder ref="ManagedRoute" /> -->
 		<!-- or list packages to look for routes: <package>org.jeets.server.etl</package> -->
 	</camelContext>
 
-	<bean id="ManagersRoute" class="org.jeets.managers.ManagersRoute" />
+	<bean id="HandlerRoute" class="org.jeets.managers.HandlerRoute" />
 	<bean id="ManagersDao" class="org.jeets.managers.ManagersDao" />
 
 	<!-- access to EntityManagerFactory/EntityManager -->

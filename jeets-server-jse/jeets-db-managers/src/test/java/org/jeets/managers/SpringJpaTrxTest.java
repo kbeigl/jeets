@@ -15,7 +15,10 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class SpringJpaTrxTest extends CamelSpringTestSupport {
 
     @Test
-//  currently this Test relies on postgres and creates records !
+//  currently this Test relies on postgres and persists records !
+//    dao.persist can be temporarily commented to avoid this
+//  create Test environment with RAM DB and INSERT records 
+//  (see pu.jar or ..apache-camel-2.19.1.git\components\camel-spring\src\test\resources\org\apache\camel\spring\interceptor\springTransactionalClientDataSourceMinimalConfiguration.xml)
     public void testSpringJpaTrx() throws Exception {
         context.addRoutes(new RouteBuilder() {
             @Override
@@ -35,6 +38,7 @@ public class SpringJpaTrxTest extends CamelSpringTestSupport {
         testEndpoint.expectedMessageCount(1); 
 
         Device device = createDevice();
+//      device.setUniqueid("111");  // TODO: test unregistered
         System.out.println("create and send Device\n" + device);
         template.sendBody("direct:managers.in", device );
 
@@ -42,6 +46,7 @@ public class SpringJpaTrxTest extends CamelSpringTestSupport {
     }
     
     static Device createDevice() {
+//      creates device with id=0 ! change to @Id Long (object)?
 //      return Samples.createDeviceEntity();
         return Samples.createDeviceWithTwoPositions();
 //      return Samples.createDeviceWithPositionWithTwoEvents();
