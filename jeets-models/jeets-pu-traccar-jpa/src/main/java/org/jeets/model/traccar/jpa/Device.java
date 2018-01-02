@@ -1,7 +1,9 @@
 package org.jeets.model.traccar.jpa;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -36,7 +39,7 @@ public class Device implements java.io.Serializable {
     private String contact;
     private String category;
     private Set<Event> events = new HashSet<Event>(0);
-    private Set<Position> positions = new HashSet<Position>(0);
+    private List<Position> positions = new ArrayList<Position>();
     private Set<DeviceGeofence> deviceGeofences = new HashSet<DeviceGeofence>(0);
 //    not used for JeeTS yet
 //    private Group group;
@@ -61,7 +64,7 @@ public class Device implements java.io.Serializable {
 //            Set<UserDevice> userDevices, 
             Set<DeviceGeofence> deviceGeofences, 
 //            Set<AttributeAlias> attributeAliaseses, 
-            Set<Event> events, Set<Position> positions) {
+            Set<Event> events, List<Position> positions) {
         this.id = id;
 //        this.group = groups;
         this.name = name;
@@ -214,7 +217,7 @@ public class Device implements java.io.Serializable {
     }
  */
     
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "device")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "device", cascade = CascadeType.PERSIST)
     public Set<DeviceGeofence> getDeviceGeofences() {
         return this.deviceGeofences;
     }
@@ -233,12 +236,21 @@ public class Device implements java.io.Serializable {
         this.events = events;
     }
 
+    /**
+     * List of Positions is returned in DESCending order. <br>
+     * LAST chronological Position is FIRST in the List! <br>
+     * Use FIFO mechanism for large Lists to profit from LAZY loading!
+     * <p>
+     * Identical timestamps could be disambiguated with IDs to determine exact
+     * submission order, but should not be implemented for a production system.
+     */
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "device", cascade = CascadeType.PERSIST)
-    public Set<Position> getPositions() {
+    @OrderBy ("fixtime DESC, devicetime DESC, servertime DESC")
+    public List<Position> getPositions() {
         return this.positions;
     }
 
-    public void setPositions(Set<Position> positions) {
+    public void setPositions(List<Position> positions) {
         this.positions = positions;
     }
 
@@ -253,18 +265,5 @@ public class Device implements java.io.Serializable {
 //                + (deviceGeofences != null ? toString(deviceGeofences, maxLen) : null) 
                 + "]";
     }
-
-//    private String toString(Collection<?> collection, int maxLen) {
-//        StringBuilder builder = new StringBuilder();
-//        builder.append("[");
-//        int i = 0;
-//        for (Iterator<?> iterator = collection.iterator(); iterator.hasNext() && i < maxLen; i++) {
-//            if (i > 0)
-//                builder.append(", ");
-//            builder.append(iterator.next());
-//        }
-//        builder.append("]");
-//        return builder.toString();
-//    }
 
 }

@@ -54,7 +54,7 @@ public class DeviceGeofence implements java.io.Serializable {
         this.device = device;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "geofenceid", nullable = false, insertable = false, updatable = false)
     public Geofence getGeofences() {
         return this.geofences;

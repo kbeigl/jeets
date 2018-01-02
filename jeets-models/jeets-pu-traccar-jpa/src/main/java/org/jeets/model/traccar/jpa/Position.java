@@ -2,6 +2,8 @@ package org.jeets.model.traccar.jpa;
 // Generated 20.02.2017 21:12:15 by Hibernate Tools 4.3.5.Final
 
 import java.util.Date;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -92,7 +94,7 @@ public class Position implements java.io.Serializable {
         this.id = id;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "deviceid", nullable = false)
     public Device getDevice() {
         return this.device;

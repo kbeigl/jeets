@@ -34,6 +34,7 @@
 
 	<bean id="HandlerRoute" class="org.jeets.managers.HandlerRoute" />
 	<bean id="ManagersDao" class="org.jeets.managers.ManagersDao" />
+	<bean id="GeofenceManager" class="org.jeets.managers.GeofenceManager" />
 
 	<!-- access to EntityManagerFactory/EntityManager -->
 	<bean
@@ -48,10 +49,11 @@
 	</bean>
 
 	<bean id="jpaAdapter"
-		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
-	<!-- <bean id="jpaAdapter" class="org.springframework.orm.jpa.vendor.OpenJpaVendorAdapter" /> 
-		<property name="databasePlatform" value="org.apache.openjpa.jdbc.sql.DerbyDictionary" /> 
-		<property name="database" value="DERBY" /> </bean> -->
+		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+		<property name="showSql" value="true" />
+	</bean>
+	<!-- <property name="databasePlatform" value="org.apache.openjpa.jdbc.sql.DerbyDictionary" /> 
+		<property name="database" value="DERBY" /> -->
 
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />

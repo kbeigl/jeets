@@ -28,7 +28,8 @@ public class Samples {
         position.setDevice(device);
 //      investigate further ..
         position.setDevice(device);
-        device.setPositions(new HashSet<Position>(Arrays.asList(position)));
+        device.setPositions(Arrays.asList(position));
+//      device.setPositions(new HashSet<Position>(Arrays.asList(position)));
 //      latest (GPS time!) position of list / or database (?) 
 //      can only be set via database-ID lookup!
 //      device.setPositionid(positionid);
@@ -61,7 +62,8 @@ public class Samples {
         pos2.setLatitude(49.03107129d);
         pos2.setLongitude(12.10331786d);
         pos2.setDevice(device);
-        device.setPositions(new HashSet<Position>(Arrays.asList(pos1,pos2)));
+        device.setPositions(Arrays.asList(pos1,pos2));
+//      device.setPositions(new HashSet<Position>(Arrays.asList(pos1,pos2)));
         return device;
     }
 

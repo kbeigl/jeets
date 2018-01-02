@@ -35,10 +35,12 @@ public class SpringJpaTrxTest extends CamelSpringTestSupport {
             }
         });
 
-        testEndpoint.expectedMessageCount(1); 
-
         Device device = createDevice();
 //      device.setUniqueid("111");  // TODO: test unregistered
+
+        testEndpoint.expectedMessageCount(1); 
+//      testEndpoint.expectedBodiesReceived(device);
+
         System.out.println("create and send Device\n" + device);
         template.sendBody("direct:managers.in", device );
 
