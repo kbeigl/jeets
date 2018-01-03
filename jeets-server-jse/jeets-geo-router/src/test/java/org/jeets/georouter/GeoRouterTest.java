@@ -58,32 +58,32 @@ public class GeoRouterTest extends CamelTestSupport {
         List<Device> devices = new ArrayList<>();
 
         Device device = Samples.createDeviceEntity();
-        Set<Position> positionSet = new HashSet<Position>();
-        positionSet.add(positions.get(0));
-        positionSet.add(positions.get(1));
-        positionSet.add(positions.get(2));
-        device.setPositions(positionSet);
+        List<Position> positionList = new ArrayList<Position>();
+        positionList.add(positions.get(0));
+        positionList.add(positions.get(1));
+        positionList.add(positions.get(2));
+        device.setPositions(positionList);
         devices.add(device);
 //      ---------- GeoFence ----------
         device = Samples.createDeviceEntity();
-        positionSet = new HashSet<Position>();
-        positionSet.add(positions.get(3));
-        positionSet.add(positions.get(4));
-        positionSet.add(positions.get(5));
-        positionSet.add(positions.get(6));
-        positionSet.add(positions.get(7));
-        positionSet.add(positions.get(8));
-        device.setPositions(positionSet);
+        positionList = new ArrayList<Position>();
+        positionList.add(positions.get(3));
+        positionList.add(positions.get(4));
+        positionList.add(positions.get(5));
+        positionList.add(positions.get(6));
+        positionList.add(positions.get(7));
+        positionList.add(positions.get(8));
+        device.setPositions(positionList);
         devices.add(device);
 
         device = Samples.createDeviceEntity();
-        positionSet = new HashSet<Position>();
-        positionSet.add(positions.get(9));
-        positionSet.add(positions.get(10));
+        positionList = new ArrayList<Position>();
+        positionList.add(positions.get(9));
+        positionList.add(positions.get(10));
 //      ---------- GeoFence ----------
-        positionSet.add(positions.get(11));
-        positionSet.add(positions.get(12));
-        device.setPositions(positionSet);
+        positionList.add(positions.get(11));
+        positionList.add(positions.get(12));
+        device.setPositions(positionList);
         devices.add(device);
         
         return devices;

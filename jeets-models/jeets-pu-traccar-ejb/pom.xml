@@ -22,6 +22,7 @@
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-pu-traccar-jpa</artifactId>
+			<!-- deprecated version -->
 			<version>3.7.0</version>
 		</dependency>
 	</dependencies>

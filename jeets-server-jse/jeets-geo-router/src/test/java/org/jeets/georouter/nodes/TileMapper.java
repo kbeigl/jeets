@@ -2,8 +2,6 @@ package org.jeets.georouter.nodes;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.jeets.model.traccar.jpa.Device;
@@ -25,7 +23,7 @@ public class TileMapper implements Processor {
     public void process(Exchange exchange) throws Exception {
         Device device = (Device) exchange.getIn().getBody();
 
-        Set<Position> positions = device.getPositions();        
+        List<Position> positions = device.getPositions();        
         LOG.info("received jpa.Device {} with {} positions.", 
                 device.getUniqueid(), positions.size());
 //      a Set doesn't have a guaranteed order :(

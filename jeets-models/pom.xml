@@ -33,7 +33,7 @@
     <description>Dataformats for Tracking Software Components</description>
 
     <modules>
-       <module>jeets-pu-traccar-hibernate</module>
+        <module>jeets-pu-traccar-hibernate</module>
 	   <module>jeets-pu-traccar-jpa</module>
 	   <module>jeets-protocols</module>
 	   <!-- to be introduced with Wildfly ...

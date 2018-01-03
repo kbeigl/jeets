@@ -1,6 +1,6 @@
 package org.jeets.etl;
 
-import java.util.Set;
+import java.util.List;
 
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
@@ -26,7 +26,17 @@ public class CamelGeocoderTest extends CamelTestSupport {
 //              @formatter:off
                 from("direct:jeets-dcs")    // represents from("seda:jeets-dcs")    
                 .log("Received Device Entity '${body.name}' "               // body = device
-                        + "with ${body.positions.size} positions.")
+/* 
+ * This expression "... ${body.positions.size} positions."
+ * after switching Device.positions from Set to List (ArrayList)
+ * Line 49: Caused by: org.apache.camel.language.bean.RuntimeBeanExpressionException: 
+ *             Failed to invoke method: size on null due to: 
+ *             org.apache.camel.component.bean.AmbiguousMethodCallException: 
+ *                Ambiguous method invocations possible: 
+ *                   [public abstract int java.util.List.size(), 
+ *                    public abstract int java.util.AbstractCollection.size()]. Exchange[]
+ */
+                        )
 
                 .split(simple("${body.positions}"))
                     .log("Split line Position at (${body.latitude},${body.longitude})")
@@ -58,7 +68,7 @@ public class CamelGeocoderTest extends CamelTestSupport {
         template.sendBody("direct:jeets-dcs", device);
 
 //      TODO: assert new addresses
-        Set<Position> positions = device.getPositions();
+        List<Position> positions = device.getPositions();
         for (Position position : positions) {
             LOG.info(position.getAddress());
         }

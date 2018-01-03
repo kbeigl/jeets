@@ -25,7 +25,7 @@ public class Transformer {
 //      deviceEntity.setName("DeviceTransformer");
         deviceEntity.setLastupdate(new Date());
 
-        Set<Position> positionEntities = new HashSet<Position>();
+        List<Position> positionEntities = new ArrayList<Position>();
         Set<Event> eventEntities = new HashSet<Event>();
 
 //      TODO: ensure chronological order (somewhere in the line) - LinkedHashSet ? 
@@ -150,7 +150,7 @@ public class Transformer {
         Traccar.Device.Builder deviceBuilder = Traccar.Device.newBuilder();
         deviceBuilder.setUniqueid(deviceEntity.getUniqueid());
 
-        Set<Position> positionEntities = deviceEntity.getPositions();
+        List<Position> positionEntities = deviceEntity.getPositions();
 //      Set<Event> eventEntities = deviceEntity.getEvents();
         for (Position positionEntity : positionEntities) {
             Traccar.Position.Builder positionBuilder = entityToProtoPosition(positionEntity);
