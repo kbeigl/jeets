@@ -18,16 +18,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 public class ManagersDao {
+//  TODO: restrict Exception handling to DAO
 
     private static final Logger LOG = LoggerFactory.getLogger(ManagersDao.class);
+    public static final String unregistered = "<unregistered>";
 
-//  EXTENDED avoids LazyInitializationException: 
-//  stackoverflow.com/questions/11746499/
-//        solve-failed-to-lazily-initialize-a-collection-of-role-exception
     @PersistenceContext(type = PersistenceContextType.EXTENDED)
     EntityManager em;
-    
-    public static final String unregistered = "<unregistered>";
 
     /**
      * Return a Device Message in persistable state.
@@ -46,76 +43,40 @@ public class ManagersDao {
         try {
             dbDevice = dBLookup(inDevice.getUniqueid());
         } catch (Exception e) {
-            LOG.error("Problems retrieving Device {}", inDevice.getUniqueid());
+            LOG.error("Problems retrieving Device {}:\n{}", inDevice.getUniqueid(), e);
         }
         
         if (dbDevice == null) {
-//          dbDevice = new Device();
-//          dbDevice.setUniqueid(inDevice.getUniqueid());
             inDevice.setName(unregistered);
             LOG.debug("UNREGISTERED Device {}", inDevice.getUniqueid());
+//          safety persist and ordered dbLookup ?
             return inDevice;
         } else {
             LOG.debug("Found a registered Device {}", dbDevice.getUniqueid());
         }
-        
         return dbDevice;
     }
 
 //  not @Transactional !!
     public Device dBLookup(final String uniqueId) throws Exception {
-//      MOVE RESULT TO NamedQuery in Device
-//      -------------------------------------------------------------------------------------------
-//      "SELECT d FROM Device d WHERE d.uniqueid = :uniqueid"
-        Device dev1 = em
-                .createNamedQuery("findDeviceByUniqueId", Device.class)
+        return em.createNamedQuery("findDeviceByUniqueId", Device.class)
                 .setParameter("uniqueid", uniqueId)
                 .getSingleResult();
-//      System.out.println("dev1 has " + dev1.getPositions().size() + " positions");
-/*
-//      -------------------------------------------------------------------------------------------
-        TypedQuery<Position> query = em                             // via Position List
-                .createQuery("select p from Position p, Device d "
+    }
+
+//  not @Transactional !!
+    public List<Position> loadPositions(final String uniqueId, Position fromPosition) {
+//      move to Entity as @NamedQuery (name =" loadPositions", query = ..
+        TypedQuery<Position> query = em                             // typed Position List
+                .createQuery("select distinct p from Position p, Device d "  // two related entities
                         + "where p.device.uniqueid=:uniqueid "      // implicit join !
-                        + "order by p.servertime ", Position.class)
-                .setFirstResult(100)    // pagination
-                .setMaxResults(10)
-                .setParameter("uniqueid", uniqueId);
-        List<Position> positions = query.getResultList();
-        int p=1;
-//      2 positions listed in 2x5 elements ?
-        for (Position position : positions) {
-            System.out.println(p++ + ": " + position.getServertime());
-        }
-        Device dev2 = positions.get(0).getDevice();
-        System.out.println("dev2 has " + dev2.getPositions().size() + " positions");
-//      -------------------------------------------------------------------------------------------
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-d H:m:s.S");
-        Date fromDate = null;
-        try { fromDate = formatter.parse("2017-05-20 15:45:01.623");}
-        catch (ParseException e){e.printStackTrace();}
-        TypedQuery<Device> queryDev = em
-                .createQuery("select d "
-                        + "from Device d "
-                        + "left join fetch d.positions pos "
-//                      + "join d.positions pos "
-//                      + ", in(d.positions) pos "
-//                      + "where pos.servertime > '2017-05-20 15:45:01.623' "
-                        + "where pos.servertime>:fromdate "
-                        + "and d.uniqueid=:uniqueid "
-                        + "order by pos.servertime ", Device.class)
-                .setParameter("fromdate", fromDate)
-                .setParameter("uniqueid", uniqueId);
-//                      + "where pos.protocol=:protocol", Device.class)
-//                .setParameter("protocol", "osmand");
-//        Device dev3 = queryDev.getSingleResult();
-        List<Device> list = queryDev.getResultList();               // via Device List
-        System.out.println("list has " + list.size() + " devices");
-        Device dev3 = (Device) list.get(0);
-        System.out.println("dev3 has " + dev3.getPositions().size() + " positions");
- */
-//      -------------------------------------------------------------------------------------------
-        return dev1;
+                        + "  and p.fixtime>=:fromdate "
+                        + "order by p.fixtime ", Position.class)    // ascending !
+//              .setFirstResult(100)                                // offset
+                .setMaxResults(10)                                  // pagination
+                .setParameter("uniqueid", uniqueId)
+                .setParameter("fromdate", fromPosition.getFixtime());
+        return query.getResultList();
     }
 
     @Transactional

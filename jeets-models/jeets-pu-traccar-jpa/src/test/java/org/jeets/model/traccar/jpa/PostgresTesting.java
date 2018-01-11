@@ -62,7 +62,7 @@ public class PostgresTesting extends TestCase {
 //          17.12.12 - added Geofences
             Set<DeviceGeofence> geofenceIds = device.getDeviceGeofences();
             for (DeviceGeofence deviceGeofence : geofenceIds) {
-                Geofence geofence = deviceGeofence.getGeofences();
+                Geofence geofence = deviceGeofence.getGeofence();
                 System.out.println(geofence.getArea());
             }
         

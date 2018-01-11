@@ -108,7 +108,7 @@ public class Geofence implements java.io.Serializable {
         this.attributes = attributes;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "geofences")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "geofence")
     public Set<DeviceGeofence> getDeviceGeofences() {
         return this.deviceGeofences;
     }

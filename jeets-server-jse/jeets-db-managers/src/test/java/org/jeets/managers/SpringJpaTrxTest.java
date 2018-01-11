@@ -1,7 +1,5 @@
 package org.jeets.managers;
 
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.spring.CamelSpringTestSupport;
@@ -23,15 +21,7 @@ public class SpringJpaTrxTest extends CamelSpringTestSupport {
         context.addRoutes(new RouteBuilder() {
             @Override
             public void configure() throws Exception {
-                from("direct:manager1.out")
-                .process(new Processor() {
-                    @Override
-                    public void process(Exchange exchange) throws Exception {
-                        System.out.println("Device from 'direct:manager1.out'\n" 
-                                + (Device) exchange.getIn().getBody());
-                    }
-                })
-                .to(testEndpoint);
+                from("direct:manager1.out").to(testEndpoint);
             }
         });
 
@@ -41,7 +31,7 @@ public class SpringJpaTrxTest extends CamelSpringTestSupport {
         testEndpoint.expectedMessageCount(1); 
 //      testEndpoint.expectedBodiesReceived(device);
 
-        System.out.println("create and send Device\n" + device);
+        System.out.println("send Device to HandlerRoute\n" + device);
         template.sendBody("direct:managers.in", device );
 
         testEndpoint.assertIsSatisfied();

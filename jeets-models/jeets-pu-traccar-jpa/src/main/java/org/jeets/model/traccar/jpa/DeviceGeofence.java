@@ -21,7 +21,7 @@ public class DeviceGeofence implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
     private DeviceGeofenceId id;
     private Device device;
-    private Geofence geofences;
+    private Geofence geofence;
 
     public DeviceGeofence() {
     }
@@ -29,7 +29,7 @@ public class DeviceGeofence implements java.io.Serializable {
     public DeviceGeofence(DeviceGeofenceId id, Device device, Geofence geofences) {
         this.id = id;
         this.device = device;
-        this.geofences = geofences;
+        this.geofence = geofences;
     }
 
     @EmbeddedId
@@ -56,12 +56,12 @@ public class DeviceGeofence implements java.io.Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "geofenceid", nullable = false, insertable = false, updatable = false)
-    public Geofence getGeofences() {
-        return this.geofences;
+    public Geofence getGeofence() {
+        return this.geofence;
     }
 
-    public void setGeofences(Geofence geofences) {
-        this.geofences = geofences;
+    public void setGeofence(Geofence geofence) {
+        this.geofence = geofence;
     }
 
 }

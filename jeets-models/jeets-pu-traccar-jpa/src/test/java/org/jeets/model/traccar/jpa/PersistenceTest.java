@@ -13,10 +13,9 @@ import org.jeets.model.traccar.util.Samples;
 import junit.framework.TestCase;
 
 /* TODO:
- * en.wikipedia.org/wiki/JUnit A JUnit test fixture is a Java object. With older
- * versions of JUnit, fixtures had to inherit from junit.framework.TestCase, but
- * the new tests using JUnit 4 should not do this...
- * 
+ * en.wikipedia.org/wiki/JUnit A JUnit test fixture is a Java object. 
+ * With older versions of JUnit, fixtures had to inherit from junit.framework.TestCase, 
+ * but the new tests using JUnit 4 should not do this...
  * https://stackoverflow.com/questions/42471723/
  *  jpa-not-recognizing-existing-constraints-from-database
  */

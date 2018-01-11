@@ -49,10 +49,9 @@ public class HandlerRoute {
 
         Device inDevice = (Device) exchange.getIn().getBody();
         Device gtsDevice = dao.authorizeDevice(inDevice);
-        
+
 //      TODO: create Test for activemq:unregisteredDevices Endpoint 
         if (acceptUnregisteredDevices && gtsDevice.getName().equals(ManagersDao.unregistered)) {
-//          TODO - UNTESTED
 //          dao.dBpersist(gtsDevice); ?
 //          dao.dBmerge  (gtsDevice); ?
         } else {
@@ -61,12 +60,15 @@ public class HandlerRoute {
 //          return new String[] { "activemq:unregisteredDevices" };
         }
         
-//      merge incoming with managed device ?here?at end of process!
+//      load a complete trip for analysis
+//      List<Position> tripPositions = dao.loadPositions(gtsDevice.getUniqueid(), null);
+//      tripManager.analyzeTrip(tripPositions);
+        System.out.println();
+        
+//      merge incoming with managed device ?here? => at end of process!
 //      replace (for persisting) instead of adding!!
 //      gtsDevice.getPositions().addAll(inDevice.getPositions());
 
-        LOG.info("new positions.size {}", gtsDevice.getPositions().size());
-        
         geofenceManager.analyzeGeofences(inDevice, gtsDevice);
 
 //      analyze positions, speed, course, motion ====================
@@ -77,7 +79,7 @@ public class HandlerRoute {
 //      ?device = dao.dBmerge(gtsDevice); ???
 //      dao.dBpersist(gtsDevice);
         
-//      finally set Camel output
+//      finally set Camel output to continue Routing
         exchange.getIn().setBody(gtsDevice);
 //      return new String[] {}; // dead end 
         return new String[] {"direct:manager1.out" }; 

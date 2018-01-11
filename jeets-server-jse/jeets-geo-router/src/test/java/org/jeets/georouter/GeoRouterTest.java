@@ -43,8 +43,8 @@ public class GeoRouterTest extends CamelTestSupport {
         testEndpoint.message(1).header("senddevice").isEqualTo("hvv");
         testEndpoint.message(2).header("senddevice").isEqualTo("hvv");
 
-        List<Position> positions = createTrack();
-        List<Device> devices = divideTrack(positions);
+        List<Position> positions = Samples.createU1Track();
+        List<Device> devices = Samples.divideU1Track(positions);
         for (Device device : devices) {
             template.sendBody(GeoBasedRoute.startUri, device);
         }
@@ -52,68 +52,6 @@ public class GeoRouterTest extends CamelTestSupport {
         testEndpoint.assertIsSatisfied();
 //        context.stopRoute(routeName);
 //        context.removeRoute(routeName);
-    }
-    
-    private List<Device> divideTrack(List<Position> positions) {
-        List<Device> devices = new ArrayList<>();
-
-        Device device = Samples.createDeviceEntity();
-        List<Position> positionList = new ArrayList<Position>();
-        positionList.add(positions.get(0));
-        positionList.add(positions.get(1));
-        positionList.add(positions.get(2));
-        device.setPositions(positionList);
-        devices.add(device);
-//      ---------- GeoFence ----------
-        device = Samples.createDeviceEntity();
-        positionList = new ArrayList<Position>();
-        positionList.add(positions.get(3));
-        positionList.add(positions.get(4));
-        positionList.add(positions.get(5));
-        positionList.add(positions.get(6));
-        positionList.add(positions.get(7));
-        positionList.add(positions.get(8));
-        device.setPositions(positionList);
-        devices.add(device);
-
-        device = Samples.createDeviceEntity();
-        positionList = new ArrayList<Position>();
-        positionList.add(positions.get(9));
-        positionList.add(positions.get(10));
-//      ---------- GeoFence ----------
-        positionList.add(positions.get(11));
-        positionList.add(positions.get(12));
-        device.setPositions(positionList);
-        devices.add(device);
-        
-        return devices;
-    }
-
-    private List<Position> createTrack() {
-        List<Position> positions = new ArrayList<>();
-        positions.add(createTrackPoint("04.11.17 00:37:29", 53.56985d,  10.057684d, "Wandsbeker Chaussee"));
-        positions.add(createTrackPoint("04.11.17 00:39:29", 53.567647d, 10.046565d, "Ritterstraße"));
-        positions.add(createTrackPoint("04.11.17 00:41:29", 53.564706d, 10.035504d, "Wartenau"));
-        positions.add(createTrackPoint("04.11.17 00:42:29", 53.559529d, 10.027395d, "Lübecker Straße"));
-        positions.add(createTrackPoint("04.11.17 00:43:29", 53.556626d, 10.019024d, "Lohmühlenstraße"));
-        positions.add(createTrackPoint("04.11.17 00:45:29", 53.55206d,  10.009756d, "Hauptbahnhof Süd"));
-        positions.add(createTrackPoint("04.11.17 00:47:29", 53.549034d, 10.006214d, "Steinstraße"));
-        positions.add(createTrackPoint("04.11.17 00:48:29", 53.547669d, 10.000825d, "Meßberg"));
-        positions.add(createTrackPoint("04.11.17 00:50:29", 53.552546d,  9.993471d, "Jungfernstieg"));
-        positions.add(createTrackPoint("04.11.17 00:51:29", 53.558853d,  9.989303d, "Stephansplatz (Oper/CCH)"));
-        positions.add(createTrackPoint("04.11.17 00:54:29", 53.572764d,  9.989055d, "Hallerstraße"));
-        positions.add(createTrackPoint("04.11.17 00:56:29", 53.581794d,  9.988088d, "Klosterstern"));
-        positions.add(createTrackPoint("04.11.17 00:58:29", 53.588735d,  9.990741d, "Kellinghusenstraße"));
-        LOG.info("Track has {} positions ", positions.size());
-        return positions;
-    }
-    
-    private Position createTrackPoint(
-            String fixtime, double latitude, double longitude, String address) {
-        Position pos = Samples.createPositionEntity();
-        pos.setLatitude(latitude); pos.setLongitude(longitude);
-        pos.setAddress(address); // pos.setFixtime(fixtime);
-        return pos;
     }
 
     @Test

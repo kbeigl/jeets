@@ -1,8 +1,12 @@
 package org.jeets.model.traccar.util;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 
 import org.jeets.model.traccar.jpa.Device;
 import org.jeets.model.traccar.jpa.Event;
@@ -117,6 +121,83 @@ public class Samples {
 //      event.setType(deviceStopped);
 //      event.setPosition(position);
         return event;
+    }
+
+    /**
+     * Part of the subway U1 route in Hamburg, HVV Agency
+     */
+    public static List<Position> createU1Track() {
+        List<Position> positions = new ArrayList<>();
+        positions.add(createTrackPoint("04.11.17 00:37:29", 53.56985d,  10.057684d, "Wandsbeker Chaussee"));
+        positions.add(createTrackPoint("04.11.17 00:39:29", 53.567647d, 10.046565d, "Ritterstraße"));
+        positions.add(createTrackPoint("04.11.17 00:41:29", 53.564706d, 10.035504d, "Wartenau"));
+        positions.add(createTrackPoint("04.11.17 00:42:29", 53.559529d, 10.027395d, "Lübecker Straße"));
+        positions.add(createTrackPoint("04.11.17 00:43:29", 53.556626d, 10.019024d, "Lohmühlenstraße"));
+        positions.add(createTrackPoint("04.11.17 00:45:29", 53.55206d,  10.009756d, "Hauptbahnhof Süd"));
+        positions.add(createTrackPoint("04.11.17 00:47:29", 53.549034d, 10.006214d, "Steinstraße"));
+        positions.add(createTrackPoint("04.11.17 00:48:29", 53.547669d, 10.000825d, "Meßberg"));
+        positions.add(createTrackPoint("04.11.17 00:50:29", 53.552546d,  9.993471d, "Jungfernstieg"));
+        positions.add(createTrackPoint("04.11.17 00:51:29", 53.558853d,  9.989303d, "Stephansplatz (Oper/CCH)"));
+        positions.add(createTrackPoint("04.11.17 00:54:29", 53.572764d,  9.989055d, "Hallerstraße"));
+        positions.add(createTrackPoint("04.11.17 00:56:29", 53.581794d,  9.988088d, "Klosterstern"));
+        positions.add(createTrackPoint("04.11.17 00:58:29", 53.588735d,  9.990741d, "Kellinghusenstraße"));
+        return positions;
+    }
+    
+    private static Position createTrackPoint(
+            String fixtime, double latitude, double longitude, String address) {
+        Position pos = Samples.createPositionEntity();
+        pos.setLatitude(latitude); 
+        pos.setLongitude(longitude);
+        pos.setAddress(address); 
+        pos.setFixtime(createDate(fixtime));
+        return pos;
+    }
+    
+    private static Date createDate(String dateString) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yy hh:mm:ss");
+        Date date = null;
+        try {
+            date = formatter.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
+    public static List<Device> divideU1Track(List<Position> positions) {
+        List<Device> devices = new ArrayList<>();
+
+        Device device = Samples.createDeviceEntity();
+        List<Position> positionList = new ArrayList<Position>();
+        positionList.add(positions.get(0));
+        positionList.add(positions.get(1));
+        positionList.add(positions.get(2));
+        device.setPositions(positionList);
+        devices.add(device);
+//      ---------- GeoFence ----------
+        device = Samples.createDeviceEntity();
+        positionList = new ArrayList<Position>();
+        positionList.add(positions.get(3));
+        positionList.add(positions.get(4));
+        positionList.add(positions.get(5));
+        positionList.add(positions.get(6));
+        positionList.add(positions.get(7));
+        positionList.add(positions.get(8));
+        device.setPositions(positionList);
+        devices.add(device);
+
+        device = Samples.createDeviceEntity();
+        positionList = new ArrayList<Position>();
+        positionList.add(positions.get(9));
+        positionList.add(positions.get(10));
+//      ---------- GeoFence ----------
+        positionList.add(positions.get(11));
+        positionList.add(positions.get(12));
+        device.setPositions(positionList);
+        devices.add(device);
+        
+        return devices;
     }
 
 }
