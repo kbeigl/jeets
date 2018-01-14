@@ -40,8 +40,8 @@ public class Event implements java.io.Serializable {
         this.servertime = servertime;
     }
 
-    public Event(int id, Device devices, String type, Date servertime, Integer positionid, Integer geofenceid,
-            String attributes) {
+    public Event(int id, Device devices, String type, Date servertime, 
+            Integer positionid, Integer geofenceid, String attributes) {
         this.id = id;
         this.device = devices;
         this.type = type;
@@ -73,6 +73,24 @@ public class Event implements java.io.Serializable {
         this.device = devices;
     }
 
+    @Column(name = "positionid")
+    public Integer getPositionid() {
+        return this.positionid;
+    }
+
+    public void setPositionid(Integer positionid) {
+        this.positionid = positionid;
+    }
+
+    @Column(name = "geofenceid")
+    public Integer getGeofenceid() {
+        return this.geofenceid;
+    }
+
+    public void setGeofenceid(Integer geofenceid) {
+        this.geofenceid = geofenceid;
+    }
+
     @Column(name = "type", nullable = false, length = 128)
     public String getType() {
         return this.type;
@@ -90,24 +108,6 @@ public class Event implements java.io.Serializable {
 
     public void setServertime(Date servertime) {
         this.servertime = servertime;
-    }
-
-    @Column(name = "positionid")
-    public Integer getPositionid() {
-        return this.positionid;
-    }
-
-    public void setPositionid(Integer positionid) {
-        this.positionid = positionid;
-    }
-
-    @Column(name = "geofenceid")
-    public Integer getGeofenceid() {
-        return this.geofenceid;
-    }
-
-    public void setGeofenceid(Integer geofenceid) {
-        this.geofenceid = geofenceid;
     }
 
     @Column(name = "attributes", length = 4000)

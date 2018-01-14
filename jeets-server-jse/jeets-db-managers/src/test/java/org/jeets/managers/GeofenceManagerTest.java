@@ -1,6 +1,7 @@
 package org.jeets.managers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import junit.framework.TestCase;
 
 /**
- * Plain JUnit test of the GeofenceManager.
+ * Plain JUnit test of the GeofenceManager without database.
  */
 public class GeofenceManagerTest extends TestCase {
 
@@ -26,44 +27,47 @@ public class GeofenceManagerTest extends TestCase {
 
     @Test
     public void testGeofenceManager() throws Exception {
-
+//      compare org.jeets.georouter.JtsTest
 //      prepare test track with three fractions
         List<Position> positions = Samples.createU1Track();
         assertEquals(13, positions.size());
         List<Device> devices = Samples.divideU1Track(positions);
-        
+
 //      assume the first part of the track and a geofence is already persisted
+        assertChronologicalOrder(devices.get(0).getPositions(), true);
         Device dbDevice = simulateDatabaseLookup(devices.get(0));
-        List<Position> positionsTrack1 = dbDevice.getPositions();
-        assertEquals(3, positionsTrack1.size());
-        assertChronologicalOrder(positionsTrack1);
-        
+        assertEquals(3, dbDevice.getPositions().size());
+        assertChronologicalOrder(dbDevice.getPositions(), false);
         List<DeviceGeofence> list = new ArrayList<DeviceGeofence>(dbDevice.getDeviceGeofences());
-        String wktPolygon = list.get(0).getGeofence().getArea();
-        assertEquals(wktHvvPolygon, wktPolygon);
-        
+        assertEquals(wktHvvPolygon, list.get(0).getGeofence().getArea());
+
 //      now the second part of the track arrives as a message
         Device inDevice = devices.get(1);
         inDevice.setId(deviceId);
 
         GeofenceManager gfManager = new GeofenceManager();
-        dbDevice = gfManager.analyzeGeofences(inDevice, dbDevice);
+        gfManager.analyzeGeofences(inDevice, dbDevice);
+        
+//      assert created events !!
 
+//      update dbDevice positions and order
+        List<Position> reversedMsgs = revertChronologicalOrder(inDevice.getPositions());
+        if (reversedMsgs.addAll(dbDevice.getPositions()))
+            dbDevice.setPositions(reversedMsgs);
+//      assert dbDevice positions and order
+        assertEquals(9, dbDevice.getPositions().size());
+        assertChronologicalOrder(dbDevice.getPositions(), false);
+        
 //      now the third part of the track arrives as a message
         inDevice = devices.get(2);
         inDevice.setId(deviceId);
-//        dbDevice = gfManager.analyzeGeofences(inDevice, dbDevice);
+        gfManager.analyzeGeofences(inDevice, dbDevice);
+        
+//      assertions ...
         
     }
-    
-    private void assertChronologicalOrder(List<Position> positionList) {
-        for (int pos = 0; pos < positionList.size() - 1; pos++) {
-//          fixtimes could be equal depending on the system logic
-            assertTrue(positionList.get(pos).getFixtime().before(positionList.get(pos + 1).getFixtime()));
-        }
-    }
 
-    private int deviceId = 456;
+    private int deviceId = 456;  // random
 
     /**
      * Sample method to use the Persistence Unit's Entities and -relations
@@ -78,7 +82,23 @@ public class GeofenceManagerTest extends TestCase {
         Set<DeviceGeofence> deviceGeofences = new HashSet<DeviceGeofence>();
         deviceGeofences.add(deviceGeofence);
         device.setDeviceGeofences(deviceGeofences);
+        device.setPositions(revertChronologicalOrder(device.getPositions()));
         return device;
+    }
+
+//  CAUTION! Subsequent fixtimes could also be equal depending on the system logic!
+    private void assertChronologicalOrder(List<Position> positionList, boolean forward) {
+        for (int pos = 0; pos < positionList.size() - 1; pos++)
+            if (forward)
+                assertTrue(positionList.get(pos).getFixtime().before(positionList.get(pos + 1).getFixtime()));
+            else
+                assertTrue(positionList.get(pos).getFixtime().after(positionList.get(pos + 1).getFixtime()));
+    }
+
+    private List<Position> revertChronologicalOrder(List<Position> positionList) {
+        List<Position> reversePositionList = positionList.subList(0, positionList.size());
+        Collections.reverse(reversePositionList);
+        return reversePositionList;
     }
 
     // NOTE! lat and lon are swapped in Traccar representation!!
