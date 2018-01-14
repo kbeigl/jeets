@@ -10,8 +10,11 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class DeviceGeofenceId implements java.io.Serializable {
 
-    private int deviceid;
-    private int geofenceid;
+    private static final long serialVersionUID = 1L;
+    
+//  TODO: replace with Entities:
+    private int deviceid;       // Device
+    private int geofenceid;     // Geofence
 
     public DeviceGeofenceId() {
     }

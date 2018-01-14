@@ -1,7 +1,9 @@
 package org.jeets.managers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.jeets.model.traccar.jpa.Device;
 import org.jeets.model.traccar.jpa.DeviceGeofence;
@@ -29,7 +31,7 @@ public class GeofenceManager {
     private static final Logger LOG = LoggerFactory.getLogger(GeofenceManager.class);
 
     public void analyzeGeofences(Device msgDevice, Device gtsDevice) {
-        LOG.info("analyzeGeofences message with {} against entity with {} positions", 
+        LOG.debug("analyzeGeofences message with {} against entity with {} positions", 
                 msgDevice.getPositions().size(), gtsDevice.getPositions().size());
         List<DeviceGeofence> geofenceList = new ArrayList<DeviceGeofence>(gtsDevice.getDeviceGeofences());
         for (int gf = 0; gf < geofenceList.size(); gf++) {
@@ -52,41 +54,56 @@ public class GeofenceManager {
             LineString jtsLine = (LineString) createJtsGeometry(edge);
 
             if (jtsLine.crosses(jtsPolygon)) {
-                Event geofenceEvent = addGeofenceEvent(jtsLine, jtsPolygon);
+                Event geofenceEvent = analyzeGeofenceEvent(jtsLine, jtsPolygon);
                 if (geofenceEvent != null) {
-//                  create relations
-                    geofenceEvent.setGeofenceid(geofence.getId());
-                    geofenceEvent.setDevices(dbDevice);
+                    
+                    if (geofenceEvent.getType().equals(TYPE_GEOFENCE_ENTER))
+                        geofenceEvent.setPosition(msgPosition);
+                    else if (geofenceEvent.getType().equals(TYPE_GEOFENCE_EXIT))
+                        geofenceEvent.setPosition(lastPosition);
+                    
+//                  see traccar timestamp deviation ~ms <> pos.servertime
+                    geofenceEvent.setServertime(new Date()); 
+                    geofenceEvent.setDevice(dbDevice);
+                    geofenceEvent.setGeofence(geofence);
+                    Set<Event> dbDeviceEvents = dbDevice.getEvents();
+                    dbDeviceEvents.add(geofenceEvent);
+                    dbDevice.setEvents(dbDeviceEvents);
                 }
             }
-//          progress to next edge
+//          shift to next edge
             lastPosition = msgPositions.get(pos);
         }
     }
 
-//  temporary solution for testing with Traccar > refactor, move ...
-    public final String TYPE_GEOFENCE_ENTER = "geofenceEnter";
-    public final String TYPE_GEOFENCE_EXIT  = "geofenceExit";
+//  temporary solution for testing with Traccar 
+//    > refactor, move ... compare pu.Samples with enums
+    public static final String TYPE_GEOFENCE_ENTER = "geofenceEnter";
+    public static final String TYPE_GEOFENCE_EXIT  = "geofenceExit";
 
-    private Event addGeofenceEvent(LineString jtsLine, Polygon jtsPolygon) {
+    private Event analyzeGeofenceEvent(LineString jtsLine, Polygon jtsPolygon) {
         LOG.debug("linestring " + jtsLine);
         Point startPoint = jtsLine.getStartPoint();
         Point endPoint   = jtsLine.getEndPoint();
         Point crossPoint = (Point) jtsPolygon.getBoundary().intersection(jtsLine);
-        LOG.info("line from " + startPoint + " to " + endPoint + " intersects Geofence at " + crossPoint);
+        LOG.debug("line from {} to {} intersects Geofence at {}", startPoint, endPoint, crossPoint);
 
         if (startPoint.coveredBy(jtsPolygon)) {
-            LOG.info("Event: " + TYPE_GEOFENCE_EXIT);
             Event exitEvent = new Event();
             exitEvent.setType(TYPE_GEOFENCE_EXIT);
-//            exitEvent.setPositionid(positionid); ??
-//            exitEvent.setServertime(servertime); ??
+//          if (generateGeofenceEventPosition()) {
+//              new Position() .. ? -> add option !
+//              distances ratio > time ratio + crossPoint coordinates
+//          }   
             return exitEvent;
-//          new Position() .. ? -> add option !
-//            distances ratio > time ratio + crossPoint coordinates
         } else if (endPoint.coveredBy(jtsPolygon)) {
-            LOG.info("Event: " + TYPE_GEOFENCE_ENTER);
-            return null;
+            Event enterEvent = new Event();
+            enterEvent.setType(TYPE_GEOFENCE_ENTER);
+//          if (generateGeofenceEventPosition()) {
+//              new Position() .. ? -> add option !
+//              distances ratio > time ratio + crossPoint coordinates
+//          }   
+            return enterEvent;
         }
         return null;
     }

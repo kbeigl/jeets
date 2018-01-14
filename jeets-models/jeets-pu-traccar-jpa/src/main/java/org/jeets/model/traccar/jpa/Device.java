@@ -227,7 +227,7 @@ public class Device implements java.io.Serializable {
     }
 
 //  device <> devices !?
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "devices", cascade = CascadeType.PERSIST)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "device", cascade = CascadeType.PERSIST)
     public Set<Event> getEvents() {
         return this.events;
     }

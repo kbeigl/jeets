@@ -21,6 +21,7 @@ import junit.framework.TestCase;
  */
 public class PersistenceTest extends TestCase {
 
+//  TODO: move/create Geofence tests
     private EntityManagerFactory entityManagerFactory = null;
 
 /*
@@ -107,8 +108,8 @@ public class PersistenceTest extends TestCase {
                 49.34d, 12.78d, 333, 11.2, 121, 0.1);
         pos2.setProtocol("protocol");
 
-        Event event1 = new Event(1, device, "deviceMoving",  new Date(), 1, 1, "");
-        Event event2 = new Event(2, device, "deviceStopped", new Date(), 1, 1, "");
+        Event event1 = new Event(1, device, "deviceMoving",  new Date(), pos1, null, "");
+        Event event2 = new Event(2, device, "deviceStopped", new Date(), pos1, null, "");
 
 //      Note that EntityManager is not needed to create entities above!
         EntityManager entityManager = entityManagerFactory.createEntityManager();

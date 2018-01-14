@@ -22,13 +22,19 @@ import javax.persistence.TemporalType;
 @Table(name = "events", schema = "public")
 public class Event implements java.io.Serializable {
 
+    // TODO: change positionid and geofenceid to entity relations (see device)
+    // and create test case in PU (see GeofenceManager/Test, 
+    // Georouter (introduced before Geofences)
+    
     private static final long serialVersionUID = 1L;
     private int id;
     private Device device;
     private String type;
     private Date servertime;
-    private Integer positionid;
-    private Integer geofenceid;
+    private Position position;
+//    private Integer positionid;
+    private Geofence geofence;
+//    private Integer geofenceid;
     private String attributes;
 
     public Event() {
@@ -40,14 +46,16 @@ public class Event implements java.io.Serializable {
         this.servertime = servertime;
     }
 
-    public Event(int id, Device devices, String type, Date servertime, 
-            Integer positionid, Integer geofenceid, String attributes) {
+    public Event(int id, Device device, String type, Date servertime, 
+            Position position, Geofence geofence, String attributes) {
         this.id = id;
-        this.device = devices;
+        this.device = device;
         this.type = type;
         this.servertime = servertime;
-        this.positionid = positionid;
-        this.geofenceid = geofenceid;
+        this.position = position;
+        this.geofence = geofence;
+//      this.positionid = positionid;
+//      this.geofenceid = geofenceid;
         this.attributes = attributes;
     }
 
@@ -65,31 +73,43 @@ public class Event implements java.io.Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "deviceid")
-    public Device getDevices() {
+    public Device getDevice() {
         return this.device;
     }
 
-    public void setDevices(Device devices) {
-        this.device = devices;
+    public void setDevice(Device device) {
+        this.device = device;
     }
 
     @Column(name = "positionid")
-    public Integer getPositionid() {
-        return this.positionid;
+    public Position getPosition() {
+        return this.position;
     }
 
-    public void setPositionid(Integer positionid) {
-        this.positionid = positionid;
+    public void setPosition(Position position) {
+        this.position = position;
     }
+
+//    @Column(name = "positionid")
+//    public Integer getPositionid() {
+//        return this.positionid; }
+//    public void setPositionid(Integer positionid) {
+//        this.positionid = positionid; }
 
     @Column(name = "geofenceid")
-    public Integer getGeofenceid() {
-        return this.geofenceid;
+    public Geofence getGeofence() {
+        return this.geofence;
     }
 
-    public void setGeofenceid(Integer geofenceid) {
-        this.geofenceid = geofenceid;
+    public void setGeofence(Geofence geofence) {
+        this.geofence = geofence;
     }
+
+//    @Column(name = "geofenceid")
+//    public Integer getGeofenceid() {
+//        return this.geofenceid; }
+//    public void setGeofenceid(Integer geofenceid) {
+//        this.geofenceid = geofenceid; }
 
     @Column(name = "type", nullable = false, length = 128)
     public String getType() {
@@ -122,8 +142,8 @@ public class Event implements java.io.Serializable {
     @Override
     public String toString() {
         return "Event [id=" + id + ", device=" + device + ", type=" + type 
-                + ", servertime=" + servertime + ", positionid=" + positionid 
-                + ", geofenceid=" + geofenceid + ", attributes=" + attributes 
+                + ", servertime=" + servertime + ", position=" + position 
+                + ", geofence=" + geofence + ", attributes=" + attributes 
                 + "]";
     }
 

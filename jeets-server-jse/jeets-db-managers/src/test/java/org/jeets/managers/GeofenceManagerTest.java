@@ -9,13 +9,11 @@ import java.util.Set;
 import org.jeets.model.traccar.jpa.Device;
 import org.jeets.model.traccar.jpa.DeviceGeofence;
 import org.jeets.model.traccar.jpa.DeviceGeofenceId;
+import org.jeets.model.traccar.jpa.Event;
 import org.jeets.model.traccar.jpa.Geofence;
 import org.jeets.model.traccar.jpa.Position;
 import org.jeets.model.traccar.util.Samples;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import junit.framework.TestCase;
 
 /**
@@ -23,7 +21,7 @@ import junit.framework.TestCase;
  */
 public class GeofenceManagerTest extends TestCase {
 
-    private static final Logger LOG = LoggerFactory.getLogger(GeofenceManagerTest.class);
+//  private static final Logger LOG = LoggerFactory.getLogger(GeofenceManagerTest.class);
 
     @Test
     public void testGeofenceManager() throws Exception {
@@ -43,12 +41,14 @@ public class GeofenceManagerTest extends TestCase {
 
 //      now the second part of the track arrives as a message
         Device inDevice = devices.get(1);
-        inDevice.setId(deviceId);
 
         GeofenceManager gfManager = new GeofenceManager();
         gfManager.analyzeGeofences(inDevice, dbDevice);
         
-//      assert created events !!
+//      assert created event
+        assertEquals(1, dbDevice.getEvents().size());
+        List<Event> evlist = new ArrayList<Event>(dbDevice.getEvents());
+        assertEquals(GeofenceManager.TYPE_GEOFENCE_ENTER, evlist.get(0).getType());
 
 //      update dbDevice positions and order
         List<Position> reversedMsgs = revertChronologicalOrder(inDevice.getPositions());
@@ -60,14 +60,14 @@ public class GeofenceManagerTest extends TestCase {
         
 //      now the third part of the track arrives as a message
         inDevice = devices.get(2);
-        inDevice.setId(deviceId);
         gfManager.analyzeGeofences(inDevice, dbDevice);
         
-//      assertions ...
-        
+        assertEquals(2, dbDevice.getEvents().size());
+        evlist = new ArrayList<Event>(dbDevice.getEvents());
+        assertEquals(GeofenceManager.TYPE_GEOFENCE_EXIT, evlist.get(1).getType());
     }
 
-    private int deviceId = 456;  // random
+//  private int deviceId = 456;  // random
 
     /**
      * Sample method to use the Persistence Unit's Entities and -relations
@@ -75,8 +75,9 @@ public class GeofenceManagerTest extends TestCase {
      * database and a virtually persisted Geofence is added via relations.
      */
     private Device simulateDatabaseLookup(Device device) {
-        device.setId(deviceId);
-        Geofence geofence = new Geofence(248, "downtown Hamburg", wktHvvPolygon);
+        Geofence geofence = new Geofence();
+        geofence.setArea(wktHvvPolygon);
+        geofence.setName("downtown Hamburg");
         DeviceGeofenceId deviceGeofenceId = new DeviceGeofenceId(device.getId(), geofence.getId());
         DeviceGeofence   deviceGeofence   = new DeviceGeofence(deviceGeofenceId, device, geofence);
         Set<DeviceGeofence> deviceGeofences = new HashSet<DeviceGeofence>();
