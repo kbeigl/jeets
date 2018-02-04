@@ -70,16 +70,17 @@ public class Main {
             String departureStop = "Farmsen", viaStop = "Fuhlsbüttel";
             String lineKey = "HHA-U:" + routeShortName + "_HHA-U";
 
-            Instant depart = new Date().toInstant();  // now
+            Instant depart;
+//                  = new Date().toInstant();  // now
 //          String startDateString = "2017-11-03T14:30:38Z";
 //          WRONG result 18:00 at Farmsen !! correct via GeoFox !!
 //          COORECT RESULTS FOR FARMSEN 18:10
 //          override with specific time
-//          String startDateString = "2017-11-03T18:08:00Z";
-//          depart= Instant.parse(startDateString);   
+            String startDateString = "2017-11-03T18:08:00Z";
+            depart= Instant.parse(startDateString);   
 
 //          switch manualy during development
-            switch (EntityFactory.DATABASE) {
+            switch (EntityFactory.GTFS) {
             case DATABASE:
 //              2a. use Traccar Persistence Unit to query database
 //              add input params or SQL statement
@@ -117,11 +118,12 @@ public class Main {
         System.out.println(positionEntities.size() + " positions retrieved ");
         // this should only be applied to DATABASE 
         // while Transit should be played back by actual time stamps
-        setFixtimesStartingNow(positionEntities);
-        // optimize track by adding altitude and calculating course and speed
-//      listTrack(positionEntities);
+//      adjustFixtimesStartingNow(positionEntities);
+        listTrack(positionEntities);
+        
+        if (true) return;
 
-        // 2. create Player
+        // 2. create Player/s
         Player player = new Player(positionEntities);
         // 3. create Client with Tracker
         // uniqueId must be registered (for each player) and can defer from database selection
@@ -147,10 +149,13 @@ public class Main {
         for (int pos = 0; pos < positionEntities.size(); pos++) {
 //      for (int pos = 0; pos < 20; pos++) {
             Position position = positionEntities.get(pos);
-            String dateString = df.format(position.getFixtime());
-            System.out.println( pos + ". " + dateString + "\t" 
-                    + position.getLatitude() + "\t" + position.getLongitude() 
-                    + "\t" + position.getAddress());
+            String dateString = "no date";
+            if (position.getFixtime() != null) {
+                dateString = df.format(position.getFixtime());
+                System.out.println( pos + ". " + dateString + "\t" 
+                        + position.getLatitude() + "\t" + position.getLongitude() 
+                        + "\t" + position.getAddress());
+            }
         }
     }
 
@@ -158,7 +163,7 @@ public class Main {
      * As Fixtimes should not be sent from the past time and they should be set
      * to the time they are actually played to listeners.
      */
-    private static void setFixtimesStartingNow(List<Position> positionEntities) {
+    private static void adjustFixtimesStartingNow(List<Position> positionEntities) {
         long msOffset = new Date().getTime() - positionEntities.get(0).getFixtime().getTime();
         for (Position position : positionEntities) {
             // adjust fixtimes starting first position from 'now'

@@ -36,7 +36,7 @@ import org.jeets.playback.sources.GtfsApi;
  */
 public class TransitFactory {
 
-//  database (will be PU with persistence.xml)
+//  database (TODO: PU with persistence.xml)
     private static String host = "127.0.0.1";
     private static int port = 5432;
     private static String dbName = "HVV-20171006";
@@ -44,7 +44,7 @@ public class TransitFactory {
     private static String dbPassword = "postgres";
     private static String dbUrl = "jdbc:postgresql://" + host + ":" + port + "/" + dbName;
 //  "jdbc:postgresql://127.0.0.1:5432/HVV-20171006", "postgres", "postgres");
-    
+
 //      TODO: create auto detection of highly frequented stops 
 //      (pivot points) of a route/trip !!
 //      try to determine most frequented fraction of a route 
@@ -54,15 +54,16 @@ public class TransitFactory {
         // create database access to GTFS model
         gtfs = new GtfsApi(dbUrl, dbUser, dbPassword);
     }
-    
+
     private GtfsApi gtfs;
-    
+
     /**
      * This method demonstrates a 'top down' approach to generate transit
      * traffic from a GTFS set. The parameters should be familiar to transit
      * passengers without API internals.
      */
-    public List<Position> getNextTrack(int routeType, String routeShortName, String fromStop, String toStop, Instant departAt) {
+    public List<Position> getNextTrack(int routeType, String routeShortName, 
+            String fromStop, String toStop, Instant departAt) {
 
         // lookup transit routes, i.e. 'lines' to generate traffic
         String description = gtfs.getRouteType(routeType);
@@ -115,63 +116,78 @@ public class TransitFactory {
         return positionEntities;
     }
 
+//  this method is a (terrible) hack!
+//  TODO: implement geometric operations with JTS
 //  align with GeoFoxFactory.composeCourseTrack(List<CourseElement> courseElements)
     private List<Position> createPositionTrip(GtfsTrip trip, ZonedDateTime zonedDateTime) {
-
         List<GtfsStopTimes> tripStopTimes = gtfs.getStopTimes(trip); // size should match
-        List<GtfsStop> tripStops = gtfs.getStops(trip);              // size should match
-        List<GtfsShape> tripShapes = gtfs.getShapes(trip); 
+        List<GtfsStop>      tripStops     = gtfs.getStops    (trip); // size should match
+        List<GtfsShape>     tripShapes    = gtfs.getShapes   (trip); 
         if (tripStops.size() != tripStopTimes.size()) {
             logger.error("tripStops and tripStopTimes sizes are NOT equal !?");
+//          now what?
         }
-        logger.info("trip has " + tripStops.size() + " stops " 
-                + "and " + tripStopTimes.size() + " stopTimes " 
-                + "and " + tripShapes.size() + " shapes");
-
-//      MAYBE COLLECT STOP POSITIONS IN A QUEUE TO SNAP SHAPES LATER ??
+        logger.info("trip has " + tripStops.size() + " stops, " 
+                + tripStopTimes.size() + " stopTimes and " 
+                + tripShapes.size() + " shapes");
+//      TODO: check GTFS specs for direction ------------------------
+//      GtfsTrip [ .., directionId=1, .. ]
+        GtfsShape firstShape = tripShapes.get(0);
+        GtfsStop  firstStop  = tripStops .get(0);
+        GtfsStop   lastStop  = tripStops .get(tripStops.size()-1);
+//      assert same order, i.e. direction of shapes and stops
+        int direction = -1;
+        if (cartesianDistance(firstShape, firstStop) 
+                < cartesianDistance(firstShape, lastStop))
+            direction = 1;
+        else {
+//          TODO: implement opposite directions ?
+            System.err.println("shapes and stops have different directions.");
+            return null;
+        }   
+//      -------------------------------------------------------------
         List<Position> positions = new ArrayList<Position>();
-        
-        for (int i = 0; i < tripStops.size(); i++) {
-            
-            GtfsStop stop = tripStops.get(i);
-            GtfsStopTimes stopTime = tripStopTimes.get(i);
-            Position position = null;
-            
-            // skip first arrival position
-//            if (i > 0) { // arrival
-                position = new Position();
-                position.setLatitude (stop.getStopLat());
-                position.setLongitude(stop.getStopLon());
-                Date arrDate = createDate( zonedDateTime, stopTime.getArrivalTime() ) ;
-                position.setFixtime(arrDate);
-//              Note: Address will not be transmitted (helpful here)
-                position.setAddress(stop.getStopName());
-                positions.add(position);
-//            }
-            // skip last departure position
-//            if (i < tripStops.size() - 2) { // departure
-                position = new Position();
-                position.setLatitude(stop.getStopLat());
-                position.setLongitude(stop.getStopLon());
-                Date depDate = createDate( zonedDateTime, stopTime.getDepartureTime() ) ;
-                position.setFixtime(depDate);
-                position.setAddress(stop.getStopName());
-//            }
+        int stopNr = 0; Date arrDate = null;
+        GtfsStop stop = null; GtfsStopTimes stopTime = null;
+//      createPosition for each Shape
+        for (int shapeNr = 0; shapeNr < tripShapes.size(); shapeNr++) { 
+            GtfsShape shape = tripShapes.get(shapeNr);
+            stop = tripStops.get(stopNr);
+            stopTime = tripStopTimes.get(stopNr);
 
+            if (cartesianDistance(shape, stop) < 0.0009d) {   // experimental distance
+//              use shape coordinates, override stop coordinates, add stopTime and -Name
+                arrDate = createDate( zonedDateTime, stopTime.getArrivalTime() ) ;
+                positions.add(createPosition(shape.getShapePtLat(), shape.getShapePtLon(), 
+                        arrDate, stopNr + "-" + stop.getStopName()));
+                if (stopNr < tripStops.size()-1) 
+                     stopNr++;
+                else stopNr = 1; // out of reach
+            } else {
+//              use shape coordinates
+//              shape.getShapePtSequence() // unused (?)
+                positions.add(createPosition(
+                        shape.getShapePtLat(), shape.getShapePtLon(), null, null));
+            }
         }
         
-//      Position position = findClosestPosition(stop, positions);
-
-/*
-        for (GtfsShape shape : tripShapes) {
-            Position position = new Position();
-            position.setLatitude(shape.getShapePtLat());
-            position.setLongitude(shape.getShapePtLon());
-            // shape.getShapePtSequence() // not used (?)
-            positions.add(position);
-        }
- */
         return positions;
+    }
+
+    private Position createPosition(double lat, double lon, Date arrDate, String stopName) {
+        Position position = new Position();
+        position.setLatitude (lat);
+        position.setLongitude(lon);
+        position.setFixtime(arrDate);
+//      Note: Address will not be transmitted (helpful here)
+        position.setAddress(stopName);
+        return position;
+    }
+
+    private double cartesianDistance(GtfsShape shape, GtfsStop stop) {
+        return Math.sqrt( 
+               Math.pow(shape.getShapePtLat() - stop.getStopLat(), 2) +
+               Math.pow(shape.getShapePtLon() - stop.getStopLon(), 2));
     }
 
     private Date createDate(ZonedDateTime zonedDateTime, String arrivalTime) {

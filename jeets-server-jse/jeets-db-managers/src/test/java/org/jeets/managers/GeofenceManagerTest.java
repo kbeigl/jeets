@@ -41,11 +41,8 @@ public class GeofenceManagerTest extends TestCase {
 
 //      now the second part of the track arrives as a message
         Device inDevice = devices.get(1);
-
         GeofenceManager gfManager = new GeofenceManager();
         gfManager.analyzeGeofences(inDevice, dbDevice);
-        
-//      assert created event
         assertEquals(1, dbDevice.getEvents().size());
         List<Event> evlist = new ArrayList<Event>(dbDevice.getEvents());
         assertEquals(GeofenceManager.TYPE_GEOFENCE_ENTER, evlist.get(0).getType());
@@ -54,17 +51,18 @@ public class GeofenceManagerTest extends TestCase {
         List<Position> reversedMsgs = revertChronologicalOrder(inDevice.getPositions());
         if (reversedMsgs.addAll(dbDevice.getPositions()))
             dbDevice.setPositions(reversedMsgs);
-//      assert dbDevice positions and order
         assertEquals(9, dbDevice.getPositions().size());
         assertChronologicalOrder(dbDevice.getPositions(), false);
         
 //      now the third part of the track arrives as a message
         inDevice = devices.get(2);
         gfManager.analyzeGeofences(inDevice, dbDevice);
-        
         assertEquals(2, dbDevice.getEvents().size());
         evlist = new ArrayList<Event>(dbDevice.getEvents());
         assertEquals(GeofenceManager.TYPE_GEOFENCE_EXIT, evlist.get(1).getType());
+        
+//      TODO: update dbDevice positions and order as earlier before actually persisting
+        
     }
 
 //  private int deviceId = 456;  // random
