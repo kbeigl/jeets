@@ -26,7 +26,7 @@
 	<description>
 		Main POM to compile, test and build all JeeTS sources with dependencies.
 	</description>
-	<url>http://www.jeets.org/</url>
+	<url>http://jeets.org/</url>
 
 	<licenses>
 		<license>
@@ -47,7 +47,7 @@
 
 	<developers>
 		<developer>
-			<name>Java EE Tracking Software - JeeTS</name>
+			<name>Kristof Beiglböck - JeeTS</name>
 			<email>kbeigl@jeets.org</email>
 			<url>http://jeets.org</url>
 		</developer>
@@ -58,6 +58,7 @@
 		<module>jeets-models</module>
 		<module>jeets-clients</module>
 		<module>jeets-server-jse</module>
+		<module>jeets-server-jee</module>
 	 </modules>
 
 </project>

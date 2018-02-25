@@ -34,6 +34,7 @@ import org.jeets.playback.sources.GtfsApi;
  *
  * @author kbeigl@jeets.org
  */
+// TODO: this class is hack and needs to be reengineered with JTS!
 public class TransitFactory {
 
 //  database (TODO: PU with persistence.xml)
@@ -112,11 +113,76 @@ public class TransitFactory {
         // .. to jeets format
         List<Position> positionEntities = createPositionTrip(trip, zonedDateTime);
         logger.info("Created " + positionEntities.size() + " positions");
+        addTimesForShapes(positionEntities);
 
         return positionEntities;
     }
 
-//  this method is a (terrible) hack!
+    /**
+     * Initially a List<Position> is created with all Shapes.
+     * But only Shapes close to Stops have Time and Name and
+     * intermediate Times have to calculated by distance ratio.
+     */
+    private void addTimesForShapes(List<Position> positions) {
+//      assertion
+        int firstPos = 0; Position firstPosition = positions.get(firstPos); 
+        if (firstPosition.getFixtime() == null) {
+            System.err.println("First Position currently needs a timestamp for further calculations!");
+            return; // can currently cause confusion
+        }
+        double courseLength = 0d;
+        Position lastPosition = null; int lastPos;
+        for (int pos = 1; pos < positions.size(); pos++) {
+            Position currPosition = positions.get(pos);
+            Position prevPosition = positions.get(pos-1);
+            courseLength += cartesianDistance(currPosition.getLatitude(), currPosition.getLongitude(),
+                    prevPosition.getLatitude(), prevPosition.getLongitude()); 
+
+            if (currPosition.getFixtime() != null) {
+                lastPosition = currPosition; lastPos = pos;
+//              System.out.println("calculate times for positions between " + firstPos + " and " + lastPos);
+                long duration = lastPosition.getFixtime().getTime() - firstPosition.getFixtime().getTime();
+//              System.out.println("duration: " + duration + " ms / courseLength: " + courseLength);
+
+                calculateFixtimes(positions, firstPos, lastPos, courseLength, duration);
+
+//              re/set values for next interval
+                firstPos = lastPos; firstPosition = lastPosition; 
+                courseLength = 0d;
+//              break;  // restrict to first section at dev time
+            }
+        }
+    }
+
+    /**
+     * Calculate Fixtimes for intermediate Shapepoints.
+     * First and last Positions must provide a Fixtime. 
+     */
+    private void calculateFixtimes(List<Position> positions, 
+            int firstPos, int lastPos, double courseLength, long duration) {
+        
+//      subtract x seconds stop time from arrDate to simulate stop
+//      end with position (depTime - stopTime) 
+//      and start with same position (duplicate stop) and depTime (pos list > original positions)
+//        double stopTime = 10000.0d;    // train stops for [stopTime] milliseconds
+//        duration -= stopTime;          // TODO: add position for stop with different times
+
+        for (int pos = firstPos + 1; pos < lastPos+1; pos++) {
+            double distance = cartesianDistance(
+                    positions.get(pos-1).getLatitude(), positions.get(pos-1).getLongitude(), 
+                    positions.get(pos)  .getLatitude(), positions.get(pos)  .getLongitude());
+            double percent = distance / courseLength;
+            double deltaMs = duration * percent;
+//          from ratio  deltaMs -> fixtime
+            positions.get(pos).setFixtime( new Date(
+                    positions.get(pos-1).getFixtime().getTime() + (long) deltaMs));
+//            System.out.println("delta pos" + (pos - 1) + " to pos" + pos 
+//                    + ": distance " + distance + "\tdeltaMs " + deltaMs 
+//                    + "\tfixtime " + positions.get(pos).getFixtime());
+        }
+    }
+
+    //  this method is a (terrible) hack!
 //  TODO: implement geometric operations with JTS
 //  align with GeoFoxFactory.composeCourseTrack(List<CourseElement> courseElements)
     private List<Position> createPositionTrip(GtfsTrip trip, ZonedDateTime zonedDateTime) {
@@ -137,8 +203,10 @@ public class TransitFactory {
         GtfsStop   lastStop  = tripStops .get(tripStops.size()-1);
 //      assert same order, i.e. direction of shapes and stops
         int direction = -1;
-        if (cartesianDistance(firstShape, firstStop) 
-                < cartesianDistance(firstShape, lastStop))
+        if (cartesianDistance(firstShape.getShapePtLat(), 
+                firstShape.getShapePtLon(), firstStop.getStopLat(), firstStop.getStopLon()) 
+                < cartesianDistance(firstShape.getShapePtLat(), 
+                        firstShape.getShapePtLon(), lastStop.getStopLat(), lastStop.getStopLon()))
             direction = 1;
         else {
 //          TODO: implement opposite directions ?
@@ -154,20 +222,26 @@ public class TransitFactory {
             GtfsShape shape = tripShapes.get(shapeNr);
             stop = tripStops.get(stopNr);
             stopTime = tripStopTimes.get(stopNr);
-
-            if (cartesianDistance(shape, stop) < 0.0009d) {   // experimental distance
+            double distance = cartesianDistance(shape.getShapePtLat(), 
+                    shape.getShapePtLon(), stop.getStopLat(), stop.getStopLon());
+//          experimental distance, volatile!
+            if (distance < 0.0009d) {
 //              use shape coordinates, override stop coordinates, add stopTime and -Name
                 arrDate = createDate( zonedDateTime, stopTime.getArrivalTime() ) ;
                 positions.add(createPosition(shape.getShapePtLat(), shape.getShapePtLon(), 
                         arrDate, stopNr + "-" + stop.getStopName()));
                 if (stopNr < tripStops.size()-1) 
                      stopNr++;
-                else stopNr = 1; // out of reach
+//              else stopNr = 1; // out of reach
+//              better?: don't add any further positions after last stop!
+                else break;
             } else {
 //              use shape coordinates
 //              shape.getShapePtSequence() // unused (?)
-                positions.add(createPosition(
-                        shape.getShapePtLat(), shape.getShapePtLon(), null, null));
+//              first position should be a Stop, don't start with shapepoints
+                if (positions.size() != 0)
+                    positions.add(createPosition(
+                            shape.getShapePtLat(), shape.getShapePtLon(), null, null));
             }
         }
         
@@ -184,10 +258,8 @@ public class TransitFactory {
         return position;
     }
 
-    private double cartesianDistance(GtfsShape shape, GtfsStop stop) {
-        return Math.sqrt( 
-               Math.pow(shape.getShapePtLat() - stop.getStopLat(), 2) +
-               Math.pow(shape.getShapePtLon() - stop.getStopLon(), 2));
+    private double cartesianDistance(double fromLat, double fromLon, double toLat, double toLon) {
+        return Math.sqrt(Math.pow(fromLat - toLat, 2) + Math.pow(fromLon - toLon, 2));
     }
 
     private Date createDate(ZonedDateTime zonedDateTime, String arrivalTime) {

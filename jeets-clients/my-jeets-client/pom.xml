@@ -71,7 +71,7 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>org.jeets.player.sources.HibernateFactory</mainClass>
+							<mainClass>org.jeets.playback.Main</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

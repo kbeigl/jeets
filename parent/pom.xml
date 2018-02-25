@@ -47,8 +47,8 @@
 	</prerequisites>
 
 	<properties>
-		<maven.compiler.source>1.7</maven.compiler.source>
-		<maven.compiler.target>1.7</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 
 		<!-- Adjust with Camel parent with listed versions -->
 		<slf4j-version>1.7.22</slf4j-version>
@@ -61,25 +61,7 @@
 		<postgresql-version>9.4-1200-jdbc41</postgresql-version>
 		<netty-version>4.1.15.Final</netty-version>
 	</properties>
+	
+		<!-- place common builders here !? -->	
 
-<!-- 
-	<profiles>
-		<profile>
-			<id>default</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-				<property>
-					<name>default</name>
-					<value>!disabled</value>
-				</property>
-			</activation>
-			<modules>
-				<module>../jeets-models</module>
-				<module>../jeets-clients</module>
-				<module>jeets-server-jse</module>
-			</modules>
-		</profile>
-	</profiles>
- -->
- 
 </project>

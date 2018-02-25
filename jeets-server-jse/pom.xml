@@ -37,14 +37,13 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<camel.version>2.19.0</camel.version>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<!-- preferably adjust with JEE -->
+		<camel.version>2.20.2</camel.version>
 		<log4j2.version>2.7</log4j2.version>
 	</properties>
 
 	<dependencyManagement>
-		<!-- Camel BOM for all modules -->
+		<!-- Camel BOM for all *JSE* modules -->
 		<dependencies>
 			<dependency>
 				<groupId>org.apache.camel</groupId>

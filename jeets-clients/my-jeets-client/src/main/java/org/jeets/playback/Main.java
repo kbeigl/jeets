@@ -63,13 +63,22 @@ public class Main {
         // A factory can also be used to create traffic 
         // by creating a player for each vehicle constantly.
         // 1. create position list with any factory
+        
+//      manually selected and hard coded transit parameters (works for HVV)
+        int routeType = 1;  // should be removed
+        String routeShortName = "U1";
+        String departureStop = "Farmsen", viaStop = "Fuhlsbüttel";
+        String lineKey = "HHA-U:" + routeShortName + "_HHA-U";
+        String uniqueId = "pb.device.echo";
+            
+//      temporarily applied for U1 in both directions
+        if (args.length == 4) {
+            routeShortName = args[0];
+            departureStop = args[1];
+            viaStop = args[2];
+            uniqueId = args[3];
+        }
         {
-//          manually selected and hard coded transit parameters (works for HVV)
-            int routeType = 1;  // should be removed
-            String routeShortName = "U1";
-            String departureStop = "Farmsen", viaStop = "Fuhlsbüttel";
-            String lineKey = "HHA-U:" + routeShortName + "_HHA-U";
-
             Instant depart;
 //                  = new Date().toInstant();  // now
 //          String startDateString = "2017-11-03T14:30:38Z";
@@ -91,6 +100,7 @@ public class Main {
                 TransitFactory factory = new TransitFactory();
 //              routeType could be skipped and a (localized) Date parameter should be added
                 positionEntities = factory.getNextTrack(routeType, routeShortName, departureStop, viaStop, depart);
+//              positionEntities = factory.getNextTrack(routeType, routeShortName, viaStop, departureStop, depart);
                 break;
             case REST:
 //              2c. use GeoFoxFactory with access to GeoFox API -> CONFIDENTIAL !
@@ -116,18 +126,17 @@ public class Main {
 //        see GeoFox.composeCourseTrack for existing code !!
         
         System.out.println(positionEntities.size() + " positions retrieved ");
+//      listTrack(positionEntities);
         // this should only be applied to DATABASE 
         // while Transit should be played back by actual time stamps
-//      adjustFixtimesStartingNow(positionEntities);
+        adjustFixtimesStartingNow(positionEntities);
         listTrack(positionEntities);
         
-        if (true) return;
-
         // 2. create Player/s
         Player player = new Player(positionEntities);
         // 3. create Client with Tracker
         // uniqueId must be registered (for each player) and can defer from database selection
-        Tracker tracker = new Tracker("localhost", 5200, "pb.device.echo"); 
+        Tracker tracker = new Tracker("localhost", 5200, uniqueId); 
         // client device sends infos via tracker to server port
         MyClientDevice receiver = new MyClientDevice( tracker );
         player.addListener(receiver);
@@ -147,15 +156,14 @@ public class Main {
 
     private static void listTrack(List<Position> positionEntities) {
         for (int pos = 0; pos < positionEntities.size(); pos++) {
-//      for (int pos = 0; pos < 20; pos++) {
             Position position = positionEntities.get(pos);
             String dateString = "no date";
             if (position.getFixtime() != null) {
                 dateString = df.format(position.getFixtime());
-                System.out.println( pos + ". " + dateString + "\t" 
-                        + position.getLatitude() + "\t" + position.getLongitude() 
-                        + "\t" + position.getAddress());
             }
+            System.out.println( pos + ". " + dateString + "\t" 
+                    + position.getLatitude() + "\t" + position.getLongitude() 
+                    + "\t" + position.getAddress());
         }
     }
 

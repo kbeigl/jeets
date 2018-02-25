@@ -1,51 +1,21 @@
 
-
-  chp managers
-  ============
-  Enterprise Dynamics ;)
-  Now we'll use the jeets-etl project as a seed component
-  We create an envelope for *Managers of some kind
-  Manager stands for Traccar Mgrs, JEE EMgrs -> DB and TRX (and JMS)!!
-  The next jeets component creates TRX environent 
-	for one or more, sequential or paralell managers
-	accessing the same Entity !!
-  For the external environent you can add MQ start and endpoints
-
-  see ETL example > applied to Device ORM
-  from(...) 
-  .to(jpa:device)      persist/merge un/managed
-                       1:1 relation ??
-      :                permission y/n 
-  from(jpa:device)                                 
-  .to(GFmgr.class)     @Consume (jpa:device)
-      :                check dev.getGeofence!! here
-      :                dev.setGeofence
-      :                @Produce
-      :
-   .persist            finally save modifications, close trx etc.
-
-   -- end of component --
-
-jpa-component
--------------
-Camel adds the following message headers to the exchange:
-CamelJpaTemplate     JpaTemplate
-CamelEntityManager	EntityManager
-
-
 spring.io
 ---------
 Chapter 6. Aspect Oriented Programming with Spring
 6.1. Introduction
 
-Aspect-Oriented Programming (AOP) complements Object-Oriented Programming (OOP) by providing another way of thinking about program structure. The key unit of modularity in OOP is the class, whereas in AOP the unit of modularity is the aspect. Aspects enable the modularization of concerns such as transaction management that cut across multiple types and objects.
+Aspect-Oriented Programming (AOP) complements Object-Oriented Programming (OOP) 
+by providing another way of thinking about program structure. 
+The key unit of modularity in OOP is the class, 
+whereas in AOP the unit of modularity is the aspect. 
+Aspects enable the modularization of concerns 
+	such as **transaction management** 
+that cut across multiple types and objects.
 
-One of the key components of Spring is the AOP framework. While the Spring IoC container does not depend on AOP, meaning you do not need to use AOP if you don't want to, AOP complements Spring IoC to provide a very capable middleware solution.
-
-
-camel jpa
----------
-Its strongly advised to configure the JPA component to use a specific EntityManagerFactory instance. 
+One of the key components of Spring is the AOP framework. 
+While the Spring IoC container does not depend on AOP, 
+meaning you do not need to use AOP if you don't want to, 
+AOP complements Spring IoC to provide a very capable middleware solution.
 
 -----------------------------------------------
 
@@ -98,14 +68,15 @@ heavier global transactions.
 
 CCookbook
 --------
-
-In order to use the ConsumeMdb class in Camel, it must be defined as a bean in the same
+In order to use the ConsumeMdb class in Camel, 
+it must be defined as a bean in the same
 Spring application context as the Camel context.
 
-<beans xmlns="http://www.springframework.org/schema/beans" ...>
+	POJO Consuming: http://camel.apache.org/pojo-consuming.html
+	Bean Component: http://camel.apache.org/bean.html
+	Bean Binding:   http://camel.apache.org/bean-binding.html
+
 	<bean id="activemq" ...>
-		<property name="brokerURL" value="vm://myBroker?...."/>
-	</bean>
 
 	JTA AND JPA > EMgr
 	
@@ -120,12 +91,6 @@ Spring application context as the Camel context.
 	<bean class="org.jeets.managers.GeofenceManager"/>
 	<bean class="org.jeets.managers.NotificationManager"/>
 
-	<camelContext xmlns="http://camel.apache.org/schema/spring"/>
-</beans>
-
-	POJO Consuming: http://camel.apache.org/pojo-consuming.html
-	Bean Component: http://camel.apache.org/bean.html
-	Bean Binding: http://camel.apache.org/bean-binding.html
 
 ----------------------------------
 
