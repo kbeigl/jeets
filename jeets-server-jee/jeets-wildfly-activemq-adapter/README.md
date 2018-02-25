@@ -4,7 +4,8 @@ Camel ActiveMQ Adapter and Component
 This project can be used to deploy the camel-activemq component with the WildFly Camel subsystem.
 
 CLI scripts located within the `src/main/resources/cli` directory
-automatically configure the ActiveMQ Resource Adapter. 
+automatically configure the ActiveMQ Resource Adapter 
+with jndi-name="java:/OrdersQueue"
 
 The project jar can be used in other projects
 as ActiveMQComponent with the installed ActiveMQ Adapter.
