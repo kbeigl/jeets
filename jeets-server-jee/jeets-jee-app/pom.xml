@@ -17,15 +17,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <!-- 
     <parent>
+    <!-- 
         <groupId>org.wildfly.quickstarts</groupId>
         <artifactId>quickstart-parent</artifactId>
         <version>11.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
-    </parent>
      -->
-    <groupId>org.jeets</groupId>
+    	<groupId>org.jeets</groupId>
+	    <artifactId>jeets-server-jee</artifactId>
+		<version>2018.02.21</version>
+    </parent>
+     
     <version>1.0-SNAPSHOT</version>
     <artifactId>jeets-jee-app</artifactId>
     <packaging>pom</packaging>
@@ -47,8 +50,8 @@
     </modules>
 
 	<properties>
-		<!-- EAP component version management BOM -->
-		<version.server.bom>11.0.0.CR1</version.server.bom>
+		<!-- 
+		<version.server.bom>11.0.0.CR1</version.server.bom> -->
 		<version.jboss.spec.javaee.7.0>1.1.0.Final</version.jboss.spec.javaee.7.0>
 		<version.wildfly.maven.plugin>1.2.0.Beta1</version.wildfly.maven.plugin>
         <version.org.apache.commons.commons-lang3>3.5</version.org.apache.commons.commons-lang3>
@@ -93,7 +96,7 @@
             </dependency>
             
 			<!-- jboss-eap-javaee7-with-tools stack JBoss stack of the Java EE APIs, 
-			with some extras tools for your project, such as Arquillian for testing) -->
+			with some extras tools for your project, such as Arquillian for testing)
             <dependency>
                 <groupId>org.wildfly.bom</groupId>
                 <artifactId>wildfly-javaee7-with-tools</artifactId>
@@ -101,9 +104,10 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+             -->
 
 			<!-- jboss-javaee-7.0 stack JBoss stack of the Java EE APIs. You can use 
-				this stack with any version of JBoss EAP that implements Java EE. -->
+				this stack with any version of JBoss EAP that implements Java EE.
             <dependency>
                 <groupId>org.jboss.spec</groupId>
                 <artifactId>jboss-javaee-7.0</artifactId>
@@ -111,7 +115,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
+			 -->
             <dependency>
                 <groupId>org.jeets</groupId>
                 <artifactId>jeets-jee-ejb</artifactId>
@@ -129,7 +133,7 @@
 
         </dependencies>
     </dependencyManagement>
-
+<!-- 
     <build>
         <plugins>
             <plugin>
@@ -142,4 +146,5 @@
             </plugin>
         </plugins>
     </build>
+    -->
 </project>
