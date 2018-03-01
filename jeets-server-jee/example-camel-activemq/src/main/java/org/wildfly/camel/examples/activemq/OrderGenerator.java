@@ -34,6 +34,11 @@ public class OrderGenerator {
     private int count = 1;
     private Random random = new Random();
 
+    public String generateOrderString(CamelContext camelContext) {
+        String countryCode = COUNTRIES[random.nextInt(3)];
+        return countryCode;
+    }
+
     public InputStream generateOrder(CamelContext camelContext) {
         String countryCode = COUNTRIES[random.nextInt(3)].toLowerCase();
         String name = String.format("/%s-order.xml", countryCode);

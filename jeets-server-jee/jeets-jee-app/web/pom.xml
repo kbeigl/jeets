@@ -27,7 +27,7 @@
 
     <artifactId>jeets-jee-web</artifactId>
     <packaging>war</packaging>
-    <name>jeets-jee-web</name>
+    <name>> jeets-jee-web</name>
     <description>package EJB and WAR in an EAR (WAR POM file)</description>
 
     <licenses>

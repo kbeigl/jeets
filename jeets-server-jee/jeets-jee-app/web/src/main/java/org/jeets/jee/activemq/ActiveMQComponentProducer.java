@@ -1,4 +1,4 @@
-package org.jeets.jee.activemq.producer;
+package org.jeets.jee.activemq;
 
 import javax.annotation.Resource;
 import javax.enterprise.inject.Produces;

@@ -25,7 +25,7 @@
     </parent>
 
     <artifactId>jeets-jee-ejb</artifactId>
-    <name>jeets-jee-ejb</name>
+    <name>> jeets-jee-ejb</name>
     <description>package EJB and WAR in EAR (EJB POM file)</description>
 
     <licenses>

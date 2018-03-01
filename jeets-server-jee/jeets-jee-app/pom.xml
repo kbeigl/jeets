@@ -29,7 +29,7 @@
 		<version>2018.02.21</version>
     </parent>
      
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <artifactId>jeets-jee-app</artifactId>
     <packaging>pom</packaging>
     <name>jeets-jee-app</name>

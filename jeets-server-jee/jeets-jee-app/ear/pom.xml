@@ -28,7 +28,7 @@
     <!-- build EAR artifact and include EJB and Web modules. -->
     <artifactId>jeets-jee-ear</artifactId>
     <packaging>ear</packaging>
-    <name>jeets-jee-ear</name>
+    <name>> jeets-jee-ear</name>
 
     <licenses>
         <license>

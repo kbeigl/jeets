@@ -219,7 +219,6 @@
     <modules>
 	   <!-- wildfly must be running > apply profiles -->
         <module>jeets-wildfly-activemq-adapter</module>
-        <module>example-camel-activemq</module>
         <module>jeets-jee-app</module>
 	   <!-- Integration Tests as last step (second cycle) of repo -->
         <!-- <module>itests</module> see WildFly-Camel examples -->

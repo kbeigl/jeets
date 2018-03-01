@@ -32,29 +32,48 @@ public class ActiveMQRouteBuilder extends RouteBuilder {
     @Override
     public void configure() throws Exception {
 
+        from("timer:order?period=30s&delay=0")
+        .bean("orderGenerator", "generateOrderString")
+            .convertBodyTo(String.class)
+            // Remove headers to ensure we end up with unique file names being generated in the next route
+            .removeHeaders("*")
+        .to("activemq:queue:OrdersQueue");
+        
+        from("activemq:queue:OrdersQueue")
+        .choice()
+            .when(simple("${body} == 'UK'"))
+                .log("Sending order ${body} to the UK")
+//                .to("file:{{jboss.server.data.dir}}/orders/processed/UK")
+                .when(simple("${body} == 'US'"))
+                .log("Sending order ${body} to the US")
+//                .to("file:{{jboss.server.data.dir}}/orders/processed/US")
+            .otherwise()
+                .log("Sending order ${body} to another country")
+//                .to("file://{{jboss.server.data.dir}}/orders/processed/Other")
+        ;
+        
         /**
          * This route generates a random order every 5 seconds
-         */
         from("timer:order?period=30s&delay=0")
         .bean("orderGenerator", "generateOrder")
         .setHeader(Exchange.FILE_NAME).method("orderGenerator", "generateFileName")
         .to("file://{{jboss.server.data.dir}}/orders");
+         */
 
         /**
          * This route reads files placed within JBOSS_HOME/standalone/data/orders
          * and sends them to ActiveMQ queue 'ordersQueue'
-         */
         from("file://{{jboss.server.data.dir}}/orders")
         .convertBodyTo(String.class)
         // Remove headers to ensure we end up with unique file names being generated in the next route
         .removeHeaders("*")
         .to("activemq:queue:OrdersQueue");
+         */
 
         /**
          * This route consumes messages from the 'ordersQueue'. Then, based on the
          * message payload XML content it uses a content based router to output
          * orders into appropriate country directories
-         */
         from("activemq:queue:OrdersQueue")
             .choice()
                 .when(xpath("/order/customer/country = 'UK'"))
@@ -66,5 +85,6 @@ public class ActiveMQRouteBuilder extends RouteBuilder {
                 .otherwise()
                     .log("Sending order to another country")
                     .to("file://{{jboss.server.data.dir}}/orders/processed/Other");
+         */
     }
 }
