@@ -13,25 +13,26 @@ public class ActiveMQRouteBuilder extends RouteBuilder {
     public void configure() throws Exception {
 
         from("timer:order?period=30s&delay=0")
+//      simple bean
         .bean("orderGenerator", "generateOrderString")
-            .convertBodyTo(String.class)
-            // Remove headers to ensure we end up with unique file names being generated in the next route
-            .removeHeaders("*")
         .to("activemq:queue:OrdersQueue");
         
         from("activemq:queue:OrdersQueue")
+//      enterprise java bean
+        .to("ejb:java:global/jeets-jee-app/jeets-jee-ejb/GreeterEJB") // ..?method=sayHello"
+//      .to("ejb:java:global/camel-ejb-ear/camel-ejb-sub-deployment/HelloBean");
         .choice()
             .when(simple("${body} == 'UK'"))
                 .log("Sending order ${body} to the UK")
-//                .to("file:{{jboss.server.data.dir}}/orders/processed/UK")
+//              .to("file:{{jboss.server.data.dir}}/orders/processed/UK")
                 .when(simple("${body} == 'US'"))
                 .log("Sending order ${body} to the US")
-//                .to("file:{{jboss.server.data.dir}}/orders/processed/US")
+//              .to("file:{{jboss.server.data.dir}}/orders/processed/US")
             .otherwise()
                 .log("Sending order ${body} to another country")
-//                .to("file://{{jboss.server.data.dir}}/orders/processed/Other")
+//              .to("file://{{jboss.server.data.dir}}/orders/processed/Other")
         ;
         
     }
-    
+
 }

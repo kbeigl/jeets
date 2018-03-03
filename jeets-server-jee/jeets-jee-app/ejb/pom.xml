@@ -37,6 +37,7 @@
     </licenses>
 
     <dependencies>
+		<!-- redundant to war project ? -->        
         <dependency>
             <groupId>javax.enterprise</groupId>
             <artifactId>cdi-api</artifactId>

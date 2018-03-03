@@ -56,6 +56,13 @@
             <artifactId>cdi-api</artifactId>
             <scope>provided</scope>
         </dependency>
+
+		<!-- move to ejb project ? -->        
+		<dependency>
+		    <groupId>org.apache.camel</groupId>
+		    <artifactId>camel-ejb</artifactId>
+            <scope>provided</scope>
+		</dependency>
         <dependency>
             <groupId>org.jeets</groupId>
             <artifactId>jeets-jee-ejb</artifactId>

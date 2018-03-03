@@ -10,8 +10,6 @@ import org.apache.camel.CamelContext;
 public class OrderGenerator {
 
     public static final String[] COUNTRIES = {"UK", "US", "Other"};
-
-    private int count = 1;
     private Random random = new Random();
 
     public String generateOrderString(CamelContext camelContext) {
