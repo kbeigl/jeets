@@ -1,11 +1,11 @@
-Camel ActiveMQ Adapter and Component
-------------------------------------
+Deploy Camel ActiveMQ Adapter and Install -Component
+----------------------------------------------------
 
 This project can be used to deploy the camel-activemq component with the WildFly Camel subsystem.
 
 CLI scripts located within the `src/main/resources/cli` directory
 automatically configure the ActiveMQ Resource Adapter 
-with jndi-name="java:/OrdersQueue"
+with jndi-name="java:/*hvv.in*"
 
 The project jar can be used in other projects
 as ActiveMQComponent with the installed ActiveMQ Adapter.
@@ -38,7 +38,7 @@ Deploy ActiveMQ Adapter
 2. Start the application server in standalone mode 
    `${JBOSS_HOME}/bin/standalone.sh -c standalone-full-camel.xml`
    
-3. `mvn install -Pdeploy-amq-rar` create jar AND deploy the ActiveMQ resource adapter rar
+3. `mvn install -Pdeploy-amq-rar` create jar AND deploy the ActiveMQ resource adapter rar.
    If running Maven in Eclipse you have to explicitly set and unset the Maven Profile.
 
 4. Restart the application server for the resource adapter configuration to take effect!
@@ -48,7 +48,7 @@ Undeploy ActiveMQ Adapter
 
 To undeploy the adapter run `mvn clean -Pdeploy-amq-rar`.
 
-This step removes the ActiveMQ resource adapter configuration 
+This step removes the complete ActiveMQ resource adapter including all configurations 
 but this will not take effect until the application server has been restarted!
 
 Note that the adapter can be installed once and for all and 
@@ -59,5 +59,5 @@ Install ActiveMQComponent
 
 Use `mvn install` to create the project jar with the ActiveMQComponentProducer
 
-This jar is not deployed and should be imported by higher level projects.
+This jar is not deployed and can be imported by higher level projects.
 

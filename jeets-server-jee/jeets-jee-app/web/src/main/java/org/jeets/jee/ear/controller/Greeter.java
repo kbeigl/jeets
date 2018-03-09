@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.as.quickstarts.ear.controller;
+package org.jeets.jee.ear.controller;
 
 import org.jboss.as.quickstarts.ear.ejb.GreeterEJB;
 
@@ -27,8 +27,6 @@ import java.io.Serializable;
 /**
  * A simple managed bean that is used to invoke the GreeterEJB and store the
  * response. The response is obtained by invoking getMessage().
- *
- * @author paul.robinson@redhat.com, 2011-12-21
  */
 @Named("greeter")
 @SessionScoped
@@ -37,9 +35,6 @@ public class Greeter implements Serializable {
     /** Default value included to remove warning. **/
     private static final long serialVersionUID = 1L;
 
-    /**
-     * Injected GreeterEJB client
-     */
     @EJB
     private GreeterEJB greeterEJB;
 

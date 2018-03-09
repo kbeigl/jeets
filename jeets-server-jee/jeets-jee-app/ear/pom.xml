@@ -49,9 +49,15 @@
             <artifactId>jeets-jee-web</artifactId>
             <type>war</type>
         </dependency>
+		<dependency>
+			<groupId>org.jeets</groupId>
+			<artifactId>jeets-wildfly-activemq-adapter</artifactId>
+			<version>0.1</version>
+		</dependency>
     </dependencies>
 
     <build>
+        <!-- this is part of the EJB JNDI binding name !! -->
         <finalName>${project.parent.artifactId}</finalName>
         <plugins>
             <plugin>

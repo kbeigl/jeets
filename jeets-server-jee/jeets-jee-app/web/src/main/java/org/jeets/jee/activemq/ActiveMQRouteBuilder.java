@@ -15,9 +15,9 @@ public class ActiveMQRouteBuilder extends RouteBuilder {
         from("timer:order?period=30s&delay=0")
 //      simple bean
         .bean("orderGenerator", "generateOrderString")
-        .to("activemq:queue:OrdersQueue");
-        
-        from("activemq:queue:OrdersQueue")
+        .to("activemq:queue:hvv.in");
+
+        from("activemq:queue:hvv.in")
 //      enterprise java bean
         .to("ejb:java:global/jeets-jee-app/jeets-jee-ejb/GreeterEJB") // ..?method=sayHello"
 //      .to("ejb:java:global/camel-ejb-ear/camel-ejb-sub-deployment/HelloBean");

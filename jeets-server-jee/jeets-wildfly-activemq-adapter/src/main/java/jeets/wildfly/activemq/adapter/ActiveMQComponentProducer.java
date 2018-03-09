@@ -16,7 +16,7 @@ public class ActiveMQComponentProducer {
     private ConnectionFactory connectionFactory;
 
     @Produces
-    @Named("activemq")
+    @Named("activemq")  // jeetsmq
     public ActiveMQComponent createActiveMQComponent() {
         ActiveMQComponent activeMQComponent = ActiveMQComponent.activeMQComponent();
         activeMQComponent.setConnectionFactory(connectionFactory);
