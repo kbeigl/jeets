@@ -1,0 +1,39 @@
+<!--
+  ~ JeeTS Persistence Unit for traccar ERM
+  ~
+  ~ License: GNU Lesser General Public License (LGPL), version 2.1 or later.
+  ~ See the lgpl.txt file in the root directory or <http://www.gnu.org/licenses/lgpl-2.1.html>.
+<?xml version="1.0" encoding="UTF-8"?>
+  -->
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+
+	<persistence-unit name="jeets-pu-traccar-jee">
+	
+	   <jta-data-source>java:/PostgresTraccar</jta-data-source>
+
+        <description>
+            JeeTS Persistence Unit for traccar ERM
+        </description>
+        
+	<!-- currently effective model for JeeTS modules -->
+		<class>org.jeets.model.traccar.jpa.Device</class>
+		<class>org.jeets.model.traccar.jpa.Event</class>
+		<class>org.jeets.model.traccar.jpa.Position</class>
+		<!-- added 12.12.2017 -->
+		<class>org.jeets.model.traccar.jpa.DeviceGeofence</class>
+		<class>org.jeets.model.traccar.jpa.DeviceGeofenceId</class>
+		<class>org.jeets.model.traccar.jpa.Geofence</class>
+
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>
+		
+		<properties>
+      		<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+<!-- 		<property name="hibernate.hbm2ddl.auto" value="create" />
+               <property name="hibernate.show_sql" value="true" />		 -->
+        </properties>
+
+    </persistence-unit>
+
+</persistence>

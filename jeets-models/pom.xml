@@ -35,6 +35,7 @@
     <modules>
         <module>jeets-pu-traccar-hibernate</module>
 	   <module>jeets-pu-traccar-jpa</module>
+	   <module>jeets-pu-traccar-jee</module>
 	   <module>jeets-protocols</module>
 	   <!-- to be introduced with Wildfly ...
 	   <module>jeets-pu-traccar-ejb</module>	 -->
