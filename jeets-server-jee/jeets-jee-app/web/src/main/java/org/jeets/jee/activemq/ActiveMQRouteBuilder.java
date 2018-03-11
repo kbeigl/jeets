@@ -12,27 +12,26 @@ public class ActiveMQRouteBuilder extends RouteBuilder {
     @Override
     public void configure() throws Exception {
 
+//      simulate external messages via activemq
         from("timer:order?period=30s&delay=0")
-//      simple bean
-        .bean("orderGenerator", "generateOrderString")
+        .bean("messageGenerator", "generateMessageString")
         .to("activemq:queue:hvv.in");
 
         from("activemq:queue:hvv.in")
-//      enterprise java bean
-        .to("ejb:java:global/jeets-jee-app/jeets-jee-ejb/GreeterEJB") // ..?method=sayHello"
-//      .to("ejb:java:global/camel-ejb-ear/camel-ejb-sub-deployment/HelloBean");
+        .to("ejb:java:global/jeets-jee-app/jeets-jee-ejb/ApplicationBean?method=processMessage")
+//      .to("ejb:java:global/jeets-jee-app/jeets-jee-ejb/JeetsApplication?method=processMessage")
+//      current return type is void, yet body is still available
+        .log("Send message ${body} to another bean (?)");
+/*      instantiate vehicles as Stateful beans ..
         .choice()
             .when(simple("${body} == 'UK'"))
                 .log("Sending order ${body} to the UK")
 //              .to("file:{{jboss.server.data.dir}}/orders/processed/UK")
-                .when(simple("${body} == 'US'"))
+            .when(simple("${body} == 'US'"))
                 .log("Sending order ${body} to the US")
-//              .to("file:{{jboss.server.data.dir}}/orders/processed/US")
             .otherwise()
-                .log("Sending order ${body} to another country")
-//              .to("file://{{jboss.server.data.dir}}/orders/processed/Other")
-        ;
-        
+                .log("Sending order ${body} to another country");
+ */
     }
 
 }

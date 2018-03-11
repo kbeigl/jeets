@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jeets.jee.ear.controller;
+package org.jeets.jee.web.controller;
 
 import org.jboss.as.quickstarts.ear.ejb.GreeterEJB;
 
