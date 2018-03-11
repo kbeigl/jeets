@@ -54,12 +54,13 @@
 			<artifactId>jeets-wildfly-activemq-adapter</artifactId>
 			<version>0.1</version>
 		</dependency>
+		<!-- exclude persistence.xml ? 
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-pu-traccar-jpa</artifactId>
 			<version>3.14.2-SNAPSHOT</version>
-			<!-- exclude persistence.xml ? -->
 		</dependency>
+		 -->
 	</dependencies>
 
     <build>
