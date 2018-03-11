@@ -19,8 +19,6 @@ public class ActiveMQRouteBuilder extends RouteBuilder {
 
         from("activemq:queue:hvv.in")
         .to("ejb:java:global/jeets-jee-app/jeets-jee-ejb/ApplicationBean?method=processMessage")
-//      .to("ejb:java:global/jeets-jee-app/jeets-jee-ejb/JeetsApplication?method=processMessage")
-//      current return type is void, yet body is still available
         .log("Send message ${body} to another bean (?)");
 /*      instantiate vehicles as Stateful beans ..
         .choice()
