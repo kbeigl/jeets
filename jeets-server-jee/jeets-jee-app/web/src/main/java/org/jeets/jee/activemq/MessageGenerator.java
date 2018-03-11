@@ -21,11 +21,13 @@ import org.jeets.model.traccar.jpa.Position;
 public class MessageGenerator {
 
     public String generateMessageString(CamelContext camelContext) {
-        
+        return "49.123 12.456";
+    }
+    
+    public Device generateDeviceMessage(CamelContext camelContext) {
         Device dev = createDeviceWithTwoPositions();
         System.out.println("created device: " + dev);
-        
-        return "49.123 12.456";
+        return dev;
     }
     
 //  home position: *7* Obere Regenstraße, Regensburg, BY, DE
