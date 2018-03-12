@@ -19,6 +19,8 @@ public class ActiveMQComponentProducer {
     @Named("activemq")  // jeetsmq
     public ActiveMQComponent createActiveMQComponent() {
         ActiveMQComponent activeMQComponent = ActiveMQComponent.activeMQComponent();
+//      System.setProperty("org.apache.activemq.SERIALIZABLE_PACKAGES", "*");
+//      activeMQComponent.setTrustAllPackages(true);
         activeMQComponent.setConnectionFactory(connectionFactory);
         return activeMQComponent;
     }

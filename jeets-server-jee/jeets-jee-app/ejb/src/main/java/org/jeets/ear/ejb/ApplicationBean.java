@@ -11,6 +11,7 @@ public class ApplicationBean implements JeetsApplication {
     public void processMessage(String message) {
         System.out.println("JeetsApplication.processMessage(" + message + ")");
         
+//      Device dev = null;
     }
 
 }

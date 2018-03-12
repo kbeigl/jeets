@@ -14,12 +14,14 @@ public class ActiveMQRouteBuilder extends RouteBuilder {
 
 //      simulate external messages via activemq
         from("timer:order?period=30s&delay=0")
-        .bean("messageGenerator", "generateMessageString")
+//      .bean("messageGenerator", "generateMessageString")
+        .bean("messageGenerator", "generateDeviceMessage")
         .to("activemq:queue:hvv.in");
 
         from("activemq:queue:hvv.in")
+        .log("message: ${body} to application bean")
         .to("ejb:java:global/jeets-jee-app/jeets-jee-ejb/ApplicationBean?method=processMessage")
-        .log("Send message ${body} to another bean (?)");
+        .log("Send message ${body} to another bean");
 /*      instantiate vehicles as Stateful beans ..
         .choice()
             .when(simple("${body} == 'UK'"))
