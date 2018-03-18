@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" >
+
+<ui:composition template="WEB-INF/templates/template.xhtml">
+	<ui:define name="content">
+
+	<h1>
+		<h:outputText value="JEE Tracking Application" />
+	</h1>
+
+	<h:form id="refreshpanel" >
+	<h:panelGrid columns="3" border="1" columnClasses="labelcol,iocol,descriptioncol"
+		    headerClass="header" footerClass="footer" rowClasses="row">
+	    <f:facet name="header">
+	        <h:outputText value="Refresh page with current status values"/>
+	    </f:facet>
+		
+		<h:outputText value="update page " />
+		<h:commandButton value="Display Server Status" style="width:100%" ></h:commandButton>
+		<h:outputText value="last update at #{appcontroller.getCurrentTime()}" >
+			<f:convertDateTime pattern="dd.MM.yy HH:mm:ss" />
+		</h:outputText>
+
+		<f:facet name="footer" >
+			TODO: display Probe Lists and thresholds for next Probe Processing.
+		</f:facet>
+
+	</h:panelGrid>
+	</h:form>
+	
+	</ui:define>
+</ui:composition>
+</html>
