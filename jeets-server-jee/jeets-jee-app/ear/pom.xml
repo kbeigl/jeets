@@ -49,11 +49,13 @@
 			<artifactId>jeets-jee-web</artifactId>
 			<type>war</type>
 		</dependency>
+		<!-- move to web pom only ? -->
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-wildfly-activemq-adapter</artifactId>
 			<version>0.1</version>
 		</dependency>
+		<!-- move to ejb pom only ? .. or leave it in lib folder ? -->
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-pu-traccar-jee</artifactId>

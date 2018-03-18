@@ -19,8 +19,11 @@ public class ActiveMQComponentProducer {
     @Named("activemq")  // jeetsmq
     public ActiveMQComponent createActiveMQComponent() {
         ActiveMQComponent activeMQComponent = ActiveMQComponent.activeMQComponent();
+//      these don't work here
 //      System.setProperty("org.apache.activemq.SERIALIZABLE_PACKAGES", "*");
 //      activeMQComponent.setTrustAllPackages(true);
+//      -> add property to WF start script
+//      -Dorg.apache.activemq.SERIALIZABLE_PACKAGES="*" 
         activeMQComponent.setConnectionFactory(connectionFactory);
         return activeMQComponent;
     }
