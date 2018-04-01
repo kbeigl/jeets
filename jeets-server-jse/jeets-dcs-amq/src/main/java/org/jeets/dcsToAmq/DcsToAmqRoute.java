@@ -16,8 +16,9 @@ public class DcsToAmqRoute extends RouteBuilder {
     public void configure() throws Exception {
 //      @formatter:off
         from("netty4:tcp://localhost:" + PORT + "?serverInitializerFactory=#device&sync=true")
-        .convertBodyTo(Device.class)
-        .inOnly("activemq:device.in?connectionFactory=#activeMqConnectionFactory")
+            .convertBodyTo(Device.class)
+            .inOnly("activemq:device.in?connectionFactory=#activeMqConnectionFactory")
+//          .inOnly("activemq:hvv.in?connectionFactory=#activeMqConnectionFactory")
         .process(new AckResponder());
 //      @formatter:on
     }

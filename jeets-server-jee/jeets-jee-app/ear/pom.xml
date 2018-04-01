@@ -49,7 +49,7 @@
 			<artifactId>jeets-jee-web</artifactId>
 			<type>war</type>
 		</dependency>
-		<!-- move to web pom only ? -->
+		<!-- move from lib to web pom only ? -->
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-wildfly-activemq-adapter</artifactId>

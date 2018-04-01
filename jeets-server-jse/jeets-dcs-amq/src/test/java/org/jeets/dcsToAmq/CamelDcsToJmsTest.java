@@ -16,6 +16,7 @@ import org.jeets.dcsToAmq.steps.DeviceProtoExtractor;
 import org.jeets.model.traccar.jpa.Device;
 import org.jeets.model.traccar.util.Samples;
 import org.jeets.protocol.Traccar;
+import org.jeets.protocol.Traccar.Device.Builder;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,8 +67,6 @@ public class CamelDcsToJmsTest extends CamelTestSupport {
     @Test
     public void testDeviceFromNettyToAmqToMock() throws Exception {
         LOG.info("create and add DcsRoute ...");
-//      from "netty4:tcp://localhost:{port}?serverInitializerFactory=#device&sync=true"
-//      .to "activemq:queue:device.in" :
         context.addRoutes(new DcsToAmqRoute() );
         context.addRoutes(new RouteBuilder() {
             public void configure() throws Exception {
@@ -86,9 +85,10 @@ public class CamelDcsToJmsTest extends CamelTestSupport {
 
 //      now send message from client
         MockEndpoint mock = getMockEndpoint("mock:result");
+        Builder devPosEv = org.jeets.protocol.util.Samples.createDeviceWithPositionWithOneEvent();
         Traccar.Acknowledge response = (Traccar.Acknowledge) template   // Traccar.Device
                 .requestBody("netty4:tcp://localhost:5200?clientInitializerFactory=#ack&sync=true", 
-                        org.jeets.protocol.util.Samples.createDeviceWithPositionWithOneEvent());
+                        devPosEv);
 
         LOG.info("client received response: " + response);              //     jpa.Device
         assertEquals(789, response.getDeviceid());
