@@ -130,6 +130,7 @@ public class Tracker {
 //      keep devBuilder if transmission goes wrong
         Traccar.Device protoDevice = devBuilder.build();
 //      use in/for ACK? add fieldin Device?: java.util.UUID xTraceID = java.util.UUID.randomUUID();
+        System.out.println("transmitTraccarDevice: " + protoDevice);
         Traccar.Acknowledge ack = TraccarSender.transmitTraccarObject(protoDevice, host, port);
         if (ack == null) 
             return false;

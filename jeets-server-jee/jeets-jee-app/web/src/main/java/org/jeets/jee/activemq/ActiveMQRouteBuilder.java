@@ -13,10 +13,10 @@ public class ActiveMQRouteBuilder extends RouteBuilder {
     public void configure() throws Exception {
 
 //      simulate external messages via activemq
-        from("timer:order?period=30s&delay=0")
-//      .bean("messageGenerator", "generateMessageString")
-        .bean("messageGenerator", "generateDeviceMessage")
-        .to("activemq:queue:hvv.in");
+//        from("timer:order?period=30s&delay=0")
+////      .bean("messageGenerator", "generateMessageString")
+//        .bean("messageGenerator", "generateDeviceMessage")
+//        .to("activemq:queue:hvv.in");
 
         from("activemq:queue:hvv.in")
         .log("message: ${body} to application bean")

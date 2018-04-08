@@ -68,14 +68,33 @@
         <version>3.6.1</version>
       </plugin>
 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>3.0.2</version>
-        <configuration>
-          <encoding>UTF-8</encoding>
-        </configuration>
-      </plugin>
+	<plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-resources-plugin</artifactId>
+		<version>3.0.2</version>
+		<!-- move to maven-assembly-plugin (not needed here yet)
+		<executions>
+			<execution>
+				<id>copy-resources</id>
+				<phase>validate</phase>
+				<goals>
+					<goal>copy-resources</goal>
+				</goals>
+				<configuration>
+					<outputDirectory>${basedir}/target/classes/META-INF/services/org/apache/camel</outputDirectory>
+					<resources>
+						<resource>
+							<directory>src/main/resources/META-INF/services/org/apache/camel</directory>
+						</resource>
+					</resources>
+				</configuration>
+			</execution>
+		</executions>
+		 -->
+		<configuration>
+			<encoding>UTF-8</encoding>
+		</configuration>
+	</plugin>
 
       <!-- this is important to terminate target\surefire\surefirebooterXXX.jar  
       	if test is cancelled with <CTRL> + <C>. Otherwise port remains blocked!! -->
@@ -89,10 +108,20 @@
       </plugin>
       
      <plugin>
-        <!-- NOTE: We don't need a groupId specification because the group is
-             org.apache.maven.plugins ...which is assumed by default. -->
+        <!-- STATUS APRIL 2018: 
+        	The jeets-dcs-amq.jar file has the correct jeets TypeConverter.
+        	Then the assembly copies the TypeConverter from camel-netty4 (override).
+        	Therefor the project file can be used, but the command line file
+        	produces an error due to missing jeets TypeConverter 
+        	The solution should be found here (includes/excludes):
+        	maven.apache.org/plugins/maven-assembly-plugin/assembly.html
+        	HACK SOLUTION (model with Maven/Ant!?):
+        	edit TypeConverter inside jar-with-dependencies 
+        	and REPLACE (works!) org.apache.camel.component.netty4.NettyConverter
+        	with org.jeets.dcsToAmq.steps.DeviceProtoToEntityTransformer
+       	-->
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.0.0</version>
+        <version>3.1.0</version>        
         <configuration>
           <descriptorRefs>
             <descriptorRef>jar-with-dependencies</descriptorRef>
@@ -114,7 +143,7 @@
         </executions>
       </plugin>
 
-      <!-- generate components meta-data and validate component includes documentation etc -->
+      <!-- generate components meta-data and validate component includes documentation etc
       <plugin>
         <groupId>org.apache.camel</groupId>
         <artifactId>camel-package-maven-plugin</artifactId>
@@ -136,6 +165,7 @@
           </execution>
         </executions>
       </plugin>
+       -->
 
     </plugins>
   </build>

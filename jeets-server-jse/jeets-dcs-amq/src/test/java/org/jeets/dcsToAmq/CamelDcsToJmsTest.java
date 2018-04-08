@@ -70,7 +70,8 @@ public class CamelDcsToJmsTest extends CamelTestSupport {
         context.addRoutes(new DcsToAmqRoute() );
         context.addRoutes(new RouteBuilder() {
             public void configure() throws Exception {
-                from("activemq:queue:device.in?connectionFactory=#activeMqConnectionFactory")
+                from("activemq:queue:hvv.in?connectionFactory=#activeMqConnectionFactory")
+//              from("activemq:queue:device.in?connectionFactory=#activeMqConnectionFactory")
 //              optional process for logging only
                 .process(new Processor() {
                     public void process(Exchange exchange) throws Exception {
