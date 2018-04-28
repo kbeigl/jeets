@@ -46,8 +46,8 @@ public class Greeter implements Serializable {
         message = greeterEJB.sayHello(name);
     }
 
-    /** Get the greeting message, customized with 
-     * the name of the person to be greeted. */
+    /** Get the greeting message (customized with 
+     * the name of the person to be greeted). */
     public String getMessage() {
         return message;
     }

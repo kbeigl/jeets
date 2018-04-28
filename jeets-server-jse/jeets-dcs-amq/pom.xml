@@ -111,7 +111,7 @@
         <!-- STATUS APRIL 2018: 
         	The jeets-dcs-amq.jar file has the correct jeets TypeConverter.
         	Then the assembly copies the TypeConverter from camel-netty4 (override).
-        	Therefor the project file can be used, but the command line file
+        	Therefore the project file can be used, but the command line file
         	produces an error due to missing jeets TypeConverter 
         	The solution should be found here (includes/excludes):
         	maven.apache.org/plugins/maven-assembly-plugin/assembly.html

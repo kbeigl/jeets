@@ -9,6 +9,8 @@ import org.jeets.model.traccar.util.Samples;
 /**
  * Simple message generator to simulate incoming device message
  * - for the time being.
+ * <p>
+ * TODO: move to test environment
  * 
  * @author kbeigl@jeets.org
  */

@@ -62,14 +62,14 @@ public class Main {
         Main main = new Main();
         // A factory can also be used to create traffic 
         // by creating a player for each vehicle constantly.
-        // 1. create position list with any factory
         
+//      1. create position list with any factory
 //      manually selected and hard coded transit parameters (works for HVV)
         int routeType = 1;  // should be removed
         String routeShortName = "U1";
         String departureStop = "Farmsen", viaStop = "Fuhlsbüttel";
         String lineKey = "HHA-U:" + routeShortName + "_HHA-U";
-        String uniqueId = "pb.device.echo";
+        String uniqueId = "U1.FaFu";
             
 //      temporarily applied for U1 in both directions
         if (args.length == 4) {
@@ -91,19 +91,19 @@ public class Main {
 //          switch manualy during development
             switch (EntityFactory.GTFS) {
             case DATABASE:
-//              2a. use Traccar Persistence Unit to query database
+//              1a. use Traccar Persistence Unit to query database
 //              add input params or SQL statement
                 positionEntities = main.selectPositionsFromDB(lineKey);
                 break;
             case GTFS:
-//              2b. use TransitFactory with access to GTFS API 
+//              1b. use TransitFactory with access to GTFS API 
                 TransitFactory factory = new TransitFactory();
 //              routeType could be skipped and a (localized) Date parameter should be added
                 positionEntities = factory.getNextTrack(routeType, routeShortName, departureStop, viaStop, depart);
 //              positionEntities = factory.getNextTrack(routeType, routeShortName, viaStop, departureStop, depart);
                 break;
             case REST:
-//              2c. use GeoFoxFactory with access to GeoFox API -> CONFIDENTIAL !
+//              1c. use GeoFoxFactory with access to GeoFox API -> CONFIDENTIAL !
 /*
                 GeoFoxFactory geoFox = new GeoFoxFactory();
                 try {
@@ -132,9 +132,10 @@ public class Main {
         adjustFixtimesStartingNow(positionEntities);
         listTrack(positionEntities);
         
-        // 2. create Player/s
+//      2. create Player/s
         Player player = new Player(positionEntities);
-        // 3. create Client with Tracker
+        
+//      3. create Client with Tracker
         // uniqueId must be registered (for each player) and can defer from database selection
         Tracker tracker = new Tracker("localhost", 5200, uniqueId); 
         // client device sends infos via tracker to server port

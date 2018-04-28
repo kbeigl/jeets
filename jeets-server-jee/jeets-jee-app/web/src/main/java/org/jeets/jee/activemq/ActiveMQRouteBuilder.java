@@ -13,6 +13,7 @@ public class ActiveMQRouteBuilder extends RouteBuilder {
     public void configure() throws Exception {
 
 //      simulate external messages via activemq
+//      TODO move to tests
 //        from("timer:order?period=30s&delay=0")
 ////      .bean("messageGenerator", "generateMessageString")
 //        .bean("messageGenerator", "generateDeviceMessage")

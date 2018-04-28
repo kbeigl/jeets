@@ -1,6 +1,5 @@
 package org.jeets.jee.web.controller;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
@@ -20,9 +19,9 @@ public class ApplicationController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 //	@Inject
-	private transient Logger logger;	
-	@Inject
-	private FacesContext facesContext;
+//	private transient Logger logger;	
+//	@Inject
+//	private FacesContext facesContext;
 	@EJB
     private ApplicationBean appBean;
 //	@EJB
