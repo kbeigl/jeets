@@ -16,23 +16,22 @@
 	<h:form id="refreshpanel" >
 	<h:panelGrid columns="3" border="1" columnClasses="labelcol,iocol,descriptioncol"
 		    headerClass="header" footerClass="footer" rowClasses="row">
-	    <f:facet name="header">
-	        <h:outputText value="Refresh page with current status values"/>
-	    </f:facet>
-		
+
 		<h:outputText value="update page " />
 		<h:commandButton value="Display Server Status" style="width:100%" ></h:commandButton>
 		<h:outputText value="last update at #{appcontroller.getCurrentTime()}" >
 			<f:convertDateTime pattern="dd.MM.yy HH:mm:ss" />
 		</h:outputText>
 
-		<f:facet name="footer" >
-			TODO: display Probe Lists and thresholds for next Probe Processing.
-		</f:facet>
-
 	</h:panelGrid>
 	</h:form>
+	TODO: add button to clear app (remove one/all vehicle/s)
 	
+	<br></br>
+	<div id="vehicles">
+    	<ui:include src="vehiclespanel.xhtml"/>
+	</div>
+
 	</ui:define>
 </ui:composition>
 </html>
