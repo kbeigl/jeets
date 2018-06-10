@@ -22,8 +22,7 @@
     <parent>
 	    <groupId>org.jeets</groupId>
 		<artifactId>jeets-parent</artifactId>
-		<version>2018.01.03-SNAPSHOT</version>
-<!-- 	<version>${jeets-repo-release}</version>  -->
+	    <version>${jeets-parent-version}</version>
     	<relativePath>../parent</relativePath>
     </parent>
 

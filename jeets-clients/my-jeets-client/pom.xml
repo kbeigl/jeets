@@ -1,33 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright 2017 The Java EE Tracking System - JeeTS
+    Copyright 2017 Kristof Beiglböck kbeigl@jeets.org
+    
+    The JEE Tracking System licenses this file to you 
+    under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+    	http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<!-- PARENT FOR ARTEFACT ??? -->
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-clients</artifactId>
-		<version>2018.01.03-SNAPSHOT</version>
-		<!-- <version>${jeets-repo-release}</version> -->
+		<version>1.0</version>
 	</parent>
 
 	<artifactId>my-jeets-client</artifactId>
 	<version>0.1</version>
 	<packaging>jar</packaging>
 
-	<name>my-jeets-client</name>
-	<url>http://jeets.org</url>
-
-	<properties>
-		<!-- move to parent! -->
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<junit.version>4.12</junit.version>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-	</properties>
-
 	<dependencies>
-
 		<!-- tracker includes netty, protobuffer and PU -->
 		<dependency>
 			<groupId>org.jeets</groupId>
@@ -41,8 +43,7 @@
 		</dependency>
 		<!-- external proprietary data source / to be removed from player -->
 		<!-- MUST BE PLACED AFTER org.jeets TO AVOID VERSION CONFLICTS -->
-		<!-- currently deactivated, conflict with protocol, tracker, player jboss.logging 
-			version etc.
+		<!-- currently deactivated, conflict with protocol, tracker, player jboss.logging version etc.
 		<dependency>
 			<groupId>de.jeets</groupId>
 			<artifactId>geofox-api-rest-client</artifactId>
@@ -50,11 +51,11 @@
 		</dependency>
 		 -->
 
-		<!-- place in top level pom of repo -->
+		<!-- move up -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
+			<version>${junit-version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

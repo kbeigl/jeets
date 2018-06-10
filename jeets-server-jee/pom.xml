@@ -17,15 +17,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-<!-- not yet, need to adjust below versions with parent first
+<!-- no need to adjust below versions with parent .. yet
 	<parent>
 		<artifactId>jeets-parent</artifactId>
-		<version>2018.01.03-SNAPSHOT</version>
-			<version>${jeets-repo-release}</version>
+	    <version>${jeets-parent-version}</version>
 		<relativePath>../parent</relativePath>
 	</parent>
  -->
-		<groupId>org.jeets</groupId>
+	<groupId>org.jeets</groupId>
 
 	<artifactId>jeets-server-jee</artifactId>
 	<version>2018.02.21</version>
@@ -33,7 +32,6 @@
 
 	<name>--- Server Tracking Components (JEE) ---</name>
 	<description>WildFly JeeTS Components</description>
-	<url>http://jeets.org</url>
 
 	<properties>
 	   <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -22,14 +22,12 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-parent</artifactId>
-		<version>2018.01.03-SNAPSHOT</version>
-		<!-- <version>${jeets-repo-release}</version> -->
+	    <version>${jeets-parent-version}</version>
 		<relativePath>../parent</relativePath>
 	</parent>
 
 	<artifactId>jeets-server-jse</artifactId>
-	<!-- subversion for this directory -->
-	<version>2017.12.18</version>
+	    <version>${jeets-parent-version}</version>
 	<packaging>pom</packaging>
 
 	<name>--- Server Tracking Components (JSE) ---</name>

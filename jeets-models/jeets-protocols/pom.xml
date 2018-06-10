@@ -4,10 +4,11 @@
     <parent>
 	   <groupId>org.jeets</groupId>
 	   <artifactId>jeets-models</artifactId>
-		<version>2018.01.03-SNAPSHOT</version>
-<!-- 	<version>${jeets-repo-release}</version>  -->
+		<version>1.0</version>
     </parent>
 
+    <!-- includes unnecessary dependencies for protocols from models 
+    	resolve with imported pu-traccar-jpa and remove parent !?-->
     <artifactId>jeets-protocols</artifactId>
     <version>0.1</version>
     <packaging>jar</packaging>
@@ -16,22 +17,17 @@
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>3.1.0</version>
+            <version>${protobuf-version}</version>
         </dependency>
         <dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-pu-traccar-jpa</artifactId>
 			<version>3.14.1</version>
         </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-        </dependency>
     </dependencies>
 
     <build>
-	<!-- this is useful in development time. Remove for deployment? -->
+	<!-- Useful in development time, remove to hide source. -->
         <sourceDirectory>src/main/java</sourceDirectory>
         <resources>
             <resource>

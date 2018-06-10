@@ -7,7 +7,7 @@
     under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
-    http://www.apache.org/licenses/LICENSE-2.0
+    	http://www.apache.org/licenses/LICENSE-2.0
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,21 +18,21 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-	    <groupId>org.jeets</groupId>
-	    <artifactId>jeets</artifactId>
-		<version>2018.01.03-SNAPSHOT</version>
-<!-- 	<version>${jeets-repo-release}</version>  -->
-    </parent>
+	<parent>
+		<groupId>org.jeets</groupId>
+		<artifactId>jeets</artifactId>
+		<!-- sync with jeets-parent-version below -->
+		<version>1.0</version>
+	</parent>
 
 	<artifactId>jeets-parent</artifactId>
 	<packaging>pom</packaging>
-	<name>JeeTS Parent</name>
+	
+	<name>--- JeeTS Parent (versioning etc.) ---</name>
 	<description>
-		Parent POM to compile and test all JeeTS sources with
-		dependencies.
+		Parent POM to compile and test all JeeTS sources with dependencies.
 	</description>
-	<url>http://www.jeets.org/</url>
+	<url>jeets.org/</url>
 
 	<licenses>
 		<license>
@@ -47,21 +47,31 @@
 	</prerequisites>
 
 	<properties>
+		<!-- add all JeeTS sub/sub/versions for official release (?) -->
+		<!-- propagate project version (after incrementing above) -->
+		<jeets-parent-version>1.0</jeets-parent-version>
+		
+		<!-- maven settings -->
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- Adjust with Camel parent with listed versions -->
 		<slf4j-version>1.7.22</slf4j-version>
 		<commons-logging-version>1.2</commons-logging-version>
 		<junit-version>4.12</junit-version>
 
-		<!-- move down to persistence ? -->
+		<!-- persistence -->
 		<hibernate-version>5.2.4.Final</hibernate-version>
+		<version.org.hibernate.javax.persistence>1.0.0.Final</version.org.hibernate.javax.persistence>
 		<h2database-version>1.3.176</h2database-version>
 		<postgresql-version>9.4-1200-jdbc41</postgresql-version>
+		
+		<!-- network / protocols -->
 		<netty-version>4.1.15.Final</netty-version>
+        <protobuf-version>3.1.0</protobuf-version>
 	</properties>
-	
-		<!-- place common builders here !? -->	
+
+	<!-- place common builders here !? -->
 
 </project>

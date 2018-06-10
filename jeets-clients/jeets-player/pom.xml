@@ -23,24 +23,12 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-clients</artifactId>
-		<version>2018.01.03-SNAPSHOT</version>
-		<!-- <version>${jeets-repo-release}</version> -->
+		<version>1.0</version>
 	</parent>
 
 	<artifactId>jeets-player</artifactId>
 	<version>0.2</version>
 	<packaging>jar</packaging>
-
-	<name>jeets-player</name>
-	<url>http://jeets.org</url>
-
-	<properties>
-		<!-- move to parent! -->
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<junit.version>4.12</junit.version>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-	</properties>
 
 	<dependencies>
 		<dependency>
