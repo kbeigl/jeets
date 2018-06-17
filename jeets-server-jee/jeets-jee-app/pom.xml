@@ -26,7 +26,7 @@
      -->
     	<groupId>org.jeets</groupId>
 	    <artifactId>jeets-server-jee</artifactId>
-		<version>2018.02.21</version>
+		<version>1.0</version>
     </parent>
      
     <version>1.0</version>

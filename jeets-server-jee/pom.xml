@@ -17,17 +17,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-<!-- no need to adjust below versions with parent .. yet
 	<parent>
+		<groupId>org.jeets</groupId>
 		<artifactId>jeets-parent</artifactId>
-	    <version>${jeets-parent-version}</version>
+	    <version>1.0</version>
 		<relativePath>../parent</relativePath>
 	</parent>
- -->
-	<groupId>org.jeets</groupId>
-
+ 
 	<artifactId>jeets-server-jee</artifactId>
-	<version>2018.02.21</version>
+	<version>1.0</version>
 	<packaging>pom</packaging>
 
 	<name>--- Server Tracking Components (JEE) ---</name>
@@ -214,12 +212,12 @@
         </repository>
     </repositories>
 
-    <modules>
-	   <!-- wildfly must be running > apply profiles -->
-        <module>jeets-wildfly-activemq-adapter</module>
-        <module>jeets-jee-app</module>
-	   <!-- Integration Tests as last step (second cycle) of repo -->
-        <!-- <module>itests</module> see WildFly-Camel examples -->
-    </modules>
+	<modules>
+		<!-- wildfly must be running > apply profiles -->
+		<module>jeets-wildfly-activemq-adapter</module>
+		<module>jeets-jee-app</module>
+		<!-- Integration Tests as last step (second cycle) of repo -->
+		<!-- <module>itests</module> see WildFly-Camel examples -->
+	</modules>
 
 </project>

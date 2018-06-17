@@ -16,16 +16,17 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-models</artifactId>
-	    <version>${jeets-parent-version}</version>
+	    <version>1.0</version>
 	</parent>
 
 	<artifactId>jeets-pu-traccar-jpa</artifactId>
-	<!-- matches Traccar release version -->
+	<!-- reflect Traccar release version -->
 	<version>3.14.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 

@@ -1,17 +1,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-	   <groupId>org.jeets</groupId>
-	   <artifactId>jeets-models</artifactId>
+	<parent>
+		<groupId>org.jeets</groupId>
+		<artifactId>jeets-models</artifactId>
 		<version>1.0</version>
-    </parent>
+	</parent>
 
     <!-- includes unnecessary dependencies for protocols from models 
     	resolve with imported pu-traccar-jpa and remove parent !?-->
-    <artifactId>jeets-protocols</artifactId>
-    <version>0.1</version>
-    <packaging>jar</packaging>
+	<artifactId>jeets-protocols</artifactId>
+	<!-- apply version during development,
+		remove version to align top level versioning -->
+	<version>0.1</version>
+	<packaging>jar</packaging>
 
     <dependencies>
         <dependency>

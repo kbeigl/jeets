@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-clients</artifactId>
-		<version>${jeets-parent-version}</version>
+		<version>1.0</version>
 	</parent>
 
 	<artifactId>jeets-tracker</artifactId>
@@ -68,8 +68,7 @@
 	<build>
 		<plugins>
 			<plugin>
-				<!-- NOTE: We don't need a groupId specification because the group is 
-					org.apache.maven.plugins ...which is assumed by default. -->
+				<!-- default groupId: org.apache.maven.plugins -->
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>3.0.0</version>
 				<configuration>

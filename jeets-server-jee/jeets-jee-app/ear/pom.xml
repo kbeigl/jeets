@@ -22,7 +22,7 @@
     <parent>
 	    <groupId>org.jeets</groupId>
 	    <artifactId>jeets-jee-app</artifactId>
-	    <version>1.0-SNAPSHOT</version>
+	    <version>1.0</version>
     </parent>
     
     <!-- build EAR artifact and include EJB and Web modules. -->

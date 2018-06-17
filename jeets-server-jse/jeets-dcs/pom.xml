@@ -18,57 +18,58 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-	   <groupId>org.jeets</groupId>
-	   <artifactId>jeets-server-jse</artifactId>
-		<version>2017.12.18</version>
- <!-- 	<version>${jeets-repo-release}</version>  -->
-    </parent>
-
-  <artifactId>jeets-dcs</artifactId>
-  <version>0.1</version>
-  <packaging>jar</packaging>
-
-  <!-- <name>Camel JeeTS-DCS Component</name> -->
-  <url>http://jeets.org</url>
-  <description>JeeTS Device Communication Server (Camel Component)</description>
-
-  <dependencies>
-	<dependency>
+	<parent>
 		<groupId>org.jeets</groupId>
-		<artifactId>jeets-protocols</artifactId>
-		<version>0.1</version>
-	</dependency>
+		<artifactId>jeets-server-jse</artifactId>
+		<version>1.0</version>
+	</parent>
 
-    <dependency>
-	  <groupId>org.apache.camel</groupId>
-	  <artifactId>camel-netty4</artifactId>
-	</dependency>
-	
-	<!-- only for test demo -->
-	<dependency>
-	  <groupId>org.apache.camel</groupId>
-	  <artifactId>camel-protobuf</artifactId>
-	  <scope>test</scope>
-	</dependency>
+	<artifactId>jeets-dcs</artifactId>
+	<version>0.1</version>
+	<packaging>jar</packaging>
 
-    <!-- for testing (camel-spring-test?) -->
-    <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-    
-    <!-- support camel documentation -->
-    <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>apt</artifactId>
-    </dependency>
-    
-  </dependencies>
+	<!-- <name>Camel JeeTS-DCS Component</name> -->
+	<url>http://jeets.org</url>
+	<description>JeeTS Device Communication Server (Camel Component)</description>
 
+	<dependencies>
+		<dependency>
+			<groupId>org.jeets</groupId>
+			<artifactId>jeets-protocols</artifactId>
+			<version>0.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-netty4</artifactId>
+		</dependency>
+
+		<!-- only for test demo -->
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-protobuf</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- for testing (camel-spring-test?) -->
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- support camel documentation -->
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>apt</artifactId>
+		</dependency>
+
+	</dependencies>
+
+	<!-- THIS IS NOT REQUIRED
+	SHOULD BE ANALYZED AND POTENTIALLY MOVED UP
   <build>
     <defaultGoal>install</defaultGoal>
 
@@ -87,8 +88,9 @@
           <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
+       -->
 
-      <!-- generate components meta-data and validate component includes documentation etc -->
+      <!-- generate components meta-data and validate component includes documentation etc
       <plugin>
         <groupId>org.apache.camel</groupId>
         <artifactId>camel-package-maven-plugin</artifactId>
@@ -110,8 +112,9 @@
           </execution>
         </executions>
       </plugin>
-
-      <!-- to generate the MANIFEST-FILE of the bundle -->
+       -->
+       
+      <!-- to generate the MANIFEST-FILE of the bundle
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
@@ -125,5 +128,8 @@
         </configuration>
       </plugin>
     </plugins>
+    
   </build>
+   -->
+  
 </project>

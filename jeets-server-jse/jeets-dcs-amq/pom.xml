@@ -22,8 +22,7 @@
     <parent>
 	   <groupId>org.jeets</groupId>
 	   <artifactId>jeets-server-jse</artifactId>
-		<version>2017.12.18</version>
- <!-- 	<version>${jeets-repo-release}</version>  -->
+		<version>1.0</version>
     </parent>
 
   <artifactId>jeets-dcs-amq</artifactId>

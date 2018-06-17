@@ -14,72 +14,74 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-	    <groupId>org.jeets</groupId>
+	<parent>
+		<groupId>org.jeets</groupId>
 		<artifactId>jeets-parent</artifactId>
-	    <version>${jeets-parent-version}</version>
-    	<relativePath>../parent</relativePath>
-    </parent>
+		<version>1.0</version>
+		<relativePath>../parent</relativePath>
+	</parent>
 
 	<artifactId>jeets-models</artifactId>
-    <packaging>pom</packaging>
+	<version>1.0</version>
+	<packaging>pom</packaging>
 
-    <name>--- System Dataformats and Models ---</name>
+	<name>--- System Dataformats and Models ---</name>
 
-    <modules>
-       <module>jeets-pu-traccar-hibernate</module>
-	   <module>jeets-pu-traccar-jpa</module>
-	   <module>jeets-pu-traccar-jee</module>
-<!--   place DAOs here (?)
-	   <module>jeets-pu-traccar-ejb</module> -->
-	   <module>jeets-pu-gtfs-jpa</module>
-	   <!-- move to avoid persistence dependencies -->
-	   <module>jeets-protocols</module>
-    </modules>
+	<modules>
+		<module>jeets-pu-traccar-hibernate</module>
+		<module>jeets-pu-traccar-jpa</module>
+		<module>jeets-pu-traccar-jee</module>
+		<!-- place DAOs here (?) -->
+		<!-- <module>jeets-pu-traccar-ejb</module> -->
+		<module>jeets-pu-gtfs-jpa</module>
+		<!-- move to avoid persistence dependencies (?) -->
+		<module>jeets-protocols</module>
+	</modules>
 
-    <dependencies>
-    <!-- unnecessary dependencies for protocols (?) -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>${hibernate-version}</version>
-        </dependency>
+	<dependencies>
+		<!-- unnecessary dependencies for protocols (?) -->
 		<dependency>
-		    <groupId>org.postgresql</groupId>
-		    <artifactId>postgresql</artifactId>
-            <version>${postgresql-version}</version>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>${postgresql-version}</version>
 		</dependency>
 
-        <!-- Hibernate uses jboss-logging for logging,
-		we will use the sl4fj-simple backend -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>${slf4j-version}</version>
-        </dependency>
+		<!-- Hibernate uses jboss-logging for logging, we will use the sl4fj-simple 
+			backend -->
 		<dependency>
-		    <groupId>commons-logging</groupId>
-		    <artifactId>commons-logging</artifactId>
-            <version>${commons-logging-version}</version>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>${slf4j-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>${commons-logging-version}</version>
 		</dependency>
 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit-version}</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- H2 in-memory database for testing only -->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>${h2database-version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit-version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- H2 in-memory database for testing only -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>${h2database-version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 
 </project>

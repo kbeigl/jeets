@@ -19,14 +19,15 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-	    <groupId>org.jeets</groupId>
+	<parent>
+		<groupId>org.jeets</groupId>
 		<artifactId>jeets-parent</artifactId>
-	    <version>${jeets-parent-version}</version>
-    	<relativePath>../parent</relativePath>
-    </parent>
+		<version>1.0</version>
+		<relativePath>../parent</relativePath>
+	</parent>
 
 	<artifactId>jeets-clients</artifactId>
+	<version>1.0</version>
 	<packaging>pom</packaging>
 
 	<name>--- Client Tracking Components ---</name>

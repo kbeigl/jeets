@@ -3,6 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- Deprecated -->
+	<groupId>org.jeets</groupId>
 	<artifactId>jeets-pu-traccar-ejb</artifactId>
 	<version>3.7.0</version>
 	<packaging>jar</packaging>

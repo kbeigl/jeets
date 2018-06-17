@@ -25,7 +25,7 @@
 	</parent>
 
 	<artifactId>jeets-pu-traccar-jee</artifactId>
-	<!-- matches Traccar release version -->
+	<!-- reflect Traccar release version -->
 	<version>3.14.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 

@@ -18,29 +18,28 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-	   <groupId>org.jeets</groupId>
-	   <artifactId>jeets-server-jse</artifactId>
-		<version>2017.12.18</version>
- <!-- 	<version>${jeets-repo-release}</version>  -->
-    </parent>
+	<parent>
+		<groupId>org.jeets</groupId>
+		<artifactId>jeets-server-jse</artifactId>
+		<version>1.0</version>
+	</parent>
 
-  <artifactId>jeets-db-managers</artifactId>
-  <version>0.2-SNAPSHOT</version>
-  <packaging>jar</packaging>
+	<artifactId>jeets-db-managers</artifactId>
+	<version>0.2-SNAPSHOT</version>
+	<packaging>jar</packaging>
 
-  <name>jeets-db-managers</name>
-  <url>http://jeets.org</url>
-  <description>JeeTS Entity Management</description>
+	<name>jeets-db-managers</name>
+	<url>http://jeets.org</url>
+	<description>JeeTS Entity Management</description>
 
-  <properties>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <exec-maven-plugin-version>1.5.0</exec-maven-plugin-version>
-    <build-helper-maven-plugin-version>1.10</build-helper-maven-plugin-version>
-  </properties>
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<exec-maven-plugin-version>1.5.0</exec-maven-plugin-version>
+		<build-helper-maven-plugin-version>1.10</build-helper-maven-plugin-version>
+	</properties>
 
 	<dependencies>
 		<dependency>

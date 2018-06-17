@@ -25,7 +25,8 @@
 	</parent>
 
 	<artifactId>jeets-pu-traccar-hibernate</artifactId>
-	<version>0.1</version>
+	<!-- inherit parent version when done -->
+	<!-- <version>0.1</version> -->
 	<packaging>jar</packaging>
 
     <name>jeets-pu-traccar-hibernate !! DEPRECATED !! </name>
