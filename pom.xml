@@ -25,7 +25,7 @@
 
 	<name>=== JeeTS - Java EE Tracking Software ===</name>
 	<description>
-		Main POM to compile, test and build ALL JeeTS sources with dependencies.
+		Main POM 'frontpage' to compile, test and build ALL JeeTS sources with dependencies.
 	</description>
 	<url>jeets.org</url>
 
@@ -38,7 +38,7 @@
 	</developers>
 
 	<modules>
-		<module>parent</module>
+		<module>jeets-parent</module>
 		<module>jeets-models</module>
 		<module>jeets-clients</module>
 		<module>jeets-server-jse</module>

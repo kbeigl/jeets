@@ -23,11 +23,10 @@
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-parent</artifactId>
 		<version>1.0</version>
-		<relativePath>../parent</relativePath>
+		<relativePath>../jeets-parent</relativePath>
 	</parent>
 
 	<artifactId>jeets-clients</artifactId>
-	<version>1.0</version>
 	<packaging>pom</packaging>
 
 	<name>--- Client Tracking Components ---</name>
