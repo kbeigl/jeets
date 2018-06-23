@@ -22,13 +22,16 @@
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-models</artifactId>
 		<version>1.0</version>
+		<relativePath>../</relativePath>
 	</parent>
 
 	<artifactId>jeets-pu-traccar-hibernate</artifactId>
-	<!-- inherit parent version when done -->
-	<!-- <version>0.1</version> -->
+    <version>3.7</version>
 	<packaging>jar</packaging>
 
-    <name>jeets-pu-traccar-hibernate !! DEPRECATED !! </name>
+    <name>jeets-pu-traccar-hibernate *deprecated*</name>
+	<description>
+		This project was created for traccar model 3.7 and is not updated anymore.
+	</description>
 
 </project>

@@ -27,7 +27,7 @@
 
 	<artifactId>jeets-pu-traccar-jpa</artifactId>
 	<!-- reflect Traccar release version -->
-	<version>3.14.2-SNAPSHOT</version>
+	<version>3.14.2</version>
 	<packaging>jar</packaging>
 
 </project>

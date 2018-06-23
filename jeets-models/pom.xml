@@ -32,14 +32,14 @@
 	<name>--- System Dataformats and Models ---</name>
 
 	<modules>
-		<module>jeets-pu-traccar-hibernate</module>
 		<module>jeets-pu-traccar-jpa</module>
 		<module>jeets-pu-traccar-jee</module>
-		<!-- place DAOs here (?) -->
-		<!-- <module>jeets-pu-traccar-ejb</module> -->
 		<module>jeets-pu-gtfs-jpa</module>
 		<!-- move to avoid persistence dependencies (?) -->
 		<module>jeets-protocols</module>
+		<!-- deprecated, traccar 3.7 version -->
+		<module>jeets-pu-traccar-hibernate</module>
+		<!-- <module>jeets-pu-traccar-ejb</module> -->
 	</modules>
 
 	<dependencies>
