@@ -40,7 +40,7 @@ public class Transformer {
             List<Traccar.Event> eventProtos = positionProto.getEventList();
             for (Traccar.Event eventProto : eventProtos) {
                 Event eventEntity = protoToEntityEvent(eventProto);
-                eventEntity.setDevices(deviceEntity);   // n:1
+                eventEntity.setDevice(deviceEntity);   // n:1
 //              event and position should have identical timestamp
                 eventEntity.setServertime(positionEntity.getServertime());  // required !!
                 eventEntities.add(eventEntity);
