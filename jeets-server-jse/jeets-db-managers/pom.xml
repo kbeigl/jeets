@@ -27,7 +27,6 @@
 	</parent>
 
 	<artifactId>jeets-db-managers</artifactId>
-	<version>0.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>jeets-db-managers</name>

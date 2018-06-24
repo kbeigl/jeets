@@ -17,45 +17,44 @@
   -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-	   <groupId>org.jeets</groupId>
-	   <artifactId>jeets-server-jse</artifactId>
-		<version>1.0</version>
-    </parent>
-
-  <artifactId>jeets-dcs-amq</artifactId>
-  <version>0.1</version>
-  <packaging>jar</packaging>
-
-  <url>http://jeets.org</url>
-  <description>JeeTS Device Communication Server to ActiveMQ</description>
-
-  <dependencies>
-	<dependency>
+	<parent>
 		<groupId>org.jeets</groupId>
-		<artifactId>jeets-protocols</artifactId>
+		<artifactId>jeets-server-jse</artifactId>
 		<version>1.0</version>
-	</dependency>
+	</parent>
 
-    <dependency>
-	  <groupId>org.apache.camel</groupId>
-	  <artifactId>camel-netty4</artifactId>
-	</dependency>
-    <dependency>
-      <groupId>org.apache.activemq</groupId>
-      <artifactId>activemq-camel</artifactId>
-    </dependency>
+	<artifactId>jeets-dcs-amq</artifactId>
+	<packaging>jar</packaging>
 
-    <!-- for testing -->
-    <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-	
-  </dependencies>
+	<url>http://jeets.org</url>
+	<description>JeeTS Device Communication Server to ActiveMQ</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.jeets</groupId>
+			<artifactId>jeets-protocols</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-netty4</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-camel</artifactId>
+		</dependency>
+
+		<!-- for testing -->
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
 
   <build>
     <defaultGoal>install</defaultGoal>
