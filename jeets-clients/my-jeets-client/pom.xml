@@ -26,7 +26,6 @@
 	</parent>
 
 	<artifactId>my-jeets-client</artifactId>
-	<version>0.1</version>
 	<packaging>jar</packaging>
 
 	<dependencies>
@@ -34,12 +33,12 @@
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-tracker</artifactId>
-			<version>0.2</version>
+			<version>1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-player</artifactId>
-			<version>0.2</version>
+			<version>1.0</version>
 		</dependency>
 		<!-- external proprietary data source / to be removed from player -->
 		<!-- MUST BE PLACED AFTER org.jeets TO AVOID VERSION CONFLICTS -->

@@ -27,7 +27,6 @@
 	</parent>
 
 	<artifactId>jeets-tracker</artifactId>
-	<version>0.2</version>
 	<packaging>jar</packaging>
 
 	<dependencies>
