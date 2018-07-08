@@ -48,6 +48,8 @@ Undeploy ActiveMQ Adapter
 
 To undeploy the adapter run `mvn clean -Pdeploy-amq-rar`.
 
+Note that is not `mvn install` and not `-Pundeploy-amq-rar` as you might expect.
+
 This step removes the complete ActiveMQ resource adapter including all configurations 
 but this will not take effect until the application server has been restarted!
 
