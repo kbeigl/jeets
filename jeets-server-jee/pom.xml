@@ -68,14 +68,14 @@
                 <scope>import</scope>
             </dependency>
 			<!-- jboss-eap-javaee7-with-tools stack JBoss stack of the Java EE APIs, 
-			with some extras tools for your project, such as Arquillian for testing) -->
+			with some extras tools for your project, such as Arquillian for testing)
             <dependency>
                 <groupId>org.wildfly.bom</groupId>
                 <artifactId>wildfly-javaee7-with-tools</artifactId>
                 <version>${version.server.bom}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
+            </dependency> -->
         </dependencies>
     </dependencyManagement>
 
