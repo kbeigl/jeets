@@ -39,12 +39,12 @@ public class PersistenceTest extends TestCase {
 	    Map<String, String> persistenceMap = new HashMap<String, String>();
 
         persistenceMap.put("javax.persistence.jdbc.url", "jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1;MVCC=TRUE");
-//        persistenceMap.put("javax.persistence.jdbc.url", "jdbc:h2:mem:test;INIT=create schema IF NOT EXISTS generic;");
+//      persistenceMap.put("javax.persistence.jdbc.url", "jdbc:h2:mem:test;INIT=create schema IF NOT EXISTS generic;");
 	    persistenceMap.put("javax.persistence.jdbc.user", "sa");
         persistenceMap.put("javax.persistence.jdbc.password", "");
         persistenceMap.put("javax.persistence.jdbc.driver", "org.h2.Driver");
         
-//        persistenceMap.put("hibernate.hbm2ddl.auto", "create-drop");
+//      persistenceMap.put("hibernate.hbm2ddl.auto", "create-drop");
         persistenceMap.put("hibernate.hbm2ddl.auto", "create");
         persistenceMap.put("hibernate.show_sql", "true");
 	    

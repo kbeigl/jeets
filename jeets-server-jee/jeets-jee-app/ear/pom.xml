@@ -53,7 +53,7 @@
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-wildfly-activemq-adapter</artifactId>
-			<version>0.1</version>
+			<version>1.0</version>
 		</dependency>
 		<!-- move to ejb pom only ? .. or leave it in lib folder ? -->
 		<dependency>

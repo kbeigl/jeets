@@ -26,7 +26,6 @@
 
     <name>jeets-wildfly-activemq-adapter</name>
     <artifactId>jeets-wildfly-activemq-adapter</artifactId>
-    <version>0.1</version>
     <packaging>war</packaging>
 
     <properties>

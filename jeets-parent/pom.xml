@@ -60,8 +60,10 @@
 		<commons-logging-version>1.2</commons-logging-version>
 		<junit-version>4.12</junit-version>
 
-		<!-- persistence -->
-		<hibernate-version>5.2.4.Final</hibernate-version>
+		<!-- persistence
+		<hibernate-version>5.1.10.Final</hibernate-version>
+		<hibernate-version>5.2.4.Final</hibernate-version> -->
+		<hibernate-version>5.2.17.Final</hibernate-version>	
 		<version.org.hibernate.javax.persistence>1.0.0.Final</version.org.hibernate.javax.persistence>
 		<h2database-version>1.3.176</h2database-version>
 		<postgresql-version>9.4-1200-jdbc41</postgresql-version>
