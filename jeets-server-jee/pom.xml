@@ -87,9 +87,20 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency> -->
+
+	    <!-- simulate parent version -->
+		<!-- <hibernate-version>5.2.17.Final</hibernate-version>	
+	    <dependency>
+	        <groupId>org.hibernate</groupId>
+	        <artifactId>hibernate-core</artifactId>
+	        <version>5.2.17.Final</version>
+	    </dependency>
+	    doesn't overrule 5.1..  :(
+	     -->
+
         </dependencies>
     </dependencyManagement>
-
+    
     <!-- move up for full repo (?)
     <build>
         <pluginManagement>
