@@ -47,8 +47,8 @@
 
 	<properties>
 		<!-- add all JeeTS sub/sub/versions for official release (?) -->
-		<!-- propagate project version (after incrementing above) -->
-		<jeets-parent-version>1.0</jeets-parent-version>
+		<!-- propagate project version (after incrementing above)
+		<jeets-parent-version>1.0</jeets-parent-version> -->
 		
 		<!-- maven settings -->
 		<maven.compiler.source>1.8</maven.compiler.source>
@@ -61,8 +61,7 @@
 		<junit-version>4.12</junit-version>
 
 		<!-- persistence
-		<hibernate-version>5.1.10.Final</hibernate-version>
-		<hibernate-version>5.2.4.Final</hibernate-version> -->
+		<hibernate-version>5.1.10.Final</hibernate-version> -->
 		<hibernate-version>5.2.17.Final</hibernate-version>	
 		<version.org.hibernate.javax.persistence>1.0.0.Final</version.org.hibernate.javax.persistence>
 		<h2database-version>1.3.176</h2database-version>

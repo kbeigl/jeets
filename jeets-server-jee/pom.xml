@@ -17,13 +17,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+<!-- 
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-parent</artifactId>
 	    <version>1.0</version>
 		<relativePath>../jeets-parent</relativePath>
 	</parent>
- 
+  -->
+  
+    <!-- add due to (temporarily?) missing parent 
+    	(for debugging hibernate version conflicts)-->
+		<groupId>org.jeets</groupId>
+	    <version>1.0</version>
 	<artifactId>jeets-server-jee</artifactId>
 	<packaging>pom</packaging>
 
@@ -31,17 +37,21 @@
 	<description>WildFly JeeTS Components</description>
 
 	<properties>
-	   <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- add due to (temporarily?) missing parent -->
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-	   <!-- WildFly-Camel 5.1.0 provides Camel-2.20.2 integration 
-	   with WildFly-11.0.0 -->
-	   <!-- WildFly-Camel versions (overrules Camel version!) -->
+	    <!-- WildFly-Camel 5.1.0 provides Camel-2.20.2 integration 
+	    with WildFly-11.0.0 -->
+	    <!-- WildFly-Camel versions (overrules Camel version!) -->
         <version.wildfly.camel>5.1.0</version.wildfly.camel>
-        <version.wildfly>11.0.0.Final</version.wildfly>
-		<!-- EAP component version management BOM -->
-		<version.server.bom>11.0.0.Final</version.server.bom>
+        
+        <!-- <version.wildfly>11.0.0.Final</version.wildfly>  -->
+		<!-- EAP component version management BOM
+		<version.server.bom>11.0.0.Final</version.server.bom> -->
 
-        <!-- Plugin versions, centralize, move up for full repo (?) -->
+        <!-- Plugin versions, centralize, move up for full repo (?)
         <version-download-maven-plugin>1.3.0</version-download-maven-plugin>
         <version-exec-maven-plugin>1.4.0</version-exec-maven-plugin>
         <version-maven-assembly-plugin>2.4</version-maven-assembly-plugin>
@@ -52,7 +62,8 @@
         <version-maven-source-plugin>2.3</version-maven-source-plugin>
         <version-maven-surefire-plugin>2.18.1</version-maven-surefire-plugin>
         <version-maven-war-plugin>3.0.0</version-maven-war-plugin>
-        <version-wildfly-maven-plugin>1.2.1.Final</version-wildfly-maven-plugin>
+        
+        <version-wildfly-maven-plugin>1.2.1.Final</version-wildfly-maven-plugin> -->
         
         <deploy.skip>true</deploy.skip>
     </properties>
@@ -79,6 +90,7 @@
         </dependencies>
     </dependencyManagement>
 
+    <!-- move up for full repo (?)
     <build>
         <pluginManagement>
             <plugins>
@@ -156,7 +168,6 @@
 
         <plugins>
             <plugin>
-			<!-- move up ? -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <executions>
@@ -179,7 +190,6 @@
         </license>
     </licenses>
 
-    <!-- 
     <distributionManagement>
         <repository>
             <id>jboss-releases-repository</id>
@@ -192,7 +202,6 @@
             <url>https://repository.jboss.org/nexus/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
-     -->
     
     <repositories>
         <repository>
@@ -210,6 +219,7 @@
             </snapshots>
         </repository>
     </repositories>
+     -->
 
 	<modules>
 		<!-- wildfly must be running > apply profiles -->
