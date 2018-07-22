@@ -59,11 +59,12 @@
         <version-maven-dependency-plugin>2.10</version-maven-dependency-plugin>
         <version-maven-release-plugin>2.5</version-maven-release-plugin>
         <version-maven-resources-plugin>2.7</version-maven-resources-plugin>
-        <version-maven-source-plugin>2.3</version-maven-source-plugin>
         <version-maven-surefire-plugin>2.18.1</version-maven-surefire-plugin>
         <version-maven-war-plugin>3.0.0</version-maven-war-plugin>
-        
-        <version-wildfly-maven-plugin>1.2.1.Final</version-wildfly-maven-plugin> -->
+         -->
+        <version-maven-source-plugin>2.3</version-maven-source-plugin>
+
+        <version-wildfly-maven-plugin>1.2.1.Final</version-wildfly-maven-plugin>
         
         <deploy.skip>true</deploy.skip>
     </properties>
@@ -78,6 +79,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            
 			<!-- jboss-eap-javaee7-with-tools stack JBoss stack of the Java EE APIs, 
 			with some extras tools for your project, such as Arquillian for testing)
             <dependency>
@@ -88,23 +90,39 @@
                 <scope>import</scope>
             </dependency> -->
 
-	    <!-- simulate parent version -->
-		<!-- <hibernate-version>5.2.17.Final</hibernate-version>	
-	    <dependency>
-	        <groupId>org.hibernate</groupId>
-	        <artifactId>hibernate-core</artifactId>
-	        <version>5.2.17.Final</version>
-	    </dependency>
-	    doesn't overrule 5.1..  :(
-	     -->
+		    <!-- simulate parent version -->
+			<!-- <hibernate-version>5.2.17.Final</hibernate-version>	
+		    <dependency>
+		        <groupId>org.hibernate</groupId>
+		        <artifactId>hibernate-core</artifactId>
+		        <version>5.2.17.Final</version>
+		    </dependency>
+		    doesn't overrule 5.1..  :(
+		     -->
 
         </dependencies>
     </dependencyManagement>
     
-    <!-- move up for full repo (?)
     <build>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>org.wildfly.plugins</groupId>
+                    <artifactId>wildfly-maven-plugin</artifactId>
+                    <version>${version-wildfly-maven-plugin}</version>
+                    <configuration>
+                        <version>${version.wildfly}</version>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${version-maven-source-plugin}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+				<!-- move up in hierarchy
                 <plugin>
                     <groupId>com.googlecode.maven-download-plugin</groupId>
                     <artifactId>download-maven-plugin</artifactId>
@@ -145,11 +163,6 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>${version-maven-source-plugin}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${version-maven-surefire-plugin}</version>
                     <configuration>
@@ -166,16 +179,7 @@
                     <artifactId>exec-maven-plugin</artifactId>
                     <version>${version-exec-maven-plugin}</version>
                 </plugin>
-                <plugin>
-                    <groupId>org.wildfly.plugins</groupId>
-                    <artifactId>wildfly-maven-plugin</artifactId>
-                    <version>${version-wildfly-maven-plugin}</version>
-                    <configuration>
-                        <version>${version.wildfly}</version>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
+                -->
 
         <plugins>
             <plugin>
@@ -192,6 +196,7 @@
                 <inherited>true</inherited>
             </plugin>
         </plugins>
+        
     </build>
         
     <licenses>
@@ -201,6 +206,7 @@
         </license>
     </licenses>
 
+	<!-- 
     <distributionManagement>
         <repository>
             <id>jboss-releases-repository</id>
