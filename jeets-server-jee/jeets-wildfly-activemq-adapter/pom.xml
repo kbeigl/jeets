@@ -26,7 +26,8 @@
 
     <name>jeets-wildfly-activemq-adapter</name>
     <artifactId>jeets-wildfly-activemq-adapter</artifactId>
-    <packaging>war</packaging>
+    <!-- jar required in web project -->
+    <packaging>jar</packaging>
 
     <properties>
         <!-- skip deployment in default profile -->

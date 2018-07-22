@@ -114,9 +114,9 @@
         	The solution should be found here (includes/excludes):
         	maven.apache.org/plugins/maven-assembly-plugin/assembly.html
         	HACK SOLUTION (model with Maven/Ant!?):
-        	edit TypeConverter inside jar-with-dependencies 
-        	and REPLACE (works!) org.apache.camel.component.netty4.NettyConverter
-        	with org.jeets.dcsToAmq.steps.DeviceProtoToEntityTransformer
+        	edit TypeConverter inside jar-with-dependencies and
+        	REPLACE org.apache.camel.component.netty4.NettyConverter
+        	with org.jeets.dcsToAmq.steps.DeviceProtoToEntityTransformer (works!) 
        	-->
         <artifactId>maven-assembly-plugin</artifactId>
         <version>3.1.0</version>        
