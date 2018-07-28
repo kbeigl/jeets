@@ -7,13 +7,14 @@ The Name JeeTS reflects "GPS Tracking System G.T.S. with Java EE", i.e. "Jee" T.
 
 More details can (soon) be found on http://jeets.org
 
+## Literature
+
 The complete building process of a GPS Tracking System with JeeTS components
 
 is described in the (soon to be published) supplementary book to this repository:
 
-GPS Tracking with Java EE Components
-
-Challenges of Connected Cars
+    GPS Tracking with Java EE Components
+    Challenges of Connected Cars
 
 ## License
 
