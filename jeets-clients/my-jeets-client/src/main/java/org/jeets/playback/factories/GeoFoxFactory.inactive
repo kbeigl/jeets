@@ -275,6 +275,6 @@ public class GeoFoxFactory {
     private DateTimeFormatter outputDateTime = DateTimeFormatter.ofPattern("dd. MMM HH:mm:ss.SSS");
 
     private static Log logger = LogFactory.getLog(GeoFoxFactory.class);
-    private GeoFoxCustomApi geofox = new GeoFoxCustomApi("beiglb","I@/0(tGf=S%B");
+    private GeoFoxCustomApi geofox = new GeoFoxCustomApi("user","password");
 
 }
