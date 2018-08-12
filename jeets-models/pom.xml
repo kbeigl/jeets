@@ -44,11 +44,27 @@
 
 	<dependencies>
 		<!-- unnecessary dependencies for protocols (?) -->
+		<!-- fix github.com/kbeigl/jeets/issues/1 -->
+		<!-- hardcoded version! TODO: harmonize jeets.models with jeets.server -->
+		<!-- Exclude dom4j to avoid version conflicts (we have 1.6, this drags in 1.6.1)
+		<dependency>
+			<groupId>dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+			<version>1.6</version>
+		</dependency> -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate-version}</version>
-        </dependency>
+			<!-- 
+			<exclusions>
+				<exclusion>
+					<groupId>dom4j</groupId>
+					<artifactId>dom4j</artifactId>
+				</exclusion>
+			</exclusions> -->
+		</dependency>
+
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>

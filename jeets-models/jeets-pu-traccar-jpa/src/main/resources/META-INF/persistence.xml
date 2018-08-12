@@ -16,6 +16,10 @@
             JeeTS Persistence Unit for traccar ERM
         </description>
         
+        <!-- test for downgrade hibernate-version 5.1.10.Final
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <validation-mode>NONE</validation-mode> -->
+                
 	<!-- currently effective model for JeeTS modules -->
 		<class>org.jeets.model.traccar.jpa.Device</class>
 		<class>org.jeets.model.traccar.jpa.Event</class>
