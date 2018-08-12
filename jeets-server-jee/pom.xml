@@ -47,9 +47,9 @@
 	    <!-- WildFly-Camel versions (overrules Camel version!) -->
         <version.wildfly.camel>5.1.0</version.wildfly.camel>
         
-        <!-- <version.wildfly>11.0.0.Final</version.wildfly>  -->
-		<!-- EAP component version management BOM
-		<version.server.bom>11.0.0.Final</version.server.bom> -->
+        <version.wildfly>11.0.0.Final</version.wildfly>
+		<!-- EAP component version management BOM -->
+		<version.server.bom>${version.wildfly}</version.server.bom>
 
         <!-- Plugin versions, centralize, move up for full repo (?)
         <version-download-maven-plugin>1.3.0</version-download-maven-plugin>
@@ -69,28 +69,24 @@
         <deploy.skip>true</deploy.skip>
     </properties>
 
-    <dependencyManagement>
-		<!-- WildFly-Camel BOM for all *JEE* modules -->
-        <dependencies>
-            <dependency>
-                <groupId>org.wildfly.camel</groupId>
-                <artifactId>wildfly-camel-bom</artifactId>
-                <version>${version.wildfly.camel}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            
-			<!-- jboss-eap-javaee7-with-tools stack JBoss stack of the Java EE APIs, 
-			with some extras tools for your project, such as Arquillian for testing)
-            <dependency>
-                <groupId>org.wildfly.bom</groupId>
-                <artifactId>wildfly-javaee7-with-tools</artifactId>
-                <version>${version.server.bom}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency> -->
-      </dependencies>
-    </dependencyManagement>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.wildfly.bom</groupId>
+				<artifactId>wildfly-javaee7-with-tools</artifactId>
+				<version>${version.server.bom}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.wildfly.camel</groupId>
+				<artifactId>wildfly-camel-bom</artifactId>
+				<version>${version.wildfly.camel}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
     
     <build>
         <pluginManagement>
