@@ -26,10 +26,11 @@
 
 	<artifactId>jeets-parent</artifactId>
 	<packaging>pom</packaging>
-	
+
 	<name>--- JeeTS Parent (versioning etc.) ---</name>
 	<description>
-		Parent POM to compile and test all JeeTS sources with dependencies.
+		Parent POM to compile and test all JeeTS sources with
+		dependencies.
 	</description>
 	<url>jeets.org/</url>
 
@@ -46,16 +47,26 @@
 	</prerequisites>
 
 	<properties>
+		<jeets-parent-version>1.0</jeets-parent-version>
+
+		<!-- howtodoinjava.com/maven/maven-parent-child-pom-example/ -->
 		<!-- add all JeeTS sub/sub/versions for official release (?) -->
-		<!-- propagate project version (after incrementing above)
-		<jeets-parent-version>1.0</jeets-parent-version> -->
 		
 		<!-- maven settings -->
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+		
+		<exec-maven-plugin-version>1.5.0</exec-maven-plugin-version>
+		<!-- <build-helper-maven-plugin-version>1.10</build-helper-maven-plugin-version> -->
+
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding> -->
 
 		<!-- Adjust with Camel parent with listed versions -->
+		<!-- preferably adjust with JEE -->
+		<camel.version>2.20.2</camel.version>
+		
+		<!-- <log4j2.version>2.7</log4j2.version> -->
 		<slf4j-version>1.7.22</slf4j-version>
 		<commons-logging-version>1.2</commons-logging-version>
 		<junit-version>4.12</junit-version>
@@ -71,6 +82,19 @@
 		<netty-version>4.1.15.Final</netty-version>
         <protobuf-version>3.1.0</protobuf-version>
 	</properties>
+	
+	<!-- Spring BOM first, Camel BOM second -->
+	<dependencyManagement>
+	   <dependencies>
+	     <dependency>
+	       <groupId>org.apache.camel</groupId>
+	       <artifactId>camel-parent</artifactId>
+	       <version>${camel.version}</version>
+	       <type>pom</type>
+	       <scope>import</scope>
+	     </dependency>
+	   </dependencies>
+	</dependencyManagement>
 
 	<!-- place common builders here !? -->
 

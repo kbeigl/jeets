@@ -31,14 +31,6 @@
 
 	<name>--- Server Tracking Components (JSE) ---</name>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<!-- preferably adjust with JEE -->
-		<camel.version>2.20.2</camel.version>
-		<log4j2.version>2.7</log4j2.version>
-	</properties>
-
 	<modules>
 		<module>jeets-dcs</module>
 		<module>jeets-etl</module>
@@ -48,19 +40,6 @@
 		<module>jeets-dcs-amq</module>
 		<module>jeets-geo-router</module>
 	</modules>
-
-	<dependencyManagement>
-		<!-- Camel BOM for all *JSE* modules -->
-		<dependencies>
-			<dependency>
-				<groupId>org.apache.camel</groupId>
-				<artifactId>camel-parent</artifactId>
-				<version>${camel.version}</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 
 	<dependencies>
 		<!-- logging runtime <> test ! -->
