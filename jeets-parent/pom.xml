@@ -63,18 +63,9 @@
 		<!-- <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding> -->
 
 		<!-- Adjust with Camel parent with listed versions -->
-		<!-- preferably adjust with JEE -->
+		<!-- adjust with JEE (i.e WildFly branch) -->
 		<camel.version>2.20.2</camel.version>
 		
-		<!-- <log4j2.version>2.7</log4j2.version> -->
-		<slf4j-version>1.7.22</slf4j-version>
-		<commons-logging-version>1.2</commons-logging-version>
-		<junit-version>4.12</junit-version>
-
-		<!-- persistence
-		<hibernate-version>5.1.10.Final</hibernate-version> -->
-		<hibernate-version>5.2.17.Final</hibernate-version>	
-		<version.org.hibernate.javax.persistence>1.0.0.Final</version.org.hibernate.javax.persistence>
 		<h2database-version>1.3.176</h2database-version>
 		<postgresql-version>9.4-1200-jdbc41</postgresql-version>
 		

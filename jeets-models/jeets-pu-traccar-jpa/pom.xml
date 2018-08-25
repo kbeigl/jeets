@@ -30,4 +30,9 @@
 	<version>3.14.2</version>
 	<packaging>jar</packaging>
 
-</project>
+	<!-- 	
+	currently this project is using hibernate-jpa-2.1-api-1.0.0.Final.jar
+	for javax.persistence. To be replaced after hibernate project is removed.
+ 	-->
+
+ </project>

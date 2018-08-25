@@ -37,57 +37,40 @@
 		<module>jeets-pu-gtfs-jpa</module>
 		<!-- move to avoid persistence dependencies (?) -->
 		<module>jeets-protocols</module>
-		<!-- deprecated, traccar 3.7 version -->
+		<!-- deprecated, traccar 3.7 version, to be removed -->
 		<module>jeets-pu-traccar-hibernate</module>
 		<!-- <module>jeets-pu-traccar-ejb</module> -->
 	</modules>
 
 	<dependencies>
-		<!-- unnecessary dependencies for protocols (?) -->
-		<!-- fix github.com/kbeigl/jeets/issues/1 -->
-		<!-- hardcoded version! TODO: harmonize jeets.models with jeets.server -->
-		<!-- Exclude dom4j to avoid version conflicts (we have 1.6, this drags in 1.6.1)
-		<dependency>
-			<groupId>dom4j</groupId>
-			<artifactId>dom4j</artifactId>
-			<version>1.6</version>
-		</dependency> -->
+		<!-- 	
+		currently the traccar-jpa project is using hibernate-jpa-2.1-api-1.0.0.Final.jar
+		for javax.persistence. To be replaced after hibernate project is removed.
+	 	-->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
-			<version>${hibernate-version}</version>
-			<!-- 
-			<exclusions>
-				<exclusion>
-					<groupId>dom4j</groupId>
-					<artifactId>dom4j</artifactId>
-				</exclusion>
-			</exclusions> -->
+			<version>5.2.17.Final</version>
 		</dependency>
 
-		<dependency>
+ 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>${postgresql-version}</version>
 		</dependency>
 
-		<!-- Hibernate uses jboss-logging for logging, we will use the sl4fj-simple 
-			backend -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
-			<version>${slf4j-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
-			<version>${commons-logging-version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>${junit-version}</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- H2 in-memory database for testing only -->
