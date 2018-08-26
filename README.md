@@ -1,19 +1,13 @@
 The JeeTS Source Repository
 ===========================
 
-The JeeTS Source Repository is hosting the code for Java EE Tracking Components.
-
-The Name JeeTS reflects "GPS Tracking System G.T.S. with Java EE", i.e. "Jee" T.S.
-
+The JeeTS Source Repository is hosting the code for Java EE Tracking Components.  
+The Name JeeTS reflects "GPS Tracking System with Java EE", i.e. "Jee" T.S. for G.T.S.   
 More details can (soon) be found on http://jeets.org
-
-## Contact
-
-- Kristof Beiglböck ([kbeigl@jeets.org](mailto:kbeigl@jeets))
 
 ## Literature
 
-The complete building process of a GPS Tracking System with JeeTS components
+The complete building process of a GPS Tracking System with JeeTS components  
 is described in the supplementary book to this repository:
 
 [![JeeTS-Book](JeeTS-Book.jpg)](https://www.amazon.com/GPS-Tracking-Java-Components-Challenges/dp/1138313823)
@@ -21,6 +15,10 @@ is described in the supplementary book to this repository:
 
     GPS Tracking with Java EE Components
     Challenges of Connected Cars
+
+## Contact
+
+- Kristof Beiglböck ([kbeigl@jeets.org](mailto:kbeigl@jeets))
 
 ## License
 
