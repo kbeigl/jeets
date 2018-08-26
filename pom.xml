@@ -20,7 +20,7 @@
 
 	<groupId>org.jeets</groupId>
 	<artifactId>jeets</artifactId>
-	<version>1.0</version>
+	<version>1.0.Final</version>
 	<packaging>pom</packaging>
 
 	<name>=== JeeTS - Java EE Tracking Software ===</name>
@@ -36,6 +36,14 @@
 			<url>jeets.org</url>
 		</developer>
 	</developers>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<distribution>repo</distribution>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+		</license>
+	</licenses>
 
 	<modules>
 		<module>jeets-parent</module>

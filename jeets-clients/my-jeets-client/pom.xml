@@ -26,6 +26,7 @@
 	</parent>
 
 	<artifactId>my-jeets-client</artifactId>
+	<version>1.0</version>
 	<packaging>jar</packaging>
 
 	<dependencies>
@@ -54,7 +55,6 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>${junit-version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

@@ -28,6 +28,7 @@
     <!-- includes unnecessary dependencies for protocols from models 
     	resolve with imported pu-traccar-jpa and remove parent !?-->
 	<artifactId>jeets-protocols</artifactId>
+	<version>1.0</version>
 	<packaging>jar</packaging>
 
     <dependencies>

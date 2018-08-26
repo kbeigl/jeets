@@ -25,7 +25,8 @@
     </parent>
 
     <name>jeets-wildfly-activemq-adapter</name>
-    <artifactId>jeets-wildfly-activemq-adapter</artifactId>
+	<artifactId>jeets-wildfly-activemq-adapter</artifactId>
+	<version>1.0</version>
     <!-- jar required in web project -->
     <packaging>jar</packaging>
 

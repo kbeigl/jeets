@@ -27,6 +27,7 @@
 	</parent>
 
 	<artifactId>jeets-etl</artifactId>
+	<version>1.0</version>
 	<packaging>jar</packaging>
 
 	<name>jeets-etl</name>
