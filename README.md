@@ -14,7 +14,10 @@ More details can (soon) be found on http://jeets.org
 ## Literature
 
 The complete building process of a GPS Tracking System with JeeTS components
-is described in the (soon to be published) supplementary book to this repository:
+is described in the supplementary book to this repository:
+
+![JeeTS-Book](JeeTS-Book.jpg)
+
 
     GPS Tracking with Java EE Components
     Challenges of Connected Cars
