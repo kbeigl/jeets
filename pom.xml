@@ -20,7 +20,7 @@
 
 	<groupId>org.jeets</groupId>
 	<artifactId>jeets</artifactId>
-	<version>1.0</version>
+	<version>1.0.Final</version>
 	<packaging>pom</packaging>
 
 	<name>=== JeeTS - Java EE Tracking Software ===</name>
