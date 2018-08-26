@@ -26,7 +26,8 @@
     </parent>
     
     <!-- build EAR artifact and include EJB and Web modules. -->
-    <artifactId>jeets-jee-ear</artifactId>
+	<artifactId>jeets-jee-ear</artifactId>
+	<version>1.0</version>
     <packaging>ear</packaging>
     <name>> jeets-jee-ear</name>
 

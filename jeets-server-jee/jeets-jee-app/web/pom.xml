@@ -24,7 +24,8 @@
 	    <version>1.0</version>
     </parent>
 
-    <artifactId>jeets-jee-web</artifactId>
+	<artifactId>jeets-jee-web</artifactId>
+	<version>1.0</version>
     <packaging>war</packaging>
     <name>> jeets-jee-web</name>
     <description>package EJB and WAR in an EAR (WAR POM file)</description>

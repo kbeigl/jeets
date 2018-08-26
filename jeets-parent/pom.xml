@@ -25,32 +25,30 @@
 	</parent>
 
 	<artifactId>jeets-parent</artifactId>
+	<version>1.0</version>
 	<packaging>pom</packaging>
 
 	<name>--- JeeTS Parent (versioning etc.) ---</name>
 	<description>
-		Parent POM to compile and test all JeeTS sources with
-		dependencies.
+		Parent POM for common definitions and constants for all JeeTS sources.
 	</description>
 	<url>jeets.org/</url>
-
-	<licenses>
-		<license>
-			<name>Apache License, Version 2.0</name>
-			<distribution>repo</distribution>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-		</license>
-	</licenses>
 
 	<prerequisites>
 		<maven>3.0</maven>
 	</prerequisites>
 
 	<properties>
-		<jeets-parent-version>1.0</jeets-parent-version>
-
-		<!-- howtodoinjava.com/maven/maven-parent-child-pom-example/ -->
-		<!-- add all JeeTS sub/sub/versions for official release (?) -->
+		<camel.version>2.20.2</camel.version>
+		<!-- adjust with JEE (i.e WildFly branch) -->
+		
+		<h2database-version>1.3.176</h2database-version>
+		<postgresql-version>9.4-1200-jdbc41</postgresql-version>
+		
+		<!-- network / protocols -->
+		<!-- netty-version should be set by Camel BOM -->
+		<netty-version>4.1.15.Final</netty-version>
+        <protobuf-version>3.1.0</protobuf-version>
 		
 		<!-- maven settings -->
 		<maven.compiler.source>1.8</maven.compiler.source>
@@ -61,17 +59,6 @@
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding> -->
-
-		<!-- Adjust with Camel parent with listed versions -->
-		<!-- adjust with JEE (i.e WildFly branch) -->
-		<camel.version>2.20.2</camel.version>
-		
-		<h2database-version>1.3.176</h2database-version>
-		<postgresql-version>9.4-1200-jdbc41</postgresql-version>
-		
-		<!-- network / protocols -->
-		<netty-version>4.1.15.Final</netty-version>
-        <protobuf-version>3.1.0</protobuf-version>
 	</properties>
 	
 	<!-- Spring BOM first, Camel BOM second -->
@@ -86,7 +73,5 @@
 	     </dependency>
 	   </dependencies>
 	</dependencyManagement>
-
-	<!-- place common builders here !? -->
 
 </project>

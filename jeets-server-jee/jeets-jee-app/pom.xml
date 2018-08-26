@@ -22,10 +22,11 @@
 	    <artifactId>jeets-server-jee</artifactId>
 		<version>1.0</version>
     </parent>
-     
-    <artifactId>jeets-jee-app</artifactId>
-    <packaging>pom</packaging>
-    <name>jeets-jee-app</name>
+
+	<artifactId>jeets-jee-app</artifactId>
+	<version>1.0</version>
+	<packaging>pom</packaging>
+	<name>jeets-jee-app</name>
     <description>JeeTS seed component for WildFly with EJB and WAR in an EAR (top level POM file) with Camel Route to ActiveMQ broker</description>
 
     <licenses>

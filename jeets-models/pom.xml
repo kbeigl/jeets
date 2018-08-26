@@ -27,6 +27,7 @@
 	</parent>
 
 	<artifactId>jeets-models</artifactId>
+	<version>1.0</version>
 	<packaging>pom</packaging>
 
 	<name>--- System Dataformats and Models ---</name>

@@ -27,6 +27,7 @@
 	</parent>
 
 	<artifactId>jeets-clients</artifactId>
+	<version>1.0</version>
 	<packaging>pom</packaging>
 
 	<name>--- Client Tracking Components ---</name>

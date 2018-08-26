@@ -27,6 +27,7 @@
 	</parent>
 
 	<artifactId>jeets-player</artifactId>
+	<version>1.0</version>
 	<packaging>jar</packaging>
 
 	<dependencies>

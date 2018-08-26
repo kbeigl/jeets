@@ -26,6 +26,7 @@
 	</parent>
 
 	<artifactId>jeets-dcs-amq</artifactId>
+	<version>1.0</version>
 	<packaging>jar</packaging>
 
 	<url>http://jeets.org</url>

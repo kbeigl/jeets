@@ -27,6 +27,7 @@
 	</parent>
 
 	<artifactId>jeets-server-jse</artifactId>
+	<version>1.0</version>
 	<packaging>pom</packaging>
 
 	<name>--- Server Tracking Components (JSE) ---</name>
