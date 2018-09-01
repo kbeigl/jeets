@@ -27,7 +27,7 @@
 	</parent>
 
 	<artifactId>jeets-models</artifactId>
-	<version>1.0</version>
+	<version>1.1-RC</version>
 	<packaging>pom</packaging>
 
 	<name>--- System Dataformats and Models ---</name>
@@ -38,8 +38,6 @@
 		<module>jeets-pu-gtfs-jpa</module>
 		<!-- move to avoid persistence dependencies (?) -->
 		<module>jeets-protocols</module>
-		<!-- deprecated, traccar 3.7 version, to be removed -->
-		<module>jeets-pu-traccar-hibernate</module>
 		<!-- <module>jeets-pu-traccar-ejb</module> -->
 	</modules>
 
