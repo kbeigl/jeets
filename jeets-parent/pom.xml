@@ -21,7 +21,7 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets</artifactId>
-		<version>1.0.Final</version>
+		<version>1.1-RC</version>
 	</parent>
 
 	<artifactId>jeets-parent</artifactId>
@@ -41,19 +41,19 @@
 	<properties>
 		<camel.version>2.20.2</camel.version>
 		<!-- adjust with JEE (i.e WildFly branch) -->
-		
+
 		<h2database-version>1.3.176</h2database-version>
 		<postgresql-version>9.4-1200-jdbc41</postgresql-version>
-		
+
 		<!-- network / protocols -->
-		<!-- netty-version should be set by Camel BOM -->
+		<!-- netty-version should be set via Camel BOM -->
 		<netty-version>4.1.15.Final</netty-version>
         <protobuf-version>3.1.0</protobuf-version>
-		
+
 		<!-- maven settings -->
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		
+
 		<exec-maven-plugin-version>1.5.0</exec-maven-plugin-version>
 		<!-- <build-helper-maven-plugin-version>1.10</build-helper-maven-plugin-version> -->
 

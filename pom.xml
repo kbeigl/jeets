@@ -20,12 +20,12 @@
 
 	<groupId>org.jeets</groupId>
 	<artifactId>jeets</artifactId>
-	<version>1.0.Final</version>
+	<version>1.1-RC</version>
 	<packaging>pom</packaging>
 
 	<name>=== JeeTS - Java EE Tracking Software ===</name>
 	<description>
-		Main POM 'frontpage' to compile, test and build ALL JeeTS sources with dependencies.
+		JeeTS Super POM to compile, test and build ALL JeeTS sources with dependencies.
 	</description>
 	<url>jeets.org</url>
 
