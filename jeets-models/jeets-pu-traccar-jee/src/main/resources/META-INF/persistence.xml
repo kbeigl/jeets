@@ -14,7 +14,7 @@
 	   <jta-data-source>java:/PostgresTraccar</jta-data-source>
 
         <description>
-            JeeTS Persistence Unit for traccar ERM
+            JeeTS Persistence Unit for traccar ERM (JEE)
         </description>
         
 	<!-- currently effective model for JeeTS modules -->

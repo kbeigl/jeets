@@ -29,4 +29,7 @@
 	<version>3.14.2</version>
 	<packaging>jar</packaging>
 
+	<description>
+		Deprecated: moved into jeets-pu-traccar-jpa as second persistence unit for JEE
+	</description>
 </project>

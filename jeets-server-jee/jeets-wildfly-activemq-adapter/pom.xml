@@ -18,17 +18,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
+	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-server-jee</artifactId>
-		<version>1.0</version>
-    </parent>
+		<version>1.1-RC</version>
+	</parent>
 
-    <name>jeets-wildfly-activemq-adapter</name>
+	<name>jeets-wildfly-activemq-adapter</name>
 	<artifactId>jeets-wildfly-activemq-adapter</artifactId>
 	<version>1.0</version>
-    <!-- jar required in web project -->
-    <packaging>jar</packaging>
+	<!-- jar (not war) required in web project -->
+	<packaging>jar</packaging>
 
     <properties>
         <!-- skip deployment in default profile -->

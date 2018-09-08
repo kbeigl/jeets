@@ -9,17 +9,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 
-
 	<persistence-unit name="jeets-pu-traccar-jpa">
 
-        <description>
-            JeeTS Persistence Unit for traccar ERM
-        </description>
-        
-        <!-- test for downgrade hibernate-version 5.1.10.Final
-        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <validation-mode>NONE</validation-mode> -->
-                
 	<!-- currently effective model for JeeTS modules -->
 		<class>org.jeets.model.traccar.jpa.Device</class>
 		<class>org.jeets.model.traccar.jpa.Event</class>
@@ -79,6 +70,29 @@
       		<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
 <!-- 		<property name="hibernate.hbm2ddl.auto" value="create" />
             <property name="hibernate.show_sql" value="true" />		 -->
+        </properties>
+
+    </persistence-unit>
+    
+    <persistence-unit name="jeets-pu-traccar-jee">
+
+	   <jta-data-source>java:/PostgresTraccar</jta-data-source>
+
+	<!-- currently effective model for JeeTS modules -->
+		<class>org.jeets.model.traccar.jpa.Device</class>
+		<class>org.jeets.model.traccar.jpa.Event</class>
+		<class>org.jeets.model.traccar.jpa.Position</class>
+		<!-- added 12.12.2017 -->
+		<class>org.jeets.model.traccar.jpa.DeviceGeofence</class>
+		<class>org.jeets.model.traccar.jpa.DeviceGeofenceId</class>
+		<class>org.jeets.model.traccar.jpa.Geofence</class>
+
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>
+		
+		<properties>
+      		<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+<!-- 		<property name="hibernate.hbm2ddl.auto" value="create" />
+               <property name="hibernate.show_sql" value="true" />		 -->
         </properties>
 
     </persistence-unit>

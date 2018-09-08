@@ -23,18 +23,18 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-clients</artifactId>
-		<version>1.0</version>
+		<version>1.1-RC</version>
 	</parent>
 
 	<artifactId>jeets-tracker</artifactId>
-	<version>1.0</version>
+	<version>1.1-RC</version>
 	<packaging>jar</packaging>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-protocols</artifactId>
-			<version>1.0</version>
+			<version>${protocols-version-latest}</version>
 		</dependency>
 
 		<!-- use this for developing -->

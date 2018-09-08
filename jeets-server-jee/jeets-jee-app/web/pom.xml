@@ -42,17 +42,11 @@
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-pu-traccar-jee</artifactId>
+			<!-- <artifactId>jeets-pu-traccar-jpa</artifactId>
+			<version>${pu-traccar-jpa-version-latest}</version> -->
 			<version>3.14.2</version>
             <scope>provided</scope>
 		</dependency>
-		<!-- 
-		<dependency>
-			<groupId>org.jeets</groupId>
-			<artifactId>jeets-pu-traccar-jpa</artifactId>
-			<version>3.14.2</version>
-			<scope>provided</scope> 
-		</dependency>
-		 -->
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-wildfly-activemq-adapter</artifactId>
