@@ -34,7 +34,8 @@
 
 	<modules>
 		<module>jeets-pu-traccar-jpa</module>
-		<module>jeets-pu-traccar-jee</module>
+		<!-- moved pu-jee into pu-jpa 
+		<module>jeets-pu-traccar-jee</module> -->
 		<module>jeets-pu-gtfs-jpa</module>
 		<!-- move to avoid persistence dependencies (?) -->
 		<module>jeets-protocols</module>

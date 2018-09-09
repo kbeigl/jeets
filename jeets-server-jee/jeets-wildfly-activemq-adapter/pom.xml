@@ -31,7 +31,7 @@
 	<packaging>jar</packaging>
 
     <properties>
-        <!-- skip deployment in default profile -->
+		<deploy.skip>true</deploy.skip>
         <deploy-rar.skip>true</deploy-rar.skip>
     </properties>
 
@@ -65,7 +65,6 @@
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
                 <configuration>
-                	<!-- set in parent -->
                     <skip>${deploy.skip}</skip>
                 </configuration>
                 <executions>

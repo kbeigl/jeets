@@ -1,10 +1,10 @@
 package org.jeets.dcsToAmq;
 
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
+//import org.apache.camel.Exchange;
+//import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.jeets.model.traccar.jpa.Device;
-import org.jeets.protocol.Traccar;
+//import org.jeets.protocol.Traccar;
 
 public class DcsToAmqRoute extends RouteBuilder {
 

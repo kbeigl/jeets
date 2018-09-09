@@ -45,16 +45,15 @@
 		<version.wildfly.camel>5.1.0</version.wildfly.camel>
 
 		<version.wildfly>11.0.0.Final</version.wildfly>
-		<!-- EAP component version management BOM - after wildfly.camel ! -->
 		<version.server.bom>${version.wildfly}</version.server.bom>
 
 		<version-maven-source-plugin>2.3</version-maven-source-plugin>
 		<version-wildfly-maven-plugin>1.2.1.Final</version-wildfly-maven-plugin>
-		<deploy.skip>true</deploy.skip>
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
+		<!-- order matters, don't switch ! -->
 			<dependency>
 				<groupId>org.wildfly.bom</groupId>
 				<artifactId>wildfly-javaee7-with-tools</artifactId>

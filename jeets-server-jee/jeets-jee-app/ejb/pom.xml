@@ -21,11 +21,10 @@
     <parent>
 	    <groupId>org.jeets</groupId>
 	    <artifactId>jeets-jee-app</artifactId>
-	    <version>1.0</version>
+	    <version>1.1-RC</version>
     </parent>
 
 	<artifactId>jeets-jee-ejb</artifactId>
-	<version>1.0</version>
     <name>> jeets-jee-ejb</name>
     <description>package EJB and WAR in EAR (EJB POM file)</description>
 
@@ -40,10 +39,8 @@
     <dependencies>
 		<dependency>
 			<groupId>org.jeets</groupId>
-			<artifactId>jeets-pu-traccar-jee</artifactId>
-			<version>3.14.2</version>
-			<!-- <artifactId>jeets-pu-traccar-jpa</artifactId>
-			<version>${pu-traccar-jpa-version-latest}</version> -->
+			<artifactId>jeets-pu-traccar-jpa</artifactId>
+			<version>${pu-traccar-jpa-version-latest}</version>
             <scope>provided</scope>
 		</dependency>
 		<!-- redundant to war project ? -->        
