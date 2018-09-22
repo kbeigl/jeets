@@ -47,7 +47,7 @@
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-wildfly-activemq-adapter</artifactId>
-			<version>1.0</version>
+            <version>${wildfly-activemq-adapter-latest}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

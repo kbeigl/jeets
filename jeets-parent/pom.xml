@@ -44,7 +44,8 @@
 		<protocols-version-latest>1.1-RC</protocols-version-latest>
 		<tracker-version-latest>1.1-RC</tracker-version-latest>
 		<player-version-latest>1.1-RC</player-version-latest>
-		<dcs-version-latest>1.1-RC</dcs-version-latest>		
+		<dcs-version-latest>1.1-RC</dcs-version-latest>
+		<wildfly-activemq-adapter-latest>1.0</wildfly-activemq-adapter-latest>
 
 		<camel.version>2.20.2</camel.version>
 		<!-- adjust with JEE (i.e WildFly branch) -->
