@@ -71,22 +71,36 @@ public class Position implements Serializable {
 		this.servertime = servertime;
 	}
 
+    /**
+     * Time when message was sent by client.
+     */
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "devicetime", nullable = false, length = 29)
 	public Date getDevicetime() {
 		return this.devicetime;
 	}
 
+    /**
+     * Time when message was sent by client.
+     * @param devicetime
+     */
 	public void setDevicetime(Date devicetime) {
 		this.devicetime = devicetime;
 	}
 
+    /**
+     * Time when GPS position(lat,lon) was fixed by GPS unit.
+     */
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "fixtime", nullable = false, length = 29)
 	public Date getFixtime() {
 		return this.fixtime;
 	}
 
+    /**
+     * Time when GPS position(lat,lon) was fixed by GPS unit.
+     * @param fixtime
+     */
 	public void setFixtime(Date fixtime) {
 		this.fixtime = fixtime;
 	}

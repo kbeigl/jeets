@@ -70,7 +70,7 @@ public class CamelGeocoderTest extends CamelTestSupport {
         mock.expectedMessageCount(1);
 
         Device device = Samples.createDeviceWithTwoPositions();
-        device.setUniqueid(Samples.unique);
+        device.setUniqueid(Samples.uniqueId);
         device.setName("TestDevice");
 
         template.sendBody("direct:jeets-dcs", device);

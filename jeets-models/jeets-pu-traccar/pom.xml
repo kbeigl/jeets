@@ -22,20 +22,14 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-models</artifactId>
-		<version>1.1.1</version>
+		<version>1.2.0</version>
 	</parent>
 
 	<artifactId>jeets-pu-traccar</artifactId>
-	<version>4.1</version>
+	<version>4.2</version>
 	<packaging>jar</packaging>
 
 	<dependencies>
-		<!-- hibernate provides jx.pers-api in hibernate-jpa-2.1-api-1.0.0.Final.jar replace ??
-			<groupId>javax.persistence</groupId>
-			<artifactId>javax.persistence-api</artifactId>
-			<version>${javax.persistence-api.version}</version>
-			<scope>provided</scope>
-		</dependency> -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
@@ -44,24 +38,16 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
         </dependency>
+		<!-- testing -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.dbunit</groupId>
-			<artifactId>dbunit</artifactId>
-		</dependency>
-	<!-- logging is still unclear, clarify logging
-		 and move all the way up to parent -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
 	        <scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
+			<!-- includes slf4j -->
+			<groupId>org.dbunit</groupId>
+			<artifactId>dbunit</artifactId>
 	        <scope>test</scope>
 		</dependency>
     </dependencies>
@@ -92,7 +78,7 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>sql-maven-plugin</artifactId>
 				<configuration>
-					<!-- match **test** persistence.xml -->
+					<!-- applied in **test** persistence.xml -->
 					<username>${jeets.test.jdbc.user}</username>
 					<password>${jeets.test.jdbc.password}</password>
 					<driver>${jeets.test.jdbc.driver}</driver>

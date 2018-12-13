@@ -23,17 +23,17 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-clients</artifactId>
-		<version>1.1.1</version>
+		<version>1.2.0</version>
 	</parent>
 
 	<artifactId>jeets-player</artifactId>
-	<version>1.1.0</version>
+    <version>1.2.0</version>
 	<packaging>jar</packaging>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.jeets</groupId>
-			<artifactId>jeets-pu-traccar-jpa</artifactId>
+			<artifactId>jeets-pu-traccar</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>

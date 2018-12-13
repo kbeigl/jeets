@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
-    Copyright 2017 The Java EE Tracking System - JeeTS
-    Copyright 2017 Kristof Beiglböck kbeigl@jeets.org
+    Copyright 2018 The Java EE Tracking System - JeeTS
+    Copyright 2018 Kristof Beiglböck kbeigl@jeets.org
     
     The JEE Tracking System licenses this file to you 
     under the Apache License, Version 2.0 (the "License");
@@ -20,8 +20,8 @@
 
 	<groupId>org.jeets</groupId>
 	<artifactId>jeets</artifactId>
-	<!-- main jeets repo version -->
-	<version>1.1.1</version>
+	<!-- main JeeTS repo version -->
+	<version>1.2.0</version>
 	<packaging>pom</packaging>
 
 	<name>=== JeeTS - Java EE Tracking Software ===</name>

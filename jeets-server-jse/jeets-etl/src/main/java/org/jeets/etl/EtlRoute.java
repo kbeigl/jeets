@@ -29,8 +29,9 @@ public class EtlRoute extends SpringRouteBuilder {
 
     // use Camel .log instead
     private static final Logger LOG = LoggerFactory.getLogger(EtlRoute.class);
+//  actually the ETL doesn't need a port (here)
     // "etl.device.port"
-    static final int PORT = Integer.parseInt(System.getProperty("port", "5200"));
+//  static final int PORT = Integer.parseInt(System.getProperty("port", "5200"));
 
     public void configure() throws Exception {
         LOG.info("configure EtlRoutes .. ");
@@ -39,19 +40,20 @@ public class EtlRoute extends SpringRouteBuilder {
 
         from("seda:jeets-dcs")
         
-        .split(simple("${body.positions}"))
-            .log("Split line Position at (${body.latitude},${body.longitude})")
-            .enrich("direct:geocode", GeocodeEnricher.setAddress())   
-            .log("added new Address \"${body.address}\"")
-        .end()
-        
-        .process(new Processor() {
-            public void process(Exchange exchange) throws Exception {
-                Device device = (Device) exchange.getIn().getBody();
-                NetworkDevice netDevice = new NetworkDevice(device);
-                exchange.getOut().setBody(netDevice);
-            }
-        })
+	        .split(simple("${body.positions}"))
+	            .log("Split line Position at (${body.latitude},${body.longitude})")
+	            .enrich("direct:geocode", GeocodeEnricher.setAddress())   
+	            .log("added new Address \"${body.address}\"")
+	        .end()
+	        
+	        .process(new Processor() {
+	            public void process(Exchange exchange) throws Exception {
+	                Device device = (Device) exchange.getIn().getBody();
+	                NetworkDevice netDevice = new NetworkDevice(device);
+	                exchange.getOut().setBody(netDevice);
+	            }
+	        })
+
         .to("jpa:org.jeets.model.traccar.jpa.Device?usePersist=true");
 
         /* content enrichment with Camel Google Geocoder */

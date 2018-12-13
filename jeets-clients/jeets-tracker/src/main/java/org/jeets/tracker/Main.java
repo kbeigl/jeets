@@ -80,7 +80,7 @@ public class Main {
         }
 
         if (args.length == 2) {
-            Tracker tracker = new Tracker(host, port, "pb.device");
+            Tracker tracker = new Tracker(host, port, uniqueId);
             sendSampleMessages(tracker);
         }
         else if (args.length == 3) {
@@ -97,8 +97,6 @@ public class Main {
         System.out.println("created list with " + posBuilderList.size() + " positions.");
         for (int pos = 0; pos < posBuilderList.size(); pos++) {
             Traccar.Position.Builder posBuilder = posBuilderList.get(pos);
-//              Traccar.Event.Builder eventBuilder = Samples.createAlarmEventProto();
-//              posBuilder.addEvent(eventBuilder);
             posBuilder.setFixtime(new Date().getTime());
             System.out.println("fixed " + (pos+1) + ". position at " + posBuilder.getFixtime());
             tracker.sendPositionProto(posBuilder);

@@ -3,6 +3,7 @@ package org.jeets.protocol.util;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -12,14 +13,41 @@ import org.jeets.model.traccar.jpa.Position;
 import org.jeets.protocol.Traccar;
 import org.jeets.protocol.Traccar.EventType;
 
+/**
+ * Transform Traccar Entities to binary Protobuffers for sending messages from
+ * client (Tracker) and transform Protos back to Java Entities on server (DCS).
+ * <p>
+ * The Transformer (currently) is focused on Object Relations between Device,
+ * Positions and Events. Note that their relations are modeled different in
+ * Persistence Unit and Protobuffer. In the end both models allow many Events
+ * for one Position, i.e. n:1 The relation is unidirectional in both models -
+ * only in different directions. <br>
+ * Vice versa Events must have a Position to determine where and when the Event
+ * took place. Therefore Events without Positions should be ignored or rather
+ * shouldn't be created in the first place.
+ * <p>
+ * In the Protobuffer Model a Device can hold many positions and each position
+ * can hold many events. Each event is accessed via the position parent.
+ * <p>
+ * In the Persistence Unit a Device can hold many positions and many events and
+ * the event.position has to be looked up in the device.positions.
+ */
 public class Transformer {
 
 //  TODO: align and cleanup main/resources/ProtobufferDeviceDecoder
-//      .transfromPositionProtoToEntity 
-//  <-> .transformDeviceProtoToPositionEntities
+//	make *Position and *Event methods private (?)
 
+	/**
+	 * Transform Device Protobuffer with related Positions and their related Events.
+	 * <p>
+	 * see {@link Transformer} description for relevant Object Relations.
+	 * 
+	 * @param deviceProto
+	 * @return
+	 */
     public static Device protoToEntityDevice( Traccar.Device deviceProto ) { // throws TransformException
-        Device deviceEntity = new Device();
+
+    	Device deviceEntity = new Device();
         deviceEntity.setUniqueid(deviceProto.getUniqueid());
 //      Name is only available by server lookup in admin section
 //      deviceEntity.setName("DeviceTransformer");
@@ -28,25 +56,27 @@ public class Transformer {
         List<Position> positionEntities = new ArrayList<Position>();
         Set<Event> eventEntities = new HashSet<Event>();
 
-//      TODO: ensure chronological order (somewhere in the line) - LinkedHashSet ? 
-//      .. and determine lastPosition for deviceEntity.setPositionid(positionid);
+//      TODO: assert chronological order (somewhere in the line) - LinkedHashSet ? 
+//      .. and determine lastPosition for deviceEntity.setLastPosition(position);
       
-        List<Traccar.Position> positionProtos = deviceProto.getPositionList();
-        for (Traccar.Position positionProto : positionProtos) {
+        for (Traccar.Position positionProto : deviceProto.getPositionList()) {
             Position positionEntity = protoToEntityPosition(positionProto);
+
             positionEntity.setDevice(deviceEntity);     // n:1
             positionEntities.add(positionEntity);
 
-            List<Traccar.Event> eventProtos = positionProto.getEventList();
-            for (Traccar.Event eventProto : eventProtos) {
+//          positionProto holds eventProtos
+            for (Traccar.Event eventProto : positionProto.getEventList()) {
                 Event eventEntity = protoToEntityEvent(eventProto);
                 eventEntity.setDevice(deviceEntity);   // n:1
 //              event and position should have identical timestamp
                 eventEntity.setServertime(positionEntity.getServertime());  // required !!
+                eventEntity.setPosition(positionEntity); // 1:1
                 eventEntities.add(eventEntity);
             }
         }
 
+//      deviceEntity  holds eventEntities 
         deviceEntity.setEvents(eventEntities);          // 1:n
         deviceEntity.setPositions(positionEntities);    // 1:n
 
@@ -57,15 +87,23 @@ public class Transformer {
     }
 
     /**
-     * Transform Position Protobuffer to Entity with related Events. The
-     * Position Entity has no relation to its Events and is currently internally
-     * modeled via Device
-     */
+	 * Transform Position Protobuffer to Entity without related Device or Events.
+	 * <p>
+	 * Relation positionEntity.setDevice(dev) is not applied and should be handled
+	 * externally. <br>
+	 * The Position Entity has no relation to its Events. Vice versa Event Entities
+	 * are related to Device and Position Entity.<br>
+	 * see {@link #protoToEntityEvent}
+	 * 
+	 * @param positionProto
+	 * @return positionEntity
+	 */
     public static Position protoToEntityPosition(Traccar.Position positionProto) {
-        Position positionEntity = new Position();
-//      these doesn't exist in proto, set transformation time
+
+    	Position positionEntity = new Position();
+//      these don't exist in proto, set transformation time
         positionEntity.setServertime(new Date());
-//      generalize and collect (somewhere)
+//      protocol protobuffer.device can/should be overridden
         positionEntity.setProtocol("pb.device");
         positionEntity.setLatitude(positionProto.getLatitude());
         positionEntity.setLongitude(positionProto.getLongitude());
@@ -73,23 +111,24 @@ public class Transformer {
         positionEntity.setAccuracy(positionProto.getAccuracy());
         positionEntity.setCourse(positionProto.getCourse());
         positionEntity.setSpeed(positionProto.getSpeed());
-//      fix proto file to transfer valid flag (wrong description in book!)
-        positionEntity.setValid(true);
+        positionEntity.setValid(positionProto.getValid());
         positionEntity.setDevicetime(new Date(positionProto.getDevicetime()));
         positionEntity.setFixtime(new Date(positionProto.getFixtime()));
-
-//        List<Traccar.Event> positionEvents = positionProto.getEventList();
-//        for (Traccar.Event eventProto : positionEvents) {
-//            Event eventEntity = protoToEntityEvent(eventProto);
-////          TODO: change parameter to (Position) Entity, avoid DB-ID
-////          eventEntity.setPositionid(positionid);
-//        }
         
         return positionEntity;
     }
 
-    /* TODO: study traccar GTS and determine transformation of 
-             Traccar.EventType.KEY_ALARM / Traccar.AlarmType.ALARM_SOS */
+    /**
+	 * Transforms Event without relation to a position, i.e. Relations
+	 * eventEntity.setPosition(pos) and .setDevice(dev) are not applied and should
+	 * be handled externally.
+	 * 
+	 * @param eventProto
+	 * @return eventEntity
+	 */
+    /* TODO: study Traccar GTS, implement transformation of
+     * Traccar.EventType.KEY_ALARM / Traccar.AlarmType.ALARM_SOS,
+     * test persist and inspect database entries */
     public static Event protoToEntityEvent(Traccar.Event eventProto) {
         Event eventEntity = new Event();
         eventEntity.setType(eventProto.getEvent().name());
@@ -97,34 +136,67 @@ public class Transformer {
     }
 
     /**
-     * Transform Event Entity to modifiable Event Builder.
+     * This method should handle client events on server side.
+     * Server Events are not transmitted to client.
+     * @param eventType
+     * @return event type String
      */
-    public static Traccar.Event.Builder entityToProtoEvent(Event eventEntity) {
-        Traccar.Event.Builder eventBuilder = Traccar.Event.newBuilder();
-//      the eventProto should only handle client events
-//      since Protos are designed for one direction only
-        eventBuilder.setEvent(stringToEventTypeProto(eventEntity.getType()));
-        return eventBuilder;
-    }
-    
-//  currently not used 
-    public void entitiesToProtoPositions(List<Position> positionEntities) {
-        List<Traccar.Position.Builder> protoPositionBuilders = new ArrayList<>();
-        for (Position positionEntity : positionEntities) {
-            protoPositionBuilders.add(entityToProtoPosition(positionEntity));
+    public static String eventTypeProtoToEntityString(EventType eventType) {
+        switch (eventType) {
+        case KEY_MOTION:
+            return org.jeets.model.traccar.util.Samples.deviceMoving;
+            
+        case KEY_ALARM:
+            return "alarmEvent";
+
+        default:
+//          TODO: improve to KEY_UNKNOWN_EVENT and add log.warn(..)
+            return "unknownEvent";
         }
     }
 
+    /**
+     * Transform Device Entity to modifiable Device Builder.
+     */
+    public static Traccar.Device.Builder entityToProtoDevice(Device deviceEntity) {
+    	
+        Traccar.Device.Builder deviceBuilder = Traccar.Device.newBuilder();
+        deviceBuilder.setUniqueid(deviceEntity.getUniqueid());
+
+		List<Position> positionEntities = deviceEntity.getPositions();
+		Set<Event> eventEntities = deviceEntity.getEvents();
+		for (Position positionEntity : positionEntities) {
+			Traccar.Position.Builder positionBuilder = entityToProtoPosition(positionEntity);
+
+//  		nested reverse lookup: find the Event with the current positionEntity
+			for (Iterator<Event> ev = eventEntities.iterator(); ev.hasNext();) {
+				Event eventEntity = ev.next();
+				// skip (loose!) events without position
+				if ((eventEntity.getPosition() != null) 
+				&& (eventEntity.getPosition().equals(positionEntity))) {
+//					System.out.println("matched " + eventEntity + " with " + positionEntity);
+			      	positionBuilder.addEvent(entityToProtoEvent(eventEntity));
+			      	ev.remove(); // event can only have one position, speed up nested loop
+//			      	don't break; since positionEntity can have more than one event
+			    }
+			}
+//			add positionBuilder *after* above modifications; 
+//			doesn't work *before* modifications via object references into deviceBuilder!
+			deviceBuilder.addPosition(positionBuilder);
+		}
+
+        return deviceBuilder;
+    }
+    
     /**
      * Transform Position Entity to modifiable Position Builder.
      */
     public static Traccar.Position.Builder entityToProtoPosition(Position positionEntity) {
         Traccar.Position.Builder positionBuilder = Traccar.Position.newBuilder();
-        // see java8.timeapi package !!
 //      required attribute for transmission => NullPointerException !!
         positionBuilder.setDevicetime(positionEntity.getDevicetime().getTime()); // no millis ?
         positionBuilder.setFixtime(positionEntity.getFixtime().getTime()); 
-        positionBuilder.setValid(positionEntity.isValid());
+        positionBuilder.setValid(positionEntity.getValid());
         positionBuilder.setLatitude(positionEntity.getLatitude());
         positionBuilder.setLongitude(positionEntity.getLongitude());
         positionBuilder.setAltitude(positionEntity.getAltitude());
@@ -141,61 +213,34 @@ public class Transformer {
     }
 
     /**
-     * Transform Device Entity to modifiable Device Builder.
-     * <p>
-     * Note that Events are not transformed, since Entities apply positionID and
-     * not Position Entity.
+     * Transform Event Entity to modifiable Event Builder.
      */
-    public static Traccar.Device.Builder entityToProtoDevice(Device deviceEntity) {
-        Traccar.Device.Builder deviceBuilder = Traccar.Device.newBuilder();
-        deviceBuilder.setUniqueid(deviceEntity.getUniqueid());
-
-        List<Position> positionEntities = deviceEntity.getPositions();
-//      Set<Event> eventEntities = deviceEntity.getEvents();
-        for (Position positionEntity : positionEntities) {
-            Traccar.Position.Builder positionBuilder = entityToProtoPosition(positionEntity);
-//            for (Event eventEntity : eventEntities) {
-////              can only be set via database-ID lookup!
-//                eventEntity.getPositionid();
-//                positionBuilder.addEvent(entityToProtoEvent(eventEntity));
-//            }
-            deviceBuilder.addPosition(positionBuilder);
-        }
-
-        return deviceBuilder;
-    }
-    
-//  lookup relations
-
-    /**
-     * This method should handle client events on server side.
-     * Server Events don't need to be transmitted to client.
-     * @param eventType
-     * @return
-     */
-    public static String eventTypeProtoToEntityString(EventType eventType) {
-        switch (eventType) {
-        case KEY_MOTION:
-            return org.jeets.model.traccar.util.Samples.deviceMoving; 
-
-        default:
-//          TODO: improve to KEY_UNKNOWN_EVENT and add log.warn(..)
-            return "unknownEvent";
-        }
+    public static Traccar.Event.Builder entityToProtoEvent(Event eventEntity) {
+        Traccar.Event.Builder eventBuilder = Traccar.Event.newBuilder();
+//      the eventProto should only handle client events
+//      since Protos are designed for one direction only
+        eventBuilder.setEvent(stringToEventTypeProto(eventEntity.getType()));
+        return eventBuilder;
     }
 
     /**
      * This method should handle server events and transform them to client
-     * events - if available. It is basically provided for development purposes.
+     * events - if available. Basically provided for development purposes.
      * 
-     * @param eventType
-     * @return
+     * @param eventString
+     * @return EventType
      */
     public static EventType stringToEventTypeProto(String eventString) {
-//      TODO: special handling for Alarm Event requires Alarm Type 
-        switch (eventString) {
+
+    	switch (eventString) {
         case org.jeets.model.traccar.util.Samples.deviceMoving: 
+        case org.jeets.model.traccar.util.Samples.deviceStopped: 
+//          TODO: special handling for Motion Event requires Motion sub/type
             return EventType.KEY_MOTION; 
+
+        case "alarmEvent": 
+//          TODO: special handling for Alarm Event requires Alarm sub/type
+            return EventType.KEY_ALARM; 
 
         default:
 //          TODO: improve to KEY_UNKNOWN_EVENT and add log.warn(..)

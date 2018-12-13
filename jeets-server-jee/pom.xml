@@ -21,7 +21,7 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-parent</artifactId>
-		<version>1.1.1</version>
+		<version>1.2.0</version>
 		<relativePath>../jeets-parent</relativePath>
 	</parent>
 
@@ -42,12 +42,12 @@
 		<!-- WildFly-Camel 5.1.0 provides Camel-2.20.2 integration with WildFly-11.0.0 -->
 		<!-- WildFly-Camel versions (overrules Camel version!) -->
 		<version.wildfly.camel>5.1.0</version.wildfly.camel>
-
+		<version-wildfly-maven-plugin>1.2.1.Final</version-wildfly-maven-plugin>
 		<version.wildfly>11.0.0.Final</version.wildfly>
 		<version.server.bom>${version.wildfly}</version.server.bom>
 
+		<!-- see parent: maven-source-plugin-version>3.0.1 -->
 		<version-maven-source-plugin>2.3</version-maven-source-plugin>
-		<version-wildfly-maven-plugin>1.2.1.Final</version-wildfly-maven-plugin>
 	</properties>
 
 	<dependencyManagement>

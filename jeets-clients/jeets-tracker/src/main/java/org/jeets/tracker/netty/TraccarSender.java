@@ -23,10 +23,13 @@ public class TraccarSender {
     static final boolean SSL = System.getProperty("ssl") != null;
 
     /**
-     * Currently every invocation sets up the complete Netty 'chain' and creates
-     * a new connection. The return value of null indicates that the
-     * transmission was not successful.
-     */
+	 * Currently every invocation sets up the complete Netty 'chain' and creates a
+	 * new connection. The return value of null indicates that the transmission was
+	 * not successful. The TraccarObject can be any entity represented in the
+	 * *.proto file, i.e. Device, Position and Event. It is recommended to implement
+	 * the client server dialog with the Device, since it can hold Positions and
+	 * Events in the ORM message.
+	 */
     public static Acknowledge transmitTraccarObject(Object traccarObject, String host, int port) {
         final SslContext sslCtx = setSslContext();
         Acknowledge ack;

@@ -80,8 +80,6 @@ public class Tracker {
     /**
      * All Positions are collected in a MessageQueue and the MessageLoop takes
      * care of sending them whenever connectivity allows it.
-     *
-     * @author kbeigl@jeets.org
      */
     private class MessageLoop implements Runnable {
         public void run() {

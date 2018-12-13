@@ -1,10 +1,61 @@
-JeeTS Protocols
+JeeTS Protocols for Traccar ORM
 ===============
-This project creates a jar module '[name?]' with google protobuffer java accessors.
-The artefact includes the *.proto source files for easier debugging (remove if needed).
+This project represents the core of GPS Tracking. 
+jeets-protocols is a subset of the jeets-pu-traccar ERM and ORM  
+which can be converted from Java Entities to binary Protobuffer messages and vice versa.
+The Transformer (see TransformerTest) represents sending
+and receiving of Traccar messages for the complete Tracking System.
+
+Note that the protocol is *not* designed to transfer every Entity of jeets-pu-traccar with Relations.
+It focuses on the clients tracking data defined by Device, Position/s and Event/s.
+
+The protocol can be extended to include GeoFences for example. Some Devices store GeoFences locally,
+to be exchanged with the server. The protocol should *not* be extended to Entities
+that only matter on server side, i.e. User etc. This could potentially introduce
+administrative actions and hard to detect security issues. 
+
+This project provides a jeets-protocols.jar module with Google Protobuffer Java accessors.
+The artifact includes the *.proto source files for easier debugging (remove if needed).
+The module also contains the Traccar Persistence Unit, which can also be created without
+JPA and EntityManager and transformed into binary Protobuffer messages.
+The project does *not* include a transmission technology, i.e. Netty for TCP.
+
+
+Modeling differences
+-
+
+The Transformer (currently) is focused on Object Relations between Device, Positions and Events. 
+These relations are modeled different in Persistence Unit and Protobuffer. 
+Both model many Events for one Position, i.e. n:1 via a unidirectional relation - only from different directions. 
+By design decision Events must have a Position to determine where and when the Event took place. 
+Therefore Events without Positions should be ignored (shouldn't be created in the first place). 
+
+In the Protobuffer Model a Device can hold many positions and each position can hold many events. 
+Each event is accessed via the position parent. 
+
+In the Persistence Unit a Device can hold many positions and many events.
+The event.position has to be looked up in the device.positions.
+
+
+
+Traccar Proto Decoder
+---------------------
+The Book Chapter 7.5 is pointing to 
+
+	\jeets-models\jeets-protocols\src\main\resources
+
+for the ProtobufferDeviceDecoder for the Traccar GTS.
+The Decoder has been updated to Traccar 4.2 and
+the moved up to the project folder 
+
+	\jeets-models\jeets-protocols\traccar-proto-decoder
+
+Please read instructions there to add Protobuffer Messages to Traccar
+and send Messages with the jeets-tracker.
+
 
 How to generate java files
-==========================
+-
 Before running maven the java accessors have to be created with an installation of the protobuffer compiler 'protoc'.
 	> protoc --version
 	> libprotoc 3.1.0

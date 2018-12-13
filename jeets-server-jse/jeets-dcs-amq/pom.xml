@@ -22,11 +22,11 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-server-jse</artifactId>
-		<version>1.1.1</version>
+		<version>1.2.0</version>
 	</parent>
 
 	<artifactId>jeets-dcs-amq</artifactId>
-	<version>1.1.0</version>
+    <version>1.2.0</version>
 	<packaging>jar</packaging>
 
 	<url>http://jeets.org</url>
@@ -53,52 +53,48 @@
 			<artifactId>camel-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
 	</dependencies>
 
-  <build>
+	<build>
     <defaultGoal>install</defaultGoal>
 
     <plugins>
-	<plugin>
-		<groupId>org.apache.maven.plugins</groupId>
-		<artifactId>maven-resources-plugin</artifactId>
-		<version>3.0.2</version>
-		<!-- move to maven-assembly-plugin (not needed here yet)
-		<executions>
-			<execution>
-				<id>copy-resources</id>
-				<phase>validate</phase>
-				<goals>
-					<goal>copy-resources</goal>
-				</goals>
-				<configuration>
-					<outputDirectory>${basedir}/target/classes/META-INF/services/org/apache/camel</outputDirectory>
-					<resources>
-						<resource>
-							<directory>src/main/resources/META-INF/services/org/apache/camel</directory>
-						</resource>
-					</resources>
-				</configuration>
-			</execution>
-		</executions>
-		 -->
-		<configuration>
-			<encoding>UTF-8</encoding>
-		</configuration>
-	</plugin>
-
-      <!-- this is important to terminate target\surefire\surefirebooterXXX.jar  
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-resources-plugin</artifactId>
+			<!-- move to maven-assembly-plugin (not needed here yet)
+			<executions>
+				<execution>
+					<id>copy-resources</id>
+					<phase>validate</phase>
+					<goals>
+						<goal>copy-resources</goal>
+					</goals>
+					<configuration>
+						<outputDirectory>${basedir}/target/classes/META-INF/services/org/apache/camel</outputDirectory>
+						<resources>
+							<resource>
+								<directory>src/main/resources/META-INF/services/org/apache/camel</directory>
+							</resource>
+						</resources>
+					</configuration>
+				</execution>
+			</executions>
+			 -->
+			<configuration>
+				<encoding>UTF-8</encoding>
+			</configuration>
+		</plugin>
+		<!-- this is important to terminate target\surefire\surefirebooterXXX.jar  
       	if test is cancelled with <CTRL> + <C>. Otherwise port remains blocked!! -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <shutdown>kill</shutdown>
-        </configuration>
-      </plugin>
-      
-     <plugin>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-surefire-plugin</artifactId>
+			<configuration>
+				<shutdown>kill</shutdown>
+			</configuration>
+		</plugin>  
+		<plugin>
         <!-- STATUS APRIL 2018: 
         	The jeets-dcs-amq.jar file has the correct jeets TypeConverter.
         	Then the assembly copies the TypeConverter from camel-netty4 (override).
@@ -111,40 +107,37 @@
         	REPLACE org.apache.camel.component.netty4.NettyConverter
         	with org.jeets.dcsToAmq.steps.DeviceProtoToEntityTransformer (works!) 
        	-->
-        <artifactId>maven-assembly-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifest>
-              <mainClass>org.jeets.dcsToAmq.Main</mainClass>
-            </manifest>
-          </archive>
-        </configuration>
-      </plugin>
-
-      <!-- generate components meta-data and validate component includes documentation etc
-      <plugin>
-        <groupId>org.apache.camel</groupId>
-        <artifactId>camel-package-maven-plugin</artifactId>
-        <version>${camel.version}</version>
-        <executions>
-          <execution>
-            <id>prepare</id>
-            <goals>
-              <goal>prepare-components</goal>
-            </goals>
-            <phase>generate-resources</phase>
-          </execution>
-          <execution>
-            <id>validate</id>
-            <goals>
-              <goal>validate-components</goal>
-            </goals>
-            <phase>prepare-package</phase>
-          </execution>
-        </executions>
-      </plugin>
-       -->
-
+			<artifactId>maven-assembly-plugin</artifactId>
+			<configuration>
+				<archive>
+					<manifest>
+						<mainClass>org.jeets.dcsToAmq.Main</mainClass>
+					</manifest>
+				</archive>
+			</configuration>
+		</plugin>
+		<!-- generate components meta-data and validate component includes documentation etc
+		<plugin>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-package-maven-plugin</artifactId>
+			<version>${camel.version}</version>
+			<executions>
+				<execution>
+					<id>prepare</id>
+					<goals>
+						<goal>prepare-components</goal>
+					</goals>
+					<phase>generate-resources</phase>
+				</execution>
+				<execution>
+					<id>validate</id>
+					<goals>
+						<goal>validate-components</goal>
+					</goals>
+					<phase>prepare-package</phase>
+				</execution>
+			</executions>
+		</plugin> -->
     </plugins>
-  </build>
+	</build>
 </project>

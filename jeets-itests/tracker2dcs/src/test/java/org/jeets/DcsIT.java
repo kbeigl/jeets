@@ -7,6 +7,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
+import org.apache.camel.component.properties.PropertiesComponent;
 import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.jeets.dcs.DcsRoute;
@@ -24,9 +25,8 @@ public class DcsIT extends CamelTestSupport {
     /**
      * Compare original DcsRouteTest in jeets-dcs
      * <p>
-     * TODO: harmonize settings for host, port, messages!, device name (also for
-     * queuing) etc. for tracker, dcs, dcsIT projects. <br>
-     * http://camel.apache.org/using-propertyplaceholder.html
+     * TODO: harmonize settings for host, port, messages!, device name 
+     * (also for queuing) etc. for tracker, dcs, dcsIT projects. <br>
      * <p>
      * Actually the DCS is not treated as a Component. This test simply uses the
      * DcsRoute inside the test environment analogous to applying the DcsRoute
@@ -37,6 +37,10 @@ public class DcsIT extends CamelTestSupport {
     @Test
     public void testDcsRoute() throws Exception {
         LOG.info("create DcsRoute ...");
+        
+        PropertiesComponent props = context.getComponent("properties", PropertiesComponent.class);  
+        props.setLocation("classpath:dcs.properties");
+        
         context.addRoutes(new DcsRoute() );
         context.addRoutes(new RouteBuilder() {
             public void configure() throws Exception {
@@ -95,23 +99,9 @@ public class DcsIT extends CamelTestSupport {
     @Override
     protected JndiRegistry createRegistry() throws Exception {
         JndiRegistry registry = super.createRegistry();
-        registry.bind("device", new DeviceProtoExtractor(null));
+//      registry.bind("{{dcs.protobuffer.protocol}}", new DeviceProtoExtractor(null));
+        registry.bind("protobuffer", new DeviceProtoExtractor(null));
         return registry;
     }
     
-//  @Test   initial IT to get goin'
-    public void testExecute() throws Exception {
-        System.out.println("testExecute");
-        assertEquals(0, execute(new String[] {}));
-        assertEquals(1, execute(new String[] { "one" }));
-        assertEquals(6, execute(new String[] { "one", "two", "three", "four", "five", "six" }));
-    }
-
-    private int execute(String[] args) throws Exception {
-        if (args != null)
-            return args.length;
-        else 
-            return 0;
-    }
-
 }

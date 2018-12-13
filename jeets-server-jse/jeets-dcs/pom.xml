@@ -23,33 +23,24 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-server-jse</artifactId>
-		<version>1.1.1</version>
+		<version>1.2.0</version>
 	</parent>
 
 	<artifactId>jeets-dcs</artifactId>
-	<version>1.1.0</version>
+    <version>1.2.0</version>
 	<packaging>jar</packaging>
 
-	<!-- <name>Camel JeeTS-DCS Component</name> -->
 	<url>http://jeets.org</url>
-	<description>JeeTS Device Communication Server (Camel Component)</description>
+	<description>JeeTS Device Communication Server</description>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-protocols</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-netty4</artifactId>
-		</dependency>
-
-		<!-- only for test demo -->
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-protobuf</artifactId>
-			<scope>test</scope>
 		</dependency>
 
 		<!-- for testing (camel-spring-test?) -->
@@ -59,59 +50,31 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- support camel documentation -->
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>apt</artifactId>
-		</dependency>
-
 	</dependencies>
-
-	<!-- THIS IS NOT REQUIRED
-	SHOULD BE ANALYZED AND POTENTIALLY MOVED UP
-  <build>
-    <defaultGoal>install</defaultGoal> -->
-
-      <!-- generate components meta-data and validate component includes documentation etc
-      <plugin>
-        <groupId>org.apache.camel</groupId>
-        <artifactId>camel-package-maven-plugin</artifactId>
-        <version>${camel.version}</version>
-        <executions>
-          <execution>
-            <id>prepare</id>
-            <goals>
-              <goal>prepare-components</goal>
-            </goals>
-            <phase>generate-resources</phase>
-          </execution>
-          <execution>
-            <id>validate</id>
-            <goals>
-              <goal>validate-components</goal>
-            </goals>
-            <phase>prepare-package</phase>
-          </execution>
-        </executions>
-      </plugin>
-       -->
-       
-      <!-- to generate the MANIFEST-FILE of the bundle
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <version>3.3.0</version>
-        <extensions>true</extensions>
-        <configuration>
-          <instructions>
-            <Bundle-SymbolicName>org.jeets.jeets-dcs</Bundle-SymbolicName>
-            <Export-Service>org.apache.camel.spi.ComponentResolver;component=jeets-dcs</Export-Service>
-          </instructions>
-        </configuration>
-      </plugin>
-    </plugins>
-    
-  </build>
-   -->
   
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+<!-- 	<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<filtering>true</filtering>
+			</testResource>
+		</testResources> -->
+		<plugins>
+			<plugin>
+				<groupId>org.commonjava.maven.plugins</groupId>
+				<artifactId>directory-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>

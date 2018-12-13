@@ -30,8 +30,7 @@ import io.netty.handler.ssl.SslContext;
  * Initialize channel to receive an Traccar Acknowledge message for every
  * Traccar Object successfully transmitted to a receiver.
  * 
- * @author kbeigl
- * @param <T>
+ * @author kbeigl@jeets.org
  */
 public class TraccarAckInitializer<T extends Channel> extends ChannelInitializer<T> {
 

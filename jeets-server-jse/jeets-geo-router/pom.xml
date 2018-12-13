@@ -23,11 +23,11 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-server-jse</artifactId>
-		<version>1.1.1</version>
+		<version>1.2.0</version>
 	</parent>
 
 	<artifactId>jeets-geo-router</artifactId>
-	<version>1.1.0</version>
+    <version>1.2.0</version>
 	<packaging>jar</packaging>
 
 	<url>http://jeets.org</url>
@@ -36,7 +36,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.jeets</groupId>
-			<artifactId>jeets-pu-traccar-jpa</artifactId>
+			<artifactId>jeets-pu-traccar</artifactId>
 		</dependency>
 		<dependency>
 		    <groupId>org.locationtech.jts</groupId>
@@ -65,7 +65,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.0.2</version>
 				<configuration>
 					<encoding>UTF-8</encoding>
 				</configuration>
@@ -81,8 +80,7 @@
 				</configuration>
 			</plugin>
 
-			<!-- generate components meta-data and validate component includes documentation 
-				etc -->
+			<!-- generate components meta-data and validate component includes documentation etc -->
 			<plugin>
 				<groupId>org.apache.camel</groupId>
 				<artifactId>camel-package-maven-plugin</artifactId>

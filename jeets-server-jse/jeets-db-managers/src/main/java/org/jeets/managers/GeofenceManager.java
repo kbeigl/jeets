@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.jeets.model.traccar.jpa.Device;
-import org.jeets.model.traccar.jpa.DeviceGeofence;
 import org.jeets.model.traccar.jpa.Event;
 import org.jeets.model.traccar.jpa.Geofence;
 import org.jeets.model.traccar.jpa.Position;
@@ -33,9 +32,9 @@ public class GeofenceManager {
     public void analyzeGeofences(Device msgDevice, Device gtsDevice) {
         LOG.debug("analyzeGeofences message with {} against entity with {} positions", 
                 msgDevice.getPositions().size(), gtsDevice.getPositions().size());
-        List<DeviceGeofence> geofenceList = new ArrayList<DeviceGeofence>(gtsDevice.getDeviceGeofences());
+        List<Geofence> geofenceList = new ArrayList<Geofence>(gtsDevice.getGeofences());
         for (int gf = 0; gf < geofenceList.size(); gf++) {
-            Geofence geofence = geofenceList.get(gf).getGeofence();
+            Geofence geofence = geofenceList.get(gf);
             analyzeGeofence(gtsDevice, msgDevice, geofence);
         }
     }

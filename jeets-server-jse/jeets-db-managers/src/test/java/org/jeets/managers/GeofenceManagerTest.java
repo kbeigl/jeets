@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.jeets.model.traccar.jpa.Device;
-import org.jeets.model.traccar.jpa.DeviceGeofence;
-import org.jeets.model.traccar.jpa.DeviceGeofenceId;
 import org.jeets.model.traccar.jpa.Event;
 import org.jeets.model.traccar.jpa.Geofence;
 import org.jeets.model.traccar.jpa.Position;
@@ -36,8 +34,8 @@ public class GeofenceManagerTest extends TestCase {
         Device dbDevice = simulateDatabaseLookup(devices.get(0));
         assertEquals(3, dbDevice.getPositions().size());
         assertChronologicalOrder(dbDevice.getPositions(), false);
-        List<DeviceGeofence> list = new ArrayList<DeviceGeofence>(dbDevice.getDeviceGeofences());
-        assertEquals(wktHvvPolygon, list.get(0).getGeofence().getArea());
+        List<Geofence> list = new ArrayList<Geofence>(dbDevice.getGeofences());
+        assertEquals(wktHvvPolygon, list.get(0).getArea());
 
 //      now the second part of the track arrives as a message
         Device inDevice = devices.get(1);
@@ -77,11 +75,11 @@ public class GeofenceManagerTest extends TestCase {
         Geofence geofence = new Geofence();
         geofence.setArea(wktHvvPolygon);
         geofence.setName("downtown Hamburg");
-        DeviceGeofenceId deviceGeofenceId = new DeviceGeofenceId(device.getId(), geofence.getId());
-        DeviceGeofence   deviceGeofence   = new DeviceGeofence(deviceGeofenceId, device, geofence);
-        Set<DeviceGeofence> deviceGeofences = new HashSet<DeviceGeofence>();
-        deviceGeofences.add(deviceGeofence);
-        device.setDeviceGeofences(deviceGeofences);
+//      DeviceGeofenceId deviceGeofenceId = new DeviceGeofenceId(device.getId(), geofence.getId());
+//      DeviceGeofence   deviceGeofence   = new DeviceGeofence(deviceGeofenceId, device, geofence);
+        Set<Geofence> deviceGeofences = new HashSet<Geofence>();
+        deviceGeofences.add(geofence);
+        device.setGeofences(deviceGeofences);
         device.setPositions(revertChronologicalOrder(device.getPositions()));
         return device;
     }

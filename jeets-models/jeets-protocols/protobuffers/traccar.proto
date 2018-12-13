@@ -28,6 +28,7 @@ option optimize_for = SPEED;
 message Device {
     string uniqueid = 1;
     repeated Position position = 2;
+//  additional lastPosition is not modelled for network message and can be set on server Entity
 }
 
 // This message maps to the Position entity in the traccar model
@@ -53,7 +54,7 @@ message Position {
     double speed      = 9;
 	// use protobuffer methodology
     string attributes = 10;
-
+	// reversed Entity relation
     repeated Event event = 11;
 }
 
@@ -138,6 +139,8 @@ enum AlarmType {
 }
 
 message Acknowledge {
+//   bad choice, redesign ..
+//   TODO: change int deviceId to String uniqueId to match Traccar Protocol purpose
      int32 deviceid  = 1;
 //   int32 messageid = x;
 //   MsgType = y;

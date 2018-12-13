@@ -43,8 +43,6 @@ import org.apache.camel.spring.Main;
  */
 public class IntegrationTest extends TestCase {
 //  Currently this test is only starting the application to check if it boots OK
-//  A client could be started in the testing environment
-//  but first the PG DB has to be substituted by an in memory DB (see PU Testing)
     public void testEtlRoutes() throws Exception {
 //      boot up Spring application context for 5 seconds to check that it works OK
         Main.main("-duration", "3s");

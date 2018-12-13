@@ -11,6 +11,8 @@ import org.jeets.tracker.netty.TraccarMessageHandler;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
@@ -29,6 +31,9 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
 public class ProtobufferDeviceTest {
+	
+	private static final Logger log = LoggerFactory.getLogger(ProtobufferDeviceTest.class);
+
     static final String PORT = System.getProperty("port", "test_port");
     private static final int TIMEOUT_MILLIS = 1000;
     // Address to bind on / connect to.
@@ -40,14 +45,16 @@ public class ProtobufferDeviceTest {
     @Test
     public void testProtobufferDevice() {
         Traccar.Device.Builder deviceBuilder = Samples.createDeviceWithPositionWithOneEvent();
-        assertEquals("395389", deviceBuilder.getUniqueid());
+        assertEquals(org.jeets.model.traccar.util.Samples.uniqueId, deviceBuilder.getUniqueid());
+        
         String testId = "testId";
         deviceBuilder.setUniqueid(testId);
         Traccar.Device deviceOrm = deviceBuilder.build();
         assertEquals(testId, deviceOrm.getUniqueid());
         assertTrue(deviceOrm.getPositionCount()==1);
         assertTrue(deviceOrm.getPosition(0).getEventCount()==1);
-        System.out.println("transmit Device Proto:\n" + deviceBuilder.toString());
+
+        log.info("transmit Device Proto:\n{}", deviceBuilder.toString());
         Channel clientChannel = null;   // , serverChannel = null;
         try {
             // Start the server.
@@ -59,7 +66,8 @@ public class ProtobufferDeviceTest {
 //          Traccar.Acknowledge ack = handler.sendTraccarObject(deviceBuilder);
             Traccar.Acknowledge ack = handler.sendTraccarObject(deviceOrm);
 //          assertEquals("..", ack.toString());
-            System.out.println("Client received\n" + ack.toString());
+            
+            log.info("Client received\n{}", ack.toString());
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

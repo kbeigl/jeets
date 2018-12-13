@@ -1,0 +1,8 @@
+
+Traccar Proto Decoder
+---------------------
+The Book Chapter 7.5 is pointing to this location 
+for the ProtobufferDeviceDecoder for the Traccar GTS.
+The Decoder has been updated to Traccar 4.2 and
+the moved up to the project folder 
+	jeets-protocols\traccar-proto-decoder

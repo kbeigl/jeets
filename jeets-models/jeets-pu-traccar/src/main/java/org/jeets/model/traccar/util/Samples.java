@@ -12,6 +12,12 @@ import org.jeets.model.traccar.jpa.Device;
 import org.jeets.model.traccar.jpa.Event;
 import org.jeets.model.traccar.jpa.Position;
 
+/**
+ * These samples demonstrate how to create Entities and relate them to each
+ * other.
+ * 
+ * @author kbeigl@jeets.org
+ */
 public class Samples {
 
 //  home position: *7* Obere Regenstraße, Regensburg, BY, DE
@@ -127,7 +133,7 @@ public class Samples {
 	public static Device createDeviceEntity() {
 		Device device = new Device();
 		device.setUniqueid(uniqueId);
-		device.setName(sampleDeviceName);
+		device.setName(sampleDeviceName); // used only on server side
 		device.setLastupdate(new Date());
 //      device.setPosition(position);
 //      device.setAttributeAliases(attributeAlias);
@@ -152,7 +158,7 @@ public class Samples {
 		position.setLatitude(lat);
 		position.setLongitude(lon);
 		position.setFixtime(new Date());
-//        position.setDevicetime(new Date());
+        position.setDevicetime(new Date());
 //        position.setServertime(new Date());
 		position.setProtocol("protocol");
 //      position.setAccuracy(accuracy);

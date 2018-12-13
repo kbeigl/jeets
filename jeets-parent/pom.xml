@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
-    Copyright 2017 The Java EE Tracking System - JeeTS
-    Copyright 2017 Kristof Beiglböck kbeigl@jeets.org
+    Copyright 2018 The Java EE Tracking System - JeeTS
+    Copyright 2018 Kristof Beiglböck kbeigl@jeets.org
     
     The JEE Tracking System licenses this file to you 
     under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,7 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets</artifactId>
-		<version>1.1.1</version>
+		<version>1.2.0</version>
 	</parent>
 
 	<artifactId>jeets-parent</artifactId>
@@ -41,13 +41,16 @@
 		<camel.version>2.20.2</camel.version>
 		<!-- adjust with JEE (i.e WildFly branch) -->
 
+		<!-- database/s -->
 		<hibernate-version>5.2.17.Final</hibernate-version>
 		<h2database-version>1.3.176</h2database-version>
-        <!-- <postgresql-version>9.4-1200-jdbc41</postgresql-version> -->
-        <!-- matches traccar 4.1 -->
+        <!-- jee-app: <version.h2db>1.4.193</version.h2db> -->
+        <!-- matches traccar 4.2 -->
         <postgresql-version>42.2.5</postgresql-version>
 		<dbunit-version>2.6.0</dbunit-version>
 		<sql-maven-plugin-version>1.5</sql-maven-plugin-version>
+        <openjpa-version>2.4.1</openjpa-version>
+        <apache-derby-version>10.11.2-RC</apache-derby-version>
         
 		<!-- network / protocols -->
 		<protobuf-version>3.1.0</protobuf-version>
@@ -60,17 +63,18 @@
 		<maven.build.timestamp.format>dd.MM.yyyy HH:mm:ss</maven.build.timestamp.format>
 		<jeets.properties.file>jeets.properties</jeets.properties.file>
 		
-		<!-- overriden by itests profile -->
+		<!-- overridden in itests profile -->
 		<skip.unit.tests>false</skip.unit.tests>
 		<skip.integration.tests>true</skip.integration.tests>
 
-		<!-- add multiply referenced versions here, 
-			single referenced in dependencyManagement below. -->
-        <tracker-version-latest>1.1.0</tracker-version-latest>
+		<!-- add multiple referenced versions here, 
+			   add single referenced in dependencyManagement below. -->
+        <tracker-version-latest>1.2.0</tracker-version-latest>
         <tracker-project-latest>jeets-tracker-${tracker-version-latest}</tracker-project-latest>
 		<tracker-jar-with-dependencies>${tracker-project-latest}-jar-with-dependencies.jar</tracker-jar-with-dependencies>
 
 		<!-- maven settings -->
+		<!-- <jdk.version>1.8</jdk.version> -->
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 
@@ -78,17 +82,18 @@
         <maven-compiler-plugin-version>3.8.0</maven-compiler-plugin-version>
 	    <maven-surefire-plugin-version>2.22.0</maven-surefire-plugin-version>
 	    <maven-failsafe-plugin-version>2.22.0</maven-failsafe-plugin-version>
+	    <!-- what's this? comment and check .. -->
 		<process-exec-maven-plugin-version>0.8</process-exec-maven-plugin-version>
         <directory-maven-plugin-version>0.3.1</directory-maven-plugin-version>
 		
 	    <maven-source-plugin-version>3.0.1</maven-source-plugin-version>
+	    <!-- add maven-javadoc-plugin ! -->
         <maven-assembly-plugin-version>3.1.0</maven-assembly-plugin-version>
         <!-- latest? defaults to: 2.6-->
         <maven-resources-plugin-version>3.1.0</maven-resources-plugin-version>
 		<build-helper-maven-plugin-version>1.10</build-helper-maven-plugin-version>
         
-        <!-- should match m2e version installed in Eclipse -->
-        <lifecycle-mapping-version>1.4.0</lifecycle-mapping-version>
+        <lifecycle-mapping-version>1.0.0</lifecycle-mapping-version>
 
 		<exec-maven-plugin-version>1.5.0</exec-maven-plugin-version>
 
@@ -101,8 +106,6 @@
         <version-maven-war-plugin>3.0.0</version-maven-war-plugin>  -->
 	</properties>
 	
-	<!-- Spring BOM first, Camel BOM second -->
-    <!-- better(?): manage Spring via Camel BOM ! -->
     <dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -118,13 +121,13 @@
 			All hard coded versions should explicitly match version in module. -->
 	        <dependency>
 				<groupId>org.jeets</groupId>
-				<artifactId>jeets-pu-traccar-jpa</artifactId>
-	            <version>3.14.3</version>
+				<artifactId>jeets-pu-traccar</artifactId>
+	            <version>4.2</version>
 	        </dependency>
 			<dependency>
 				<groupId>org.jeets</groupId>
 				<artifactId>jeets-protocols</artifactId>
-				<version>1.1.0</version>
+				<version>1.2.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.jeets</groupId>
@@ -134,12 +137,12 @@
 			<dependency>
 				<groupId>org.jeets</groupId>
 				<artifactId>jeets-player</artifactId>
-				<version>1.1.0</version>
+				<version>1.2.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.jeets</groupId>
 				<artifactId>jeets-dcs</artifactId>
-				<version>1.1.0</version>
+				<version>1.2.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.jeets</groupId>
@@ -155,7 +158,13 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+		<!-- logging -->
+	    <dependency>
+	    	<!-- includes slf4j and log4j2 -->
+	        <groupId>org.apache.logging.log4j</groupId>
+	        <artifactId>log4j-slf4j-impl</artifactId>
+	    </dependency>
+ 	</dependencies>
 
 	<profiles>
 	    <profile>
@@ -287,39 +296,40 @@
 					<artifactId>lifecycle-mapping</artifactId>
 					<version>${lifecycle-mapping-version}</version>
 					<configuration>
-					<lifecycleMappingMetadata>
-						<pluginExecutions>
-							<pluginExecution>
-								<pluginExecutionFilter>
-									<groupId>org.codehaus.mojo</groupId>
-									<artifactId>sql-maven-plugin</artifactId>
-									<versionRange>${sql-maven-plugin-version}</versionRange>
-									<goals>
-										<goal>execute</goal>
-									</goals>
-								</pluginExecutionFilter>
-								<action>
-									<ignore />
-								</action>
-							</pluginExecution>
-							<pluginExecution>
-								<pluginExecutionFilter>
-									<groupId>org.commonjava.maven.plugins</groupId>
-									<artifactId>directory-maven-plugin</artifactId>
-									<versionRange>${directory-maven-plugin-version}</versionRange>
-									<goals>
-										<goal>highest-basedir</goal>
-									</goals>
-								</pluginExecutionFilter>
-								<action>
-									<execute>
-										<runOnIncremental>true</runOnIncremental>
-										<runOnConfiguration>true</runOnConfiguration>
-									</execute>
-								</action>
-							</pluginExecution>
-						</pluginExecutions>
-					</lifecycleMappingMetadata>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<!-- this is only used in pu ! move down ? simplify here -->
+										<groupId>org.codehaus.mojo</groupId>
+										<artifactId>sql-maven-plugin</artifactId>
+										<versionRange>${sql-maven-plugin-version}</versionRange>
+										<goals>
+											<goal>execute</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.commonjava.maven.plugins</groupId>
+										<artifactId>directory-maven-plugin</artifactId>
+										<versionRange>${directory-maven-plugin-version}</versionRange>
+										<goals>
+											<goal>highest-basedir</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<execute>
+											<runOnIncremental>true</runOnIncremental>
+											<runOnConfiguration>true</runOnConfiguration>
+										</execute>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
 					</configuration>
 				</plugin>
 <!-- 			

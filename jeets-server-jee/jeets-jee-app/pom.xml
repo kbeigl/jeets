@@ -20,11 +20,11 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-server-jee</artifactId>
-		<version>1.1.1</version>
+		<version>1.2.0</version>
 	</parent>
 
 	<artifactId>jeets-jee-app</artifactId>
-	<version>1.1.0</version>
+    <version>1.2.0</version>
 	<packaging>pom</packaging>
 	<name>jeets-jee-app</name>
 	<description>JeeTS seed component for WildFly with EJB and WAR in an EAR (top level POM file) with Camel Route to ActiveMQ broker</description>
@@ -50,7 +50,6 @@
         <httpclient.version>4.5.3</httpclient.version>
         
         <!-- other plug-in versions
-        <version.ear.plugin>2.8</version.ear.plugin>   see ear build section
         <version.ejb.plugin>2.3</version.ejb.plugin>
         <version.war.plugin>2.1.1</version.war.plugin> -->
 	</properties>
