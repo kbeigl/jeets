@@ -23,10 +23,11 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-server-jse</artifactId>
-		<version>1.1.0</version>
+		<version>1.1.1</version>
 	</parent>
 
 	<artifactId>jeets-dcs</artifactId>
+	<version>1.1.0</version>
 	<packaging>jar</packaging>
 
 	<!-- <name>Camel JeeTS-DCS Component</name> -->

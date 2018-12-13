@@ -14,7 +14,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
@@ -22,7 +23,7 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-parent</artifactId>
-		<version>1.1.0</version>
+		<version>1.1.1</version>
 		<relativePath>../jeets-parent</relativePath>
 	</parent>
 
@@ -32,48 +33,140 @@
 	<name>--- System Dataformats and Models ---</name>
 
 	<modules>
-		<module>jeets-pu-traccar-jpa</module>
-		<!-- moved pu-jee into pu-jpa 
-		<module>jeets-pu-traccar-jee</module> -->
-		<module>jeets-pu-gtfs-jpa</module>
+		<module>jeets-pu-traccar</module>
+		<module>jeets-pu-gtfs</module>
 		<!-- move to avoid persistence dependencies (?) -->
 		<module>jeets-protocols</module>
-		<!-- <module>jeets-pu-traccar-ejb</module> -->
 	</modules>
 
-	<dependencies>
-		<!-- 	
-		currently the traccar-jpa project is using hibernate-jpa-2.1-api-1.0.0.Final.jar
-		for javax.persistence. To be replaced after hibernate project is removed.
-	 	-->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>${hibernate-version}</version>
-		</dependency>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-core</artifactId>
+				<version>${hibernate-version}</version>
+				<!-- <scope>test</scope> test compile repo.. -->
+			</dependency>
+			<dependency>
+				<groupId>org.postgresql</groupId>
+				<artifactId>postgresql</artifactId>
+				<version>${postgresql-version}</version>
+			</dependency>
+			<!-- redundant to specification below ? -->
+			<dependency>
+				<groupId>com.h2database</groupId>
+				<artifactId>h2</artifactId>
+				<version>${h2database-version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.dbunit</groupId>
+				<artifactId>dbunit</artifactId>
+				<version>${dbunit-version}</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
- 		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>${postgresql-version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-		</dependency>
-
-		<!-- H2 in-memory database for testing only -->
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>${h2database-version}</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<!-- webdev.jhuep.com/~jcs/ejava-javaee/coursedocs/content/html_single/jpa-entitymgr-ex-book.html -->
+					<!-- runs schema against the test DB -->
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>sql-maven-plugin</artifactId>
+					<version>${sql-maven-plugin-version}</version>
+					<dependencies>
+						<!-- currently only h2 testing is in place, pg is in beta -->
+						<dependency>
+							<groupId>org.postgresql</groupId>
+							<artifactId>postgresql</artifactId>
+							<version>${postgresql-version}</version>
+						</dependency>
+						<dependency>
+							<groupId>com.h2database</groupId>
+							<artifactId>h2</artifactId>
+							<version>${h2database-version}</version>
+						</dependency>
+					</dependencies>
+					<executions>
+						<execution>
+							<id>drop-db-before-test</id>
+							<phase>process-test-classes</phase>
+							<goals>
+								<goal>execute</goal>
+							</goals>
+							<configuration>
+								<autocommit>true</autocommit>
+								<fileset>
+									<basedir>${basedir}/src/test/resources/</basedir>
+									<includes>
+										<include>ddl/**/*drop*.ddl</include>
+									</includes>
+								</fileset>
+								<!-- [ERROR]s after 'clean', before first db creation -->
+								<onError>continue</onError>
+							</configuration>
+						</execution> 
+						<execution>
+							<id>create-db-before-test</id>
+							<phase>process-test-classes</phase>
+							<goals>
+								<goal>execute</goal>
+							</goals>
+							<configuration>
+								<autocommit>true</autocommit>
+								<orderFile>ascending</orderFile>
+								<fileset>
+									<basedir>${basedir}/src/test/resources/</basedir>
+									<includes>
+										<include>ddl/**/*create*.ddl</include>
+										<!-- <include>ddl/**/*tuningadd*.ddl</include> -->
+									</includes>
+								</fileset>
+								<print>true</print>
+							</configuration>
+						</execution>
+						<!-- trigger execution ids via profiling !? 
+						<execution>
+							<id>populate-db-before-test</id>
+							<phase>process-test-classes</phase>
+							<goals>
+								<goal>execute</goal>
+							</goals>
+							<configuration>
+								<autocommit>true</autocommit>
+								<fileset>
+									<basedir>${basedir}/src/test/resources/</basedir>
+									<includes>
+										<include>ddl/**/*populate*.ddl</include>
+									</includes>
+								</fileset>
+							</configuration>
+						</execution>
+	 					<execution>
+							<id>drop-db-after-test</id>
+							<phase>test</phase>
+							<goals>
+								<goal>execute</goal>
+							</goals>
+							<configuration>
+								<autocommit>true</autocommit>
+								<orderFile>descending</orderFile>
+								<fileset>
+									<basedir>${basedir}/src/test/resources/</basedir>
+									<includes>
+										<include>ddl/**/*tuningremove*.ddl</include>
+										<include>ddl/**/*drop*.ddl</include>
+									</includes>
+								</fileset>
+							</configuration>
+						</execution> -->
+					</executions>
+				</plugin>
+   			</plugins>
+		</pluginManagement>
+	</build>
 
 </project>

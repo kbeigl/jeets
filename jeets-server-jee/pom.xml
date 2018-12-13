@@ -21,14 +21,14 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-parent</artifactId>
-		<version>1.1.0</version>
+		<version>1.1.1</version>
 		<relativePath>../jeets-parent</relativePath>
 	</parent>
 
 	<artifactId>jeets-server-jee</artifactId>
 	<packaging>pom</packaging>
 
-	<name>--- Server Tracking Components (JEE) ---</name>
+	<name>--- AppServer Tracking Components (JEE) ---</name>
 	<description>WildFly JeeTS Components</description>
 
 	<licenses>

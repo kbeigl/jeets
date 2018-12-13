@@ -19,9 +19,12 @@
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.jeets</groupId>
+  <!-- org ! -->
   <artifactId>jeets-etl-traccar</artifactId>
   <version>0.1</version>
   <packaging>jar</packaging>
+  
+  <!-- no parent attached to jeets repo ! -->
 
   <name>jeets-etl-traccar</name>
   <url>http://jeets.de</url>
@@ -39,6 +42,7 @@
   <dependencies>
 	<dependency>
 		<groupId>de.jeets</groupId>
+		<!-- org ! -->
 		<artifactId>jeets-protocols</artifactId>
 		<!-- upgrade to 1.1.0 -->
 		<version>1.0</version>

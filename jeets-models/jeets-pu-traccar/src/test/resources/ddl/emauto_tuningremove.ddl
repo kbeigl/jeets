@@ -1,0 +1,2 @@
+
+DROP INDEX EM_AUTO_MAKEMODEL if exists;

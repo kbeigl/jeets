@@ -22,12 +22,11 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-models</artifactId>
-		<version>1.1.0</version>
+		<version>1.1.1</version>
 	</parent>
 
-    <!-- includes unnecessary dependencies for protocols from models 
-    	resolve with imported pu-traccar-jpa and remove parent !?-->
 	<artifactId>jeets-protocols</artifactId>
+    <version>1.1.0</version>
 	<packaging>jar</packaging>
 
     <dependencies>
@@ -39,6 +38,10 @@
         <dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-pu-traccar-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
         </dependency>
     </dependencies>
 

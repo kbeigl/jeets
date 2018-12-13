@@ -15,6 +15,14 @@ import org.slf4j.LoggerFactory;
 
 public class CamelGeocoderTest extends CamelTestSupport {
 //    CamelSpringTestSupport
+	
+	/* 01.11.18 TODO: revisit geocoder and fix OVER_QUERY_LIMIT
+	 * [main] INFO route1 - Split line Position at (49.03107129,12.10331786)
+	 * [main] INFO route2 - Location  is at  in									empty
+	 * Problem with Geocoder OVER_QUERY_LIMIT => no address added.		!! root cause !!
+	 * [main] INFO route1 - added new Address ""								empty
+	 * [main] INFO org.jeets.etl.CamelGeocoderTest - null						null
+	 */
 
     private static final Logger LOG = LoggerFactory.getLogger(CamelGeocoderTest.class);
 
@@ -25,18 +33,18 @@ public class CamelGeocoderTest extends CamelTestSupport {
             public void configure() throws Exception {
 //              @formatter:off
                 from("direct:jeets-dcs")    // represents from("seda:jeets-dcs")    
-                .log("Received Device Entity '${body.name}' "               // body = device
-/* 
- * This expression "... ${body.positions.size} positions."
- * after switching Device.positions from Set to List (ArrayList)
- * Line 49: Caused by: org.apache.camel.language.bean.RuntimeBeanExpressionException: 
- *             Failed to invoke method: size on null due to: 
- *             org.apache.camel.component.bean.AmbiguousMethodCallException: 
- *                Ambiguous method invocations possible: 
- *                   [public abstract int java.util.List.size(), 
- *                    public abstract int java.util.AbstractCollection.size()]. Exchange[]
- */
-                        )
+                .log("Received Device Entity '${body.name}' "   // body = device
+				/* 
+				 * expression "... ${body.positions.size} positions."
+				 * after switching Device.positions from Set to List (ArrayList)
+				 * Line 49: Caused by: org.apache.camel.language.bean.RuntimeBeanExpressionException: 
+				 *             Failed to invoke method: size on null due to: 
+				 *             org.apache.camel.component.bean.AmbiguousMethodCallException: 
+				 *                Ambiguous method invocations possible: 
+				 *                   [public abstract int java.util.List.size(), 
+				 *                    public abstract int java.util.AbstractCollection.size()]. Exchange[]
+				 */
+                		)
 
                 .split(simple("${body.positions}"))
                     .log("Split line Position at (${body.latitude},${body.longitude})")

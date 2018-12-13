@@ -1,11 +1,3 @@
-JeeTS Persistence Unit for traccar ERM - jeets-pu-traccar
-======================================
-This project provides access to the traccar database via JPA or Hibernate.
-The project should completly be generated with Hibernate Tools for every new DB release.
-This minimizes the effort while providing a full GTS database.
-This project creates a jar module '[name?]' with ...
-The artefact includes the files needed for JPA *or* Hibernate access.
-One of them can be excluded in the pom of the maven build process.
 
 material
 ========

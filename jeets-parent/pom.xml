@@ -21,13 +21,13 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets</artifactId>
-		<version>1.1.0</version>
+		<version>1.1.1</version>
 	</parent>
 
 	<artifactId>jeets-parent</artifactId>
 	<packaging>pom</packaging>
 
-	<name>--- JeeTS Parent ---</name>
+	<name>--- JeeTS Parent - global definitions ---</name>
 	<description>
 		Parent POM for common definitions and constants for all JeeTS sources.
 	</description>
@@ -43,21 +43,21 @@
 
 		<hibernate-version>5.2.17.Final</hibernate-version>
 		<h2database-version>1.3.176</h2database-version>
-		<postgresql-version>9.4-1200-jdbc41</postgresql-version>
-
+        <!-- <postgresql-version>9.4-1200-jdbc41</postgresql-version> -->
+        <!-- matches traccar 4.1 -->
+        <postgresql-version>42.2.5</postgresql-version>
+		<dbunit-version>2.6.0</dbunit-version>
+		<sql-maven-plugin-version>1.5</sql-maven-plugin-version>
+        
 		<!-- network / protocols -->
-		<!-- netty-version is set via Camel BOM (see tracker/pom)
-		<netty-version>4.1.15.Final</netty-version> -->
 		<protobuf-version>3.1.0</protobuf-version>
 
 		<!-- project settings -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<!-- replace default settings in repo root (without external path)
-		mvn initialize -Djeets.properties.file=mycompany.properties 
-		mvn clean process-resources   // life-cycle phase
-		mvn clean resources:resources //            goal
-		-->
+		<!-- rterp.wordpress.com/2012/03/16/stamping-version-number-and-build-time-in-properties-file-with-maven/ -->
+		<jeets.compile.time>${maven.build.timestamp}</jeets.compile.time>
+		<maven.build.timestamp.format>dd.MM.yyyy HH:mm:ss</maven.build.timestamp.format>
 		<jeets.properties.file>jeets.properties</jeets.properties.file>
 		
 		<!-- overriden by itests profile -->
@@ -79,24 +79,31 @@
 	    <maven-surefire-plugin-version>2.22.0</maven-surefire-plugin-version>
 	    <maven-failsafe-plugin-version>2.22.0</maven-failsafe-plugin-version>
 		<process-exec-maven-plugin-version>0.8</process-exec-maven-plugin-version>
+        <directory-maven-plugin-version>0.3.1</directory-maven-plugin-version>
+		
 	    <maven-source-plugin-version>3.0.1</maven-source-plugin-version>
         <maven-assembly-plugin-version>3.1.0</maven-assembly-plugin-version>
-        <directory-maven-plugin-version>0.3.1</directory-maven-plugin-version>
         <!-- latest? defaults to: 2.6-->
         <maven-resources-plugin-version>3.1.0</maven-resources-plugin-version>
+		<build-helper-maven-plugin-version>1.10</build-helper-maven-plugin-version>
+        
+        <!-- should match m2e version installed in Eclipse -->
+        <lifecycle-mapping-version>1.4.0</lifecycle-mapping-version>
+
+		<exec-maven-plugin-version>1.5.0</exec-maven-plugin-version>
+
 	    <!-- TODO -->
-<!--    <maven-antrun-plugin-version>1.8</maven-antrun-plugin-version>
+<!--    antrun can (temporarily be used to echo Maven's internal variables and values
+		<maven-antrun-plugin-version>1.8</maven-antrun-plugin-version>
 		<version-download-maven-plugin>1.3.0</version-download-maven-plugin>
         <version-maven-dependency-plugin>2.10</version-maven-dependency-plugin>
         <version-maven-release-plugin>2.5</version-maven-release-plugin>
-        <version-maven-war-plugin>3.0.0</version-maven-war-plugin>
-		<build-helper-maven-plugin-version>1.10</build-helper-maven-plugin-version> -->
-
-		<exec-maven-plugin-version>1.5.0</exec-maven-plugin-version>
+        <version-maven-war-plugin>3.0.0</version-maven-war-plugin>  -->
 	</properties>
 	
 	<!-- Spring BOM first, Camel BOM second -->
-	<dependencyManagement>
+    <!-- better(?): manage Spring via Camel BOM ! -->
+    <dependencyManagement>
 		<dependencies>
 			<dependency>
 				<groupId>org.apache.camel</groupId>
@@ -108,17 +115,12 @@
 
 		<!-- internal JeeTS dependencies: 
 			lower level components included in higher level JeeTS components. 
-			All versions hardcoded here should match explicit version in module. -->
+			All hard coded versions should explicitly match version in module. -->
 	        <dependency>
 				<groupId>org.jeets</groupId>
 				<artifactId>jeets-pu-traccar-jpa</artifactId>
 	            <version>3.14.3</version>
 	        </dependency>
-			<dependency>
-				<groupId>org.jeets</groupId>
-				<artifactId>jeets-wildfly-activemq-adapter</artifactId>
-	            <version>1.0</version>
-			</dependency>
 			<dependency>
 				<groupId>org.jeets</groupId>
 				<artifactId>jeets-protocols</artifactId>
@@ -139,6 +141,11 @@
 				<artifactId>jeets-dcs</artifactId>
 				<version>1.1.0</version>
 			</dependency>
+			<dependency>
+				<groupId>org.jeets</groupId>
+				<artifactId>jeets-wildfly-activemq-adapter</artifactId>
+	            <version>1.0</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -151,12 +158,6 @@
 	</dependencies>
 
 	<profiles>
-<!-- 	<profile> not required (yet)
-	        <id>default</id>
-	        <activation>
-	            <activeByDefault>true</activeByDefault>
-	        </activation>
-	    </profile> -->
 	    <profile>
 	        <id>itests</id>
 	        <properties>
@@ -277,8 +278,48 @@
 					<artifactId>maven-resources-plugin</artifactId>
 					<version>${maven-resources-plugin-version}</version>
 					<configuration>
-						<!-- apply project.build.sourceEncoding? -->
+						<!-- apply ${project.build.sourceEncoding}? -->
 						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>${lifecycle-mapping-version}</version>
+					<configuration>
+					<lifecycleMappingMetadata>
+						<pluginExecutions>
+							<pluginExecution>
+								<pluginExecutionFilter>
+									<groupId>org.codehaus.mojo</groupId>
+									<artifactId>sql-maven-plugin</artifactId>
+									<versionRange>${sql-maven-plugin-version}</versionRange>
+									<goals>
+										<goal>execute</goal>
+									</goals>
+								</pluginExecutionFilter>
+								<action>
+									<ignore />
+								</action>
+							</pluginExecution>
+							<pluginExecution>
+								<pluginExecutionFilter>
+									<groupId>org.commonjava.maven.plugins</groupId>
+									<artifactId>directory-maven-plugin</artifactId>
+									<versionRange>${directory-maven-plugin-version}</versionRange>
+									<goals>
+										<goal>highest-basedir</goal>
+									</goals>
+								</pluginExecutionFilter>
+								<action>
+									<execute>
+										<runOnIncremental>true</runOnIncremental>
+										<runOnConfiguration>true</runOnConfiguration>
+									</execute>
+								</action>
+							</pluginExecution>
+						</pluginExecutions>
+					</lifecycleMappingMetadata>
 					</configuration>
 				</plugin>
 <!-- 			

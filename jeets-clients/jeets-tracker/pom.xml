@@ -23,10 +23,11 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-clients</artifactId>
-		<version>1.1.0</version>
+		<version>1.1.1</version>
 	</parent>
 
 	<artifactId>jeets-tracker</artifactId>
+	<version>1.1.0</version>
 	<packaging>jar</packaging>
 
 	<dependencyManagement>
@@ -51,7 +52,6 @@
 			<artifactId>netty-all</artifactId> 
 		</dependency>
 
-		<!-- H2 in-memory database for testing only -->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
@@ -61,9 +61,6 @@
 	</dependencies>
 
 	<build>
-		<filters>
-			<filter>src/main/resources/tracker.properties</filter>
-		</filters>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>

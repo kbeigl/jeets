@@ -23,10 +23,11 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-server-jse</artifactId>
-		<version>1.1.0</version>
+		<version>1.1.1</version>
 	</parent>
 
 	<artifactId>jeets-db-managers</artifactId>
+	<version>1.1.0</version>
 	<packaging>jar</packaging>
 
 	<name>jeets-db-managers</name>
@@ -37,6 +38,17 @@
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-pu-traccar-jpa</artifactId>
+		</dependency>
+		<!-- compile these into pu !? -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>${postgresql-version}</version>
 		</dependency>
 
 		<dependency>

@@ -22,10 +22,11 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-clients</artifactId>
-		<version>1.1.0</version>
+		<version>1.1.1</version>
 	</parent>
 
 	<artifactId>my-jeets-client</artifactId>
+	<version>1.1.0</version>
 	<packaging>jar</packaging>
 
 	<dependencies>
@@ -38,9 +39,14 @@
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-player</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+		</dependency>
+
 		<!-- external proprietary data source / to be removed from player -->
 		<!-- MUST BE PLACED AFTER org.jeets TO AVOID VERSION CONFLICTS -->
-		<!-- currently deactivated, conflict with protocol, tracker, player jboss.logging version etc.
+		<!-- currently deactivated ...
 		<dependency>
 			<groupId>de.jeets</groupId>
 			<artifactId>geofox-api-rest-client</artifactId>

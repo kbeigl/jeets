@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <tc_devices id="1" name="Samsung A3" uniqueid="395389" lastupdate="2018-11-03 19:56:18.13" positionid="10" attributes="{}" phone="" model="" contact="" disabled="false"/>
+
+  <tc_events id="1" type="deviceOnline" servertime="2018-10-26 21:59:46.882" deviceid="1" attributes="{}"/>
+  <tc_events id="2" type="deviceOffline" servertime="2018-10-26 22:03:42.638" deviceid="1" attributes="{}"/>
+  <tc_events id="3" type="deviceOnline" servertime="2018-11-03 19:24:49.994" deviceid="1" attributes="{}"/>
+  <tc_events id="4" type="deviceUnknown" servertime="2018-11-03 19:47:18.311" deviceid="1" attributes="{}"/>
+  <tc_events id="5" type="deviceOnline" servertime="2018-11-03 19:50:02.268" deviceid="1" attributes="{}"/>
+  <tc_events id="6" type="deviceMoving" servertime="2018-11-03 19:50:02.289" deviceid="1" positionid="7" attributes="{}"/>
+
+  <tc_geofences id="1" name="homezone" description="" area="POLYGON((49.03230984430897 12.102041245292636, 49.029147174837476 12.102384568046542, 49.02934977253378 12.106195450091032, 49.03119561778715 12.105611801147457, 49.032411136821054 12.10367202837369, 49.03230984430897 12.102041245292636))" attributes="{}"/>
+
+  <tc_positions id="1" protocol="osmand" deviceid="1" servertime="2018-10-26 21:59:46.859" devicetime="2018-10-26 21:59:48.0" fixtime="2018-10-26 21:59:48.0" valid="true" latitude="49.0309763" longitude="12.1028853" altitude="0.0" speed="0.0" course="0.0" attributes="{&quot;batteryLevel&quot;:100.0,&quot;distance&quot;:0.0,&quot;totalDistance&quot;:0.0,&quot;motion&quot;:false}" accuracy="20.0" network="null"/>
+  <tc_positions id="2" protocol="osmand" deviceid="1" servertime="2018-11-03 19:24:49.986" devicetime="2018-11-03 19:24:55.0" fixtime="2018-11-03 19:24:55.0" valid="true" latitude="49.0309763" longitude="12.1028853" altitude="0.0" speed="0.0" course="0.0" attributes="{&quot;batteryLevel&quot;:55.0,&quot;distance&quot;:0.0,&quot;totalDistance&quot;:0.0,&quot;motion&quot;:false}" accuracy="20.399999618530273" network="null"/>
+  <tc_positions id="3" protocol="osmand" deviceid="1" servertime="2018-11-03 19:26:09.97" devicetime="2018-11-03 19:26:16.0" fixtime="2018-11-03 19:26:16.0" valid="true" latitude="49.0309763" longitude="12.1028853" altitude="0.0" speed="0.0" course="0.0" attributes="{&quot;batteryLevel&quot;:55.0,&quot;distance&quot;:0.0,&quot;totalDistance&quot;:0.0,&quot;motion&quot;:false}" accuracy="20.0" network="null"/>
+  <tc_positions id="4" protocol="osmand" deviceid="1" servertime="2018-11-03 19:31:10.099" devicetime="2018-11-03 19:31:16.0" fixtime="2018-11-03 19:31:16.0" valid="true" latitude="49.0309772" longitude="12.1029033" altitude="0.0" speed="0.0" course="0.0" attributes="{&quot;batteryLevel&quot;:55.0,&quot;distance&quot;:1.32,&quot;totalDistance&quot;:1.32,&quot;motion&quot;:false}" accuracy="19.201000213623047" network="null"/>
+  <tc_positions id="5" protocol="osmand" deviceid="1" servertime="2018-11-03 19:33:37.389" devicetime="2018-11-03 19:33:41.0" fixtime="2018-11-03 19:33:41.0" valid="true" latitude="49.0289473" longitude="12.1013174" altitude="0.0" speed="0.0" course="0.0" attributes="{&quot;batteryLevel&quot;:55.0,&quot;distance&quot;:253.89,&quot;totalDistance&quot;:255.21,&quot;motion&quot;:false}" accuracy="50.01300048828125" network="null"/>
+  <tc_positions id="6" protocol="osmand" deviceid="1" servertime="2018-11-03 19:34:37.982" devicetime="2018-11-03 19:34:41.0" fixtime="2018-11-03 19:34:41.0" valid="true" latitude="49.0294764" longitude="12.1035396" altitude="0.0" speed="0.0" course="0.0" attributes="{&quot;batteryLevel&quot;:55.0,&quot;distance&quot;:172.56,&quot;totalDistance&quot;:427.77,&quot;motion&quot;:false}" accuracy="30.983999252319336" network="null"/>
+  <tc_positions id="7" protocol="osmand" deviceid="1" servertime="2018-11-03 19:37:18.221" devicetime="2018-11-03 19:37:19.0" fixtime="2018-11-03 19:37:19.0" valid="true" latitude="49.028788791038096" longitude="12.103927172720432" altitude="416.0" speed="0.38876877682757377" course="0.0" attributes="{&quot;batteryLevel&quot;:55.0,&quot;distance&quot;:81.6,&quot;totalDistance&quot;:509.37,&quot;motion&quot;:true}" accuracy="0.0" network="null"/>
+  <tc_positions id="8" protocol="osmand" deviceid="1" servertime="2018-11-03 19:50:02.256" devicetime="2018-11-03 19:50:03.0" fixtime="2018-11-03 19:50:03.0" valid="true" latitude="49.03046278283" longitude="12.103288471698761" altitude="370.0" speed="0.5442763223172425" course="0.0" attributes="{&quot;batteryLevel&quot;:55.0,&quot;distance&quot;:192.09,&quot;totalDistance&quot;:701.46,&quot;motion&quot;:true}" accuracy="0.0" network="null"/>
+  <tc_positions id="9" protocol="osmand" deviceid="1" servertime="2018-11-03 19:55:34.898" devicetime="2018-11-03 19:55:36.0" fixtime="2018-11-03 19:55:36.0" valid="true" latitude="49.03106175363064" longitude="12.103353179991245" altitude="440.0" speed="0.971922" course="0.0" attributes="{&quot;batteryLevel&quot;:55.0,&quot;distance&quot;:66.84,&quot;totalDistance&quot;:768.3,&quot;motion&quot;:true}" accuracy="0.0" network="null"/>
+  <tc_positions id="10" protocol="osmand" deviceid="1" servertime="2018-11-03 19:56:18.129" devicetime="2018-11-03 19:56:19.0" fixtime="2018-11-03 19:56:19.0" valid="true" latitude="49.03068972285837" longitude="12.103526685386896" altitude="454.0" speed="3.3045346609654427" course="345.1000061035156" attributes="{&quot;batteryLevel&quot;:55.0,&quot;distance&quot;:43.31,&quot;totalDistance&quot;:811.61,&quot;motion&quot;:true}" accuracy="0.0" network="null"/>
+
+  <tc_servers id="1" registration="true" latitude="0.0" longitude="0.0" zoom="0" readonly="false" twelvehourformat="false" forcesettings="false" devicereadonly="false" limitcommands="false"/>
+
+  <tc_statistics id="1" capturetime="2018-10-27 10:53:12.722" activeusers="1" activedevices="1" requests="21" messagesreceived="1" messagesstored="1" attributes="{}" mailsent="0" smssent="0" geocoderrequests="0" geolocationrequests="0"/>
+
+  <tc_user_device userid="1" deviceid="1"/>
+
+  <tc_user_geofence userid="1" geofenceid="1"/>
+
+  <tc_users id="1" name="admin" email="admin" hashedpassword="D33DCA55ABD4CC5BC76F2BC0B4E603FE2C6F61F4C1EF2D47" salt="000000000000000000000000000000000000000000000000" readonly="false" administrator="true" latitude="0.0" longitude="0.0" zoom="0" twelvehourformat="false" disabled="false" devicelimit="-1" userlimit="0" devicereadonly="false" limitcommands="false"/>
+</dataset>
