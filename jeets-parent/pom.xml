@@ -21,14 +21,13 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets</artifactId>
-		<version>1.1-RC</version>
+		<version>1.1.0</version>
 	</parent>
 
 	<artifactId>jeets-parent</artifactId>
-	<version>1.1-RC</version>
 	<packaging>pom</packaging>
 
-	<name>--- JeeTS Parent (versioning etc.) ---</name>
+	<name>--- JeeTS Parent ---</name>
 	<description>
 		Parent POM for common definitions and constants for all JeeTS sources.
 	</description>
@@ -39,14 +38,6 @@
 	</prerequisites>
 
 	<properties>
-		<!-- internal JeeTS dependencies -->
-        <pu-traccar-jpa-version-latest>3.14.3</pu-traccar-jpa-version-latest>
-		<protocols-version-latest>1.1-RC</protocols-version-latest>
-		<tracker-version-latest>1.1-RC</tracker-version-latest>
-		<player-version-latest>1.1-RC</player-version-latest>
-		<dcs-version-latest>1.1-RC</dcs-version-latest>
-		<wildfly-activemq-adapter-latest>1.0</wildfly-activemq-adapter-latest>
-
 		<camel.version>2.20.2</camel.version>
 		<!-- adjust with JEE (i.e WildFly branch) -->
 
@@ -55,43 +46,268 @@
 		<postgresql-version>9.4-1200-jdbc41</postgresql-version>
 
 		<!-- network / protocols -->
-		<!-- netty-version should be set via Camel BOM -->
-		<netty-version>4.1.15.Final</netty-version>
-        <protobuf-version>3.1.0</protobuf-version>
+		<!-- netty-version is set via Camel BOM (see tracker/pom)
+		<netty-version>4.1.15.Final</netty-version> -->
+		<protobuf-version>3.1.0</protobuf-version>
+
+		<!-- project settings -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<!-- replace default settings in repo root (without external path)
+		mvn initialize -Djeets.properties.file=mycompany.properties 
+		mvn clean process-resources   // life-cycle phase
+		mvn clean resources:resources //            goal
+		-->
+		<jeets.properties.file>jeets.properties</jeets.properties.file>
+		
+		<!-- overriden by itests profile -->
+		<skip.unit.tests>false</skip.unit.tests>
+		<skip.integration.tests>true</skip.integration.tests>
+
+		<!-- add multiply referenced versions here, 
+			single referenced in dependencyManagement below. -->
+        <tracker-version-latest>1.1.0</tracker-version-latest>
+        <tracker-project-latest>jeets-tracker-${tracker-version-latest}</tracker-project-latest>
+		<tracker-jar-with-dependencies>${tracker-project-latest}-jar-with-dependencies.jar</tracker-jar-with-dependencies>
 
 		<!-- maven settings -->
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<!-- <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding> -->
 
-        <!-- Plugin versions, resolve (naming!) step by step
-        <version-download-maven-plugin>1.3.0</version-download-maven-plugin>
-        <version-exec-maven-plugin>1.4.0</version-exec-maven-plugin>
-        <version-maven-assembly-plugin>2.4</version-maven-assembly-plugin>
-        <version-maven-compiler-plugin>3.1</version-maven-compiler-plugin>
+        <!-- maven plugins -->
+        <maven-compiler-plugin-version>3.8.0</maven-compiler-plugin-version>
+	    <maven-surefire-plugin-version>2.22.0</maven-surefire-plugin-version>
+	    <maven-failsafe-plugin-version>2.22.0</maven-failsafe-plugin-version>
+		<process-exec-maven-plugin-version>0.8</process-exec-maven-plugin-version>
+	    <maven-source-plugin-version>3.0.1</maven-source-plugin-version>
+        <maven-assembly-plugin-version>3.1.0</maven-assembly-plugin-version>
+        <directory-maven-plugin-version>0.3.1</directory-maven-plugin-version>
+        <!-- latest? defaults to: 2.6-->
+        <maven-resources-plugin-version>3.1.0</maven-resources-plugin-version>
+	    <!-- TODO -->
+<!--    <maven-antrun-plugin-version>1.8</maven-antrun-plugin-version>
+		<version-download-maven-plugin>1.3.0</version-download-maven-plugin>
         <version-maven-dependency-plugin>2.10</version-maven-dependency-plugin>
         <version-maven-release-plugin>2.5</version-maven-release-plugin>
-        <version-maven-resources-plugin>2.7</version-maven-resources-plugin>
-        <version-maven-surefire-plugin>2.18.1</version-maven-surefire-plugin>
         <version-maven-war-plugin>3.0.0</version-maven-war-plugin>
-         -->
-		<exec-maven-plugin-version>1.5.0</exec-maven-plugin-version>
-		<!-- <build-helper-maven-plugin-version>1.10</build-helper-maven-plugin-version> -->
+		<build-helper-maven-plugin-version>1.10</build-helper-maven-plugin-version> -->
 
+		<exec-maven-plugin-version>1.5.0</exec-maven-plugin-version>
 	</properties>
 	
 	<!-- Spring BOM first, Camel BOM second -->
 	<dependencyManagement>
-	   <dependencies>
-	     <dependency>
-	       <groupId>org.apache.camel</groupId>
-	       <artifactId>camel-parent</artifactId>
-	       <version>${camel.version}</version>
-	       <type>pom</type>
-	       <scope>import</scope>
-	     </dependency>
-	   </dependencies>
+		<dependencies>
+			<dependency>
+				<groupId>org.apache.camel</groupId>
+				<artifactId>camel-parent</artifactId>
+				<version>${camel.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+		<!-- internal JeeTS dependencies: 
+			lower level components included in higher level JeeTS components. 
+			All versions hardcoded here should match explicit version in module. -->
+	        <dependency>
+				<groupId>org.jeets</groupId>
+				<artifactId>jeets-pu-traccar-jpa</artifactId>
+	            <version>3.14.3</version>
+	        </dependency>
+			<dependency>
+				<groupId>org.jeets</groupId>
+				<artifactId>jeets-wildfly-activemq-adapter</artifactId>
+	            <version>1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jeets</groupId>
+				<artifactId>jeets-protocols</artifactId>
+				<version>1.1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jeets</groupId>
+				<artifactId>jeets-tracker</artifactId>
+				<version>${tracker-version-latest}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jeets</groupId>
+				<artifactId>jeets-player</artifactId>
+				<version>1.1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jeets</groupId>
+				<artifactId>jeets-dcs</artifactId>
+				<version>1.1.0</version>
+			</dependency>
+		</dependencies>
 	</dependencyManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+<!-- 	<profile> not required (yet)
+	        <id>default</id>
+	        <activation>
+	            <activeByDefault>true</activeByDefault>
+	        </activation>
+	    </profile> -->
+	    <profile>
+	        <id>itests</id>
+	        <properties>
+	            <skip.unit.tests>true</skip.unit.tests>
+	            <skip.integration.tests>false</skip.integration.tests>
+	        </properties>
+	    </profile>
+	</profiles>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<!-- implicitly activated for all modules -->
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>${maven-surefire-plugin-version}</version>
+				    <configuration>
+				        <skipTests>${skip.unit.tests}</skipTests>
+				    </configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${maven-compiler-plugin-version}</version>
+	                <configuration>
+	                    <source>${maven.compiler.source}</source>
+	                    <target>${maven.compiler.target}</target>
+	                </configuration>
+				</plugin>
+				<plugin>
+				<!-- invoke with mvn source:jar or avoid specifying the source plugin in 
+					each of the child projects. For this you need to put it to build -> plugins 
+					section of parent pom, not build -> pluginManagement. – Andrew Logvinov -->
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>${maven-source-plugin-version}</version>
+					<executions>
+						<execution>
+							<id>attach-sources</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+					<!-- <inherited>true</inherited> ?? -->
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>${maven-assembly-plugin-version}</version>
+					<configuration>
+						<descriptorRefs>
+							<descriptorRef>jar-with-dependencies</descriptorRef>
+						</descriptorRefs>
+					</configuration>
+					<executions>
+						<execution>
+							<!-- this is used for inheritance merges -->
+							<id>make-assembly</id>
+							<!-- bind to the packaging phase -->
+							<phase>package</phase>
+							<goals>
+								<goal>single</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+				<!-- This plugin is meant to be run as part of the standard build lifecycle, 
+					to help establish locations for files in multimodule builds, 
+					where the directory structure referenced is stable and will always be intact. 
+					Inconsistencies can cause false positives or false negatives! -->
+					<groupId>org.commonjava.maven.plugins</groupId>
+					<artifactId>directory-maven-plugin</artifactId>
+					<version>${directory-maven-plugin-version}</version>
+					<executions>
+						<execution>
+							<id>directories</id>
+							<goals>
+								<goal>highest-basedir</goal>
+							</goals>
+							<phase>initialize</phase>
+							<!-- <id>directories</id> -->
+							<configuration>
+								<property>jeets.repo.directory</property>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>properties-maven-plugin</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<files>
+							<!-- Properties are read from a single property file -->
+							<file>${jeets.repo.directory}/${jeets.properties.file}</file>
+						</files>
+					</configuration>
+					<executions>
+						<!-- Load properties for the default lifecycle -->
+						<execution>
+							<id>default-lifecycle-properties</id>
+							<phase>initialize</phase>
+							<goals>
+								<goal>read-project-properties</goal>
+							</goals>
+						</execution>
+						<!-- Load properties for the clean lifecycle 
+						<execution> <id>clean-lifecycle-properties</id> 
+							<phase>pre-clean</phase> <goals> <goal>read-project-properties</goal> </goals> 
+						</execution> -->
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>${maven-resources-plugin-version}</version>
+					<configuration>
+						<!-- apply project.build.sourceEncoding? -->
+						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
+<!-- 			
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>${version-maven-dependency-plugin}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>${version-maven-release-plugin}</version>
+					<configuration>
+						<autoVersionSubmodules>true</autoVersionSubmodules>
+						<tagNameFormat>@{project.version}</tagNameFormat>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>${version-maven-war-plugin}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>exec-maven-plugin</artifactId>
+					<version>${version-exec-maven-plugin}</version>
+				</plugin> -->
+			</plugins>
+		</pluginManagement>
+	</build>
 
 </project>

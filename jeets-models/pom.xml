@@ -22,12 +22,11 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-parent</artifactId>
-		<version>1.1-RC</version>
+		<version>1.1.0</version>
 		<relativePath>../jeets-parent</relativePath>
 	</parent>
 
 	<artifactId>jeets-models</artifactId>
-	<version>1.1-RC</version>
 	<packaging>pom</packaging>
 
 	<name>--- System Dataformats and Models ---</name>
@@ -68,11 +67,6 @@
 			<artifactId>commons-logging</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
 		<!-- H2 in-memory database for testing only -->
 		<dependency>
 			<groupId>com.h2database</groupId>

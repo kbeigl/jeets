@@ -22,11 +22,10 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-clients</artifactId>
-		<version>1.1-RC</version>
+		<version>1.1.0</version>
 	</parent>
 
 	<artifactId>my-jeets-client</artifactId>
-	<version>1.1-RC</version>
 	<packaging>jar</packaging>
 
 	<dependencies>
@@ -34,12 +33,10 @@
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-tracker</artifactId>
-			<version>${tracker-version-latest}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-player</artifactId>
-			<version>${player-version-latest}</version>
 		</dependency>
 		<!-- external proprietary data source / to be removed from player -->
 		<!-- MUST BE PLACED AFTER org.jeets TO AVOID VERSION CONFLICTS -->
@@ -50,40 +47,19 @@
 			<version>29.74.01</version>
 		</dependency>
 		 -->
-
-		<!-- move up -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
 			<plugin>
-				<!-- default groupId: org.apache.maven.plugins -->
 				<artifactId>maven-assembly-plugin</artifactId>
-				<!-- <version>3.0.0</version> -->
 				<configuration>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
 					<archive>
 						<manifest>
 							<mainClass>org.jeets.playback.Main</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
-				<executions>
-					<execution>
-						<id>make-assembly</id> <!-- this is used for inheritance merges -->
-						<phase>package</phase> <!-- bind to the packaging phase -->
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>

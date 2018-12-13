@@ -23,11 +23,10 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-server-jse</artifactId>
-		<version>1.1-RC</version>
+		<version>1.1.0</version>
 	</parent>
 
 	<artifactId>jeets-dcs</artifactId>
-	<version>1.1-RC</version>
 	<packaging>jar</packaging>
 
 	<!-- <name>Camel JeeTS-DCS Component</name> -->
@@ -38,7 +37,6 @@
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-protocols</artifactId>
-			<version>${protocols-version-latest}</version>
 		</dependency>
 
 		<dependency>
@@ -71,24 +69,7 @@
 	<!-- THIS IS NOT REQUIRED
 	SHOULD BE ANALYZED AND POTENTIALLY MOVED UP
   <build>
-    <defaultGoal>install</defaultGoal>
-
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.6.1</version>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>3.0.2</version>
-        <configuration>
-          <encoding>UTF-8</encoding>
-        </configuration>
-      </plugin>
-       -->
+    <defaultGoal>install</defaultGoal> -->
 
       <!-- generate components meta-data and validate component includes documentation etc
       <plugin>

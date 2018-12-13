@@ -22,12 +22,11 @@
     <parent>
 	    <groupId>org.jeets</groupId>
 	    <artifactId>jeets-jee-app</artifactId>
-	    <version>1.1-RC</version>
+	    <version>1.1.0</version>
     </parent>
     
     <!-- build EAR artifact and include EJB and Web modules. -->
-	<artifactId>jeets-jee-ear</artifactId>
-	<!-- <version>1.0</version> -->
+    <artifactId>jeets-jee-ear</artifactId>
     <packaging>ear</packaging>
     <name>> jeets-jee-ear</name>
 
@@ -54,13 +53,11 @@
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-wildfly-activemq-adapter</artifactId>
-            <version>${wildfly-activemq-adapter-latest}</version>
 		</dependency>
 		<!-- move to ejb pom only ? .. or leave it in lib folder ? -->
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-pu-traccar-jpa</artifactId>
-			<version>${pu-traccar-jpa-version-latest}</version>
 		</dependency>
 	</dependencies>
 

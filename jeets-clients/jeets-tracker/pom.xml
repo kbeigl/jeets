@@ -23,37 +23,34 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-clients</artifactId>
-		<version>1.1-RC</version>
+		<version>1.1.0</version>
 	</parent>
 
 	<artifactId>jeets-tracker</artifactId>
-	<version>1.1-RC</version>
 	<packaging>jar</packaging>
+
+	<dependencyManagement>
+		<!-- only explicit netty-all jar from camel-netty4 
+			eclipse pom editor: lock transitive dependency version -->
+		<dependencies>
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-all</artifactId>
+				<version>4.1.16.Final</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-protocols</artifactId>
-			<version>${protocols-version-latest}</version>
 		</dependency>
-
-		<!-- use this for developing -->
 		<dependency>
 			<groupId>io.netty</groupId>
-			<artifactId>netty-all</artifactId>
-			<version>${netty-version}</version>
+			<artifactId>netty-all</artifactId> 
 		</dependency>
-		<!-- reduce components for deployment <dependency> <groupId>io.netty</groupId> 
-			<artifactId>netty-transport</artifactId> <version>${netty.version}</version> 
-			</dependency> <dependency> <groupId>io.netty</groupId> <artifactId>netty-handler</artifactId> 
-			<version>${netty.version}</version> </dependency> -->
 
-		<!-- move test stuff up to clients or even parent ? -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
 		<!-- H2 in-memory database for testing only -->
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -61,40 +58,44 @@
 			<version>${h2database-version}</version>
 			<scope>test</scope>
 		</dependency>
-
 	</dependencies>
 
 	<build>
+		<filters>
+			<filter>src/main/resources/tracker.properties</filter>
+		</filters>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+<!-- 	<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<filtering>true</filtering>
+			</testResource>
+		</testResources> -->
 		<plugins>
 			<plugin>
-				<!-- default groupId: org.apache.maven.plugins -->
+				<groupId>org.commonjava.maven.plugins</groupId>
+				<artifactId>directory-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.0.0</version>
 				<configuration>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
 					<archive>
 						<manifest>
 							<mainClass>org.jeets.tracker.Main</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
-				<executions>
-					<execution>
-						<!-- this is used for inheritance merges -->
-						<id>make-assembly</id> 
-						<!-- bind to the packaging phase -->
-						<phase>package</phase> 
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
-
 		</plugins>
-
 	</build>
 
 </project>

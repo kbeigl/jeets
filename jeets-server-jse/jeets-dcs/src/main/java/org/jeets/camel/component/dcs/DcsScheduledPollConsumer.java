@@ -18,7 +18,7 @@ public class DcsScheduledPollConsumer extends ScheduledPollConsumer {
 
     @Override
     protected int poll() throws Exception {
-        System.out.println("DcsConsumer.poll ...");
+        System.out.println( System.currentTimeMillis() + " DcsConsumer.poll ...");
         Exchange exchange = endpoint.createExchange();
         // create a message body OR LEAVE UNTOUCHED
         exchange.getIn().setBody("DcsConsumer String Body");

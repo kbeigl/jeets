@@ -21,10 +21,10 @@
     <parent>
 	    <groupId>org.jeets</groupId>
 	    <artifactId>jeets-jee-app</artifactId>
-	    <version>1.1-RC</version>
+	    <version>1.1.0</version>
     </parent>
 
-	<artifactId>jeets-jee-web</artifactId>
+    <artifactId>jeets-jee-web</artifactId>
     <packaging>war</packaging>
     <name>> jeets-jee-web</name>
     <description>package EJB and WAR in an EAR (WAR POM file)</description>
@@ -41,13 +41,11 @@
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-pu-traccar-jpa</artifactId>
-			<version>${pu-traccar-jpa-version-latest}</version>
             <scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-wildfly-activemq-adapter</artifactId>
-            <version>${wildfly-activemq-adapter-latest}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

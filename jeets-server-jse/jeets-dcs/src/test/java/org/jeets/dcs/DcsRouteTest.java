@@ -33,7 +33,7 @@ public class DcsRouteTest extends CamelTestSupport {
                         
 //                      receives Acknowledge ?! instead of...
                         Device device = (Device) exchange.getIn().getBody();
-                        LOG.info("persist jpa.Device {} with {} positions.", 
+                        LOG.info("simulate 5s persist of jpa.Device {} with {} positions.", 
                                 device.getUniqueid(), device.getPositions().size());
 //                      ShutdownTask starts with a timeout of 10 seconds!
                         Thread.sleep(5000);

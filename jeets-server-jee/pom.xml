@@ -21,12 +21,11 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-parent</artifactId>
-		<version>1.1-RC</version>
+		<version>1.1.0</version>
 		<relativePath>../jeets-parent</relativePath>
 	</parent>
 
 	<artifactId>jeets-server-jee</artifactId>
-	<version>1.1-RC</version>
 	<packaging>pom</packaging>
 
 	<name>--- Server Tracking Components (JEE) ---</name>
@@ -82,89 +81,8 @@
 						<version>${version.wildfly}</version>
 					</configuration>
 				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-source-plugin</artifactId>
-					<version>${version-maven-source-plugin}</version>
-				</plugin>
 			</plugins>
 		</pluginManagement>
-
-		<!-- move up in hierarchy ?
-		<plugin>
-			<groupId>com.googlecode.maven-download-plugin</groupId>
-			<artifactId>download-maven-plugin</artifactId>
-			<version>${version-download-maven-plugin}</version>
-		</plugin>
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-assembly-plugin</artifactId>
-			<version>${version-maven-assembly-plugin}</version>
-		</plugin>
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-compiler-plugin</artifactId>
-			<version>${version-maven-compiler-plugin}</version>
-			<configuration>
-				<source>1.8</source>
-				<target>1.8</target>
-			</configuration>
-		</plugin>
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-dependency-plugin</artifactId>
-			<version>${version-maven-dependency-plugin}</version>
-		</plugin>
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-release-plugin</artifactId>
-			<version>${version-maven-release-plugin}</version>
-			<configuration>
-				<autoVersionSubmodules>true</autoVersionSubmodules>
-				<tagNameFormat>@{project.version}</tagNameFormat>
-			</configuration>
-		</plugin>
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-resources-plugin</artifactId>
-			<version>${version-maven-resources-plugin}</version>
-		</plugin>
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-surefire-plugin</artifactId>
-			<version>${version-maven-surefire-plugin}</version>
-			<configuration>
-				<failIfNoTests>false</failIfNoTests>
-			</configuration>
-		</plugin>
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-war-plugin</artifactId>
-			<version>${version-maven-war-plugin}</version>
-		</plugin>
-		<plugin>
-			<groupId>org.codehaus.mojo</groupId>
-			<artifactId>exec-maven-plugin</artifactId>
-			<version>${version-exec-maven-plugin}</version>
-		</plugin>
-		-->
-
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-				<inherited>true</inherited>
-			</plugin>
-		</plugins>
-
 	</build>
 
 	<modules>

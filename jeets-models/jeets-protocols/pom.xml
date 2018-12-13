@@ -22,13 +22,12 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-models</artifactId>
-		<version>1.1-RC</version>
+		<version>1.1.0</version>
 	</parent>
 
     <!-- includes unnecessary dependencies for protocols from models 
     	resolve with imported pu-traccar-jpa and remove parent !?-->
 	<artifactId>jeets-protocols</artifactId>
-	<version>1.1-RC</version>
 	<packaging>jar</packaging>
 
     <dependencies>
@@ -40,7 +39,6 @@
         <dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-pu-traccar-jpa</artifactId>
-            <version>${pu-traccar-jpa-version-latest}</version>
         </dependency>
     </dependencies>
 

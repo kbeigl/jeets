@@ -27,14 +27,6 @@ import org.junit.Test;
 /* test the Component without netty4 source */
 public class DcsComponentTest extends CamelTestSupport {
 
-//    @Override
-//    protected RouteBuilder createRouteBuilder() throws Exception {
-//        return new RouteBuilder() {
-//            public void configure() {
-//            }
-//        };
-//    }
-
     @Test
     public void testFromOneToAnotherDcs() throws Exception {
         context().addRoutes(new RouteBuilder() {
@@ -81,7 +73,7 @@ public class DcsComponentTest extends CamelTestSupport {
      * with the Route from("netty4").to("jeets-dcs://device") !
      * <p>
      * Currently the poll creates a new Exchange two times per second.
-     * An improved version should through an Exception from EP.createConsumer method (?).
+     * An improved version should throw an Exception from EP.createConsumer method (?).
      *  
      */
     @Test

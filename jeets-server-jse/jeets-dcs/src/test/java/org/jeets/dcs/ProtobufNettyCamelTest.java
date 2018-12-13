@@ -88,6 +88,7 @@ public class ProtobufNettyCamelTest extends CamelTestSupport {
     }
 
     @Test
+//  no cosumer, no polling, only single request
     public void testNettyProtbufferPipelines() throws Exception {
         Traccar.Acknowledge response = (Traccar.Acknowledge) template
 //              .requestBody("netty4:tcp://localhost:{{port}}?clientInitializerFactory=#ack&sync=true", createProtoDevice());

@@ -20,7 +20,7 @@
 
 	<groupId>org.jeets</groupId>
 	<artifactId>jeets</artifactId>
-	<version>1.1-RC</version>
+	<version>1.1.0</version>
 	<packaging>pom</packaging>
 
 	<name>=== JeeTS - Java EE Tracking Software ===</name>
@@ -52,5 +52,14 @@
 		<module>jeets-server-jse</module>
 		<module>jeets-server-jee</module>
 	 </modules>
+
+	<profiles>
+	    <profile>
+	        <id>itests</id>
+			<modules>
+				<module>jeets-itests</module>
+			 </modules>
+	    </profile>
+	</profiles>
 
 </project>

@@ -7,9 +7,11 @@ public class DcsRoute extends RouteBuilder { // plain Camel without Swing!
 
 //  private static final Logger LOG = LoggerFactory.getLogger(DcsRoute.class);
     static final int PORT = Integer.parseInt(System.getProperty("port", "5200"));
+    static final String HOST = System.getProperty("host", "localhost");
 
     public void configure() throws Exception {
-        from("netty4:tcp://localhost:" + PORT + "?serverInitializerFactory=#device&sync=true")
+//      TODO: check {{host}} {{port}} syntax
+        from("netty4:tcp://" + HOST + ":" + PORT + "?serverInitializerFactory=#device&sync=true")
 //      Type Converter
         .convertBodyTo(Device.class)    // check exchange.getIn/Out
 //      Message Translator

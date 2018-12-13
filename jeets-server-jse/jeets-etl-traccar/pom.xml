@@ -40,7 +40,7 @@
 	<dependency>
 		<groupId>de.jeets</groupId>
 		<artifactId>jeets-protocols</artifactId>
-		<!-- upgrade to 1.1-RC -->
+		<!-- upgrade to 1.1.0 -->
 		<version>1.0</version>
 	</dependency>
 	<!-- artifactId protobuf-java included in protocols -->

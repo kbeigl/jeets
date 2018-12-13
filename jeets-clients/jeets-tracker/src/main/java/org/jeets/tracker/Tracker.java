@@ -18,20 +18,18 @@ import org.jeets.protocol.util.Transformer;
  * The JeeTS Tracker sends Protobuffer Messages, i.e. POJOs defined in the
  * *.proto file. External clients can only add Positions while the Tracker
  * internally adds Device with uniqueId and potential Tracker Events!
- * 
- * @author kbeigl@jeets.org
- */
-
-/* TODO: add NioEventLoopGroup management instance for complete runtime
- * tracker.transmitTraccarPosition(position)
- * 
+ * <p>
  * Every Tracker instance has a uniqueId and a List<Traccar.Position> as internal database.
  * The Tracker can be configured to send these positions to host and port as needed and as connectivity allows.
  * The Client (like the Player) submits the Traccar.Position in real (playback) time.
  * The Tracker can be configured to send a number of Positions at a time,
  * to send by a time interval (flush database). Accordingly the Tracker can clean up
  * the List after successful ACK or retry if not successful.
+ * 
+ * @author kbeigl@jeets.org
  */
+//  TODO: add NioEventLoopGroup management instance for complete runtime
+//  tracker.transmitTraccarPosition(position)
 public class Tracker {
 
     private String uniqueId = "pb.device";
@@ -57,11 +55,8 @@ public class Tracker {
      * @param protoPositionBuilder
      */
     public void sendPositionProto(Traccar.Position.Builder protoPositionBuilder) {
-//      simply add pos to queue and ..
         messageQueue.add(protoPositionBuilder);
-//      .. let the loop take care of the rest
-//      check if its running or start it
-        if (!messageLoopRunning) {  // TODO: do this right!
+        if (!messageLoopRunning) { // TODO: do this right!
             Thread t = new Thread(new MessageLoop(), "MessageLoop");
             t.start();
         }
@@ -74,13 +69,13 @@ public class Tracker {
         sendPositionProto(Transformer.entityToProtoPosition(positionEntity));
     }
 
+
     /**
      * All newly added Positions are collected in a Queue. Then the Tracker
      * internally submits the positions to the server - as connectivity allows.
      */
     private Queue<Traccar.Position.Builder> messageQueue = new LinkedList<Traccar.Position.Builder>();
     private Traccar.Device.Builder devBuilder;
-    private int maxNrOfPositions = 2;
 
     /**
      * All Positions are collected in a MessageQueue and the MessageLoop takes
@@ -108,8 +103,9 @@ public class Tracker {
                             devBuilder = null;
 //                          reset and continue with new msgs from queue, fillDev, transmit
                         } else {
-                            System.err.println("Transmission failed, trying again in 10 seconds");
-                            Thread.sleep(10000); // int tryAgainInMillis = 10000;
+                            System.err.println("Transmission failed, trying again in "
+                                    + (retryInMillis/1000) + " seconds");
+                            Thread.sleep(retryInMillis);
                         }
                     }
                 }
@@ -151,7 +147,7 @@ public class Tracker {
             devBuilder = Traccar.Device.newBuilder().setUniqueid(uniqueId);
         }
         while (!messageQueue.isEmpty())
-            if (devBuilder.getPositionCount() < maxNrOfPositions)
+            if (devBuilder.getPositionCount() < maxPosPerMsg)
                 devBuilder.addPosition(messageQueue.remove());
             else break;
         System.out.println("DeviceBuilder filled with " + devBuilder.getPositionCount() + " positions.");
@@ -183,4 +179,30 @@ public class Tracker {
         }
     }
     
+    /*
+     * Maximum number of positions transmitted in one message.
+     */
+    private int maxPosPerMsg = 2;
+
+    public int getMaxPosPerMsg() {
+        return maxPosPerMsg;
+    }
+
+    public void setMaxPosPerMsg(int maxPosPerMsg) {
+        this.maxPosPerMsg = maxPosPerMsg;
+    }
+
+    /*
+     * If transmission fails, retry sending messages in milliseconds.
+     */
+    private int retryInMillis = 10000;
+
+    public int getRetryInMillis() {
+        return retryInMillis;
+    }
+
+    public void setRetryInMillis(int retryInMillis) {
+        this.retryInMillis = retryInMillis;
+    }
+
 }

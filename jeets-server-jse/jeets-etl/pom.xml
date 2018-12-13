@@ -23,11 +23,10 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-server-jse</artifactId>
-		<version>1.1-RC</version>
+		<version>1.1.0</version>
 	</parent>
 
 	<artifactId>jeets-etl</artifactId>
-	<version>1.1-RC</version>
 	<packaging>jar</packaging>
 
 	<name>jeets-etl</name>
@@ -50,7 +49,6 @@
 	<dependency>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-dcs</artifactId>
-		<version>${dcs-version-latest}</version>
 	</dependency>
 
     <dependency>
@@ -174,31 +172,16 @@
         </executions>
       </plugin>
 
-<!-- NOTE: For groupId org.apache.maven.plugins is assumed by default.
-	<plugin>
+<!-- <plugin>
 		<artifactId>maven-assembly-plugin</artifactId>
-		<version>3.0.0</version>
 		<configuration>
-			<descriptorRefs>
-				<descriptorRef>jar-with-dependencies</descriptorRef>
-			</descriptorRefs>
 			<archive>
 				<manifest>
 					<mainClass>org.jeets.server.camel.TrackingServer</mainClass>
 				</manifest>
 			</archive>
-			</configuration>
-			<executions>
-				<execution>
-					<id>make-assembly</id>
-					<phase>package</phase>
-					<goals>
-						<goal>single</goal>
-					</goals>
-				</execution>
-			</executions>
-	</plugin>
- -->
+		</configuration>
+	</plugin>  -->
       <!-- Allows the example to be run via 'mvn camel:run' -->
       <plugin>
         <groupId>org.apache.camel</groupId>
