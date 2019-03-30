@@ -59,14 +59,14 @@ public class EntityManagerUtils {
 	 * 'main method' to trigger private methods to manually create database and / or
 	 * schema scripts. After a database setup all tests can be run against it. 
 	 */
-	@Test
+//	@Test
 	public void createSchema() {
 //		EntityManager em = null;
 //		TODO: switch (key) { case ...
 //		1. drops existing and creates new schema
 //		em = hibernateAutoCreate(PERSISTENCE_UNIT_NAME);
 //		2. creates drop- and create scripts for mvn text cycle
-		createSchmemaScripts(PERSISTENCE_UNIT_NAME);
+		createSchemaScripts(PERSISTENCE_UNIT_NAME);
 
 //		reactivate after adding switch statement above
 //		if (em != null) {
@@ -125,7 +125,7 @@ public class EntityManagerUtils {
 	 * modifications to new scripts! Also be aware that the new scripts will be
 	 * appended to the existing ones and need to cleaned accordingly.
 	 */
-	private void createSchmemaScripts(String persistenceUnit) {
+	private void createSchemaScripts(String persistenceUnit) {
 		Map<String, Object> emProps = new HashMap<>();
 		StringWriter create = new StringWriter();
 		StringWriter drop = new StringWriter();

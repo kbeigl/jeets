@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Copyright 2017 The Java EE Tracking System - JeeTS
-    Copyright 2017 Kristof Beiglböck kbeigl@jeets.org
+    Copyright 2019 The Java EE Tracking System - JeeTS
+    Copyright 2019 Kristof Beiglböck kbeigl@jeets.org
     
     The JEE Tracking System licenses this file to you 
     under the Apache License, Version 2.0 (the "License");
@@ -22,17 +22,18 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-parent</artifactId>
-		<version>1.2.0</version>
+		<version>1.2.1</version>
 		<relativePath>../jeets-parent</relativePath>
 	</parent>
 
 	<artifactId>jeets-server-jse</artifactId>
 	<packaging>pom</packaging>
 
-	<name>--- Server Tracking Components (JSE) ---</name>
+	<name>--- Server Tracking Components (JSE)    ---</name>
 
 	<modules>
 		<module>jeets-dcs</module>
+		<module>jeets-dcs-traccar</module>
 		<module>jeets-etl</module>
 		<module>jeets-db-managers</module>
 		<!-- this etl is designed to work with traccar Instructions to move the 

@@ -1,0 +1,297 @@
+
+:toc:
+
+= JeeTS DCS Traccar
+
+This project demonstrates how to integrate higher level GPS components
+from different JeeTS artifacts each dedicated to individual technologies.
+The main idea is to create a stand alone application - with little business code
+ - to explicitly run the Traccar Device Communication Servers on different
+configurable ports and to collect the Java System Entities 
+at a single Endpoint for further processing in a Tracking System.
+
+WARNING: The *jeets-dcs-traccar-4.2.x-beta* project is still in experimental
+         beta stage. Development is currently focused on the Proof of Concept 
+         to show that the Traccar DCS can be modeled with Camel Routes
+         and `camel-netty4`. 
+
+
+== Maven Build
+
+`jeets-dcs-traccar` combines the following JeeTS projects to a single runnable 
+Java Archive (`.jar` file):
+
+* link:../../jeets-models/jeets-pu-traccar/ReadMe.adoc[jeets-pu-traccar] +
+represents the Traccar Entity Relation Model (ERM) specified 
+with a JPA Persistence Unit and related Java Entities. +
+The project includes a Postgres Database Driver.
+
+* link:../../jeets-models/jeets-protocols/ReadMe.adoc[jeets-protocols] +
+adds Protocol Buffers to send Traccar Messages in binary format. +
+The project includes the Protobuffer Library.
+
+* link:../../jeets-models/jeets-protocols-traccar/jeets-protocols-traccar.adoc[jeets-protocols-traccar] +
+provides all protocols from the (main releases of) Traccar GTS. +
+The Netty v4 implementation is provided by `camel-netty4`.
+
+
+=== Maven Hierarchy
+
+Here's the hierarchy of `jeets-` artifacts and the most important drivers and libraries:
+
+* jeets-dcs-traccar
+** jeets-protocols-traccar
+*** camel-netty4
+**** netty-all
+*** jeets-protocols
+**** protobuf-java
+**** jeets-pu-traccar
+***** postgesql
+
+You can always check individual versioning with
+[source,text]
+-----------------
+  mvn dependency:tree -Dverbose
+
+  [INFO] Building jeets-dcs-traccar 4.2.3-beta
+           :
+  [INFO] org.jeets:jeets-dcs-traccar:jar:4.2.3-beta
+  [INFO] +- org.jeets:jeets-protocols-traccar:jar:4.2.3-beta:compile
+  [INFO] |  +- org.apache.camel:camel-netty4:jar:2.20.2:compile
+  [INFO] |  |  +- io.netty:netty-all:jar:4.1.16.Final:compile
+  [INFO] |  +- org.jeets:jeets-protocols:jar:1.2.0:compile
+  [INFO] |  |  +- com.google.protobuf:protobuf-java:jar:3.1.0:compile
+  [INFO] |  |  \- org.jeets:jeets-pu-traccar:jar:4.2:compile
+  [INFO] |  |     \- org.postgresql:postgresql:jar:42.2.5:compile
+-----------------
+
+
+
+== Compile and Run
+
+The regular compilation and testing of this application 
+already takes place in the 
+<<../../jeets-docs/building.adoc#Building-Anormalbuild,normal build>>
+of the complete repository.
+When working with this project and without changing 
+the nested projects in the hierarchy above you 
+can change from the repository root to the project folder 
+and repeatedly build from there:
+[source,text]
+-----------------
+  cd jeets-server-jse\jeets-dcs-traccar
+  mvn clean install
+-----------------
+In order to assemble a stand alone `jar-with-dependencies` you need
+to activate the Maven profile:
+[source,text]
+-----------------
+  mvn package -Pjar-with-dependencies
+-----------------
+
+This project compiles a runnable `jar` file
+in the project's target folder which can be launched with:
+[source,text]
+-----------------
+  github.jeets\jeets-server-jse\jeets-dcs-traccar>
+     java -jar target\jeets-dcs-traccar-4.2.3-beta-jar-with-dependencies.jar
+-----------------
+
+TIP: During development (in Eclipse) you can simply 
+	 run the `org.jeets.dcs.traccar.DcsMain` class.
+
+When starting up the `jeets-dcs-traccar` you can watch the Console output
+and look for these lines from the initialization process:
+[source,text]
+-----------------
+  [main] INFO Apache Camel 2.20.2 (CamelContext: camel-1) is starting
+  [main] INFO Route: DcsFactoryRoute started and consuming from: 
+                     file://setup/?fileName=traccar.xml&initialDelay=0&noop=true
+  [main] Apache Camel 2.20.2 (CamelContext: camel-1) started in 1.465 seconds
+   Camel INFO DcsFactoryRoute - Context.init
+             ( C:\...\jeets-server-jse\jeets-dcs-traccar\setup\traccar.xml ) ...
+   Camel INFO DcsFactoryRoute - ... Context initialized from DSL Route!
+-----------------
+
+followed by booting each DCS.
+Details will be discussed below. +
+Next you can test the graceful shutdown with `CTRL+C`
+to witness the DCS's shutdowns:
+
+[source,text]
+-----------------
+  INFO Received hang up - stopping the main instance.
+  INFO Apache Camel 2.20.2 is shutting downDcsMain is now being stopped!
+  INFO DefaultShutdownStrategy - Starting to graceful shutdown 205 routes (timeout 300 seconds)
+  INFO ServerBootstrap unbinding from localhost:5146
+-----------------
+
+
+== Configure Protocols and Ports
+
+Note that the protocol configuration is not explicitly passed via command line.
+The configuration file is read by a Camel Route from the relative directory 
+`setup\traccar.xml` which might be familiar, if you are already using the Traccar GTS.
+So you can simply copy your `traccar.xml` (and `default.xml` if needed) file and 
+the application will load your configured protocols with dedicated ports.
+
+The initialization process finishes with the `Context initialized` message 
+you can see in the output above. There you can also verify the absolute path
+of your configuration file.
+
+After initialization 
+
+. each traccar protocol implementation is registered in the Camel Context
+. a Camel Route is created for each `<protocol,port>`  
+. a Consumer is setup to listen to the port
+. then Camel and Netty take of of the rest
+
+For a single DCS entry like 
+[source,text]
+-----------------
+<entry key='robotrack.port'>5163</entry> 
+-----------------
+the output should look like this:
+[source,text]
+-----------------
+register: robotrack => org.traccar.jeets.protocol.RoboTrackProtocol@3420367a
+create Route 'robotrack' from("netty4:tcp://localhost:5163?serverInitializerFactory=#robotrack&sync=true")
+createPipelineFactory for Consumer[tcp://localhost:5163]
+INFO netty4.SingleTCPNettyServerBootstrapFactory - ServerBootstrap binding to localhost:5163
+INFO netty4.NettyConsumer - Netty consumer bound to: localhost:5163
+INFO DefaultCamelContext - Route: robotrack started and consuming from: tcp://localhost:5163
+-----------------
+
+At the end of the output you might find a list of routes that could not be created
+since the `port is already in use` on your machine. 
+[source,text]
+-----------------
+The following routes could not created due to 'port already in use'
+        port=5040 - uri=netty4:tcp://localhost:5040?serverInitializerFactory=#carscop&sync=true
+INFO DcsFactoryRoute - DcsRoutesFactory finished creating DCS Routes
+-----------------
+It is recommended to strip down
+the configuration file to the protocols you are actually using for tracking.
+
+
+== Integration Test
+
+The project is still in experimental beta stage, 
+but it's never too early to setup integration testing. 
+This also improves compatibility to other JeeTS components that can be involved.
+The Maven Hierarchy shown above involves the JeeTS persistence unit
+and Protobuffers as the JeeTS reference protocol. 
+And the client side can be simulated with the JeeTS tracker sending protobuffers
+that should arrive as System Entities at the JeeTS DCS output, i.e. endpoint. 
+
+Initially the Integration Test is setup manually to send and receive GPS messages
+as the Proof of Concept for a multi DCS.
+
+
+=== Send Test Messages with jeets-tracker
+
+First you can strip down the protocol configuration to protobuffer at port 5200. +
+Then you start the `jeets-dcs-traccar` from command line 
+
+[source,text]
+-----------------
+  github.jeets\jeets-server-jse\jeets-dcs-traccar>
+     java -jar target\jeets-dcs-traccar-4.2.3-beta-jar-with-dependencies.jar
+-----------------
+
+and check, if protobuffers are bound to 5200:
+
+[source,text]
+-----------------
+  register: protobuffer => org.traccar.jeets.protocol.ProtobufferProtocol@633ad33a
+  create Route 'protobuffer' 
+    from("netty4:tcp://localhost:5200?serverInitializerFactory=#protobuffer&sync=true")
+  createPipelineFactory for Consumer[tcp://localhost:5200]
+  INFO netty4.SingleTCPNettyServerBootstrapFactory - ServerBootstrap binding to localhost:5200
+  INFO netty4.NettyConsumer - Netty consumer bound to: localhost:5200
+  INFO DefaultCamelContext - Route: protobuffer started and consuming from: tcp://localhost:5200
+-----------------
+
+Then you open another console go to the tracker folder,
+start the tracker with host and port
+and see how it sends the first message:
+
+[source,text]
+-----------------
+  github.jeets\jeets-clients\jeets-tracker>
+     java -jar target\jeets-tracker-1.2.0-jar-with-dependencies.jar localhost 5200
+     
+     'pb.device' sending 1 Positions to 'localhost:5200' at 1553717609261
+-----------------
+
+On the first console, representing the Device Communication Server to a Tracking System,
+you should see the incoming messages:
+
+[source,text]
+-----------------
+INFO MainEventHandler       - [07c5b09e] connected
+INFO BasePipelineFactory    - [07c5b09e: 5200 < 127.0.0.1] HEX: 380a0970622e64657669 ..
+received device: pb.device with 1 positions
+
+INFO database.DeviceManager - add Device org.traccar.model.Device@199e3c57
+INFO database.DeviceManager - Registered unknown device pb.device [id=1]
+INFO BasePipelineFactory    - [07c5b09e: 5200 > 127.0.0.1] HEX: 0308c803
+
+INFO MainEventHandler - [07c5b09e] id: pb.device time: 2019-03-27 21:13:29 lat: 49,03098 lon: 12,10313 course: 0,0
+INFO DcsConsumerRoute - receiving message: org.traccar.jeets.model.Position@1bbacc2e
+INFO DcsConsumerRoute - system input: position ( id: 1 time: Wed Mar 27 21:13:29 CET 2019 lat: 49.03097993 lon: 12.10312854 )
+TrackingSystem receives message org.traccar.jeets.model.Position@1bbacc2e
+Position ( id: 1 time: Wed Mar 27 21:13:29 CET 2019 lat: 49.03097993 lon: 12.10312854 )
+INFO org.traccar.jeets.MainEventHandler - [07c5b09e] disconnected
+-----------------
+
+Or in short form:
+
+[source,text]
+-----------------
+  Tracker: 'pb.device' sending 1 Positions to 'localhost:5200' at 1553717609261
+
+      DCS: received device: pb.device with 1 positions
+
+      GTS: TrackingSystem receives message org.traccar.jeets.model.Position@1bbacc2e
+           id: 1 time: Wed Mar 27 21:13:29 CET 2019 lat: 49.03097993 lon: 12.10312854
+           
+  Tracker: received Acknowledge: deviceid: 456 at Wed Mar 27 21:13:32 CET 2019
+-----------------
+
+:checkedbox: pass:normal[{startsb}&#10004;{endsb}]
+
+{checkedbox} That's it, good start!
+
+
+// separate page !?
+== What jeets-dcs-traccar is not
+
+The jeets-dcs-traccar application can bind different protocol decoders to individual ports.
+Each protocol will extract client messages to system entities matching the Traccar database model.
+Generally this project remodels Traccar's `ServerManager()`, but most of the work lies
+in the protocol definitions perfectly maintained at traccar.org and not provided by JeeTS.
+
+This application is far from being a GPS Tracking System like Traccar.
+
+The main idea was to separate the protocols from the monolithic application 
+completely wrapped around Netty pipelines triggering Notifications etc.
+The project remodels the existing protocols into the Camel-, Netty- and Spring- frameworks.
+This simplifies system configuration, performance tuning and integration with other systems.
+This project can be used to break out of the Traccar System to create your own 
+Tracking logic or feed live information into a proprietary system.
+Or it can simply serve as a development environment for protocol implementations,
+performance testing ...
+
+
+== Road Map
+
+* setup configurable Client Multiprotocol Sender for all protocols and message types 
+  for various client-server testing
+
+* Add second flavor for output. +
+  Currently the output is defined by the original traccar Position. +
+  Next cycle should add optional JPA specified output: +
+  Persistence Unit with `@Entity`s and ORM messages (Device with Positions and Events).
+
+

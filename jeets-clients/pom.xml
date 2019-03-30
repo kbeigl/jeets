@@ -22,14 +22,14 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-parent</artifactId>
-		<version>1.2.0</version>
+		<version>1.2.1</version>
 		<relativePath>../jeets-parent</relativePath>
 	</parent>
 
 	<artifactId>jeets-clients</artifactId>
 	<packaging>pom</packaging>
 
-	<name>--- Client Tracker Components ---</name>
+	<name>--- Client Tracker Components           ---</name>
 
 	<modules>
 		<module>jeets-tracker</module>

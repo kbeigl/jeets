@@ -21,13 +21,13 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets</artifactId>
-		<version>1.2.0</version>
+		<version>1.2.1</version>
 	</parent>
 
 	<artifactId>jeets-parent</artifactId>
 	<packaging>pom</packaging>
 
-	<name>--- JeeTS Parent - global definitions ---</name>
+	<name>--- JeeTS Parent - global definitions   ---</name>
 	<description>
 		Parent POM for common definitions and constants for all JeeTS sources.
 	</description>
@@ -195,6 +195,8 @@
 	                <configuration>
 	                    <source>${maven.compiler.source}</source>
 	                    <target>${maven.compiler.target}</target>
+	                    <!-- docs.oracle.com/javase/6/docs/technotes/tools/solaris/javac.html#nonstandard -->
+	                    <!-- <compilerArgument>-Xlint:unchecked</compilerArgument> -->
 	                </configuration>
 				</plugin>
 				<plugin>
@@ -227,6 +229,7 @@
 						<execution>
 							<!-- this is used for inheritance merges -->
 							<id>make-assembly</id>
+                            <!-- difference? <id>assemble-all</id> -->
 							<!-- bind to the packaging phase -->
 							<phase>package</phase>
 							<goals>
@@ -333,7 +336,7 @@
 					</configuration>
 				</plugin>
 <!-- 			
-				<plugin>
+				<plugin>  ** used in jeets-protocols-traccar **
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-dependency-plugin</artifactId>
 					<version>${version-maven-dependency-plugin}</version>
@@ -356,7 +359,11 @@
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>exec-maven-plugin</artifactId>
 					<version>${version-exec-maven-plugin}</version>
-				</plugin> -->
+				</plugin> 
+                <plugin>  ** used in jeets-protocols-traccar **
+	                <artifactId>maven-enforcer-plugin</artifactId>
+	                <version>1.4.1</version>
+				-->
 			</plugins>
 		</pluginManagement>
 	</build>

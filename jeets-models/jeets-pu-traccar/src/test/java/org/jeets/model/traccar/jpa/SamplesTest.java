@@ -21,9 +21,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This test class is relying on an existing (test) database with a valid
- * schema. The same class could be executed a second time (search: junit execute
- * test multiple times, see JUnit @RepeatedTest) against a database dynamically
+ * This test class is relying on an existing (test) database with a valid schema
+ * which is created in the 'mvn test' cycle running the setup and tear down
+ * scripts via sql-maven-plugin to conserve static scripts as an implicit
+ * regression test - in case of changes.
+ * <p>
+ * The same class could be executed a second time (search: junit execute test
+ * multiple times, see JUnit @RepeatedTest) against a database dynamically
  * created from hibernate.hbm2ddl.auto=create (in setUpClass
  * createEntityManagerFactory) to detect model differences between script- and
  * ORM generation.

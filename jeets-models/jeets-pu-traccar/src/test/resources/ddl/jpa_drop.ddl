@@ -1,4 +1,4 @@
--- file created at Sat Nov 17 12:35:09 CET 2018
+-- file created at Tue Feb 26 12:51:03 CET 2019
 
     alter table tc_device_attribute 
        drop constraint FKguwgkku5xouwwi5uw8u3fmxbs;
@@ -39,8 +39,14 @@
     alter table tc_devices 
        drop constraint FKc91qyyu54iovy2tyj4w3g5akt;
 
+    alter table tc_devices 
+       drop constraint FKb6wl19yp3u9mskkimt0510ls6;
+
     alter table tc_events 
        drop constraint FK9rosg4vw6auwdmp9w7249yncl;
+
+    alter table tc_events 
+       drop constraint FKhp2cb5abhcq6d58a644qmk0y1;
 
     alter table tc_geofences 
        drop constraint FKnh6ek5t9fwt9gqq39qjnp7a17;

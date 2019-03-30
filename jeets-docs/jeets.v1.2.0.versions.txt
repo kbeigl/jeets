@@ -1,0 +1,22 @@
+
+ === JeeTS - Java EE Tracking Software === 	1.2.0
+ --- JeeTS Parent - global definitions --- 	1.2.0
+ --- System Dataformats and Models --- 		1.2.0
+	 jeets-pu-traccar 		4.2
+	 jeets-pu-gtfs 			1.1.1
+	 jeets-protocols 		1.2.0
+ --- Client Tracker Components --- 			1.2.0
+	 jeets-tracker 			1.2.0
+	 jeets-player 			1.2.0
+	 my-jeets-client 		1.2.0
+	 jeets-dcs 				1.2.0
+	 jeets-etl 				1.2.0
+	 jeets-db-managers 		1.2.0
+	 jeets-dcs-amq 			1.2.0
+	 jeets-geo-router 		1.2.0
+ --- AppServer Tracking Components (JEE) --	1.2.0
+ jeets-wildfly-activemq-adapter 	1.0
+	jeets-jee-app 			1.2.0
+	 > jeets-jee-ejb 		1.2.0
+	 > jeets-jee-web 		1.2.0
+	 > jeets-jee-ear 		1.2.0

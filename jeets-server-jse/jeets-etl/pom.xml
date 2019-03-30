@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-server-jse</artifactId>
-		<version>1.2.0</version>
+		<version>1.2.1</version>
 	</parent>
 
 	<artifactId>jeets-etl</artifactId>
@@ -39,6 +39,7 @@
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-dcs</artifactId>
 		</dependency>
+		<!-- db type should be set on a higher level  -->
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
@@ -68,6 +69,7 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>${h2database-version}</version>
+			<!-- remove test for h2 as main db -->
 			<scope>test</scope>
 		</dependency>
 		<!-- testing -->

@@ -1,4 +1,4 @@
--- file created at Sat Nov 17 12:35:09 CET 2018
+-- file created at Tue Feb 26 12:51:03 CET 2019
 create sequence tc_attributes_id_seq start 1 increment 50;
 create sequence tc_calendars_id_seq start 1 increment 50;
 create sequence tc_commands_id_seq start 1 increment 50;
@@ -81,9 +81,9 @@ create sequence tc_users_id_seq start 1 increment 50;
         model varchar(255),
         name varchar(255),
         phone varchar(255),
-        positionid int4,
         uniqueid varchar(255),
         groupid int4,
+        positionid int4,
         primary key (id)
     );
 
@@ -98,15 +98,12 @@ create sequence tc_users_id_seq start 1 increment 50;
     create table tc_events (
        id int4 not null,
         attributes varchar(255),
+        geofence bytea,
         maintenanceid int4,
---        manually adjusted
---        position bytea,
-        positionid int4,
---        geofence bytea,
-        geofence int4,
         servertime timestamp,
         type varchar(255),
         deviceid int4,
+        positionid int4,
         primary key (id)
     );
 
@@ -380,10 +377,20 @@ create sequence tc_users_id_seq start 1 increment 50;
        foreign key (groupid) 
        references tc_groups;
 
+    alter table tc_devices 
+       add constraint FKb6wl19yp3u9mskkimt0510ls6 
+       foreign key (positionid) 
+       references tc_positions;
+
     alter table tc_events 
        add constraint FK9rosg4vw6auwdmp9w7249yncl 
        foreign key (deviceid) 
        references tc_devices;
+
+    alter table tc_events 
+       add constraint FKhp2cb5abhcq6d58a644qmk0y1 
+       foreign key (positionid) 
+       references tc_positions;
 
     alter table tc_geofences 
        add constraint FKnh6ek5t9fwt9gqq39qjnp7a17 

@@ -1,0 +1,71 @@
+
+:toc:
+
+= Release Notes - JeeTS repository
+
+=== v1.2.1 - March 2019
+
+* Device Communication Servers for all Traccar Protocols! +
+For details goto the link:../jeets-server-jse/jeets-dcs-traccar/ReadMe.adoc[project's readme file]
+** `jeets-dcs-traccar 4.2.3-beta` 
+** includes `jeets-protocols-traccar 4.2.3-beta`
+** includes `jeets-pu-traccar 4.2`
+
+
+=== v1.2.0 - December 2018
+
+* update `jeets-pu-traccar` _complete repository_ to v4.2	!
+* original traccar ERM 4.1 was _not_ modified for Traccar 4.2 +
+  therefore `jeets-pu-traccar` v4.1 = v4.2
+
+
+=== v1.1.1
+
+* update `jeets-pu-traccar` to 4.2
+* update `jeets-pu-traccar` to 4.1 +
+  complete new Entities, full ORM model!, new EntityManagerTest, 
+		removed deprecated tests 
+* added `sql-maven-plugin` to drop and create database via scripts
+
+==== known issue
+
+* pu 4.1 is isolated and not upgraded for complete repo +
+  repo is not consistent, 
+  since required version 3.14 is not pre-compiled
+
+=== v1.1.0 - November 2018
+
+* added `jeets.properties` to configure complete repo and tests +
+  `jeets-pu-traccar-jpa` is fully configurable
+
+* added integration-tests branch with
+	** `itests` folder with aggregate pom for itests modules
+	** maven-directory-plugin
+	** maven-failsafe-plugin
+	** maven-property-plugin
+	** maven-resources-plugin with filtering of project properties
+	** `<profile><id>itests</id>` +
+	sample project tracker with itest `tracker2dcs` +
+	tracker is launched with `-props` (default props in jar)
+
+* reduced projects and folders:
+	** removed `jeets-pu-traccar-hibernate` +
+	   which was only created as an example in the book
+	** removed `jeets-pu-traccar-ejb` +
+	   which was only a skeleton created from a wizard
+	** removed `jeets-pu-traccar-jee` 
+	** united  `jeets-pu-traccar-jpa` initially for standard Java JSE +
+       with `jeets-pu-traccar-jee` modified for WildFly JEE `jta-data-source` 
+       in `jeets-pu-traccar-jpa` version 3.14.3 +
+       two persistence units jpa and jee in one `persistence.xml`!
+
+=== v1.0-Final - August 2018
+
+This is the version developed during writing of the book.
+The Final release is cleaned from some issues 
+and is the JeeTS version recommended for developers 
+learning Jee development with GPS Tracking.
+
+
+
+

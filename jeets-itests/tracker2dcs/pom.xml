@@ -21,11 +21,11 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-itests</artifactId>
-		<version>1.2.0</version>
+		<version>1.2.1</version>
 	</parent>
 
 	<artifactId>tracker2dcs</artifactId>
-    <version>1.2.0</version>
+	<version>1.2.0</version>
 	<packaging>jar</packaging>
 
 	<name>tracker2dcs-itest</name>

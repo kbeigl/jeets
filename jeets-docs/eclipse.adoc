@@ -1,0 +1,98 @@
+
+
+:toc:
+
+= Import JeeTS Repository in Eclipse
+
+There are several ways to import the projects into Eclipse.
+
+[[Building-CloningtheGitRepository]]
+=== Cloning the Git Repository
+
+Clone the Git repository with Eclipse by selecting 
+*File -> Import -> Git / Projects from Git* and *Clone URI*.
+Provide all repository details in the import wizard and clone the
+repository into a directory outside of the Eclipse workspace. Once
+cloning has completed, exit the import project wizard (i.e. simply
+select cancel when asked to select "Wizard for project import").
+
+NOTE: In a distributed development the IDE should not influence
+the compiled output. Developers should not use Eclipse to clone the repo,
+but rather follow the instruction for 'A normal build' described above.
+The code can be developed, compiled, tested and installed from Eclipse,
+but as a common practive Developers should _always_ run a 'mvn clean install'
+from command line _before_ committing their work.
+
+[[Building-m2e]]
+== m2e
+
+The complete JeeTS repository can be imported into Eclipse using m2e
+Maven integration.
+
+[[Building-ImportMavenProjects]]
+=== Import Maven Projects
+
+Import Camel projects as Maven projects using m2e by selecting *File ->
+Import -> Maven -> Existing Maven Projects*. Point the wizard to the
+root directory of the cloned repository. Eclipse will analyze all Camel
+projects and eventually present the following summary:
+
+image:.\ImportMavenProjects.png[image]
+
+Simply confirm the import of all projects by clicking *Finish*. The
+import process will create Eclipse projects and automatically set up
+build paths using dependency details provided by the pom.xml files. Once
+completed, all Camel projects will be available in your workspace
+as you can see on the left side.
+You can always point the import dialog to the JeeTS root directory
+and then un/check the projects you want to work with.
+Higher level projects will be composed with lower level projects
+via local Maven Repository and _not_ via IDE workspace!
+
+
+NOTE: As you can see the JeeTS repository is combined with multiple sub projects/modules 
+      (e.g. components, archetypes, tooling etc.). Many sub projects/modules are again 
+      categorized or packaged with another layer of sub modules and so on. 
+      Developers can import project/module which is relevant to them and work on it 
+      instead importing entire project which will consume memory and eventually slow down Eclipse. 
+      This approach is not only easy to import and work in eclipse as well as easy to test.
+
+[[Building-maven-eclipse-plugin]]
+== maven-eclipse-plugin
+
+Please check 
+  link:http://maven.apache.org/plugins/maven-eclipse-plugin/[project home] 
+to find:
+
+NOTE: This plugin is retired. It is no longer maintained.
+
+The Maven Eclipse Plugin is used to generate Eclipse IDE files 
+(*.classpath, *.project, *.wtpmodules and the .settings folder) 
+for use with a project.
+
+WARNING: Disclaimer: Users are advised to use m2e, the Eclipse Maven Integration instead of this plugin, as it can more closely resemble the actual build and runtime classpaths as described in the project pom.xml - among other advantages. However, there are project setups and workflows that still work more efficiently with statically generated Eclipse metadata - for example when there is a large number of projects in a reactor. That's where the Maven Eclipse Plugin can still help you.
+
+
+The maven-eclipse-plugin can be used to generate the
+.classpath .project and .settings files that Eclipse needs. 
+To do this, run:
+
+[source,text]
+----------------------------------------
+mvn process-test-sources eclipse:eclipse
+----------------------------------------
+
+or
+
+[source,text]
+-------------------------------------------------------------------
+mvn -Psetup.eclipse -Declipse.workspace.dir=/path/to/your/workspace
+-------------------------------------------------------------------
+
+The latter is recommended as it would completely setup the workspace for
+you as well as provide options to wire in other projects also found in
+your workspace.
+
+After running the above command, from within Eclipse, do *File -> Import
+-> Existing Projects into Workspace*, select the root camel checkout
+location and Eclipse should find all the projects.

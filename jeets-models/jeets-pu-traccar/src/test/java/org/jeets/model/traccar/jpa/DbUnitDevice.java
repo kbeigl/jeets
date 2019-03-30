@@ -6,9 +6,11 @@ import org.dbunit.DBTestCase;
 import org.dbunit.PropertiesBasedJdbcDatabaseTester;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
-import org.dbunit.operation.DatabaseOperation;
+//import org.dbunit.operation.DatabaseOperation;
 import org.junit.Test;
 
+//	some dbunit testing .. test should NOT run via mvn test
+//	but does run via project > JUnit with errors as no schema is created (yet)
 public class DbUnitDevice extends DBTestCase {
 	
 //	DBUnit tests are under construction
@@ -30,7 +32,7 @@ public class DbUnitDevice extends DBTestCase {
 	
 	@Override
 	protected IDataSet getDataSet() throws Exception {
-		return new FlatXmlDataSetBuilder().build(new FileInputStream("src/test/resources/device.xml"));
+		return new FlatXmlDataSetBuilder().build(new FileInputStream("src/test/resources/data/device.xml"));
 	}
 
 	@Test
