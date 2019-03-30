@@ -21,12 +21,12 @@ WARNING: The *jeets-dcs-traccar-4.2.x-beta* project is still in experimental
 `jeets-dcs-traccar` combines the following JeeTS projects to a single runnable 
 Java Archive (`.jar` file):
 
-* link:../../jeets-models/jeets-pu-traccar/ReadMe.adoc[jeets-pu-traccar] +
+* link:../../jeets-models/jeets-pu-traccar/README.adoc[jeets-pu-traccar] +
 represents the Traccar Entity Relation Model (ERM) specified 
 with a JPA Persistence Unit and related Java Entities. +
 The project includes a Postgres Database Driver.
 
-* link:../../jeets-models/jeets-protocols/ReadMe.adoc[jeets-protocols] +
+* link:../../jeets-models/jeets-protocols/README.adoc[jeets-protocols] +
 adds Protocol Buffers to send Traccar Messages in binary format. +
 The project includes the Protobuffer Library.
 

@@ -34,7 +34,7 @@ while the actual tracking data is collected
 in only three tables in the middle of the diagram.
 
 
-image:.\diagrams\traccarERM41.png[image]
+image:.\Diagrams\traccarERM41.png[image]
 
 
 === Simple Data Model
@@ -47,7 +47,7 @@ that should be tested for every new use case:
 
 
 [.text-center]
-image::.\diagrams\DeviceRelations.png[image]
+image::.\Diagrams\DeviceRelations.png[image]
 
 
 === Object Relation Model
@@ -59,8 +59,8 @@ The same holds for the JeeTS Protobuffer protocol and allows bulk messages
 or collecting Positions and Events over time and transfer them in a single message.
 
 [.text-center]
-image::.\diagrams\deviceORM.png[deviceORM]
-//image::.\diagrams\deviceORM.png[deviceORM,624,288]
+image::.\Diagrams\deviceORM.png[deviceORM]
+//image::.\Diagrams\deviceORM.png[deviceORM,624,288]
 
 This single device message holds an object relational model
 with one device-, two position- and five event entities.

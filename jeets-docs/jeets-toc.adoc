@@ -40,7 +40,7 @@ the https://github.com/traccar/traccar[Traccar GTS code].
 The JeeTS Persistence Unit was coded against the Traccar Model
 and as the Standard Model of the JEE JPA specification.
 
-* link:../jeets-models/jeets-pu-traccar/ReadMe.adoc[jeets-pu-traccar] +
+* link:../jeets-models/jeets-pu-traccar/README.adoc[jeets-pu-traccar] +
 represents the Traccar Entity Relation Model specified 
 with a JPA Persistence Unit and related Java Entities.
 
@@ -54,7 +54,7 @@ to be sent to the system.
 The *jeets-protocols* project is supplying Protobuffers 
 for effective binary encoding and decoding.
 
-* link:../jeets-models/jeets-protocols/ReadMe.adoc[jeets-protocols] +
+* link:../jeets-models/jeets-protocols/README.adoc[jeets-protocols] +
 adds Protocol Buffers to send Traccar Messages in binary format. 
 
 
@@ -94,7 +94,7 @@ In order to grasp the JeeTS modeling process from the monolithic
 Traccar GTS to individual components you can look 
 at the following projects consecutively:
 
-* link:../jeets-server-jse/jeets-dcs/ReadMe.adoc[jeets-dcs] +
+* link:../jeets-server-jse/jeets-dcs/README.adoc[jeets-dcs] +
 combines the above projects (pu and protocols) to receive binary 
 Protobuffer messages and transform them to Java Entities.
 
@@ -107,7 +107,7 @@ to receive Tracker Messages from any Tracker supported by Traccar!
 The cascaded build works analog to the example above
 only with more complex modules:
 
-. link:../jeets-models/jeets-pu-traccar/ReadMe.adoc[jeets-pu-traccar]
+. link:../jeets-models/jeets-pu-traccar/README.adoc[jeets-pu-traccar]
 as above
 
 . link:../jeets-models/jeets-protocols-traccar/jeets-protocols-traccar.adoc[jeets-protocols-traccar] +
@@ -140,7 +140,7 @@ Then it starts the *jeets-tracker*, which also includes
 the projects *jeets-pu-traccar* and *jeets-protocols*,
 to send Traccar Protobuffers.
 
-* link:../jeets-itests/tracker2dcs/ReadMe.adoc[tracker2dcs] +
+* link:../jeets-itests/tracker2dcs/README.adoc[tracker2dcs] +
 By studying this integration test you can find out how to send
 messages from a client to a server and assert their communication.
 
