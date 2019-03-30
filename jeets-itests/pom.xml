@@ -29,7 +29,7 @@
 	<artifactId>jeets-itests</artifactId>
 	<packaging>pom</packaging>
 
-	<name>--- Integration Tests ---</name>
+	<name>--- Integration Tests                ---</name>
 
 	<modules>
 		<module>tracker2dcs</module>
