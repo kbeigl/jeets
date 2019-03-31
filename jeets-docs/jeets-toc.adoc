@@ -126,8 +126,10 @@ WARNING: The *jeets-dcs-traccar* project is still in experimental
 
 == jeets-itests
 
-This folder is providing an *Integration Test* environment to setup 
-and test different components close to a production environment.
+This folder is providing an 
+link:../jeets-itests/README.md[Integration Test] 
+environment to setup and test different components 
+close to a production environment.
 
 
 === Testing Device Communication

@@ -21,7 +21,7 @@
 	<groupId>org.jeets</groupId>
 	<artifactId>jeets</artifactId>
 	<!-- main JeeTS repo version -->
-	<version>1.2.1</version>
+	<version>1.2.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>=== JeeTS - Java EE Tracking Software   ===</name>
