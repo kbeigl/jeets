@@ -1,7 +1,6 @@
 package org.traccar;
 
 import org.junit.Test;
-import org.traccar.jeets.Config;
 
 import static org.junit.Assert.assertEquals;
 

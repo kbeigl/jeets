@@ -1,7 +1,7 @@
 package org.traccar.protocol;
 
 import org.junit.Test;
-import org.traccar.jeets.ProtocolTest;
+import org.traccar.ProtocolTest;
 import org.traccar.protocol.Jt600FrameDecoder;
 
 public class Jt600FrameDecoderTest extends ProtocolTest {

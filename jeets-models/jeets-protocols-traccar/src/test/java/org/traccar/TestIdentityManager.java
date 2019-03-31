@@ -1,8 +1,8 @@
 package org.traccar;
 
-import org.traccar.jeets.database.IdentityManager;
-import org.traccar.jeets.model.Position;
+import org.traccar.database.IdentityManager;
 import org.traccar.model.Device;
+import org.traccar.model.Position;
 
 public final class TestIdentityManager implements IdentityManager {
 
