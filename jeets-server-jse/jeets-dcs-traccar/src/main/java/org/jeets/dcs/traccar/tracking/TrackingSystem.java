@@ -1,6 +1,6 @@
 package org.jeets.dcs.traccar.tracking;
 
-import org.traccar.jeets.model.Position;
+import org.traccar.model.Position;
 
 /**
  * This class represents the Tracking System with incoming

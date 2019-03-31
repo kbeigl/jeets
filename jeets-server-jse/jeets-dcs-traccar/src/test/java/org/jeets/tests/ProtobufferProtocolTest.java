@@ -3,8 +3,8 @@ package org.jeets.tests;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import org.traccar.jeets.BaseProtocol;
-import org.traccar.jeets.TrackerServer;
+import org.traccar.BaseProtocol;
+import org.traccar.TrackerServer;
 
 public class ProtobufferProtocolTest {
 
@@ -15,8 +15,8 @@ public class ProtobufferProtocolTest {
     @Test
     public void testProtobufferProtocol() throws Exception {
         
-        org.traccar.jeets.Context.init("setup/traccar.xml");
-        String protocolString = "org.traccar.jeets.protocol.ProtobufferProtocol";
+        org.traccar.Context.init("setup/traccar.xml");
+        String protocolString = "org.traccar.protocol.ProtobufferProtocol";
         
         @SuppressWarnings("rawtypes")
         Class protocolClass = Class.forName(protocolString);

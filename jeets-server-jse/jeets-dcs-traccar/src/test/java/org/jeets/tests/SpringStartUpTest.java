@@ -18,7 +18,7 @@ package org.jeets.tests;
 
 import junit.framework.TestCase;
 import org.apache.camel.spring.Main;
-import org.traccar.jeets.Context;
+import org.traccar.Context;
 
 public class SpringStartUpTest extends TestCase {
 

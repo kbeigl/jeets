@@ -19,9 +19,9 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.spi.Registry;
 import org.jeets.util.ClassFinder;
 import org.jeets.util.MultiRegistry;
-import org.traccar.jeets.BaseProtocol;
-import org.traccar.jeets.Context;
-import org.traccar.jeets.TrackerServer;
+import org.traccar.BaseProtocol;
+import org.traccar.Context;
+import org.traccar.TrackerServer;
 
 /**
  * This Factory replaces the org.traccar.ServerManager
@@ -39,7 +39,7 @@ public class DcsRoutesFactory {
 
     public void createTraccarDcsRoutes(CamelContext camelContext, Registry registry) {
 
-        Map<String, BaseProtocol> protocolList = getInstantiatedProtocols("org.traccar.jeets.protocol");
+        Map<String, BaseProtocol> protocolList = getInstantiatedProtocols("org.traccar.protocol");
         System.out.println("instantiated " + protocolList.size() + " *Protocol objects");
         Map<String, Integer> portFailures = new ConcurrentHashMap<>();
 //      introduce counter before and after ? in test?
@@ -109,7 +109,7 @@ public class DcsRoutesFactory {
 
         Map<String, BaseProtocol> protocolList = new ConcurrentHashMap<>();
         List<Class<?>> protocolClasses =
-                ClassFinder.getClasses(packageName, org.traccar.jeets.BaseProtocol.class);
+                ClassFinder.getClasses(packageName, org.traccar.BaseProtocol.class);
 
         for (Class<?> protocolClass : protocolClasses) {
 //          if (BaseProtocol.class.isAssignableFrom(protocolClass)) &&

@@ -5,7 +5,7 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.jeets.routes.ContextInitDslRoute;
 import org.junit.Test;
-import org.traccar.jeets.Context;
+import org.traccar.Context;
 
 public class ContextInitDslRouteTest extends CamelTestSupport {
 
