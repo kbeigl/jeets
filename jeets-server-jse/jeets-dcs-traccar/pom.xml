@@ -8,14 +8,14 @@
     <version>1.2.2-SNAPSHOT</version>
   </parent>
   <artifactId>jeets-dcs-traccar</artifactId>
-  <version>4.2.4-beta</version>
+  <version>4.3.0-beta</version>
   <name>jeets-dcs-traccar</name>
   <url>jeets.org</url>
   <dependencies>
     <dependency>
       <groupId>org.jeets</groupId>
       <artifactId>jeets-protocols-traccar</artifactId>
-      <version>4.2.4-beta</version>
+      <version>4.3.0-beta</version>
     </dependency>
 	<!-- required for packaging jar-with-dependencies (clarify),
 		align with parent and 
