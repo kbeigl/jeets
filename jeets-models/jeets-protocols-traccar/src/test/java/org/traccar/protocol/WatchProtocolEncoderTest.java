@@ -3,7 +3,6 @@ package org.traccar.protocol;
 import org.junit.Test;
 import org.traccar.ProtocolTest;
 import org.traccar.model.Command;
-import org.traccar.protocol.WatchProtocolEncoder;
 
 import static org.junit.Assert.assertEquals;
 
@@ -33,6 +32,18 @@ public class WatchProtocolEncoderTest extends ProtocolTest {
         command.setType(Command.TYPE_VOICE_MESSAGE);
         command.set(Command.KEY_DATA, "3333");
         assertEquals("[CS*123456789012345*0005*TK,33]", encoder.encodeCommand(null, command));
+
+        command = new Command();
+        command.setDeviceId(1);
+        command.setType(Command.TYPE_VOICE_MESSAGE);
+        command.set(Command.KEY_DATA, "2321414d520a2573");
+        assertEquals("[CS*123456789012345*000b*TK,#!AMR\n%s]", encoder.encodeCommand(null, command));
+
+        command = new Command();
+        command.setDeviceId(1);
+        command.setType(Command.TYPE_MESSAGE);
+        command.set(Command.KEY_MESSAGE, "text");
+        assertEquals("[CS*123456789012345*0018*MESSAGE,0074006500780074]", encoder.encodeCommand(null, command));
 
         command = new Command();
         command.setDeviceId(1);

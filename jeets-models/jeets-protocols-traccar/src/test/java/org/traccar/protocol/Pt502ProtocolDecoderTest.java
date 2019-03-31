@@ -3,7 +3,6 @@ package org.traccar.protocol;
 import org.junit.Test;
 import org.traccar.ProtocolTest;
 import org.traccar.model.Position;
-import org.traccar.protocol.Pt502ProtocolDecoder;
 
 public class Pt502ProtocolDecoderTest extends ProtocolTest {
 

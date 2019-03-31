@@ -1,19 +1,8 @@
 package org.jeets.dcs.traccar.routes;
 
-import java.io.File;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Enumeration;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-
 import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.spi.Registry;
@@ -161,77 +150,4 @@ public class DcsRoutesFactory {
         }
     }
 
-    @Deprecated
-    private Map<String, BaseProtocol> getProtocolList(String packageName) {
-        Map<String, BaseProtocol> protocolList = null;
-        List<String> names = null;
-        try {
-            names = getClassNames(packageName);
-//          check empty list and null
-            protocolList = getProtocolInstances(names, packageName);
-//          check empty list and null
-            System.out.println("loaded " + protocolList.size() + " *Protocol objects");
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return protocolList;
-    }
-
-    /**
-     * Map the protocol name to an instantiated BaseProtocol object. This step was
-     * slightly modified from the traccar implementation, since we will start the
-     * TrackerServer routes via camel-netty4. The mapping returns all information
-     * and objects to create netty4: Camel routes.
-     */
-    @Deprecated
-    private Map<String, BaseProtocol> getProtocolInstances(List<String> classNames, String packageName)
-            throws Exception {
-
-        Map<String, BaseProtocol> protocolList = new LinkedHashMap<>();
-        for (String name : classNames) {
-            @SuppressWarnings("rawtypes")
-            Class protocolClass = Class.forName(packageName + '.' + name);
-            if (BaseProtocol.class.isAssignableFrom(protocolClass)
-                    && Context.getConfig().hasKey(BaseProtocol.nameFromClass(protocolClass) + ".port")) {
-                BaseProtocol protocol = (BaseProtocol) protocolClass.newInstance();
-                protocolList.put(protocol.getName(), protocol);
-            }
-        }
-        return protocolList;
-    }
-
-    /**
-     * The source of this code is the org.traccar.ServerManager's constructor where
-     * the Protocols are loaded, configured and actvated.
-     */
-    @Deprecated
-    private List<String> getClassNames(String packageName) throws Exception {
-        List<String> names = new LinkedList<>();
-        String packagePath = packageName.replace('.', '/');
-        URL packageUrl = getClass().getClassLoader().getResource(packagePath);
-
-        if (packageUrl.getProtocol().equals("jar")) {
-            String jarFileName = URLDecoder.decode(packageUrl.getFile(), StandardCharsets.UTF_8.name());
-            try (JarFile jf = new JarFile(jarFileName.substring(5, jarFileName.indexOf("!")))) {
-                Enumeration<JarEntry> jarEntries = jf.entries();
-                while (jarEntries.hasMoreElements()) {
-                    String entryName = jarEntries.nextElement().getName();
-                    if (entryName.startsWith(packagePath) && entryName.length() > packagePath.length() + 5) {
-                        names.add(entryName.substring(packagePath.length() + 1, entryName.lastIndexOf('.')));
-                    }
-                }
-            }
-        } else {
-            File folder = new File(new URI(packageUrl.toString()));
-            File[] files = folder.listFiles();
-            if (files != null) {
-                for (File actual: files) {
-                    String entryName = actual.getName();
-                    names.add(entryName.substring(0, entryName.lastIndexOf('.')));
-                }
-            }
-        }
-        return names;
-    }
 }

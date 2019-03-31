@@ -2,7 +2,6 @@ package org.traccar.protocol;
 
 import org.junit.Test;
 import org.traccar.ProtocolTest;
-import org.traccar.protocol.CellocatorProtocolDecoder;
 
 public class CellocatorProtocolDecoderTest extends ProtocolTest {
 
@@ -10,6 +9,9 @@ public class CellocatorProtocolDecoderTest extends ProtocolTest {
     public void testDecode() throws Exception {
 
         CellocatorProtocolDecoder decoder = new CellocatorProtocolDecoder(null);
+
+        verifyPosition(decoder, binary(
+                "4d4350470041420f000402021226d8a70221d801010000000001000000000000000000000000c4d90000000ca7a741ff0096dd15a40700000000000000001619130c01e307e4"));
 
         verifyPosition(decoder, binary(
                 "4D434750008AD01500080103011804000000460020000000005E750000000000000000000000C34300040204DA4DA30367195703E803000000000000000001030F0802E10778"));

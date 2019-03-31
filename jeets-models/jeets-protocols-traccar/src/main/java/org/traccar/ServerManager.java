@@ -79,16 +79,16 @@ public class ServerManager {
         }
     }
 
-//    public BaseProtocol getProtocol(String name) {
-//        return protocolList.get(name);
-//    }
+    public BaseProtocol getProtocol(String name) {
+        return protocolList.get(name);
+    }
 
     public void start() throws Exception {
         for (TrackerServer server: serverList) {
             try {
                 server.start();
             } catch (BindException e) {
-                LOGGER.warn("One of the protocols is disabled due to port conflict");
+                LOGGER.warn("Port {} is disabled due to conflict", server.getPort());
             }
         }
     }

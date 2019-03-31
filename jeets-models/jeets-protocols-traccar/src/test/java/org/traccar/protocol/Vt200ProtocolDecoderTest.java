@@ -2,7 +2,6 @@ package org.traccar.protocol;
 
 import org.junit.Test;
 import org.traccar.ProtocolTest;
-import org.traccar.protocol.Vt200ProtocolDecoder;
 
 public class Vt200ProtocolDecoderTest extends ProtocolTest {
 

@@ -4,7 +4,6 @@ import io.netty.handler.codec.http.DefaultHttpHeaders;
 import io.netty.handler.codec.http.HttpMethod;
 import org.junit.Test;
 import org.traccar.ProtocolTest;
-import org.traccar.protocol.AppletProtocolDecoder;
 
 public class AppletProtocolDecoderTest extends ProtocolTest {
 

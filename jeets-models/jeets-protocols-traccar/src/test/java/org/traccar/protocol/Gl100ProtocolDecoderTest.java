@@ -3,7 +3,6 @@ package org.traccar.protocol;
 
 import org.junit.Test;
 import org.traccar.ProtocolTest;
-import org.traccar.protocol.Gl100ProtocolDecoder;
 
 public class Gl100ProtocolDecoderTest extends ProtocolTest {
 

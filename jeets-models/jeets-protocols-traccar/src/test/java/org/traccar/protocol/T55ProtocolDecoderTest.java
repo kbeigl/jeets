@@ -2,7 +2,6 @@ package org.traccar.protocol;
 
 import org.junit.Test;
 import org.traccar.ProtocolTest;
-import org.traccar.protocol.T55ProtocolDecoder;
 
 public class T55ProtocolDecoderTest extends ProtocolTest {
 
@@ -10,6 +9,9 @@ public class T55ProtocolDecoderTest extends ProtocolTest {
     public void testDecode() throws Exception {
 
         T55ProtocolDecoder decoder = new T55ProtocolDecoder(null);
+
+        verifyPosition(decoder, text(
+                "660420156A0066AA$GPRMC,122806.0,A,0119.212178,N,10355.000942,E,0.0,,230119,0.0,E,A*27"));
 
         verifyNull(decoder, text(
                 "$IMEI=355797031609284"));

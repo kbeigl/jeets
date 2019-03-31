@@ -18,6 +18,7 @@ package org.traccar.protocol;
 import io.netty.channel.Channel;
 import org.traccar.BaseProtocolDecoder;
 import org.traccar.DeviceSession;
+import org.traccar.NetworkMessage;
 import org.traccar.Protocol;
 import org.traccar.helper.Parser;
 import org.traccar.helper.PatternBuilder;
@@ -38,7 +39,7 @@ public class ItsProtocolDecoder extends BaseProtocolDecoder {
             .expression("[^,]+,")                // event
             .groupBegin()
             .expression("[^,]+,")                // vendor
-            .number("d+.d+.d+,")                 // firmware version
+            .expression("[^,]+,")                // firmware version
             .groupEnd("?")
             .expression("[^,]+,")                // type
             .groupBegin()
@@ -52,13 +53,19 @@ public class ItsProtocolDecoder extends BaseProtocolDecoder {
             .expression("[^,]+,")                // vehicle registration
             .number("([01]),")                   // valid
             .groupEnd()
-            .number("(dd),(dd),(dddd),")         // date (ddmmyyyy)
-            .number("(dd),(dd),(dd),")           // time (hhmmss)
+            .number("(dd),?(dd),?(dddd),")       // date (ddmmyyyy)
+            .number("(dd),?(dd),?(dd),")         // time (hhmmss)
             .expression("([AV]),").optional()    // valid
             .number("(d+.d+),([NS]),")           // latitude
             .number("(d+.d+),([EW]),")           // longitude
-            .number("(-?d+.d+),").optional()     // altitude
+            .groupBegin()
             .number("(d+.d+),")                  // speed
+            .number("(d+.d+),")                  // course
+            .number("(d+),")                     // satellites
+            .or()
+            .number("(-?d+.d+),")                // altitude
+            .number("(d+.d+),")                  // speed
+            .groupEnd()
             .any()
             .compile();
 
@@ -66,7 +73,13 @@ public class ItsProtocolDecoder extends BaseProtocolDecoder {
     protected Object decode(
             Channel channel, SocketAddress remoteAddress, Object msg) throws Exception {
 
-        Parser parser = new Parser(PATTERN, (String) msg);
+        String sentence = (String) msg;
+
+        if (channel != null && sentence.startsWith("$,01,")) {
+            channel.writeAndFlush(new NetworkMessage("$,1,*", remoteAddress));
+        }
+
+        Parser parser = new Parser(PATTERN, sentence);
         if (!parser.matches()) {
             return null;
         }
@@ -88,8 +101,17 @@ public class ItsProtocolDecoder extends BaseProtocolDecoder {
         }
         position.setLatitude(parser.nextCoordinate(Parser.CoordinateFormat.DEG_HEM));
         position.setLongitude(parser.nextCoordinate(Parser.CoordinateFormat.DEG_HEM));
-        position.setAltitude(parser.nextDouble(0));
-        position.setSpeed(UnitsConverter.knotsFromKph(parser.nextDouble()));
+
+        if (parser.hasNext(3)) {
+            position.setSpeed(UnitsConverter.knotsFromKph(parser.nextDouble()));
+            position.setCourse(parser.nextDouble());
+            position.set(Position.KEY_SATELLITES, parser.nextInt());
+        }
+
+        if (parser.hasNext()) {
+            position.setAltitude(parser.nextDouble(0));
+            position.setSpeed(UnitsConverter.knotsFromKph(parser.nextDouble()));
+        }
 
         return position;
     }

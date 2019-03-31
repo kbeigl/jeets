@@ -1,7 +1,7 @@
 package org.traccar.protocol;
 
 import org.traccar.ProtocolTest;
-import org.traccar.protocol.Jt600ProtocolDecoder;
+
 import org.junit.Test;
 
 public class Jt600ProtocolDecoderTest extends ProtocolTest {

@@ -38,6 +38,7 @@ import java.util.TimeZone;
 public abstract class BaseProtocolDecoder extends ExtendedObjectDecoder {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseProtocolDecoder.class);
+
     private static final String PROTOCOL_UNKNOWN = "unknown";
 
     private final Config config = Context.getConfig();
@@ -54,13 +55,13 @@ public abstract class BaseProtocolDecoder extends ExtendedObjectDecoder {
         return protocol != null ? protocol.getName() : PROTOCOL_UNKNOWN;
     }
 
-    public String getServer(Channel channel) {
+    public String getServer(Channel channel, char delimiter) {
         String server = config.getString(getProtocolName() + ".server");
         if (server == null && channel != null) {
             InetSocketAddress address = (InetSocketAddress) channel.localAddress();
             server = address.getAddress().getHostAddress() + ":" + address.getPort();
         }
-        return server;
+        return server != null ? server.replace(':', delimiter) : null;
     }
 
     protected double convertSpeed(double value, String defaultUnits) {

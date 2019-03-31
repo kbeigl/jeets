@@ -3,7 +3,6 @@ package org.traccar.protocol;
 import org.junit.Test;
 import org.traccar.ProtocolTest;
 import org.traccar.model.Position;
-import org.traccar.protocol.H02ProtocolDecoder;
 
 public class H02ProtocolDecoderTest extends ProtocolTest {
 
@@ -11,6 +10,9 @@ public class H02ProtocolDecoderTest extends ProtocolTest {
     public void testDecode() throws Exception {
 
         H02ProtocolDecoder decoder = new H02ProtocolDecoder(null);
+
+        verifyNotNull(decoder, buffer(
+                "*hq,356327081001239,VP1,V,470,002,92,3565,0Y92,19433,30Y92,1340,29#"));
 
         verifyPosition(decoder, binary(
                 "2435248308419329301047591808172627335900074412294E024138FEFFFFFFFF01120064BA73005ECC"));

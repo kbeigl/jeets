@@ -2,7 +2,6 @@ package org.traccar.protocol;
 
 import org.junit.Test;
 import org.traccar.ProtocolTest;
-import org.traccar.protocol.AtrackProtocolDecoder;
 
 public class AtrackProtocolDecoderTest extends ProtocolTest {
 
@@ -34,6 +33,9 @@ public class AtrackProtocolDecoderTest extends ProtocolTest {
         decoder.setLongDate(false);
 
         decoder.setCustom(true);
+
+        verifyPositions(decoder, buffer(
+                "@P,9493,402,143,356961075931165,1546830150,1546830151,1546830151,-88429209,44271154,54,10,0,10,1,0,0,0,1858AE010000,2000,2000,\u001A,%CI%FL%ML%VN%PD%FC%EL%ET%AT%MF%MV%BV%DT%GN%GV%ME%RL%RP%SA%SM%TR%IA%MP,0,0,2T1KR32E28C706185,0,1,0,7,251,89,118,41,0,00A5001A040800A5001A040B00A5001A040C00A5001A040900A4001C040D00A50019040900A60019040900A4001B040B00A5001A040900A7001A040E\u001A,008CFE7C03C4\u001A,356961075931165,0,0,12,0,18,5,0\n"));
 
         verifyPositions(decoder, buffer(
                 "@P,FD34,720,12256,357520076794151,1535445349,1535445354,1535500603,106784149,-6283086,105,2,138,0,3,0,0,0,,2000,2000,,%CI%TR%MV%BV%AT%SA%ET%GQ%GS%PC%RP%OD%AV1%XS%VS,0,0,0,0,0,0,0,0,1011677,0,138,0,0,0\r\n",

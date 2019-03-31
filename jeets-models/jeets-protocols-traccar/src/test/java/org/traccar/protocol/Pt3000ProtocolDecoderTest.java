@@ -2,7 +2,6 @@ package org.traccar.protocol;
 
 import org.junit.Test;
 import org.traccar.ProtocolTest;
-import org.traccar.protocol.Pt3000ProtocolDecoder;
 
 public class Pt3000ProtocolDecoderTest extends ProtocolTest {
 

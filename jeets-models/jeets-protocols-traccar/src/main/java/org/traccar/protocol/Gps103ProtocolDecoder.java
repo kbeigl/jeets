@@ -15,11 +15,15 @@
  */
 package org.traccar.protocol;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import org.traccar.BaseProtocolDecoder;
+import org.traccar.Context;
 import org.traccar.DeviceSession;
 import org.traccar.NetworkMessage;
 import org.traccar.Protocol;
+import org.traccar.helper.DataConverter;
 import org.traccar.helper.DateBuilder;
 import org.traccar.helper.Parser;
 import org.traccar.helper.PatternBuilder;
@@ -33,6 +37,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Gps103ProtocolDecoder extends BaseProtocolDecoder {
+
+    private int photoPackets = 0;
+    private ByteBuf photo;
 
     public Gps103ProtocolDecoder(Protocol protocol) {
         super(protocol);
@@ -73,9 +80,11 @@ public class Gps103ProtocolDecoder extends BaseProtocolDecoder {
             .number(",(d+.?d*)?").optional()     // altitude
             .number(",([01])?").optional()       // ignition
             .number(",([01])?").optional()       // door
-            .number(",(?:(d+.d+)%)?").optional() // fuel 1
-            .number(",(?:(d+.d+)%)?").optional() // fuel 2
-            .number("(-?d+)?")                   // temperature
+            .groupBegin()
+            .number(",(?:(d+.d+)%)?")  // fuel 1
+            .number(",(?:(d+.d+)%|d+)?")  // fuel 2
+            .groupEnd("?")
+            .number(",([-+]?d+)?")               // temperature
             .groupEnd()
             .any()
             .compile();
@@ -104,9 +113,9 @@ public class Gps103ProtocolDecoder extends BaseProtocolDecoder {
             .text("imei:")
             .number("(d+),")                     // imei
             .expression("[^,]+,")
-            .expression("...,")                  // event
-            .expression(".{6},")                 // sensor id
-            .expression(".{4},")                 // sensor voltage
+            .expression("(?:-+|(.+)),")          // event
+            .expression("(?:-+|(.+)),")          // sensor id
+            .expression("(?:-+|(.+)),")          // sensor voltage
             .number("(dd)(dd)(dd),")             // time (hhmmss)
             .number("(dd)(dd)(dd),")             // date (ddmmyy)
             .number("(d+),")                     // rssi
@@ -118,6 +127,9 @@ public class Gps103ProtocolDecoder extends BaseProtocolDecoder {
             .number("(-?d+),")                   // altitude
             .number("(d+.d+),")                  // hdop
             .number("(d+),")                     // satellites
+            .number("([01]),")                   // ignition
+            .number("([01]),")                   // charge
+            .expression("(?:-+|(.+))")           // error
             .any()
             .compile();
 
@@ -185,12 +197,15 @@ public class Gps103ProtocolDecoder extends BaseProtocolDecoder {
             if (channel != null) {
                 channel.writeAndFlush(new NetworkMessage("**,imei:" + imei + ",E;", remoteAddress));
             }
+        } else if (alarm.startsWith("vt")) {
+            photoPackets = Integer.parseInt(alarm.substring(2));
+            photo = Unpooled.buffer();
         } else if (alarm.equals("acc on")) {
             position.set(Position.KEY_IGNITION, true);
         } else if (alarm.equals("acc off")) {
             position.set(Position.KEY_IGNITION, false);
         } else if (alarm.startsWith("T:")) {
-            position.set(Position.PREFIX_TEMP + 1, alarm.substring(2));
+            position.set(Position.PREFIX_TEMP + 1, Double.parseDouble(alarm.substring(2)));
         } else if (alarm.startsWith("oil ")) {
             position.set(Position.KEY_FUEL_LEVEL, Double.parseDouble(alarm.substring(4)));
         } else if (!position.getAttributes().containsKey(Position.KEY_ALARM) && !alarm.equals("tracker")) {
@@ -307,6 +322,10 @@ public class Gps103ProtocolDecoder extends BaseProtocolDecoder {
         Position position = new Position(getProtocolName());
         position.setDeviceId(deviceSession.getDeviceId());
 
+        position.set(Position.KEY_EVENT, parser.next());
+        position.set("sensorId", parser.next());
+        position.set("sensorVoltage", parser.nextDouble());
+
         position.setTime(parser.nextDateTime(Parser.DateTimeFormat.HMS_DMY));
 
         position.set(Position.KEY_RSSI, parser.nextInt());
@@ -320,8 +339,44 @@ public class Gps103ProtocolDecoder extends BaseProtocolDecoder {
 
         position.set(Position.KEY_HDOP, parser.nextDouble());
         position.set(Position.KEY_SATELLITES, parser.nextInt());
+        position.set(Position.KEY_IGNITION, parser.nextInt() > 0);
+        position.set(Position.KEY_CHARGE, parser.nextInt() > 0);
+        position.set("error", parser.next());
 
         return position;
+    }
+
+    private Position decodePhoto(Channel channel, SocketAddress remoteAddress, String sentence) {
+
+        String imei = sentence.substring(5, 5 + 15);
+        DeviceSession deviceSession = getDeviceSession(channel, remoteAddress, imei);
+        if (deviceSession == null) {
+            return null;
+        }
+
+        ByteBuf buf = Unpooled.wrappedBuffer(DataConverter.parseHex(
+                sentence.substring(24, sentence.endsWith(";") ? sentence.length() - 1 : sentence.length())));
+        int index = buf.readUnsignedShortLE();
+        photo.writeBytes(buf, buf.readerIndex() + 2, buf.readableBytes() - 4);
+
+        if (index + 1 >= photoPackets) {
+            Position position = new Position(getProtocolName());
+            position.setDeviceId(deviceSession.getDeviceId());
+
+            getLastLocation(position, null);
+
+            try {
+                position.set(Position.KEY_IMAGE, Context.getMediaManager().writeFile(imei, photo, "jpg"));
+            } finally {
+                photoPackets = 0;
+                photo.release();
+                photo = null;
+            }
+
+            return position;
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -353,7 +408,9 @@ public class Gps103ProtocolDecoder extends BaseProtocolDecoder {
             }
         }
 
-        if (sentence.contains("OBD")) {
+        if (sentence.substring(21, 21 + 2).equals("vr")) {
+            return decodePhoto(channel, remoteAddress, sentence);
+        } else if (sentence.substring(21, 21 + 3).contains("OBD")) {
             return decodeObd(channel, remoteAddress, sentence);
         } else if (sentence.endsWith("*")) {
             return decodeAlternative(channel, remoteAddress, sentence);

@@ -2,7 +2,6 @@ package org.traccar.protocol;
 
 import org.junit.Test;
 import org.traccar.ProtocolTest;
-import org.traccar.protocol.Gl200BinaryProtocolDecoder;
 
 public class Gl200BinaryProtocolDecoderTest extends ProtocolTest {
 

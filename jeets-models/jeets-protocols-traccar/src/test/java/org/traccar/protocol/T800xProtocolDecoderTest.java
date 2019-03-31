@@ -2,7 +2,6 @@ package org.traccar.protocol;
 
 import org.junit.Test;
 import org.traccar.ProtocolTest;
-import org.traccar.protocol.T800xProtocolDecoder;
 
 public class T800xProtocolDecoderTest extends ProtocolTest {
 

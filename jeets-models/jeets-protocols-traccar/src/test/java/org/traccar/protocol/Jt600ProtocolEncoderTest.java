@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.traccar.ProtocolTest;
 import org.traccar.model.Command;
-import org.traccar.protocol.Jt600ProtocolEncoder;
 
 public class Jt600ProtocolEncoderTest extends ProtocolTest {
     Jt600ProtocolEncoder encoder = new Jt600ProtocolEncoder();

@@ -3,7 +3,6 @@ package org.traccar.protocol;
 import io.netty.handler.codec.http.HttpMethod;
 import org.junit.Test;
 import org.traccar.ProtocolTest;
-import org.traccar.protocol.PiligrimProtocolDecoder;
 
 public class PiligrimProtocolDecoderTest extends ProtocolTest {
 

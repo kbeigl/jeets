@@ -2,7 +2,6 @@ package org.traccar.protocol;
 
 import org.junit.Test;
 import org.traccar.ProtocolTest;
-import org.traccar.protocol.Gt06FrameDecoder;
 
 public class Gt06FrameDecoderTest extends ProtocolTest {
 

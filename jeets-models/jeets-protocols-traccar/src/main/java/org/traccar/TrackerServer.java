@@ -58,11 +58,14 @@ public abstract class TrackerServer {
 
 //      handle this in Camel uri (spring.xml). Deactivate here?
         if (datagram) {
+
             this.bootstrap = new Bootstrap()
                     .group(EventLoopGroupFactory.getWorkerGroup())
                     .channel(NioDatagramChannel.class)
                     .handler(pipelineFactory);
+
         } else {
+
             this.bootstrap = new ServerBootstrap()
                     .group(EventLoopGroupFactory.getBossGroup(), EventLoopGroupFactory.getWorkerGroup())
                     .channel(NioServerSocketChannel.class)
@@ -93,6 +96,7 @@ public abstract class TrackerServer {
     protected abstract void addProtocolHandlers(PipelineBuilder pipeline);
 
     private int port;
+
     public int getPort() {
         return port;
     }
@@ -102,6 +106,7 @@ public abstract class TrackerServer {
     }
 
     private String address;
+
     public String getAddress() {
         return address;
     }
@@ -111,6 +116,7 @@ public abstract class TrackerServer {
     }
 
     private final ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+
     public ChannelGroup getChannelGroup() {
         return channelGroup;
     }

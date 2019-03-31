@@ -19,7 +19,6 @@ package org.traccar.protocol;
 import org.junit.Test;
 import org.traccar.ProtocolTest;
 import org.traccar.model.Command;
-import org.traccar.protocol.AdmProtocolEncoder;
 
 import static org.junit.Assert.assertEquals;
 

@@ -2,7 +2,6 @@ package org.traccar.protocol;
 
 import org.junit.Test;
 import org.traccar.ProtocolTest;
-import org.traccar.protocol.EskyProtocolDecoder;
 
 public class EskyProtocolDecoderTest extends ProtocolTest {
 

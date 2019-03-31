@@ -2,7 +2,6 @@ package org.traccar.protocol;
 
 import org.junit.Test;
 import org.traccar.ProtocolTest;
-import org.traccar.protocol.Tt8850ProtocolDecoder;
 
 public class Tt8850ProtocolDecoderTest extends ProtocolTest {
 

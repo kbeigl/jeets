@@ -3,7 +3,6 @@ package org.traccar.protocol;
 import org.junit.Test;
 import org.traccar.ProtocolTest;
 import org.traccar.model.Position;
-import org.traccar.protocol.Tk103ProtocolDecoder;
 
 public class Tk103ProtocolDecoderTest extends ProtocolTest {
 
