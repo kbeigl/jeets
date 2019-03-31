@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.junit.Test;
 import org.traccar.BaseTest;
-import org.traccar.events.AlertEventHandler;
 import org.traccar.model.Event;
 import org.traccar.model.Position;
 

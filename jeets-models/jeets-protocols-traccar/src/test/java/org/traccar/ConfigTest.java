@@ -1,8 +1,8 @@
 package org.traccar;
 
 import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
+import org.traccar.Config;
 
 public class ConfigTest {
 
