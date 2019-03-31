@@ -18,7 +18,6 @@ package org.traccar.protocol;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-
 import org.traccar.StringProtocolEncoder;
 import org.traccar.model.Command;
 

@@ -15,10 +15,10 @@
  */
 package org.traccar.protocol;
 
+import org.traccar.BaseProtocolDecoder;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
-
-import org.traccar.BaseProtocolDecoder;
 import org.traccar.Protocol;
 
 import java.net.SocketAddress;

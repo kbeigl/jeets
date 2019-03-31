@@ -16,7 +16,6 @@
 package org.traccar.protocol;
 
 import io.netty.channel.Channel;
-
 import org.traccar.BaseProtocolEncoder;
 import org.traccar.model.Command;
 

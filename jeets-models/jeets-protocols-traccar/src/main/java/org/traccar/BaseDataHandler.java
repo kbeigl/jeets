@@ -15,10 +15,9 @@
  */
 package org.traccar;
 
-import org.traccar.model.Position;
-
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import org.traccar.model.Position;
 
 public abstract class BaseDataHandler extends ChannelInboundHandlerAdapter {
 

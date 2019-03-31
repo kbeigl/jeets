@@ -15,9 +15,8 @@
  */
 package org.traccar.model;
 
-import org.traccar.Context;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.traccar.Context;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CellTower {

@@ -15,10 +15,10 @@
  */
 package org.traccar.helper;
 
+import org.traccar.model.Position;
+
 import java.util.AbstractMap;
 import java.util.Map;
-
-import org.traccar.model.Position;
 
 public final class ObdDecoder {
 

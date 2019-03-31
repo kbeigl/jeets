@@ -15,6 +15,8 @@
  */
 package org.traccar.helper;
 
+import org.traccar.Config;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,8 +34,6 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
-
-import org.traccar.Config;
 
 public final class Log {
 

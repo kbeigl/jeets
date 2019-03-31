@@ -16,7 +16,6 @@
 package org.traccar.protocol;
 
 import io.netty.channel.Channel;
-
 import org.traccar.BaseProtocolDecoder;
 import org.traccar.Context;
 import org.traccar.DeviceSession;

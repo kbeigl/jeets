@@ -16,7 +16,6 @@
 package org.traccar.protocol;
 
 import io.netty.handler.codec.string.StringDecoder;
-
 import org.traccar.BaseProtocol;
 import org.traccar.CharacterDelimiterFrameDecoder;
 import org.traccar.PipelineBuilder;

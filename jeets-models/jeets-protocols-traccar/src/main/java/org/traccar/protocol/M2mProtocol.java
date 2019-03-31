@@ -16,7 +16,6 @@
 package org.traccar.protocol;
 
 import io.netty.handler.codec.FixedLengthFrameDecoder;
-
 import org.traccar.BaseProtocol;
 import org.traccar.PipelineBuilder;
 import org.traccar.TrackerServer;

@@ -18,10 +18,9 @@ package org.traccar;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import org.traccar.model.Position;
 
 import java.net.InetSocketAddress;
-
-import org.traccar.model.Position;
 
 @ChannelHandler.Sharable
 public class RemoteAddressHandler extends ChannelInboundHandlerAdapter {

@@ -18,7 +18,6 @@ package org.traccar;
 import io.netty.channel.Channel;
 import io.netty.channel.socket.DatagramChannel;
 import io.netty.handler.codec.http.HttpRequestDecoder;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.traccar.database.ConnectionManager;

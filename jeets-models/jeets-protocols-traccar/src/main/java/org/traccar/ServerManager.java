@@ -42,7 +42,7 @@ public class ServerManager {
     public ServerManager() throws Exception {
 
         List<String> names = new LinkedList<>();
-        String packageName = "org.traccar.jeets.protocol";
+        String packageName = "org.traccar.protocol";
         String packagePath = packageName.replace('.', '/');
         URL packageUrl = getClass().getClassLoader().getResource(packagePath);
 
