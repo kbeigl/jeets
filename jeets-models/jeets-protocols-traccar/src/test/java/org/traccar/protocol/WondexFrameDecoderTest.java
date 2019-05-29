@@ -1,8 +1,7 @@
 package org.traccar.protocol;
 
 import org.junit.Test;
-import org.traccar.jeets.ProtocolTest;
-import org.traccar.protocol.WondexFrameDecoder;
+import org.traccar.ProtocolTest;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;

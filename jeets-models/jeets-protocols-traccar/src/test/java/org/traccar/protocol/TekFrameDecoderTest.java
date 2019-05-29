@@ -1,8 +1,7 @@
 package org.traccar.protocol;
 
 import org.junit.Test;
-import org.traccar.jeets.ProtocolTest;
-import org.traccar.protocol.TekFrameDecoder;
+import org.traccar.ProtocolTest;
 
 public class TekFrameDecoderTest extends ProtocolTest {
 

@@ -1,8 +1,7 @@
 package org.traccar.protocol;
 
 import org.junit.Test;
-import org.traccar.jeets.ProtocolTest;
-import org.traccar.protocol.WatchFrameDecoder;
+import org.traccar.ProtocolTest;
 
 public class WatchFrameDecoderTest extends ProtocolTest {
 

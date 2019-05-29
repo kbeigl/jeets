@@ -9,8 +9,8 @@ import org.jeets.routes.ContextInitDslRoute;
 import org.jeets.routes.ProtobufferDslRoute;
 import org.jeets.util.MultiRegistry;
 import org.junit.Test;
-import org.traccar.jeets.BasePipelineFactory;
-import org.traccar.jeets.protocol.ProtobufferProtocol;
+import org.traccar.BasePipelineFactory;
+import org.traccar.protocol.ProtobufferProtocol;
 
 /**
  * Extensive testing on all phases to startup and use only the single

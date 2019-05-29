@@ -1,8 +1,7 @@
 package org.traccar.protocol;
 
 import org.junit.Test;
-import org.traccar.jeets.ProtocolTest;
-import org.traccar.protocol.L100FrameDecoder;
+import org.traccar.ProtocolTest;
 
 public class L100FrameDecoderTest extends ProtocolTest {
 
@@ -10,6 +9,10 @@ public class L100FrameDecoderTest extends ProtocolTest {
     public void testDecode() throws Exception {
 
         L100FrameDecoder decoder = new L100FrameDecoder();
+
+        verifyFrame(
+                binary("41544c2c4c2c3836383334353033383137313936332c4e2c3230313231382c3039333031362c412c3032352e3036373134342c4e2c3035352e3134343833332c452c3030302e302c4750532c333933392c3432342c30332c30303430352c303038383334"),
+                decoder.decode(null, null, binary("41544c2c4c2c3836383334353033383137313936332c4e2c3230313231382c3039333031362c412c3032352e3036373134342c4e2c3035352e3134343833332c452c3030302e302c4750532c333933392c3432342c30332c30303430352c30303838333440")));
 
         verifyFrame(
                 binary("4c2c41544c2c3836363739353033303437373935322c30312c303033352c"),

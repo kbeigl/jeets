@@ -1,8 +1,7 @@
 package org.traccar.protocol;
 
 import org.junit.Test;
-import org.traccar.jeets.ProtocolTest;
-import org.traccar.protocol.TramigoFrameDecoder;
+import org.traccar.ProtocolTest;
 
 public class TramigoFrameDecoderTest extends ProtocolTest {
 

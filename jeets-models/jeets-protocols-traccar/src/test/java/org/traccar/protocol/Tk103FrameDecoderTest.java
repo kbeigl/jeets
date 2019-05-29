@@ -2,8 +2,7 @@ package org.traccar.protocol;
 
 import io.netty.buffer.ByteBuf;
 import org.junit.Test;
-import org.traccar.jeets.ProtocolTest;
-import org.traccar.protocol.Tk103FrameDecoder;
+import org.traccar.ProtocolTest;
 
 public class Tk103FrameDecoderTest extends ProtocolTest {
 

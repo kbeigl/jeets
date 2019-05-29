@@ -1,8 +1,7 @@
 package org.traccar.protocol;
 
 import org.junit.Test;
-import org.traccar.jeets.ProtocolTest;
-import org.traccar.protocol.HuabaoFrameDecoder;
+import org.traccar.ProtocolTest;
 
 import static org.junit.Assert.assertEquals;
 

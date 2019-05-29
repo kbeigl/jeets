@@ -1,7 +1,7 @@
 package org.jeets.routes;
 
 import org.apache.camel.builder.RouteBuilder;
-import org.traccar.jeets.Context;
+import org.traccar.Context;
 
 /**
  * This route initializes the static traccar.Context class with different

@@ -1,7 +1,6 @@
 package org.traccar.helper;
 
 import org.junit.Test;
-import org.traccar.jeets.helper.ObdDecoder;
 
 import static org.junit.Assert.assertEquals;
 
