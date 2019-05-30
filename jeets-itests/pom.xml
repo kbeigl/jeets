@@ -22,14 +22,14 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-parent</artifactId>
-		<version>1.2.2-SNAPSHOT</version>
+		<version>1.2.2</version>
 		<relativePath>../jeets-parent</relativePath>
 	</parent>
 
 	<artifactId>jeets-itests</artifactId>
 	<packaging>pom</packaging>
 
-	<name>--- Integration Tests                ---</name>
+	<name>--- Integration Tests                    ---</name>
 
 	<modules>
 		<module>tracker2dcs</module>

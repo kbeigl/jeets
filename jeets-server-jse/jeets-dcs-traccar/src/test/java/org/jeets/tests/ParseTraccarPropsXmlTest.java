@@ -6,6 +6,14 @@ import org.junit.Test;
 
 public class ParseTraccarPropsXmlTest extends CamelTestSupport {
 
+/* 
+ * org.apache.camel.TypeConversionException: Error during type conversion from type: java.lang.String to the required type: 
+ * org.w3c.dom.Document with value [Body is instance of java.io.InputStream] due org.xml.sax.SAXParseException; lineNumber: 3; columnNumber: 70; 
+ * Externe DTD: Lesen von externer DTD "properties.dtd" nicht erfolgreich, da "http"-Zugriff wegen der von der Eigenschaft 
+ * "accessExternalDTD" festgelegten Einschränkung nicht zulässig ist.
+ * solution: stackoverflow.com/questions/31293624/error-while-unmarshal-an-xml-with-jaxb-coused-by-dtd-file
+ * TODO: find the Camel way to set unmarshaller properties
+ */
     @Test
     public void testPortParser() throws Exception {
 

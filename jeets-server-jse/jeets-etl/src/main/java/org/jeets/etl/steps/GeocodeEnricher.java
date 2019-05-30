@@ -3,7 +3,8 @@ package org.jeets.etl.steps;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
 import org.jeets.model.traccar.jpa.Position;
 
-import com.google.code.geocoder.model.GeocoderStatus;
+//import com.google.code.geocoder.model.GeocoderStatus;
+import org.apache.camel.component.geocoder.GeocoderStatus;
 
 public class GeocodeEnricher {
     

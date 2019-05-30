@@ -11,6 +11,11 @@ For details goto the link:../jeets-server-jse/jeets-dcs-traccar/ReadMe.adoc[proj
 ** includes `jeets-protocols-traccar 4.3.0-beta`
 ** includes `jeets-pu-traccar 4.2`
    v4.1 = v4.2 = v4.3
+   
+* Upgraded Camel from 2.20.2 to 2.24.0
+  with issues 
+  #2 google API key required bug
+  #3 org.xml.sax.SAXParseException bug
 
 
 === v1.2.1 - March 2019
