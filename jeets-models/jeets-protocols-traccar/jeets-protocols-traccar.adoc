@@ -9,7 +9,7 @@ This project is a stripped down version of the http://traccar.org[Traccar GTS]
 running the Device Communication Servers (DCS) exclusively.
 All DCS servers provide the same output format being the `org.traccar.model.Position` java class.
 
-The code is currently based on Traccar v4.2 (10.Nov.'18 4:24) 
+The code is currently based on Traccar v4.3 
 and the main effort of the code reduction was to conserve the original `org.traccar.protocol` 
 package for regression tests etc. 
 Note that the `org.jeets` package with subpackages is actually larger 
