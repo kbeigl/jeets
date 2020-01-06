@@ -11,13 +11,13 @@ public class HuabaoProtocolEncoderTest extends ProtocolTest {
     @Test
     public void testEncode() throws Exception {
 
-        HuabaoProtocolEncoder encoder = new HuabaoProtocolEncoder();
-        
+        HuabaoProtocolEncoder encoder = new HuabaoProtocolEncoder(null);
+
         Command command = new Command();
         command.setDeviceId(1);
         command.setType(Command.TYPE_ENGINE_STOP);
 
-        verifyCommand(encoder, command, binary("7EA0060007001403305278017701150424154610AD7E"));
+        verifyCommand(encoder, command, binary("7e81050001080201000027001ff0467e"));
 
     }
 

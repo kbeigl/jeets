@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  * Copyright 2019 The JEE Tracking System - JeeTS
-  * Copyright 2019 Kristof Beiglböck kbeigl@roaf.de
+  * Copyright 2020 The JEE Tracking System - JeeTS
+  * Copyright 2020 Kristof Beiglböck kbeigl@roaf.de
   *
   * The JeeTS Project licenses this file to you under the Apache License,
   * version 2.0 (the "License"); you may not use this file except in compliance
@@ -23,11 +23,10 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-clients</artifactId>
-		<version>1.2.2</version>
+		<version>1.2.3</version>
 	</parent>
 
 	<artifactId>jeets-tracker</artifactId>
-	<version>1.2.0</version>
 	<packaging>jar</packaging>
 
 	<dependencies>

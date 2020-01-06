@@ -10,12 +10,21 @@ public class BoxProtocolDecoderTest extends ProtocolTest {
     public void testDecode() throws Exception {
 
         BoxProtocolDecoder decoder = new BoxProtocolDecoder(null);
-        
+
         verifyNull(decoder, text(
                 "H,BT,358281002435893,081028142432,F5813D19,6D6E6DC2"));
         
         verifyNull(decoder, text(
                 "H,BT,N878123,080415081234,D63E6DD9,6D6E6DC2,8944100300825505377"));
+
+        verifyPosition(decoder, text(
+                "L,190416090826,G,21.46701,39.18655,0,280,86.62,53,21;A,0;D,0;T0,34.2;I,0"));
+
+        verifyPosition(decoder, text(
+                "L,190416090926,G,21.46701,39.18655,0,280,86.62,7,20;A,0;D,0;T0,34.2;I,0;END,106,222,190416080509"));
+
+        verifyPosition(decoder, text(
+                "L,190227043304,G,25.68773,48.59788,71,53,261.42,1,23;A,0.03;D,0.06;I,0"));
 
         verifyPosition(decoder, text(
                 "L,081028142429,G,52.51084,-1.70849,0,170,0,1,0"));

@@ -2,6 +2,7 @@ package org.traccar.protocol;
 
 import org.junit.Test;
 import org.traccar.ProtocolTest;
+import org.traccar.model.Position;
 
 public class T55ProtocolDecoderTest extends ProtocolTest {
 
@@ -9,6 +10,13 @@ public class T55ProtocolDecoderTest extends ProtocolTest {
     public void testDecode() throws Exception {
 
         T55ProtocolDecoder decoder = new T55ProtocolDecoder(null);
+
+        verifyNull(decoder, text(
+                "$DEVID,0x0103846677F21422*41"));
+
+        verifyAttribute(decoder, text(
+                "$GPIOP,01000000,00000000,0.00,0.00,0.00,0.00,4.69,4.24*49"),
+                Position.KEY_BATTERY, 4.24);
 
         verifyPosition(decoder, text(
                 "660420156A0066AA$GPRMC,122806.0,A,0119.212178,N,10355.000942,E,0.0,,230119,0.0,E,A*27"));

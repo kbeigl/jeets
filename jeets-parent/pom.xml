@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
-    Copyright 2018 The Java EE Tracking System - JeeTS
-    Copyright 2018 Kristof Beiglböck kbeigl@jeets.org
+    Copyright 2020 The Java EE Tracking System - JeeTS
+    Copyright 2020 Kristof Beiglböck kbeigl@jeets.org
     
     The JEE Tracking System licenses this file to you 
     under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,7 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets</artifactId>
-		<version>1.2.2</version>
+		<version>1.2.3</version>
 	</parent>
 
 	<artifactId>jeets-parent</artifactId>
@@ -33,20 +33,22 @@
 	</description>
 	<url>jeets.org/</url>
 
-	<prerequisites>
-		<maven>3.0</maven>
-	</prerequisites>
-
 	<properties>
+	    <spring-boot-version>2.1.5.RELEASE</spring-boot-version>
+        <!-- matches traccar 4.2
+        <postgresql.version> managed by spring boot bom, but version explicitly 
+        required for sql-maven-plugin-version dependency in jeets-models
+        stackoverflow.com/questions/11254356 -->
+        <postgresql-version>42.2.5</postgresql-version>
+
 		<camel.version>2.24.0</camel.version>
 		<!-- adjust with JEE (i.e WildFly branch) -->
 
 		<!-- database/s -->
+		<!-- remove hibernate version - managed by spring boot bom -->
 		<hibernate-version>5.2.17.Final</hibernate-version>
 		<h2database-version>1.3.176</h2database-version>
         <!-- jee-app: <version.h2db>1.4.193</version.h2db> -->
-        <!-- matches traccar 4.2 -->
-        <postgresql-version>42.2.5</postgresql-version>
 		<dbunit-version>2.6.0</dbunit-version>
 		<sql-maven-plugin-version>1.5</sql-maven-plugin-version>
         <openjpa-version>2.4.1</openjpa-version>
@@ -66,15 +68,26 @@
 		<!-- overridden in itests profile -->
 		<skip.unit.tests>false</skip.unit.tests>
 		<skip.integration.tests>true</skip.integration.tests>
+		<!-- skip tests via command line:
+		mvn clean install -Dskip.unit.tests=true -->
 
-		<!-- add multiple referenced versions here, 
+		<!-- add multiple referenced versions here (itests etc.), 
 			   add single referenced in dependencyManagement below. -->
         <tracker-version-latest>1.2.0</tracker-version-latest>
         <tracker-project-latest>jeets-tracker-${tracker-version-latest}</tracker-project-latest>
 		<tracker-jar-with-dependencies>${tracker-project-latest}-jar-with-dependencies.jar</tracker-jar-with-dependencies>
 
+        <protocols-traccar-version-latest>4.6-191229</protocols-traccar-version-latest>
+        <protocols-traccar-project-latest>jeets-protocols-traccar-${protocols-traccar-version-latest}</protocols-traccar-project-latest>
+		<protocols-traccar-jar-with-dependencies>${protocols-traccar-project-latest}-jar-with-dependencies.jar</protocols-traccar-jar-with-dependencies>
+
+        <device-version-latest>1.2.3</device-version-latest>
+        <device-project-latest>jeets-device-${device-version-latest}</device-project-latest>
+		<device-jar-with-dependencies>${device-project-latest}-jar-with-dependencies.jar</device-jar-with-dependencies>
+
 		<!-- maven settings -->
 		<!-- <jdk.version>1.8</jdk.version> -->
+		<!-- <java.version>1.8</java.version> -->
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 
@@ -83,7 +96,7 @@
 	    <maven-surefire-plugin-version>2.22.0</maven-surefire-plugin-version>
 	    <maven-failsafe-plugin-version>2.22.0</maven-failsafe-plugin-version>
 	    <!-- what's this? comment and check .. -->
-		<process-exec-maven-plugin-version>0.8</process-exec-maven-plugin-version>
+		<process-exec-maven-plugin-version>0.9</process-exec-maven-plugin-version>
         <directory-maven-plugin-version>0.3.1</directory-maven-plugin-version>
 		
 	    <maven-source-plugin-version>3.0.1</maven-source-plugin-version>
@@ -95,7 +108,7 @@
         
         <lifecycle-mapping-version>1.0.0</lifecycle-mapping-version>
 
-		<exec-maven-plugin-version>1.5.0</exec-maven-plugin-version>
+		<exec-maven-plugin-version>1.6.0</exec-maven-plugin-version>
 
 	    <!-- TODO -->
 <!--    antrun can (temporarily be used to echo Maven's internal variables and values
@@ -108,6 +121,18 @@
 	
     <dependencyManagement>
 		<dependencies>
+			<!-- or spring-boot-starter-parent in top level pom 
+			in order to include plugin managements !
+			docs.spring.io/spring-boot/docs/2.2.0.M2/reference/html/using-spring-boot.html -->
+			<!-- import Spring Boot before Camel -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring-boot-version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<!-- import Camel -->
 			<dependency>
 				<groupId>org.apache.camel</groupId>
 				<artifactId>camel-parent</artifactId>
@@ -133,6 +158,11 @@
 				<groupId>org.jeets</groupId>
 				<artifactId>jeets-tracker</artifactId>
 				<version>${tracker-version-latest}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jeets</groupId>
+				<artifactId>jeets-device</artifactId>
+				<version>${device-version-latest}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.jeets</groupId>
@@ -180,12 +210,14 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
-					<!-- implicitly activated for all modules -->
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>${maven-surefire-plugin-version}</version>
 				    <configuration>
 				        <skipTests>${skip.unit.tests}</skipTests>
+						<!-- this is important to terminate target\surefire\surefirebooterXXX.jar 
+							if test is cancelled with <CTRL> + <C>. Otherwise port remains blocked!! -->
+						<shutdown>kill</shutdown>
 				    </configuration>
 				</plugin>
 				<plugin>
@@ -196,7 +228,9 @@
 	                    <source>${maven.compiler.source}</source>
 	                    <target>${maven.compiler.target}</target>
 	                    <!-- docs.oracle.com/javase/6/docs/technotes/tools/solaris/javac.html#nonstandard -->
-	                    <!-- <compilerArgument>-Xlint:unchecked</compilerArgument> -->
+	                    <!-- <compilerArgument>-Xlint:unchecked</compilerArgument>
+						<maxmem>512M</maxmem>
+						<showDeprecation>true</showDeprecation> -->
 	                </configuration>
 				</plugin>
 				<plugin>

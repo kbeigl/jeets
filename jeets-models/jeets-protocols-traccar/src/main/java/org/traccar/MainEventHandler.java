@@ -72,9 +72,7 @@ public class MainEventHandler extends ChannelInboundHandlerAdapter {
             LOGGER.info(s.toString());
 //          Context.getStatisticsManager().registerMessageStored(position.getDeviceId());
 
-            if (position != null) {
-                ctx.fireChannelRead(position);
-            }
+
 
         }
     }
@@ -84,14 +82,14 @@ public class MainEventHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+    public void channelActive(ChannelHandlerContext ctx) {
         if (!(ctx.channel() instanceof DatagramChannel)) {
             LOGGER.info(formatChannel(ctx.channel()) + " connected");
         }
     }
 
     @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+    public void channelInactive(ChannelHandlerContext ctx) {
         LOGGER.info(formatChannel(ctx.channel()) + " disconnected");
         closeChannel(ctx.channel());
 
@@ -111,7 +109,7 @@ public class MainEventHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) {
         if (evt instanceof IdleStateEvent) {
             LOGGER.info(formatChannel(ctx.channel()) + " timed out");
             closeChannel(ctx.channel());

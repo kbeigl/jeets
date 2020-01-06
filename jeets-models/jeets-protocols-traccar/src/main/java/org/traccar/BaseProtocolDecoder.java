@@ -20,6 +20,7 @@ import io.netty.channel.socket.DatagramChannel;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.traccar.config.Config;
 import org.traccar.database.ConnectionManager;
 import org.traccar.database.IdentityManager;
 //import org.traccar.database.StatisticsManager;
@@ -84,7 +85,7 @@ public abstract class BaseProtocolDecoder extends ExtendedObjectDecoder {
 
     protected TimeZone getTimeZone(long deviceId, String defaultTimeZone) {
         TimeZone result = TimeZone.getTimeZone(defaultTimeZone);
-        String timeZoneName = identityManager.lookupAttributeString(deviceId, "decoder.timezone", null, true);
+        String timeZoneName = identityManager.lookupAttributeString(deviceId, "decoder.timezone", null, false, true);
         if (timeZoneName != null) {
             result = TimeZone.getTimeZone(timeZoneName);
         } else {
@@ -141,7 +142,13 @@ public abstract class BaseProtocolDecoder extends ExtendedObjectDecoder {
     }
 
     public DeviceSession getDeviceSession(Channel channel, SocketAddress remoteAddress, String... uniqueIds) {
+        return getDeviceSession(channel, remoteAddress, false, uniqueIds);
+    }
+
+    public DeviceSession getDeviceSession(
+            Channel channel, SocketAddress remoteAddress, boolean ignoreCache, String... uniqueIds) {
         if (channel != null && BasePipelineFactory.getHandler(channel.pipeline(), HttpRequestDecoder.class) != null
+                || ignoreCache || config.getBoolean(getProtocolName() + ".ignoreSessionCache")
                 || config.getBoolean("decoder.ignoreSessionCache")) {
             long deviceId = findDeviceId(remoteAddress, uniqueIds);
             if (deviceId != 0) {

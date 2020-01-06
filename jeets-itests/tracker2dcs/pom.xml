@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Copyright 2018 The Java EE Tracking System - JeeTS
-    Copyright 2018 Kristof Beiglböck kbeigl@jeets.org
+    Copyright 2020 The Java EE Tracking System - JeeTS
+    Copyright 2020 Kristof Beiglböck kbeigl@jeets.org
     
     The JEE Tracking System licenses this file to you 
     under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,7 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-itests</artifactId>
-		<version>1.2.2</version>
+		<version>1.2.3</version>
 	</parent>
 
 	<artifactId>tracker2dcs</artifactId>
@@ -50,6 +50,8 @@
 		<plugins>
 				<plugin>
 					<artifactId>maven-failsafe-plugin</artifactId>
+					<!-- parent version is hidden in itests profile -->
+					<version>${maven-failsafe-plugin-version}</version>
 				</plugin>
 				<plugin>
 					<groupId>org.commonjava.maven.plugins</groupId>
@@ -58,6 +60,8 @@
 				<plugin>
 				<groupId>com.bazaarvoice.maven.plugins</groupId>
 				<artifactId>process-exec-maven-plugin</artifactId>
+				<!-- parent version is hidden in itests profile -->
+				<version>${process-exec-maven-plugin-version}</version>
 				<executions>
 					<execution>
 						<id>start-jar</id>

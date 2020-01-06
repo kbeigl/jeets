@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 - 2018 Anton Tananaev (anton@traccar.org)
+ * Copyright 2015 - 2019 Anton Tananaev (anton@traccar.org)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@ import org.traccar.PipelineBuilder;
 import org.traccar.TrackerServer;
 import org.traccar.model.Command;
 
-import io.netty.handler.codec.string.StringEncoder;
-
 public class WatchProtocol extends BaseProtocol {
 
     public WatchProtocol() {
@@ -33,6 +31,7 @@ public class WatchProtocol extends BaseProtocol {
                 Command.TYPE_ALARM_SOS,
                 Command.TYPE_ALARM_BATTERY,
                 Command.TYPE_REBOOT_DEVICE,
+                Command.TYPE_POWER_OFF,
                 Command.TYPE_ALARM_REMOVE,
                 Command.TYPE_SILENCE_TIME,
                 Command.TYPE_ALARM_CLOCK,
@@ -45,8 +44,7 @@ public class WatchProtocol extends BaseProtocol {
             @Override
             protected void addProtocolHandlers(PipelineBuilder pipeline) {
                 pipeline.addLast(new WatchFrameDecoder());
-                pipeline.addLast(new StringEncoder());
-                pipeline.addLast(new WatchProtocolEncoder());
+                pipeline.addLast(new WatchProtocolEncoder(WatchProtocol.this));
                 pipeline.addLast(new WatchProtocolDecoder(WatchProtocol.this));
             }
         });

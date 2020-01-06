@@ -268,7 +268,7 @@ public class EelinkProtocolDecoder extends BaseProtocolDecoder {
             }
 
             if (buf.readableBytes() >= 2) {
-                position.set(Position.PREFIX_TEMP + 2, buf.readUnsignedShort() / 16.0);
+                position.set(Position.PREFIX_TEMP + 2, buf.readShort() / 16.0);
             }
 
         }
@@ -322,6 +322,34 @@ public class EelinkProtocolDecoder extends BaseProtocolDecoder {
 
             position.set(Position.KEY_RESULT, sentence);
 
+        }
+
+        return position;
+    }
+
+    private Position decodeObd(DeviceSession deviceSession, ByteBuf buf) {
+
+        Position position = new Position(getProtocolName());
+        position.setDeviceId(deviceSession.getDeviceId());
+
+        getLastLocation(position, new Date(buf.readUnsignedInt() * 1000));
+
+        while (buf.readableBytes() > 0) {
+            int pid = buf.readUnsignedByte();
+            int value = buf.readInt();
+            switch (pid) {
+                case 0x89:
+                    position.set(Position.KEY_FUEL_CONSUMPTION, value);
+                    break;
+                case 0x8a:
+                    position.set(Position.KEY_ODOMETER, value * 1000L);
+                    break;
+                case 0x8b:
+                    position.set(Position.KEY_FUEL_LEVEL, value / 10);
+                    break;
+                default:
+                    break;
+            }
         }
 
         return position;
@@ -384,7 +412,8 @@ public class EelinkProtocolDecoder extends BaseProtocolDecoder {
 
                 return decodeNew(deviceSession, buf, type, index);
 
-            } else if (type == MSG_HEARTBEAT && buf.readableBytes() >= 2) {
+            } else if (type == MSG_HEARTBEAT && buf.readableBytes() >= 2
+                    || type == MSG_OBD && buf.readableBytes() == 4) {
 
                 Position position = new Position(getProtocolName());
                 position.setDeviceId(deviceSession.getDeviceId());
@@ -394,6 +423,10 @@ public class EelinkProtocolDecoder extends BaseProtocolDecoder {
                 decodeStatus(position, buf.readUnsignedShort());
 
                 return position;
+
+            } else if (type == MSG_OBD) {
+
+                return decodeObd(deviceSession, buf);
 
             } else if (type == MSG_DOWNLINK) {
 

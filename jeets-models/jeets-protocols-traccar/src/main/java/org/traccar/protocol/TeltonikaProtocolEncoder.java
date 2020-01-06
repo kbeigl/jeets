@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 - 2018 Anton Tananaev (anton@traccar.org)
+ * Copyright 2016 - 2019 Anton Tananaev (anton@traccar.org)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,9 @@ package org.traccar.protocol;
 
 import org.traccar.BaseProtocolEncoder;
 import org.traccar.helper.Checksum;
+import org.traccar.helper.DataConverter;
 import org.traccar.model.Command;
+import org.traccar.Protocol;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -26,19 +28,21 @@ import java.nio.charset.StandardCharsets;
 
 public class TeltonikaProtocolEncoder extends BaseProtocolEncoder {
 
-    private ByteBuf encodeContent(String content) {
+    public TeltonikaProtocolEncoder(Protocol protocol) {
+        super(protocol);
+    }
+
+    private ByteBuf encodeContent(byte[] content) {
 
         ByteBuf buf = Unpooled.buffer();
 
         buf.writeInt(0);
-        buf.writeInt(content.length() + 10);
+        buf.writeInt(content.length + 8);
         buf.writeByte(TeltonikaProtocolDecoder.CODEC_12);
         buf.writeByte(1); // quantity
         buf.writeByte(5); // type
-        buf.writeInt(content.length() + 2);
-        buf.writeBytes(content.getBytes(StandardCharsets.US_ASCII));
-        buf.writeByte('\r');
-        buf.writeByte('\n');
+        buf.writeInt(content.length);
+        buf.writeBytes(content);
         buf.writeByte(1); // quantity
         buf.writeInt(Checksum.crc16(Checksum.CRC16_IBM, buf.nioBuffer(8, buf.writerIndex() - 8)));
 
@@ -48,11 +52,15 @@ public class TeltonikaProtocolEncoder extends BaseProtocolEncoder {
     @Override
     protected Object encodeCommand(Command command) {
 
-        switch (command.getType()) {
-            case Command.TYPE_CUSTOM:
-                return encodeContent(command.getString(Command.KEY_DATA));
-            default:
-                return null;
+        if (command.getType().equals(Command.TYPE_CUSTOM)) {
+            String data = command.getString(Command.KEY_DATA);
+            if (data.matches("(\\p{XDigit}{2})+")) {
+                return encodeContent(DataConverter.parseHex(data));
+            } else {
+                return encodeContent((data + "\r\n").getBytes(StandardCharsets.US_ASCII));
+            }
+        } else {
+            return null;
         }
     }
 

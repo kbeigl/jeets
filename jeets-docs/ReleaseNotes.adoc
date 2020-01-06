@@ -3,13 +3,30 @@
 
 = Release Notes - JeeTS repository
 
+=== v1.2.3
+
+* added jeets-device as successor of jeets-tracker
+
+* Updated Device Communication Servers for all Traccar Protocols! +
+** `jeets-dcs-traccar 4.6-191229` 
+** includes `jeets-protocols-traccar 4.6-191229`
+** includes `jeets-pu-traccar 4.2` +
+   v4.1 = v4.2 = v4.3
+
+* added Integration Test to send messages via jeets-device +
+  and receive messages with jeets-protocols-traccar
+
+* added `org.springframework.boot` BOM before Camel BOM +
+to reduce explicit versioning for postgres etc. .. ongoing
+
+
 === v1.2.2 - May 2019
 
 * Updated Device Communication Servers for all Traccar Protocols! +
 For details goto the link:../jeets-server-jse/jeets-dcs-traccar/ReadMe.adoc[project's readme file]
 ** `jeets-dcs-traccar 4.3.0-beta` 
 ** includes `jeets-protocols-traccar 4.3.0-beta`
-** includes `jeets-pu-traccar 4.2`
+** includes `jeets-pu-traccar 4.2` +
    v4.1 = v4.2 = v4.3
    
 * Upgraded Camel from 2.20.2 to 2.24.0

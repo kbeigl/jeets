@@ -1,0 +1,81 @@
+The JeeTS Device
+=================
+
+IMPORTANT: The JeeTS Device is the successor of the JeeTS Tracker, which will be 
+ eventually removed once the Device has been regression tested against the Tracker
+ for a complete repository build. +
+ The redesign makes use of the Camel Producer to send messages and receive responses 
+ from a DCS (like the traccar GTS). +
+ The term Device also supports the notion of applying Device Communication technology
+ not only to GPS Trackers, but to the emerging Internet of Things (IoT).
+
+The JeeTS Device Jar &#8230;
+
+. can be launched via command line as a standalone JSE application as described below. 
+
+. can serve as a 'sender' component for any client application to send messages and 
+receive responses (ACKs) to and from a host:port. 
+
+. is used to standardize the JeeTS repository as a reference client for integration 
+testing of client and server software.
+
+_!! to be decided !!_ +
+The Device includes the jeets-protocols to send Protobuffer messages 
+aligned with the Traccar GTS Model, i.e. Database.
+The JeeTS Protocols package brings the Protobuffer libraries and handling,
+Hibernate with Database Driver, ORM Entities and libraries.
+
+Tracker application
+===================
+The Tracker represents a tracker hardware and can be 'attached' to any RealObject to be tracked.  
+Protocols and Database can be customized to a project's needs and the operation mode can be set via properties or getters.
+
+_add listing for a sample application_
+
+Standalone Instructions
+=======================
+
+_revisit after implementation and (regression) testing_
+
+The jeets-device.jar (jeets-device-1.2.3-jar-with-dependencies.jar) is created with 'mvn package'.  
+The jar is automatically equipped with a tracker.properties file with variables from the repo's main jeets.properties file.  
+To adjust the properties to your needs you can edit this file  
+or you can create your own 
+
+    mycompany.jeets.properties
+         prod.jeets.properties
+          dev.jeets.properties
+          etc.
+
+After creating the jeets-device.jar enter this command line (adjust the directory) 
+without arguments or with '-h' &#8230;
+
+    java -jar target\jeets-device-1.2.3-jar-with-dependencies.jar [-h]
+
+&#8230; to display the usage screen:
+
+    usage of jeets-device.jar
+    <no args>       - this help screen
+    -h              - this help screen
+    -props          - use default tracker.properties (in jar) to
+                      send sample Protobuffer Messages
+    host port       - send sample Protobuffer Messages
+    host port "messageString" - send any String message (for testing)
+
+At development time inside the repository structure you can also launch via Maven with:
+
+    mvn exec:java -Dexec.mainClass="org.jeets.tracker.Main" -Dexec.args="'127.0.0.1' 5200"
+
+
+
+
+start java -jar tracker.jar > immediately sends Positions and shuts down
+ ..
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 

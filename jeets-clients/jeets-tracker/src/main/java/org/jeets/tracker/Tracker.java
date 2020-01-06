@@ -92,7 +92,7 @@ public class Tracker {
 //                  try transmitting until msgs are acknowledged
                     while (!transmitted) {
 //                      keep trying and add newly queued msgs until maxNrOfPositions
-                        fillDeviceBuilder();
+                        loadDeviceBuilder();
                         System.out.println("'" + uniqueId + "' sending " + devBuilder.getPositionCount()
                                 + " Positions to '" + host + ":" + port + "' at " + new Date().getTime()
                                 + " (" + messageQueue.size() + " msgs queued)");
@@ -137,10 +137,10 @@ public class Tracker {
     /**
      * The DeviceBuilder represents the message to be sent. As long as the
      * message can't be sent due to connectivity problems the DeviceBuilder can
-     * be filled from the queue to a maximum number of messages. After it was
+     * be loaded from the queue to a maximum number of messages. After it was
      * sent a new DeviceBuilder can be created and filled ...
      */
-    private void fillDeviceBuilder() {
+    private void loadDeviceBuilder() {
         if (devBuilder == null) {
             devBuilder = Traccar.Device.newBuilder().setUniqueid(uniqueId);
         }
@@ -148,7 +148,7 @@ public class Tracker {
             if (devBuilder.getPositionCount() < maxPosPerMsg)
                 devBuilder.addPosition(messageQueue.remove());
             else break;
-        System.out.println("DeviceBuilder filled with " + devBuilder.getPositionCount() + " positions.");
+        System.out.println("DeviceBuilder loaded with " + devBuilder.getPositionCount() + " positions.");
     }
 
     /**
@@ -172,7 +172,7 @@ public class Tracker {
             System.err.println("Don't know about host " + host);
             System.exit(1);
         } catch (IOException e) {
-            System.err.println("Couldn't get I/O for the connection to " + host + ":" + port);
+            System.err.println("Couldn't get I/O connection to " + host + ":" + port);
             System.exit(1);
         }
     }

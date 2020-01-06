@@ -17,43 +17,31 @@ package org.traccar.database;
 
 import io.netty.channel.Channel;
 import io.netty.util.Timeout;
-//import io.netty.util.TimerTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.traccar.Context;
 import org.traccar.Protocol;
-//import org.traccar.events.OverspeedEventHandler;
 import org.traccar.model.Device;
-//import org.traccar.model.DeviceState;
 import org.traccar.model.Event;
 import org.traccar.model.Position;
 
 import java.net.SocketAddress;
-//import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
-//import java.util.HashSet;
 import java.util.Map;
-//import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-//import java.util.concurrent.TimeUnit;
 
 public class ConnectionManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionManager.class);
 
-//    private static final long DEFAULT_TIMEOUT = 600;
-
-//    private final long deviceTimeout;
     private final boolean enableStatusEvents;
     private final boolean updateDeviceState;
 
     private final Map<Long, ActiveDevice> activeDevices = new ConcurrentHashMap<>();
-//    private final Map<Long, Set<UpdateListener>> listeners = new ConcurrentHashMap<>();
     private final Map<Long, Timeout> timeouts = new ConcurrentHashMap<>();
 
     public ConnectionManager() {
-//        deviceTimeout = Context.getConfig().getLong("status.timeout", DEFAULT_TIMEOUT) * 1000;
         enableStatusEvents = Context.getConfig().getBoolean("event.enable");
         updateDeviceState = Context.getConfig().getBoolean("status.updateDeviceState");
     }
@@ -106,7 +94,6 @@ public class ConnectionManager {
                     break;
             }
             events.put(new Event(eventType, deviceId), null);
-//            Context.getNotificationManager().updateEvents(events);
         }
 
         Timeout timeout = timeouts.remove(deviceId);
@@ -120,97 +107,23 @@ public class ConnectionManager {
 
         if (status.equals(Device.STATUS_ONLINE)) {
             LOGGER.warn("updateDevice.Device.STATUS_ONLINE");
-//            timeouts.put(deviceId, GlobalTimer.getTimer().newTimeout(new TimerTask() {
-//                @Override
-//                public void run(Timeout timeout) {
-//                    if (!timeout.isCancelled()) {
-//                        updateDevice(deviceId, Device.STATUS_UNKNOWN, null);
-//                    }
-//                }
-//            }, deviceTimeout, TimeUnit.MILLISECONDS));
         }
 
-//        try {
-            Context.getDeviceManager().updateDeviceStatus(device);
-//        } catch (SQLException error) {
-//            LOGGER.warn("Update device status error", error);
-//        }
-
+        Context.getDeviceManager().updateDeviceStatus(device);
         updateDevice(device);
-
-//        if (status.equals(Device.STATUS_ONLINE) && !oldStatus.equals(Device.STATUS_ONLINE)) {
-//            Context.getCommandsManager().sendQueuedCommands(getActiveDevice(deviceId));
-//        }
     }
 
     public Map<Event, Position> updateDeviceState(long deviceId) {
-//        DeviceState deviceState = Context.getDeviceManager().getDeviceState(deviceId);
         Map<Event, Position> result = new HashMap<>();
-
-//        Map<Event, Position> event = null;
-//        Context.getMotionEventHandler().updateMotionState(deviceState);
-//        if (event != null) {
-//            result.putAll(event);
-//        }
-
-//        event = Context.getOverspeedEventHandler().updateOverspeedState(deviceState, Context.getDeviceManager().
-//                lookupAttributeDouble(deviceId, OverspeedEventHandler.ATTRIBUTE_SPEED_LIMIT, 0, false));
-//        if (event != null) {
-//            result.putAll(event);
-//        }
-
         return result;
     }
 
     public synchronized void updateDevice(Device device) {
-        System.err.println("skip ConnectionManager.updateDevice");
-//        for (long userId : Context.getPermissionsManager().getDeviceUsers(device.getId())) {
-//            if (listeners.containsKey(userId)) {
-//                for (UpdateListener listener : listeners.get(userId)) {
-//                    listener.onUpdateDevice(device);
-//                }
-//            }
-//        }
+        LOGGER.warn("ConnectionManager.updateDevice not implemented");
     }
 
     public synchronized void updatePosition(Position position) {
-        System.err.println("skip ConnectionManager.updatePosition");
-//        long deviceId = position.getDeviceId();
-//        for (long userId : Context.getPermissionsManager().getDeviceUsers(deviceId)) {
-//            if (listeners.containsKey(userId)) {
-//                for (UpdateListener listener : listeners.get(userId)) {
-//                    listener.onUpdatePosition(position);
-//                }
-//            }
-//        }
-    }
-/*
-    public synchronized void updateEvent(long userId, Event event) {
-        if (listeners.containsKey(userId)) {
-            for (UpdateListener listener : listeners.get(userId)) {
-                listener.onUpdateEvent(event);
-            }
-        }
+        LOGGER.warn("ConnectionManager.updatePosition not implemented");
     }
 
-    public interface UpdateListener {
-        void onUpdateDevice(Device device);
-        void onUpdatePosition(Position position);
-        void onUpdateEvent(Event event);
-    }
-
-    public synchronized void addListener(long userId, UpdateListener listener) {
-        if (!listeners.containsKey(userId)) {
-            listeners.put(userId, new HashSet<UpdateListener>());
-        }
-        listeners.get(userId).add(listener);
-    }
-
-    public synchronized void removeListener(long userId, UpdateListener listener) {
-        if (!listeners.containsKey(userId)) {
-            listeners.put(userId, new HashSet<UpdateListener>());
-        }
-        listeners.get(userId).remove(listener);
-    }
- */
 }

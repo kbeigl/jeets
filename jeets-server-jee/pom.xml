@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Copyright 2017 The Java EE Tracking System - JeeTS
-    Copyright 2017 Kristof Beiglböck kbeigl@jeets.org
+    Copyright 2020 The Java EE Tracking System - JeeTS
+    Copyright 2020 Kristof Beiglböck kbeigl@jeets.org
     
     The JEE Tracking System licenses this file to you 
     under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,7 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-parent</artifactId>
-		<version>1.2.2</version>
+		<version>1.2.3</version>
 		<relativePath>../jeets-parent</relativePath>
 	</parent>
 

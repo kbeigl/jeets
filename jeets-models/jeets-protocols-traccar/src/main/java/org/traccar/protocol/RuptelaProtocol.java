@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 - 2018 Anton Tananaev (anton@traccar.org)
+ * Copyright 2015 - 2019 Anton Tananaev (anton@traccar.org)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ public class RuptelaProtocol extends BaseProtocol {
     public RuptelaProtocol() {
         setSupportedDataCommands(
                 Command.TYPE_CUSTOM,
+                Command.TYPE_REQUEST_PHOTO,
                 Command.TYPE_CONFIGURATION,
                 Command.TYPE_GET_VERSION,
                 Command.TYPE_FIRMWARE_UPDATE,
@@ -36,7 +37,7 @@ public class RuptelaProtocol extends BaseProtocol {
             @Override
             protected void addProtocolHandlers(PipelineBuilder pipeline) {
                 pipeline.addLast(new LengthFieldBasedFrameDecoder(1024, 0, 2, 2, 0));
-                pipeline.addLast(new RuptelaProtocolEncoder());
+                pipeline.addLast(new RuptelaProtocolEncoder(RuptelaProtocol.this));
                 pipeline.addLast(new RuptelaProtocolDecoder(RuptelaProtocol.this));
             }
         });

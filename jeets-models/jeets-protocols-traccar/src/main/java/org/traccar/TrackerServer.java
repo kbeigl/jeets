@@ -30,7 +30,6 @@ import java.net.InetSocketAddress;
 public abstract class TrackerServer {
 
     private final boolean datagram;
-    @SuppressWarnings("rawtypes")
     private final AbstractBootstrap bootstrap;
 
     public boolean isDatagram() {

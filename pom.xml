@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
-    Copyright 2019 The Java EE Tracking System - JeeTS
-    Copyright 2019 Kristof Beiglböck kbeigl@jeets.org
+    Copyright 2020 The Java EE Tracking System - JeeTS
+    Copyright 2020 Kristof Beiglböck kbeigl@jeets.org
     
     The JEE Tracking System licenses this file to you 
     under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,7 @@
 	<groupId>org.jeets</groupId>
 	<artifactId>jeets</artifactId>
 	<!-- main JeeTS repo version -->
-	<version>1.2.2</version>
+	<version>1.2.3</version>
 	<packaging>pom</packaging>
 
 	<name>=== JeeTS - Java EE Tracking Software   ===</name>
@@ -41,11 +41,20 @@
 	<licenses>
 		<license>
 			<name>Apache License, Version 2.0</name>
-			<distribution>repo</distribution>
 			<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
 		</license>
 	</licenses>
 
+<!-- alternative to spring boot bom with additional plugin versioning
+	causing problems. Fall back to bom ..
+	use spring initializr to generate project with this parent
+ 	<parent>
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-starter-parent</artifactId>
+	    explicit version
+		<version>2.1.5.RELEASE</version>
+	</parent>
+ -->
 	<modules>
 		<module>jeets-parent</module>
 		<module>jeets-models</module>

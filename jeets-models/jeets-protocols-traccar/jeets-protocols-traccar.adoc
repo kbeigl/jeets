@@ -6,19 +6,14 @@
 = JeeTS-protocols-traccar
 
 This project is a stripped down version of the http://traccar.org[Traccar GTS] 
-running the Device Communication Servers (DCS) exclusively.
-All DCS servers provide the same output format being the `org.traccar.model.Position` java class.
+i.e. Traccar light, to run the Device Communication Servers (DCS) exclusively.
+All DCS servers provide the same output format being 
+the `org.traccar.model.Position` java class.
 
-The code is currently based on Traccar v4.3 
-and the main effort of the code reduction was to conserve the original `org.traccar.protocol` 
+The code is currently based on Traccar v4.3 and the main effort 
+of the code reduction was to conserve the original `org.traccar.protocol` 
 package for regression tests etc. 
-Note that the `org.jeets` package with subpackages is actually larger 
-than the original `org.traccar` packages, which makes it look like a large modification.
-The sole reason behind this is that in many `org.traccar...` the `import` statements
-had to be modified and it would be bad style to publish identical fully qualified class names
-in two different repositories.
-
-Please consult traccar.org for protocol details. +
+Please consult traccar.org for protocol details. 
 Anton Tananaev is doing an incredible job maintaining
 about 200 protocols on a daily basis.
 
@@ -33,7 +28,8 @@ to provide a JPA standardized output of java `@Entity` s in the `jeets-pu-tracca
 
 === instructions for running
 
-You should compile the JeeTS repository 'System Dataformats and Models' to ensure that all dependents are installed to your Maven repository.
+You should compile the JeeTS repository 'System Dataformats and Models' 
+to ensure that all dependents are installed to your Maven repository.
 
 [source,text]
 ----
@@ -41,13 +37,12 @@ You should compile the JeeTS repository 'System Dataformats and Models' to ensur
 [INFO] --- JeeTS Parent - global definitions --- .......... SUCCESS
 [INFO] --- System Dataformats and Models --- .............. SUCCESS
 [INFO] jeets-pu-traccar ................................... SUCCESS
-[INFO] jeets-pu-gtfs ...................................... SUCCESS
 [INFO] jeets-protocols .................................... SUCCESS
 [INFO] jeets-protocols-traccar ............................ SUCCESS
 ----
 
 After successful compilation please go to the jeets-protocols-traccar main directory
-and compile `mvn package -Pjar-with-dependencies` to find the 
+to run the Traccar light GTS with your own configuration file
 
 [source,text]
 ----
@@ -55,33 +50,3 @@ and compile `mvn package -Pjar-with-dependencies` to find the
 legacy jar:
  java -jar target\jeets-protocols-traccar-4.2.1-beta.jar setup\traccar.xml
 ----
-
-If you are familiar with or even running Traccar you can place your own configuration files
-in the projects setup folder ....
-
-
-
-[source,text]
-----
-[INFO] === JeeTS - Java EE Tracking Software === .......... SUCCESS [  0.380 s]
-[INFO] --- JeeTS Parent - global definitions --- .......... SUCCESS [  0.024 s]
-[INFO] --- System Dataformats and Models --- .............. SUCCESS [  0.020 s]
-[INFO] jeets-pu-traccar ................................... SUCCESS [ 12.052 s]
-[INFO] jeets-pu-gtfs ...................................... SUCCESS [  1.143 s]
-[INFO] jeets-protocols .................................... SUCCESS [  3.673 s]
-[INFO] jeets-protocols-traccar ............................ SUCCESS [ 37.521 s]
-[INFO] --- Client Tracker Components --- .................. SUCCESS [  0.056 s]
-[INFO] jeets-tracker ...................................... SUCCESS [ 13.445 s]
-[INFO] jeets-player ....................................... SUCCESS [  0.427 s]
-[INFO] my-jeets-client .................................... SUCCESS [  6.915 s]
-[INFO] --- Server Tracking Components (JSE) --- ........... SUCCESS [  0.010 s]
-[INFO] jeets-dcs .......................................... SUCCESS [ 10.025 s]
-[INFO] jeets-dcs-traccar .................................. SUCCESS [01:26 min]
-----
-
-
-compile jar-with dependencies ...
-
-run tracker ...
-
-for Camel implementation go to jeets-dcs-traccar ...

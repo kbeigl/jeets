@@ -18,17 +18,47 @@ package org.traccar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.OperatingSystemMXBean;
+import java.lang.management.RuntimeMXBean;
+import java.nio.charset.Charset;
 import java.util.Locale;
 
 public final class Main {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
-    private static final long CLEAN_PERIOD = 24 * 60 * 60 * 1000; // 24 hours
+//  private static final long CLEAN_PERIOD = 24 * 60 * 60 * 1000; // 24 hours
 
     private Main() {
+    }
+
+    public static void logSystemInfo() {
+        try {
+            OperatingSystemMXBean operatingSystemBean = ManagementFactory.getOperatingSystemMXBean();
+            LOGGER.info("Operating system"
+                    + " name: " + operatingSystemBean.getName()
+                    + " version: " + operatingSystemBean.getVersion()
+                    + " architecture: " + operatingSystemBean.getArch());
+
+            RuntimeMXBean runtimeBean = ManagementFactory.getRuntimeMXBean();
+            LOGGER.info("Java runtime"
+                    + " name: " + runtimeBean.getVmName()
+                    + " vendor: " + runtimeBean.getVmVendor()
+                    + " version: " + runtimeBean.getVmVersion());
+
+            MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
+            LOGGER.info("Memory limit"
+                    + " heap: " + memoryBean.getHeapMemoryUsage().getMax() / (1024 * 1024) + "mb"
+                    + " non-heap: " + memoryBean.getNonHeapMemoryUsage().getMax() / (1024 * 1024) + "mb");
+
+            LOGGER.info("Character encoding: "
+                    + System.getProperty("file.encoding") + " charset: " + Charset.defaultCharset());
+
+        } catch (Exception error) {
+            LOGGER.warn("Failed to get system info");
+        }
     }
 
     public static void main(String[] args) throws Exception {
@@ -37,6 +67,7 @@ public final class Main {
         if (args.length <= 0) {
             throw new RuntimeException("Configuration file is not provided");
         }
+
         final String configFile = args[args.length - 1];
 
         run(configFile);
@@ -45,19 +76,18 @@ public final class Main {
     public static void run(String configFile) {
         try {
             Context.init(configFile);
-//          logSystemInfo();
-//          LOGGER.info("Version: " + Context.getAppVersion());
+            logSystemInfo();
             LOGGER.info("Starting Device Communication Servers ...");
 
 //          see Context callerClassName
             Context.getServerManager().start();
 
-            new Timer().scheduleAtFixedRate(new TimerTask() {
-                @Override
-                public void run() {
-                        LOGGER.warn("Clear history skipped");
-                }
-            }, 0, CLEAN_PERIOD);
+//            new Timer().scheduleAtFixedRate(new TimerTask() {
+//                @Override
+//                public void run() {
+//                        LOGGER.warn("Clear history skipped");
+//                }
+//            }, 0, CLEAN_PERIOD);
 
             Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
                 @Override

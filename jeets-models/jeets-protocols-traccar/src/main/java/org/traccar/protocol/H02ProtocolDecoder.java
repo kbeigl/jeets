@@ -88,19 +88,18 @@ public class H02ProtocolDecoder extends BaseProtocolDecoder {
     }
 
     private Integer decodeBattery(int value) {
-        switch (value) {
-            case 6:
-                return 100;
-            case 5:
-                return 80;
-            case 4:
-                return 60;
-            case 3:
-                return 20;
-            case 2:
-                return 10;
-            default:
-                return null;
+        if (value == 0) {
+            return null;
+        } else if (value <= 3) {
+            return (value - 1) * 10;
+        } else if (value <= 6) {
+            return (value - 1) * 20;
+        } else if (value <= 100) {
+            return value;
+        } else if (value >= 0xF1 && value <= 0xF6) {
+            return value - 0xF0;
+        } else {
+            return null;
         }
     }
 
@@ -186,7 +185,7 @@ public class H02ProtocolDecoder extends BaseProtocolDecoder {
             .number("(d+)(dd.d+),")              // longitude
             .groupEnd()
             .expression("([EW]),")
-            .number("(d+.?d*),")                 // speed
+            .number(" *(d+.?d*),")               // speed
             .number("(d+.?d*)?,")                // course
             .number("(?:d+,)?")                  // battery
             .number("(?:(dd)(dd)(dd))?")         // date (ddmmyy)
@@ -555,9 +554,18 @@ public class H02ProtocolDecoder extends BaseProtocolDecoder {
                 String sentence = buf.toString(StandardCharsets.US_ASCII).trim();
                 int typeStart = sentence.indexOf(',', sentence.indexOf(',') + 1) + 1;
                 int typeEnd = sentence.indexOf(',', typeStart);
+                if (typeEnd < 0) {
+                    typeEnd = sentence.indexOf('#', typeStart);
+                }
                 if (typeEnd > 0) {
                     String type = sentence.substring(typeStart, typeEnd);
                     switch (type) {
+                        case "V0":
+                        case "HTBT":
+                            if (channel != null) {
+                                channel.writeAndFlush(new NetworkMessage(sentence, remoteAddress));
+                            }
+                            return null;
                         case "NBR":
                             return decodeLbs(sentence, channel, remoteAddress);
                         case "LINK":

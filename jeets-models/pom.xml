@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Copyright 2019 The Java EE Tracking System - JeeTS
-    Copyright 2019 Kristof Beiglböck kbeigl@jeets.org
+    Copyright 2020 The Java EE Tracking System - JeeTS
+    Copyright 2020 Kristof Beiglböck kbeigl@jeets.org
     
     The JEE Tracking System licenses this file to you 
     under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-parent</artifactId>
-		<version>1.2.2</version>
+		<version>1.2.3</version>
 		<relativePath>../jeets-parent</relativePath>
 	</parent>
 
@@ -47,12 +47,13 @@
 				<version>${hibernate-version}</version>
 				<!-- <scope>test</scope> test compile repo.. -->
 			</dependency>
+			<!-- redundant to specification below ? 
+				adjust with spring boot bom -->
 			<dependency>
 				<groupId>org.postgresql</groupId>
 				<artifactId>postgresql</artifactId>
 				<version>${postgresql-version}</version>
 			</dependency>
-			<!-- redundant to specification below ? -->
 			<dependency>
 				<groupId>com.h2database</groupId>
 				<artifactId>h2</artifactId>

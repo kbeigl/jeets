@@ -2,6 +2,7 @@ package org.traccar.protocol;
 
 import org.junit.Test;
 import org.traccar.ProtocolTest;
+import org.traccar.model.Position;
 
 public class Gl200TextProtocolDecoderTest extends ProtocolTest {
 
@@ -10,11 +11,33 @@ public class Gl200TextProtocolDecoderTest extends ProtocolTest {
 
         Gl200TextProtocolDecoder decoder = new Gl200TextProtocolDecoder(null);
 
+        verifyPositions(decoder, buffer(
+                "+RESP:GTFRI,423031,355154083021002,Bolt4G,0,0,0,0,1,1.0,0.2,0,245.3,-85.630193,42.975280,20190729185934,310,410,500b,B0E320F,31,-1,100,20190729185934,0010$"));
+
+        verifyAttribute(decoder, buffer(
+                "+RESP:GTCTN,440200,866427030007379,NOKIA3,0,0,2,,9,1,0.1,174,48.7,-1.061812,51.435270,20190717080549,0234,0015,0025,145A,,,0000,20190717081008,1D3B$"),
+                Position.KEY_BATTERY_LEVEL, 9);
+
+        verifyAttribute(decoder, buffer(
+                "+RESP:GTHBM,4B0101,135790246811220,,,10,1,1,4.3,92,70.0,121.354335,31.222073,20090214013254,0460,0000,18d8,6141,00,2000.0,20090214093254,11F0$"),
+                Position.KEY_ALARM, Position.ALARM_BRAKING);
+
+        verifyAttribute(decoder, buffer(
+                "+RESP:GTPFA,F50201,866425030235982,GL300M,20190208124849,0BD4$"),
+                Position.KEY_ALARM, Position.ALARM_POWER_OFF);
+
+        verifyAttribute(decoder, buffer(
+                "+RESP:GTPNA,F50201,866425030235982,GL300M,20190208124909,0BD5$"),
+                Position.KEY_ALARM, Position.ALARM_POWER_ON);
+
         verifyAttributes(decoder, buffer(
                 "+BUFF:GTSTC,410301,864802030022424,,,0,,,,,,,0228,0002,4EE8,1BFF489,00,20181207134332,EC90$"));
 
         verifyPositions(decoder, buffer(
                 "+RESP:GTFRI,1A0900,860599000306845,G3-313,0,0,4,1,2.1,0,426.7,8.611466,47.681639,20181214134603,0228,0001,077F,4812,25.2,1,5.7,34,437.3,8.611600,47.681846,20181214134619,0228,0001,077F,4812,25.2,1,4.4,62,438.2,8.611893,47.681983,20181214134633,0228,0001,077F,4812,25.2,1,4.8,78,436.6,8.612236,47.682040,20181214134648,0228,0001,077F,4812,25.2,83,20181214134702,0654$"));
+
+        verifyPosition(decoder, buffer(
+                "+RESP:GTCAN,4B0201,867995030004314,,00,1,C07FFFFF,,2,H982769,30263.00,1266,69,82,H0,P69.20,,0,2037.40,243.93,45.56,74.33,13115,,C00,,0,,,0,68.3,99,42.5,-69.099503,18.445614,20190417233605,0370,0002,5A3D,EB42,00,20190417183607,BD76$"));
 
         verifyPosition(decoder, buffer(
                 "+RESP:GTCAN,270703,867162025056839,gv300w,0,1,E07FFFFF,,2,H9307659,368713.50,1291,90,91,,P82.40,,61,10.10,6.76,3.34,524.08,,,0000,,00,,,007FFFFF,,,,,,,,,,,,,,,,,,,,,0000,2,0,,,0,88.6,104,117.6,-116.886007,32.543697,20181031202959,0334,0020,5234,7FCC3D0,00,20181031203002,9F50$"));
@@ -187,7 +210,7 @@ public class Gl200TextProtocolDecoderTest extends ProtocolTest {
         verifyPositions(decoder, buffer(
                 "+RESP:GTFRI,210102,A10000499AEF9B,,0,1,1,9,0.5,0,288.0,-76.902364,39.578828,20161101134124,,,,,00,73,20161101134123,009D$"));
 
-        verifyAttributes(decoder, buffer(
+        verifyPositions(decoder, buffer(
                 "+RESP:GTRTL,210102,A10000499AEF9B,,0,0,1,10,0.2,0,305.4,-76.902274,39.578517,20161101155001,,,,,00,73,20161101155001,00A6$"));
 
         verifyAttributes(decoder, buffer(

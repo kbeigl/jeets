@@ -25,12 +25,13 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.traccar.Config;
+import org.traccar.config.Config;
 import org.traccar.Context;
 import org.traccar.model.BaseModel;
+import org.traccar.model.Command;
 import org.traccar.model.Device;
-import org.traccar.model.DeviceAccumulators;
 import org.traccar.model.DeviceState;
+import org.traccar.model.DeviceAccumulators;
 import org.traccar.model.Position;
 
 public class DeviceManager implements IdentityManager {
@@ -90,6 +91,24 @@ public class DeviceManager implements IdentityManager {
         updateDeviceCache(forceUpdate);
 
         return devicesByUniqueId.get(uniqueId);
+    }
+
+    @Override
+    public String getDevicePassword(long id, String protocol, String defaultPassword) {
+
+        String password = lookupAttributeString(id, Command.KEY_DEVICE_PASSWORD, null, false, false);
+        if (password != null) {
+            return password;
+        }
+
+        if (protocol != null) {
+            password = Context.getConfig().getString(protocol + "." + Command.KEY_DEVICE_PASSWORD);
+            if (password != null) {
+                return password;
+            }
+        }
+
+        return defaultPassword;
     }
 
     public Device getDeviceByPhone(String phone) {
@@ -153,11 +172,6 @@ public class DeviceManager implements IdentityManager {
         }
     }
 
-//  saved from BaseObjectMgr, but overridden
-//    protected void updateCachedItem(Device item) {
-//        devices.put(item.getId(), item);
-//    }
-
     protected void removeCachedItem(long deviceId) {
         Device cachedDevice = getById(deviceId);
         if (cachedDevice != null) {
@@ -173,11 +187,11 @@ public class DeviceManager implements IdentityManager {
     }
 
     public void updateDeviceStatus(Device device) {
-        LOGGER.warn("updateDeviceStatus error");
+        LOGGER.warn("updateDeviceStatus not implemented");
     }
 
     private void refreshLastPositions() {
-        LOGGER.warn("refreshLastPositions error");
+        LOGGER.warn("refreshLastPositions not implemented");
     }
 
     public boolean isLatestPosition(Position position) {
@@ -186,7 +200,7 @@ public class DeviceManager implements IdentityManager {
     }
 
     public void updateLatestPosition(Position position) {
-        LOGGER.warn("updateLatestPosition error");
+        LOGGER.warn("updateLatestPosition not implemented");
     }
 
     @Override
@@ -200,8 +214,8 @@ public class DeviceManager implements IdentityManager {
     }
 
     public boolean lookupAttributeBoolean(
-            long deviceId, String attributeName, boolean defaultValue, boolean lookupConfig) {
-        Object result = lookupAttribute(deviceId, attributeName, lookupConfig);
+            long deviceId, String attributeName, boolean defaultValue, boolean lookupServer, boolean lookupConfig) {
+        Object result = lookupAttribute(deviceId, attributeName, lookupServer, lookupConfig);
         if (result != null) {
             return result instanceof String ? Boolean.parseBoolean((String) result) : (Boolean) result;
         }
@@ -209,13 +223,14 @@ public class DeviceManager implements IdentityManager {
     }
 
     public String lookupAttributeString(
-            long deviceId, String attributeName, String defaultValue, boolean lookupConfig) {
-        Object result = lookupAttribute(deviceId, attributeName, lookupConfig);
+            long deviceId, String attributeName, String defaultValue, boolean lookupServer, boolean lookupConfig) {
+        Object result = lookupAttribute(deviceId, attributeName, lookupServer, lookupConfig);
         return result != null ? (String) result : defaultValue;
     }
 
-    public int lookupAttributeInteger(long deviceId, String attributeName, int defaultValue, boolean lookupConfig) {
-        Object result = lookupAttribute(deviceId, attributeName, lookupConfig);
+    public int lookupAttributeInteger(
+            long deviceId, String attributeName, int defaultValue, boolean lookupServer, boolean lookupConfig) {
+        Object result = lookupAttribute(deviceId, attributeName, lookupServer, lookupConfig);
         if (result != null) {
             return result instanceof String ? Integer.parseInt((String) result) : ((Number) result).intValue();
         }
@@ -223,8 +238,8 @@ public class DeviceManager implements IdentityManager {
     }
 
     public long lookupAttributeLong(
-            long deviceId, String attributeName, long defaultValue, boolean lookupConfig) {
-        Object result = lookupAttribute(deviceId, attributeName, lookupConfig);
+            long deviceId, String attributeName, long defaultValue, boolean lookupServer, boolean lookupConfig) {
+        Object result = lookupAttribute(deviceId, attributeName, lookupServer, lookupConfig);
         if (result != null) {
             return result instanceof String ? Long.parseLong((String) result) : ((Number) result).longValue();
         }
@@ -232,15 +247,15 @@ public class DeviceManager implements IdentityManager {
     }
 
     public double lookupAttributeDouble(
-            long deviceId, String attributeName, double defaultValue, boolean lookupConfig) {
-        Object result = lookupAttribute(deviceId, attributeName, lookupConfig);
+            long deviceId, String attributeName, double defaultValue, boolean lookupServer, boolean lookupConfig) {
+        Object result = lookupAttribute(deviceId, attributeName, lookupServer, lookupConfig);
         if (result != null) {
             return result instanceof String ? Double.parseDouble((String) result) : ((Number) result).doubleValue();
         }
         return defaultValue;
     }
 
-    private Object lookupAttribute(long deviceId, String attributeName, boolean lookupConfig) {
+    private Object lookupAttribute(long deviceId, String attributeName, boolean lookupServer, boolean lookupConfig) {
         Object result = null;
         Device device = getById(deviceId);
         if (device != null) {

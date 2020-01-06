@@ -35,7 +35,6 @@ public abstract class BaseProtocol implements Protocol {
     private final Set<String> supportedTextCommands = new HashSet<>();
     private final List<TrackerServer> serverList = new LinkedList<>();
 
-    @SuppressWarnings("unused")
     private StringProtocolEncoder textCommandEncoder = null;
 
     public static String nameFromClass(Class<?> clazz) {

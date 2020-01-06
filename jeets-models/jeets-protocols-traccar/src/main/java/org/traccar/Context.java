@@ -17,6 +17,7 @@ package org.traccar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.traccar.config.Config;
 import org.traccar.database.ConnectionManager;
 import org.traccar.database.DeviceManager;
 import org.traccar.database.IdentityManager;
@@ -36,10 +37,6 @@ public final class Context {
     private static final Logger LOGGER = LoggerFactory.getLogger(Context.class);
 
     private Context() {
-    }
-
-    public static String getAppVersion() {
-        return Context.class.getPackage().getImplementationVersion();
     }
 
     private static Config config;
@@ -81,12 +78,13 @@ public final class Context {
     public static void init(String configFile) throws Exception {
 //      fork for camel <-> traccar.Main (temporary for regression tests)
         String callerClassName = new Exception().getStackTrace()[1].getClassName();
-        boolean legacy = callerClassName.equals("org.traccar.jeets.Main");
+//      boolean legacy = callerClassName.equals("org.traccar.jeets.Main");
+        boolean legacy = callerClassName.equals("org.traccar.Main");
 
         try {
-            config = new Config();
-            config.load(configFile);
+            config = new Config(configFile);
         } catch (Exception e) {
+            config = new Config();
             Log.setupDefaultLogger();
             throw e;
         }
@@ -95,13 +93,10 @@ public final class Context {
             Log.setupLogger(config);
         }
 
-        if (config.hasKey("database.url")) {
-            LOGGER.warn("DataManager was removed -> remove database.url");
-        } else {
-            LOGGER.warn("DataManager was removed");
-        }
+//      LOGGER.warn("DataManager was removed -> remove database.url");
 
         mediaManager = new MediaManager(config.getString("media.path"));
+//      deviceManager = new DeviceManager( dataManager );
         deviceManager = new DeviceManager();
         identityManager = deviceManager;
         connectionManager = new ConnectionManager();
@@ -128,7 +123,8 @@ public final class Context {
      * from the real file.
      * Remodel provided tests to real Context incl IdentityManager?
      */
-    public static void init(IdentityManager testIdentityManager) {
+//  public static void init(IdentityManager testIdentityManager) {
+    public static void init(IdentityManager testIdentityManager, MediaManager testMediaManager) {
         config = new Config();
         identityManager = testIdentityManager;
     }
