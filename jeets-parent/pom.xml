@@ -21,7 +21,7 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets</artifactId>
-		<version>1.2.3</version>
+		<version>1.2.4</version>
 	</parent>
 
 	<artifactId>jeets-parent</artifactId>
@@ -54,8 +54,10 @@
         <openjpa-version>2.4.1</openjpa-version>
         <apache-derby-version>10.11.2-RC</apache-derby-version>
         
-		<!-- network / protocols -->
-		<protobuf-version>3.1.0</protobuf-version>
+		<!-- to be removed -->
+		<protobuf-version>3.11.0</protobuf-version>
+		<!-- traccar protocols -->
+		<protobuf.version>3.11.0</protobuf.version>
 
 		<!-- project settings -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -72,18 +74,27 @@
 		mvn clean install -Dskip.unit.tests=true -->
 
 		<!-- add multiple referenced versions here (itests etc.), 
-			   add single referenced in dependencyManagement below. -->
-        <tracker-version-latest>1.2.0</tracker-version-latest>
+			   add single referenced in dependencyManagement below.
+				maybe access projects via local .m2 repo -->
+        <tracker-version-latest>1.2.3</tracker-version-latest>
         <tracker-project-latest>jeets-tracker-${tracker-version-latest}</tracker-project-latest>
 		<tracker-jar-with-dependencies>${tracker-project-latest}-jar-with-dependencies.jar</tracker-jar-with-dependencies>
 
-        <protocols-traccar-version-latest>4.6-191229</protocols-traccar-version-latest>
+		<!-- Apply traccar-version to keep protocols- and dcs-traccar versions in sync !
+        <traccar-version-latest>4.6-191229</traccar-version-latest>  -->
+        <protocols-traccar-version-latest>4.8.0316</protocols-traccar-version-latest>
         <protocols-traccar-project-latest>jeets-protocols-traccar-${protocols-traccar-version-latest}</protocols-traccar-project-latest>
 		<protocols-traccar-jar-with-dependencies>${protocols-traccar-project-latest}-jar-with-dependencies.jar</protocols-traccar-jar-with-dependencies>
+		<!-- protocols- and dcs-traccar version should kept in sync -->
+        <dcs-traccar-version-latest>1.2.4</dcs-traccar-version-latest>
+        <dcs-traccar-project-latest>jeets-dcs-traccar-${dcs-traccar-version-latest}</dcs-traccar-project-latest>
+		<dcs-traccar-jar>${dcs-traccar-project-latest}-exec.jar</dcs-traccar-jar>
 
-        <device-version-latest>1.2.3</device-version-latest>
+        <device-version-latest>1.2.4</device-version-latest>
         <device-project-latest>jeets-device-${device-version-latest}</device-project-latest>
 		<device-jar-with-dependencies>${device-project-latest}-jar-with-dependencies.jar</device-jar-with-dependencies>
+        <device-send-folder>${jeets.repo.directory}/jeets-clients/jeets-device/send</device-send-folder>
+        <data-send-folder>${jeets.repo.directory}/jeets-data/device.send</data-send-folder>
 
 		<!-- maven settings -->
 		<!-- <jdk.version>1.8</jdk.version> -->
@@ -274,7 +285,7 @@
 				</plugin>
 				<plugin>
 				<!-- This plugin is meant to be run as part of the standard build lifecycle, 
-					to help establish locations for files in multimodule builds, 
+					to help establish locations for files in multi module builds, 
 					where the directory structure referenced is stable and will always be intact. 
 					Inconsistencies can cause false positives or false negatives! -->
 					<groupId>org.commonjava.maven.plugins</groupId>

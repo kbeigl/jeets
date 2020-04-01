@@ -123,6 +123,12 @@ public class DeviceManager implements IdentityManager {
         }
         return result;
     }
+    
+    public Collection<Device> getAllDevices() {
+        return null;
+//        return getItems(getAllItems());
+    }
+
 
     private void putUniqueDeviceId(Device device) {
         if (devicesByUniqueId == null) {
@@ -187,11 +193,11 @@ public class DeviceManager implements IdentityManager {
     }
 
     public void updateDeviceStatus(Device device) {
-        LOGGER.warn("updateDeviceStatus not implemented");
+        LOGGER.debug("updateDeviceStatus not implemented");
     }
 
     private void refreshLastPositions() {
-        LOGGER.warn("refreshLastPositions not implemented");
+        LOGGER.debug("refreshLastPositions not implemented");
     }
 
     public boolean isLatestPosition(Position position) {
@@ -200,7 +206,7 @@ public class DeviceManager implements IdentityManager {
     }
 
     public void updateLatestPosition(Position position) {
-        LOGGER.warn("updateLatestPosition not implemented");
+        LOGGER.debug("updateLatestPosition not implemented");
     }
 
     @Override

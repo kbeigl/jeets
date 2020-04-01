@@ -71,6 +71,9 @@ is a simple client software to send messages to a specified host
 and port. Developers should find it easy to adopt this 'sender'
 to their requirements.
 
+* link:../jeets-clients/jeets-device/README.adoc[jeets-device] +
+is the successor of the jeets-tracker applying Camel's Producer 
+Template to send byte or hex messages and collect the response.
 
 == jeets-server-jse
 
@@ -107,9 +110,6 @@ to receive Tracker Messages from any Tracker supported by Traccar!
 The cascaded build works analog to the example above
 only with more complex modules:
 
-. link:../jeets-models/jeets-pu-traccar/README.adoc[jeets-pu-traccar]
-as above
-
 . link:../jeets-models/jeets-protocols-traccar/jeets-protocols-traccar.adoc[jeets-protocols-traccar] +
 provides all protocols from the (main releases of) Traccar GTS 
 
@@ -119,36 +119,21 @@ supported by Traccar protocol implementations.
 The application applies the Camel Framework to create Routes 
 from each protocol port to a unified output of Traccar Entities.
 
-WARNING: The *jeets-dcs-traccar* project is still in experimental
-         beta stage. Upcoming main releases v4.x will improve
-         this component to a stand alone DCS manager.
-
 
 == jeets-itests
 
 This folder is providing an 
-link:../jeets-itests/README.md[Integration Test] 
+link:../jeets-itests/README.adoc[Integration Test] 
 environment to setup and test different components 
 close to a production environment.
 
 
-=== Testing Device Communication
+// === Testing Device Communication
 
-The *tracker2dcs* integration test sets up the *jeets-dcs*, 
-which includes the projects *jeets-pu-traccar* and *jeets-protocols*
-to receive Traccar Protobuffers.
+// The *tracker2dcs* integration test sets up the *jeets-dcs*, 
+// which includes the projects *jeets-pu-traccar* and *jeets-protocols*
+// to receive Traccar Protobuffers.
 
-Then it starts the *jeets-tracker*, which also includes 
-the projects *jeets-pu-traccar* and *jeets-protocols*,
-to send Traccar Protobuffers.
-
-* link:../jeets-itests/tracker2dcs/README.adoc[tracker2dcs] +
-By studying this integration test you can find out how to send
-messages from a client to a server and assert their communication.
-
-
-
-
-
-
-
+// Then it starts the *jeets-tracker*, which also includes 
+// the projects *jeets-pu-traccar* and *jeets-protocols*,
+// to send Traccar Protobuffers.

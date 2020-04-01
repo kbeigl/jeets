@@ -21,7 +21,7 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-server-jee</artifactId>
-		<version>1.2.3</version>
+		<version>1.2.0</version>
 	</parent>
 
 	<name>jeets-wildfly-activemq-adapter</name>

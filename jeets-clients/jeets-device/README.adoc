@@ -1,81 +1,133 @@
-The JeeTS Device
-=================
+
+:toc:
+
+= The JeeTS Device
+
+== Overview
+
+The `jeets-device.jar` &#8230;
+
+. can be launched via command line as a stand alone JSE application as described below. 
+
+. can serve as a 'sender' component for any client application to send messages and 
+receive responses (ACKs) to and from any host `ip:port`. 
+
+. is used to standardize the JeeTS repository as a reference client for integration 
+testing of client-server communication.
 
 IMPORTANT: The JeeTS Device is the successor of the JeeTS Tracker, which will be 
  eventually removed once the Device has been regression tested against the Tracker
- for a complete repository build. +
- The redesign makes use of the Camel Producer to send messages and receive responses 
- from a DCS (like the traccar GTS). +
+ for a complete repository build. 
+ The redesign makes use of the Camel Producer to send messages and 
+ receive responses from any `ip:port`. 
  The term Device also supports the notion of applying Device Communication technology
  not only to GPS Trackers, but to the emerging Internet of Things (IoT).
 
-The JeeTS Device Jar &#8230;
 
-. can be launched via command line as a standalone JSE application as described below. 
+== running the Device
 
-. can serve as a 'sender' component for any client application to send messages and 
-receive responses (ACKs) to and from a host:port. 
+The jeets-device.jar, i.e. jeets-device-1.2.4-jar-with-dependencies.jar, is created with 'mvn package'. + 
+After creating the jeets-device.jar enter this command line &#8230;
 
-. is used to standardize the JeeTS repository as a reference client for integration 
-testing of client and server software.
+    ...\jeets-clients\jeets-device>java -jar target\jeets-device-1.2.4-jar-with-dependencies.jar
 
-_!! to be decided !!_ +
-The Device includes the jeets-protocols to send Protobuffer messages 
-aligned with the Traccar GTS Model, i.e. Database.
-The JeeTS Protocols package brings the Protobuffer libraries and handling,
-Hibernate with Database Driver, ORM Entities and libraries.
+&#8230; to start the device software and watch the start process in the console:
 
-Tracker application
-===================
-The Tracker represents a tracker hardware and can be 'attached' to any RealObject to be tracked.  
-Protocols and Database can be customized to a project's needs and the operation mode can be set via properties or getters.
+	SpringCamelContext + Apache Camel 2.24.0 (CamelContext: camelContext-device) is starting
+	SpringCamelContext + Route: route-file-in started and consuming from:
+	                     file://send?charset=UTF-8&move=.sent&moveFailed=.error&preMove=.sending
+	SpringCamelContext + Route: route-parse-file started and consuming from:
+	                     direct://parse.file
+	SpringCamelContext + Total 2 routes, of which 2 are started
+	SpringCamelContext + Apache Camel 2.24.0 started in 0.467 seconds
+	
+Note that the actual output was reduced to the relevant steps and you will also see time stamps etc.
 
-_add listing for a sample application_
-
-Standalone Instructions
-=======================
-
-_revisit after implementation and (regression) testing_
-
-The jeets-device.jar (jeets-device-1.2.3-jar-with-dependencies.jar) is created with 'mvn package'.  
-The jar is automatically equipped with a tracker.properties file with variables from the repo's main jeets.properties file.  
-To adjust the properties to your needs you can edit this file  
-or you can create your own 
-
-    mycompany.jeets.properties
-         prod.jeets.properties
-          dev.jeets.properties
-          etc.
-
-After creating the jeets-device.jar enter this command line (adjust the directory) 
-without arguments or with '-h' &#8230;
-
-    java -jar target\jeets-device-1.2.3-jar-with-dependencies.jar [-h]
-
-&#8230; to display the usage screen:
-
-    usage of jeets-device.jar
-    <no args>       - this help screen
-    -h              - this help screen
-    -props          - use default tracker.properties (in jar) to
-                      send sample Protobuffer Messages
-    host port       - send sample Protobuffer Messages
-    host port "messageString" - send any String message (for testing)
-
-At development time inside the repository structure you can also launch via Maven with:
-
-    mvn exec:java -Dexec.mainClass="org.jeets.tracker.Main" -Dexec.args="'127.0.0.1' 5200"
+When launching the device software you should find a new folder `...\jeets-device\send`
+to represent the sender. +
+The folder is being polled by the Camel File Component `file://send` twice per second.
 
 
+=== send hex messages
+
+After you have started the device you can pick any `*.jdev` sample file 
+from the `...\jeets-data\device.send` folder  
+and drop it in the `...\jeets-device\send` folder. + 
+
+:checkedbox: pass:normal[{startsb}&#10004;{endsb}]
+{checkedbox} That's it!
+
+Hexadecimal representation is not exactly what is transfered over the network,
+but rather a human readable message format.
+The JeeTS Device supports sending and receiving Hex Strings 
+and takes care to transform them to `byte[]` messages for networking.
+
+Currently the Device's message format looks like this (separated by tabs)
+
+    tcp	localhost	5027	true	000F333536333037303432343431303133
+
+which will be transformed the the Netty Endpoint format 
+
+    netty4:tcp://localhost:5027?sync=true& ...
+
+to send the hex message to `localhost:5027` via `camel-netty ProducerTemplate`.
+
+If you are familiar with Traccar and even have a Traccar instance running 
+you know Traccar's style to log every incoming message in hexadecimal representation:
+
+    [d0eeefc4: 5027 < 127.0.0.1] HEX: 000f333536333037303432343431303133
+    [d0eeefc4: 5027 > 127.0.0.1] HEX: 01
+
+In this case we see a Teltonika message coming in on port `5027 <` 
+and the server responding to it with `> HEX: 01`.
+The time stamps provides information about the server performance.
+
+If you need to simulate a sequence of one or messages you 
+you can save your existing Traccer log files as jdev file 
+and modify it to re-send messages from it.
+
+Before doing so you have to start a server to receive and possibly respond to the messages.
+
+WARNING: Do not use the Device to send to servers that you don't control! +
+    Do not send messages to production servers! +
+    Since hex messages hold hard coded values like IMEI, time stamps etc.
+    you should know + 
+    what you are doing and how the server logic deals with concrete scenarios. 
+
+In short: The jeets-device is a development tool 
+and should be run against servers in development. + 
 
 
-start java -jar tracker.jar > immediately sends Positions and shuts down
- ..
+=== the jdev file format
 
- 
- 
- 
- 
- 
- 
- 
+If you have access to existing Traccer log files you can open one in your text editor. +
+Also open the `...\jeets-data\device.send\teltonika.jdev` file as a sample. +
+In order to send logged messages (at development time) you can apply 
+a regular expression to comment all lines with a starting `#`.
+To re-send a message just hit enter after `> HEX:` to place the message in the next uncommented line
+add the parameters for your server and if the protocol is synced or not:
+
+    tcp	localhost	5027	true	000F333536333037303432343431303133
+
+Now you can drop (copy and paste, don't move the file from its original location!) 
+the file into the `...\jeets-device\send` folder. 
+
+If the jeets-device is running as described above you can see message and response 
+in the console:
+
+    15:34:46,268 INFO  Device +     send hex: 000F333536333037303432343431303133
+    15:34:46,290 INFO  Device + returned hex: 01
+    
+and you can see the milli seconds it takes.
+
+Of course the server can also be running in debug mode inside your IDE and
+you can step through the code to finally release the ACK back to the device.
+Then, of course, the milli seconds are irrelevant.
+
+
+== Device to server demo
+
+You can find a complete device to server demo in the `jeets-itests`/
+link:../../jeets-itests/device2protocols-traccar/README.adoc[device2protocols integration test].
+
+    

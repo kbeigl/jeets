@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 - 2019 Anton Tananaev (anton@traccar.org)
+ * Copyright 2017 - 2020 Anton Tananaev (anton@traccar.org)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,7 +83,14 @@ public class SigfoxProtocolDecoder extends BaseHttpProtocolDecoder {
         }
         JsonObject json = Json.createReader(new StringReader(content)).readObject();
 
-        DeviceSession deviceSession = getDeviceSession(channel, remoteAddress, json.getString("device"));
+        String deviceId;
+        if (json.containsKey("device")) {
+            deviceId = json.getString("device");
+        } else {
+            deviceId = json.getString("deviceId");
+        }
+
+        DeviceSession deviceSession = getDeviceSession(channel, remoteAddress, deviceId);
         if (deviceSession == null) {
             sendResponse(channel, HttpResponseStatus.BAD_REQUEST);
             return null;
@@ -94,12 +101,19 @@ public class SigfoxProtocolDecoder extends BaseHttpProtocolDecoder {
 
         if (json.containsKey("time")) {
             position.setTime(new Date(getJsonInt(json, "time") * 1000L));
+        } else if (json.containsKey("positionTime")) {
+            position.setTime(new Date(getJsonInt(json, "positionTime") * 1000L));
         } else {
             position.setTime(new Date());
         }
 
+        if (json.containsKey("lastSeen")) {
+            position.setDeviceTime(new Date(getJsonInt(json, "lastSeen") * 1000L));
+        }
+
         if (json.containsKey("location")
-                || json.containsKey("lat") && json.containsKey("lng") && !json.containsKey("data")) {
+                || json.containsKey("lat") && json.containsKey("lng") && !json.containsKey("data")
+                || json.containsKey("latitude") && json.containsKey("longitude") && !json.containsKey("data")) {
 
             JsonObject location;
             if (json.containsKey("location")) {
@@ -109,8 +123,18 @@ public class SigfoxProtocolDecoder extends BaseHttpProtocolDecoder {
             }
 
             position.setValid(true);
-            position.setLatitude(getJsonDouble(location, "lat"));
-            position.setLongitude(getJsonDouble(location, "lng"));
+            position.setLatitude(getJsonDouble(location, location.containsKey("lat") ? "lat" : "latitude"));
+            position.setLongitude(getJsonDouble(location, location.containsKey("lng") ? "lng" : "longitude"));
+
+            if (location.containsKey("moving")) {
+                position.set(Position.KEY_MOTION, location.getBoolean("moving"));
+            }
+            if (location.containsKey("magStatus")) {
+                position.set(Position.KEY_BLOCKED, location.getBoolean("magStatus"));
+            }
+            if (location.containsKey("temperature")) {
+                position.set(Position.KEY_DEVICE_TEMP, location.getJsonNumber("temperature").doubleValue());
+            }
 
         } else {
 

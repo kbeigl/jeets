@@ -21,11 +21,12 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-parent</artifactId>
-		<version>1.2.3</version>
+		<version>1.2.4</version>
 		<relativePath>../jeets-parent</relativePath>
 	</parent>
 
 	<artifactId>jeets-server-jee</artifactId>
+	<version>1.2.0</version>
 	<packaging>pom</packaging>
 
 	<name>--- AppServer Tracking Components (JEE) ---</name>

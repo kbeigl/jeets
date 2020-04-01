@@ -3,11 +3,29 @@
 
 = Release Notes - JeeTS repository
 
-=== v1.2.3
+=== v1.2.4 - March 2020
 
-* added jeets-device as successor of jeets-tracker
+* updated Device Communication Servers for all Traccar Protocols! +
+** `jeets-protocols-traccar 4.8.0316` 
 
-* Updated Device Communication Servers for all Traccar Protocols! +
+* re-engineered `jeets-dcs-traccar` as Spring Boot Microservice
+** includes `jeets-protocols-traccar`
+
+* improved `jeets-device` as development and testing tool
+
+* added `jeets-data` folder for sample data, testing and development of JeeTS components 
+
+* added Integration Tests `device2protocols-traccar-itest` and `device2dcs-traccar-itest` + 
+  to send messages via `jeets-device` and receive messages +
+** `jeets-protocols-traccar` to test the original Traccar protocols +
+** `jeets-protocols-dcs` to test Traccar protocols as Spring Boot Microservice
+
+
+=== v1.2.3 - January 2020
+
+* added `jeets-device` as successor of jeets-tracker
+
+* updated Device Communication Servers for all Traccar Protocols! +
 ** `jeets-dcs-traccar 4.6-191229` 
 ** includes `jeets-protocols-traccar 4.6-191229`
 ** includes `jeets-pu-traccar 4.2` +
@@ -22,7 +40,7 @@ to reduce explicit versioning for postgres etc. .. ongoing
 
 === v1.2.2 - May 2019
 
-* Updated Device Communication Servers for all Traccar Protocols! +
+* updated Device Communication Servers for all Traccar Protocols! +
 For details goto the link:../jeets-server-jse/jeets-dcs-traccar/ReadMe.adoc[project's readme file]
 ** `jeets-dcs-traccar 4.3.0-beta` 
 ** includes `jeets-protocols-traccar 4.3.0-beta`

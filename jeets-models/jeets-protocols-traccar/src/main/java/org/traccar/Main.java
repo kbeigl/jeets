@@ -29,8 +29,6 @@ public final class Main {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
-//  private static final long CLEAN_PERIOD = 24 * 60 * 60 * 1000; // 24 hours
-
     private Main() {
     }
 
@@ -81,13 +79,6 @@ public final class Main {
 
 //          see Context callerClassName
             Context.getServerManager().start();
-
-//            new Timer().scheduleAtFixedRate(new TimerTask() {
-//                @Override
-//                public void run() {
-//                        LOGGER.warn("Clear history skipped");
-//                }
-//            }, 0, CLEAN_PERIOD);
 
             Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
                 @Override

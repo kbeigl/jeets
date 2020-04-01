@@ -1,0 +1,66 @@
+
+= JeeTS itest device2protocols
+
+This test should serve as a guideline for JeeTS development and testing.
+
+Let's say you want to do some development on the `jeets-protocols-traccar`
+project and open it in your IDE. The general prerequisite is that you have
+successfully installed the complete `jeets-` repository with `mvn install` 
+to install all required components in your local Maven Repository.  
+
+Now open an external console, go to the directory
+
+    ...\jeets-itests\device2protocols-traccar
+
+and after every substantial change you can install the project (vital!)
+and then run the integration test with
+
+    device2protocols-traccar> mvn clean verify -Pitests
+
+As you can see the integration test starts by running the phases
+
+    <phase>pre-integration-test</phase>
+    
+to launch the external processes required for this test
+
+        :
+    Full command line: java -cp target/jeets-protocols-traccar-x.y-jar-with-dependencies.jar ..
+     Starting process: jeets-protocols-traccar
+        :
+    Full command line: java -jar target/jeets-device-1.2.4-jar-with-dependencies.jar
+     Starting process: jeets-device
+        :
+
+and then the actual integration tests are executed. +
+This listing is only showing the important messages for brevity: 
+
+    [INFO] -------------------------------------------------------
+    [INFO]  T E S T S
+    [INFO] -------------------------------------------------------
+    [INFO] Running org.jeets.itests.Device2protocolsIT
+    INFO  Device2protocolsIT             + testProtocolFiles(org.jeets.itests.Device2protocolsIT)
+    INFO  DefaultCamelContext            + Apache Camel 2.24.0 (CamelContext: camel-1) started
+    INFO  DefaultCamelContext            + Route: send-file started and consuming from:
+                                    file://jeets-data/device.send?fileName=teltonika.jdev&noop=true
+    INFO  DefaultShutdownStrategy        + Starting to graceful shutdown 1 routes
+    INFO  DefaultShutdownStrategy        + Route: send-file shutdown complete, was consuming from: ..
+    INFO  DefaultShutdownStrategy        + Graceful shutdown of 1 routes completed in 0 seconds
+
+This concrete integration test is simple but effective.
+
+First the server `jeets-protocols-traccar` and device `jeets-device` are launched
+in separate JVMs (could be separate computers anywhere in the net).
+
+Then the actual test `Device2protocolsIT` is simply creating a Camel Route 
+to move a sample file from `jeets-data\device.send` to `jeets-device\send`
+and the device will automatically send all messages to the specified `ip:port`
+and the server will respond to every message.
+
+Currently the test is only checking, if the file was sent.
+The developer can view details by going through the individual log files for this test:
+
+    jeets\jeets-itests\device2protocols-traccar\target\device2protocols-traccar-itest
+          jeets-protocols-traccar-4.8.0316.log
+          jeets-device-1.2.4.log
+
+In the long run both processes could be logged in a single file to check messages and responses etc.

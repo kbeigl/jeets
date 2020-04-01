@@ -10,43 +10,30 @@ i.e. Traccar light, to run the Device Communication Servers (DCS) exclusively.
 All DCS servers provide the same output format being 
 the `org.traccar.model.Position` java class.
 
-The code is currently based on Traccar v4.3 and the main effort 
-of the code reduction was to conserve the original `org.traccar.protocol` 
-package for regression tests etc. 
+== overview
+
+The main effort of the code reduction was to conserve the original 
+`org.traccar.protocol` package for regression tests etc. 
 Please consult traccar.org for protocol details. 
 Anton Tananaev is doing an incredible job maintaining
 about 200 protocols on a daily basis.
 
 The main purpose of this project is to provide all Traccar protocols for your own Tracking Application.
-The `jeets-dcs-traccar` project demos how to use the protocols with the Spring and Camel Frameworks
-to create Netty Camel Routes directly from the hardware port.
+The `jeets-dcs-traccar` project demos how to use the protocols with the Spring/Boot/Starter- and Camel Frameworks
+to create Netty Camel Routes directly from the hardware Endpoint, i.e. port.
 
-The project is compiled within the JeeTS repository and only depends on the `jeets-protocol` project 
-to provide a JPA standardized output of java `@Entity` s in the `jeets-pu-traccar` project. 
-// You can choose this output format at a second output endpoint being a `org.jeets.model.traccar.Device` 
-// class potentially holding one or more `Position` with zero or more `Event`.
 
-=== instructions for running
-
-You should compile the JeeTS repository 'System Dataformats and Models' 
-to ensure that all dependents are installed to your Maven repository.
-
-[source,text]
-----
-[INFO] === JeeTS - Java EE Tracking Software === .......... SUCCESS
-[INFO] --- JeeTS Parent - global definitions --- .......... SUCCESS
-[INFO] --- System Dataformats and Models --- .............. SUCCESS
-[INFO] jeets-pu-traccar ................................... SUCCESS
-[INFO] jeets-protocols .................................... SUCCESS
-[INFO] jeets-protocols-traccar ............................ SUCCESS
-----
+== instructions for running
 
 After successful compilation please go to the jeets-protocols-traccar main directory
 to run the Traccar light GTS with your own configuration file
 
 [source,text]
 ----
- java -jar target\jeets-protocols-traccar-4.2.1-beta-jar-with-dependencies.jar setup\traccar.xml
-legacy jar:
- java -jar target\jeets-protocols-traccar-4.2.1-beta.jar setup\traccar.xml
+ java -jar target\jeets-protocols-traccar-x.y-jar-with-dependencies.jar setup\traccar.xml
 ----
+
+and you can send messages to the protocols and associated ports defined in your xml file.
+
+To observe the complete process you can proceed to the 
+link:../../jeets-itests/device2protocols-traccar/README.adoc[device2protocols integration test].

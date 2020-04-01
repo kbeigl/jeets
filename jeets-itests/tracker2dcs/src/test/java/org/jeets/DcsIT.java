@@ -34,7 +34,7 @@ public class DcsIT extends CamelTestSupport {
      * 
      * @throws Exception
      */
-//    @Test
+    @Test
     public void testDcsRoute() throws Exception {
         LOG.info("create DcsRoute ...");
         

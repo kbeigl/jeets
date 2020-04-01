@@ -15,16 +15,12 @@
  */
 package org.traccar;
 
-//import io.netty.buffer.ByteBuf;
-//import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.Channel;
-//import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandler;
-//import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandler;
+import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOutboundHandler;
 import io.netty.channel.ChannelPipeline;
-//import io.netty.channel.ChannelPromise;
 //import io.netty.channel.socket.DatagramChannel;
 //import io.netty.channel.socket.DatagramPacket;
 import io.netty.handler.timeout.IdleStateHandler;
@@ -32,9 +28,7 @@ import io.netty.handler.timeout.IdleStateHandler;
 import org.apache.camel.component.netty4.NettyConsumer;
 import org.apache.camel.component.netty4.ServerInitializerFactory;
 import org.apache.camel.component.netty4.handlers.ServerChannelHandler;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-import org.traccar.handler.DefaultDataHandler;
+
 import org.traccar.handler.NetworkMessageHandler;
 import org.traccar.handler.OpenChannelHandler;
 import org.traccar.handler.RemoteAddressHandler;
@@ -42,14 +36,13 @@ import org.traccar.handler.StandardLoggingHandler;
 
 import java.util.Map;
 
-public abstract class BasePipelineFactory extends ServerInitializerFactory {
+public abstract class BasePipelineFactory extends ChannelInitializer<Channel> {
 
 //  private static final Logger LOGGER = LoggerFactory.getLogger(BasePipelineFactory.class);
-
     private final TrackerServer server;
     private final String protocol;
     private int timeout;
-
+//  Shared Handler/s
     private RemoteAddressHandler remoteAddressHandler;
 
     /* construct BPF for registration only, i.e. without NettyConsumer */
@@ -96,8 +89,58 @@ public abstract class BasePipelineFactory extends ServerInitializerFactory {
 
     @Override
     protected void initChannel(Channel channel) {
-        final ChannelPipeline pipeline = channel.pipeline();
+//      ignore return value
+        initTraccarPipeline(channel);
+    }
 
+    /**
+     * This BasePipelineFactory is the original construct to initialize the Traccar
+     * pipeline. The CamelPipelineFactory provides a separate implementation with an
+     * additional Netty Consumer to pick up the entities at the end of the pipeline.
+     * The CamelPipelineFactory can be provided to a Spring @Configuration file to
+     * trigger createPipelineFactory(NettyConsumer) and apply the
+     * ServerInitializerFactory in a camel-netty route.
+     */
+    class CamelPipelineFactory extends ServerInitializerFactory {
+        private NettyConsumer consumer;
+
+        /**
+         * Create BasePipelineFactory for NettyConsumer, i.e. CamelPipelineFactory
+         */
+        public CamelPipelineFactory(NettyConsumer consumer) {
+            this.consumer = consumer;
+        }
+
+        /**
+         * Initialize CamelPipeline with NettyConsumer once connection channel is
+         * established. The CamelPipeline simply appends the Camel endpoint to the
+         * original BasePipeline.
+         */
+        @Override
+        protected void initChannel(Channel channel) throws Exception {
+//          log.info("append nettyHandler to Traccar pipeline");
+            initTraccarPipeline(channel)
+            .addLast("nettyHandler", new ServerChannelHandler(consumer));          
+        }
+
+        /**
+         * Create CamelPipeline to be registered as ServerInitializerFactory in a Camel
+         * route.
+         */
+        @Override
+        public ServerInitializerFactory createPipelineFactory(NettyConsumer consumer) {
+            return new CamelPipelineFactory(consumer);
+        }
+    }
+
+    /**
+     * Initialize Traccar Pipeline without camel-netty when a new channel is
+     * established. Ignoring the return value creates the original Traccar pipeline.
+     * In order to connect a NettyConsumer the returned pipeline can be enriched
+     * with a ServerChannelHandler for a ServerInitializerFactory.
+     */
+    private ChannelPipeline initTraccarPipeline(Channel channel) {
+        final ChannelPipeline pipeline = channel.pipeline();
         if (timeout > 0 && !server.isDatagram()) {
             pipeline.addLast(new IdleStateHandler(timeout, 0, 0));
         }
@@ -105,8 +148,7 @@ public abstract class BasePipelineFactory extends ServerInitializerFactory {
 //      Begin NetworkMessage ------------------------------
         pipeline.addLast(new NetworkMessageHandler());
         pipeline.addLast(new StandardLoggingHandler(protocol));
-
-        addProtocolHandlers(new PipelineBuilder() {
+        addProtocolHandlers(new PipelineBuilder() { // from TrackerServer, i.e. protocol specific
             @Override
             public void addLast(ChannelHandler handler) {
                 if (!(handler instanceof BaseProtocolDecoder || handler instanceof BaseProtocolEncoder)) {
@@ -120,56 +162,16 @@ public abstract class BasePipelineFactory extends ServerInitializerFactory {
             }
         });
 //      End NetworkMessage --------------------------------
-//      ExtendedObjectDecoder fires every single decodedMessage
-
-//      regular ChannelInboundHandlerAdapter
         addHandlers(pipeline, remoteAddressHandler);
-//      simply fires (passes on?) the Position
-        pipeline.addLast(new DefaultDataHandler()); // can be skipped
-//      ext BaseDataHandler ext ChannelInboundHandlerAdapter
-
-//      log netty events and Position output (replace with ServerInitializerFactory!?)
-        pipeline.addLast(new MainEventHandler()); // i.e. NettyEventHandler
-//      dead end
-
-//      add Camel Endpoint IF invoked in camel-netty4 from registry
-        if (consumer != null) {
-            System.out.println("add nettyHandler");
-            pipeline.addLast("nettyHandler", new ServerChannelHandler(consumer));
-        }
+        pipeline.addLast(new MainEventHandler());
+        return pipeline;
     }
 
-    @Override
+    /* Create a consumer linked channel pipeline factory */
+    @Deprecated
     public ServerInitializerFactory createPipelineFactory(NettyConsumer nettyConsumer) {
-
-        System.out.println("createPipelineFactory for " + nettyConsumer);
-
-        @SuppressWarnings("rawtypes")
-        Class protocolClass = server.getProtocolClass();
-        if (BaseProtocol.class.isAssignableFrom(protocolClass)) {
-            try {
-                BaseProtocol protocol = (BaseProtocol) protocolClass.newInstance();
-//              can be more than one server! protocol.getServerList();
-//              TO DO: only return first for now
-                BasePipelineFactory bpf = protocol.getServerList().iterator().next().getPipelineFactory();
-//              NettyConsumer not part of the construction hierarchy
-//              as original *Protocol() constructor can not be modified
-                bpf.setNettyConsumer(nettyConsumer);
-                return (ServerInitializerFactory) bpf;
-//              return bpf;
-            } catch (InstantiationException | IllegalAccessException e) {
-//              now what?
-                e.printStackTrace();
-            }
-        }
-//      null throws java.lang.NullPointerException: childHandler
-//      at io.netty.bootstrap.ServerBootstrap.childHandler(ServerBootstrap.java:134)
+        System.err.println("createPipelineFactory for " + nettyConsumer + " DEactivated !!!");
         return null;
-    }
-
-    private NettyConsumer consumer;
-    private void setNettyConsumer(NettyConsumer nettyConsumer) {
-        consumer = nettyConsumer;
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 - 2018 Anton Tananaev (anton@traccar.org)
+ * Copyright 2015 - 2019 Anton Tananaev (anton@traccar.org)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package org.traccar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.traccar.config.Config;
+//import org.traccar.database.CommandsManager;
 import org.traccar.database.ConnectionManager;
 import org.traccar.database.DeviceManager;
 import org.traccar.database.IdentityManager;
@@ -25,10 +26,9 @@ import org.traccar.database.MediaManager;
 import org.traccar.helper.Log;
 
 /**
- * This Context is derived from Traccar. On a longer term it should be replaced
- * with some specified Context, i.e. Camel-, Spring-, JNDI- etc.). The *Managers
- * should be registered and the properties should be loaded into Camel for
- * easier property resolution etc.
+ * This Context is derived from Traccar. On a longer term it might be replaced
+ * with some specified Context, i.e. Camel-, Spring-, JNDI- etc.), *Managers
+ * might be registered.
  *
  * @author kbeigl@jeets.org
  */
@@ -75,11 +75,21 @@ public final class Context {
         return serverManager;
     }
 
+    /**
+     * Distinguish original Traccar source, i.e. legacy, from Camel Spring approach.
+     * Should be initialized explicitly to avoid unwanted default behavior.
+     */
+    static boolean legacy;
+
+//    private static CommandsManager commandsManager;
+//    public static CommandsManager getCommandsManager() {
+//        return commandsManager;
+//    }
+
     public static void init(String configFile) throws Exception {
 //      fork for camel <-> traccar.Main (temporary for regression tests)
         String callerClassName = new Exception().getStackTrace()[1].getClassName();
-//      boolean legacy = callerClassName.equals("org.traccar.jeets.Main");
-        boolean legacy = callerClassName.equals("org.traccar.Main");
+        legacy = callerClassName.equals("org.traccar.Main");
 
         try {
             config = new Config(configFile);
@@ -119,11 +129,9 @@ public final class Context {
      * When the ClassFinder loads
      * *Test.class > BaseTest > Context.init(new TestIdentityManager())
      * which overrides the Context (see below).
-     * Camel tests sets up Context.init( traccar.xml )
-     * from the real file.
+     * Camel tests sets up Context.init( traccar.xml ) from the real file.
      * Remodel provided tests to real Context incl IdentityManager?
      */
-//  public static void init(IdentityManager testIdentityManager) {
     public static void init(IdentityManager testIdentityManager, MediaManager testMediaManager) {
         config = new Config();
         identityManager = testIdentityManager;

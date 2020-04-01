@@ -86,7 +86,7 @@ public class Device {
             response = device.requestBody(serverUri, byteMessage, byte[].class);
         } else {
             device.sendBody(serverUri, byteMessage);
-            response = new byte[]{};    // empty
+            response = new byte[]{ /* empty */ };
         }
         log.debug("response: " + Arrays.toString(response));
         return response;

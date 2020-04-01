@@ -15,9 +15,6 @@
  */
 package org.traccar.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class WifiAccessPoint {
 
     public static WifiAccessPoint from(String macAddress, int signalStrength) {

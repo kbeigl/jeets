@@ -1,0 +1,25 @@
+#
+# https://wiki.teltonika.lt/view/Codec
+# Teltonika message (req-resp)
+#
+# First, when module connects to server, module sends its IMEI: 356307042441013
+tcp	localhost	5027	true	000F333536333037303432343431303133
+#
+# 1'st example
+# Receiving one data record with each element property (1 byte, 2 bytes, 4 byte and 8 byte)
+# id: 356307042441013 time: 2019-06-10 12:04:46 lat: 0.00000 lon: 0.00000 course: 0.0
+tcp	localhost	5027	true	000000000000003608010000016B40D8EA30010000000000000000000000000000000105021503010101425E0F01F10000601A014E0000000000000000010000C7CF
+#
+# 2'nd example
+# Receiving one data record with one or two different element properties (1 byte, 2 byte).
+tcp	localhost	5027	true	000000000000002808010000016B40D9AD80010000000000000000000000000000000103021503010101425E100000010000F22A
+#
+# ********* TODO *********
+#
+# 3'rd example
+# Receiving two or more data records with one or more different element properties.
+# tcp	localhost	5027	true	000000000000004308020000016B40D57B480100000000000000000000000000000001010101000000000000016B40D5C198010000000000000000000000000000000 101010101000000020000252C
+# 2020-02-04 17:48:59,196 [2 - file://send] WARN  DeadLetterChannel
+# Failed delivery for (MessageId: ID-DESKTOP-DB3MIII-1580827933409-0-229
+#                  on ExchangeId: ID-DESKTOP-DB3MIII-1580827933409-0-228).
+# On delivery attempt: 0 caught: java.lang.IllegalArgumentException: length: 159

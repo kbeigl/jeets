@@ -72,9 +72,10 @@ public class ServerManager {
             Class protocolClass = Class.forName(packageName + '.' + name);
             if (BaseProtocol.class.isAssignableFrom(protocolClass)
                     && Context.getConfig().hasKey(BaseProtocol.nameFromClass(protocolClass) + ".port")) {
-                BaseProtocol protocol = (BaseProtocol) protocolClass.newInstance();
-                serverList.addAll(protocol.getServerList());
-                protocolList.put(protocol.getName(), protocol);
+//              if (protocolClass.getCanonicalName().equals("org.traccar.protocol.RuptelaProtocol")) {  }
+                    BaseProtocol protocol = (BaseProtocol) protocolClass.newInstance();
+                    serverList.addAll(protocol.getServerList());
+                    protocolList.put(protocol.getName(), protocol);
             }
         }
     }
@@ -97,7 +98,7 @@ public class ServerManager {
         for (TrackerServer server: serverList) {
             server.stop();
         }
-        GlobalTimer.release();
+//      GlobalTimer.release();
     }
 
 }

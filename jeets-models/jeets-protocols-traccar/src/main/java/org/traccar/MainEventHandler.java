@@ -45,16 +45,15 @@ public class MainEventHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-
         if (msg instanceof Position) {
             Position position = (Position) msg;
             Context.getDeviceManager().updateLatestPosition(position);
             String uniqueId = Context.getIdentityManager().getById(position.getDeviceId()).getUniqueId();
-
             // Log position
             StringBuilder s = new StringBuilder();
             s.append(formatChannel(ctx.channel())).append(" ");
-            s.append("id: ").append(uniqueId);
+            s.append("uniqueId: ").append(uniqueId);
+            s.append(" protocol: ").append(position.getProtocol());
             s.append(" time: ").append(DateUtil.formatDate(position.getFixTime(), false));
             s.append(" lat: ").append(String.format("%.5f", position.getLatitude()));
             s.append(" lon: ").append(String.format("%.5f", position.getLongitude()));
@@ -70,10 +69,10 @@ public class MainEventHandler extends ChannelInboundHandlerAdapter {
                 s.append(" result: ").append(cmdResult);
             }
             LOGGER.info(s.toString());
-//          Context.getStatisticsManager().registerMessageStored(position.getDeviceId());
 
-
-
+//          the Traccar Pipeline ends here, for Camel fire message upstream (in)
+            if (!Context.legacy)
+                ctx.fireChannelRead(position);
         }
     }
 

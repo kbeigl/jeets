@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 - 2018 Anton Tananaev (anton@traccar.org)
+ * Copyright 2015 - 2020 Anton Tananaev (anton@traccar.org)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,15 @@
  */
 package org.traccar;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.Channel;
 import io.netty.handler.codec.string.StringEncoder;
-import org.traccar.database.ActiveDevice;
+// import org.traccar.database.ActiveDevice;
 import org.traccar.helper.DataConverter;
 import org.traccar.model.Command;
 
+import java.net.SocketAddress;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -53,7 +56,8 @@ public abstract class BaseProtocol implements Protocol {
 
     /**
      * When the *Protocol is instantiated for the registration the BPFactory is
-     * created but never used for network communication. <br>
+     * created but never used for network communication.
+     * <p>
      * When the *Protocol is used in a netty4:.. route the method
      * createPipelineFactory(NettyConsumer) is invoked from the above BPFactory
      * instance to create new instances of *Protocol &gt; TrackerServer/s &gt; BPF
@@ -62,7 +66,8 @@ public abstract class BaseProtocol implements Protocol {
     protected void addServer(TrackerServer server) {
 //      conserve Protocol class for createPipelineFactory
 //      improve: derive from TrackerServer instance ! owning, declaring class etc. ?
-        server.setProtocolClass(this.getClass());
+//        server.setProtocolClass(this.getClass());
+//        should be done ?
         serverList.add(server);
     }
 
@@ -99,15 +104,16 @@ public abstract class BaseProtocol implements Protocol {
     }
 
     @Override
-    public void sendDataCommand(ActiveDevice activeDevice, Command command) {
+    public void sendDataCommand(Channel channel, SocketAddress remoteAddress, Command command) {
         if (supportedDataCommands.contains(command.getType())) {
-            activeDevice.write(command);
+            channel.writeAndFlush(new NetworkMessage(command, remoteAddress));
         } else if (command.getType().equals(Command.TYPE_CUSTOM)) {
             String data = command.getString(Command.KEY_DATA);
-            if (BasePipelineFactory.getHandler(activeDevice.getChannel().pipeline(), StringEncoder.class) != null) {
-                activeDevice.write(data);
+            if (BasePipelineFactory.getHandler(channel.pipeline(), StringEncoder.class) != null) {
+                channel.writeAndFlush(new NetworkMessage(data, remoteAddress));
             } else {
-                activeDevice.write(Unpooled.wrappedBuffer(DataConverter.parseHex(data)));
+                ByteBuf buf = Unpooled.wrappedBuffer(DataConverter.parseHex(data));
+                channel.writeAndFlush(new NetworkMessage(buf, remoteAddress));
             }
         } else {
             throw new RuntimeException("Command " + command.getType() + " is not supported in protocol " + getName());

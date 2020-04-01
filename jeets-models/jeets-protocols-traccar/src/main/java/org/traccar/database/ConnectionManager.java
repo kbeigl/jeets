@@ -106,7 +106,7 @@ public class ConnectionManager {
         }
 
         if (status.equals(Device.STATUS_ONLINE)) {
-            LOGGER.warn("updateDevice.Device.STATUS_ONLINE");
+            LOGGER.info("updateDevice '" + device.getUniqueId() + "' to status ONLINE");
         }
 
         Context.getDeviceManager().updateDeviceStatus(device);
@@ -119,11 +119,11 @@ public class ConnectionManager {
     }
 
     public synchronized void updateDevice(Device device) {
-        LOGGER.warn("ConnectionManager.updateDevice not implemented");
+        LOGGER.debug("ConnectionManager.updateDevice not implemented");
     }
 
     public synchronized void updatePosition(Position position) {
-        LOGGER.warn("ConnectionManager.updatePosition not implemented");
+        LOGGER.debug("ConnectionManager.updatePosition not implemented");
     }
 
 }

@@ -15,12 +15,9 @@
  */
 package org.traccar.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 import java.util.ArrayList;
 import java.util.Collection;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Network {
 
     public Network() {

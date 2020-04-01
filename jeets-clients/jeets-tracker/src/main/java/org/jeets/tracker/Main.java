@@ -93,10 +93,10 @@ public class Main {
     }
 
     private static void sendSampleMessages(Tracker tracker) {
-        List<Traccar.Position.Builder> posBuilderList = createSampleTrack();
+        List<Builder> posBuilderList = createSampleTrack();
         System.out.println("created list with " + posBuilderList.size() + " positions.");
         for (int pos = 0; pos < posBuilderList.size(); pos++) {
-            Traccar.Position.Builder posBuilder = posBuilderList.get(pos);
+            Builder posBuilder = posBuilderList.get(pos);
             posBuilder.setFixtime(new Date().getTime());
             System.out.println("fixed " + (pos+1) + ". position at " + posBuilder.getFixtime());
             tracker.sendPositionProto(posBuilder);

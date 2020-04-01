@@ -15,11 +15,6 @@
  */
 package org.traccar.model;
 
-import org.traccar.database.QueryIgnore;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Command extends Message implements Cloneable {
 
     public static final String TYPE_CUSTOM = "custom";
@@ -95,7 +90,6 @@ public class Command extends Message implements Cloneable {
         this.textChannel = textChannel;
     }
 
-    @QueryIgnore
     @Override
     public long getDeviceId() {
         return super.getDeviceId();

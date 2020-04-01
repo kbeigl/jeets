@@ -27,27 +27,24 @@ import io.netty.util.concurrent.GlobalEventExecutor;
 
 import java.net.InetSocketAddress;
 
+import org.apache.camel.component.netty4.ServerInitializerFactory;
+
 public abstract class TrackerServer {
 
     private final boolean datagram;
-    private final AbstractBootstrap bootstrap;
+    private AbstractBootstrap bootstrap = null;
 
     public boolean isDatagram() {
         return datagram;
     }
 
-//  seams like constructor is invoked twice > investigate
     public TrackerServer(boolean datagram, String protocol) {
-        this.datagram = datagram;
 
-//      setProtocolClass here ?
-//      try {
+        this.datagram = datagram;
         address = Context.getConfig().getString(protocol + ".address");
         port = Context.getConfig().getInteger(protocol + ".port");
-//      } catch (NullPointerException e) {  // JeeTS
-//          port = 5200;
-//      }
 
+//      one factory instance for each TrackerServer instance
         pipelineFactory = new BasePipelineFactory(this, protocol) {
             @Override
             protected void addProtocolHandlers(PipelineBuilder pipeline) {
@@ -55,63 +52,47 @@ public abstract class TrackerServer {
             }
         };
 
-//      handle this in Camel uri (spring.xml). Deactivate here?
-        if (datagram) {
-
-            this.bootstrap = new Bootstrap()
-                    .group(EventLoopGroupFactory.getWorkerGroup())
-                    .channel(NioDatagramChannel.class)
-                    .handler(pipelineFactory);
-
-        } else {
-
-            this.bootstrap = new ServerBootstrap()
-                    .group(EventLoopGroupFactory.getBossGroup(), EventLoopGroupFactory.getWorkerGroup())
-                    .channel(NioServerSocketChannel.class)
-                    .childHandler(pipelineFactory);
+//      bind in original context OR let Camel take control of the life cycle
+        if (Context.legacy) {
+            if (datagram) {
+                this.bootstrap = new Bootstrap()
+                        .group(EventLoopGroupFactory.getWorkerGroup())
+                        .channel(NioDatagramChannel.class)
+                        .handler(pipelineFactory);
+            } else {
+                this.bootstrap = new ServerBootstrap()
+                        .group(EventLoopGroupFactory.getBossGroup(), 
+                                EventLoopGroupFactory.getWorkerGroup())
+                        .channel(NioServerSocketChannel.class)
+                        .childHandler(pipelineFactory);
+            }
         }
     }
 
     private BasePipelineFactory pipelineFactory = null;
-    public BasePipelineFactory getPipelineFactory() {
-        return pipelineFactory;
-    }
 
-    /* This is a work around to conserve the protocol class in order to
-     * createPipelineFactory(NettyConsumer consumer) when being invoked from the
-     * registered *Protocol instance. There should be a better way ...
+    /**
+     * Each protocol has its own factory a returned pipeline should be named after.
+     * <p>
+     * Every new factory has a dangling reference to the TrackerServer and its
+     * BasePipeline!
+     * 
+     * @return the pipeline for the associated protocol
      */
-    @SuppressWarnings("rawtypes")
-    private Class protocolClass;    // extends BaseProtocol
-    public void setProtocolClass(@SuppressWarnings("rawtypes") Class protocolClass) {
-        this.protocolClass = protocolClass;
-    }
-
-    @SuppressWarnings("unchecked")
-    public Class<BaseProtocol> getProtocolClass() {
-        return protocolClass;
+    public ServerInitializerFactory getServerInitializerFactory() {
+        return pipelineFactory.new CamelPipelineFactory(null);
     }
 
     protected abstract void addProtocolHandlers(PipelineBuilder pipeline);
 
     private int port;
-
     public int getPort() {
         return port;
     }
 
-    public void setPort(int port) {
-        this.port = port;
-    }
-
     private String address;
-
     public String getAddress() {
         return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 
     private final ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
@@ -120,6 +101,9 @@ public abstract class TrackerServer {
         return channelGroup;
     }
 
+    /**
+     * Only apply start() and stop() methods in original Traccar context.
+     */
     public void start() throws Exception {
         InetSocketAddress endpoint;
         if (address == null) {

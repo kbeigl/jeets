@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 - 2018 Anton Tananaev (anton@traccar.org)
+ * Copyright 2013 - 2020 Anton Tananaev (anton@traccar.org)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -173,12 +173,28 @@ public class OsmAndProtocolDecoder extends BaseHttpProtocolDecoder {
         }
 
         if (position.getDeviceId() != 0) {
-            sendResponse(channel, HttpResponseStatus.OK);
+            String response = null;
+            System.err.println("CommandsManager not implemented in jeets yet.");
+//            CommandsManager commandsManager = Context.getCommandsManager();
+//            if (commandsManager != null) {
+//                for (Command command : commandsManager.readQueuedCommands(position.getDeviceId(), 1)) {
+//                    response = command.getString(Command.KEY_DATA);
+//                }
+//            }
+//            if (response != null) {
+//                sendResponse(channel, HttpResponseStatus.OK, Unpooled.copiedBuffer(response, StandardCharsets.UTF_8));
+//            } else {
+                sendResponse(channel, HttpResponseStatus.OK);
+//            }
             return position;
         } else {
             sendResponse(channel, HttpResponseStatus.BAD_REQUEST);
             return null;
         }
+    }
+
+    @Override
+    protected void sendQueuedCommands(Channel channel, SocketAddress remoteAddress, long deviceId) {
     }
 
 }

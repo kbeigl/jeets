@@ -25,6 +25,18 @@
     <entry key='gl100.port'>5003</entry>
     <entry key='gl200.port'>5004</entry>
     <entry key='t55.port'>5005</entry>
+
+    <entry key='teltonika.port'>5027</entry>
+    <entry key='ruptela.port'>5046</entry>
+
+    <entry key='carscop.port'>5040</entry>
+    <entry key='osmand.port'>5055</entry>
+
+    <entry key='adm.port'>5092</entry>
+
+<!--
+	<entry key='protobuffer.port'>5200</entry>
+
     <entry key='xexun.port'>5006</entry>
     <entry key='xexun.extended'>false</entry>
     <entry key='totem.port'>5007</entry>
@@ -47,7 +59,7 @@
     <entry key='megastek.port'>5024</entry>
     <entry key='navigil.port'>5025</entry>
     <entry key='gpsgate.port'>5026</entry>
-    <entry key='teltonika.port'>5027</entry>
+
     <entry key='mta6.port'>5028</entry>
     <entry key='tzone.port'>5029</entry>
     <entry key='tlt2h.port'>5030</entry>
@@ -60,13 +72,13 @@
     <entry key='intellitrac.port'>5037</entry>
     <entry key='gpsmta.port'>5038</entry>
     <entry key='wialon.port'>5039</entry>
-    <entry key='carscop.port'>5040</entry>
+
     <entry key='apel.port'>5041</entry>
     <entry key='manpower.port'>5042</entry>
     <entry key='globalsat.port'>5043</entry>
     <entry key='atrack.port'>5044</entry>
     <entry key='pt3000.port'>5045</entry>
-    <entry key='ruptela.port'>5046</entry>
+
     <entry key='topflytech.port'>5047</entry>
     <entry key='laipac.port'>5048</entry>
     <entry key='aplicom.port'>5049</entry>
@@ -75,7 +87,7 @@
     <entry key='gator.port'>5052</entry>
     <entry key='noran.port'>5053</entry>
     <entry key='m2m.port'>5054</entry>
-    <entry key='osmand.port'>5055</entry>
+
     <entry key='easytrack.port'>5056</entry>
     <entry key='gpsmarker.port'>5057</entry>
     <entry key='khd.port'>5058</entry>
@@ -112,7 +124,7 @@
     <entry key='aquila.port'>5089</entry>
     <entry key='flextrack.port'>5090</entry>
     <entry key='blackkite.port'>5091</entry>
-    <entry key='adm.port'>5092</entry>
+
     <entry key='watch.port'>5093</entry>
     <entry key='t800x.port'>5094</entry>
     <entry key='upro.port'>5095</entry>
@@ -200,7 +212,7 @@
     <entry key='anytrek.port'>5177</entry>
     <entry key='smartsole.port'>5178</entry>
     <entry key='its.port'>5179</entry>
-	
+ -->
     <entry key='xrb28.port'>6179</entry>
 	
 </properties>
