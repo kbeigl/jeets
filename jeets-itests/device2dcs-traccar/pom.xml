@@ -25,7 +25,7 @@
 	</parent>
 
 	<artifactId>device2dcs-traccar</artifactId>
-	<version>1.2.4</version>
+	<!-- <version>1.2.4</version> -->
 	<packaging>jar</packaging>
 
 	<name>device2dcs-traccar-itest</name>

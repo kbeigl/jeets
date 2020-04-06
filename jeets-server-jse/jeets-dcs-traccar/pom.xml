@@ -26,7 +26,7 @@
 	</parent>
 
 	<artifactId>jeets-dcs-traccar</artifactId>
-	<version>1.2.4</version>
+	<!-- <version>1.2.4</version> -->
 
 	<name>jeets-dcs-traccar</name>
 	<description>DCS manager with Spring/Boot/Netty4/Starter and Camel Endpoint</description>

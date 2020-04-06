@@ -3,6 +3,18 @@
 
 = Release Notes - JeeTS repository
 
+=== v1.3 - ?? 2020
+
+* added `my-etl-traccar` 
+for Maven Archetype generation of customized ETL microservice
+
+ * restructure repository with jeets-traccar section
+ 
+ * Camel 2.x to 3.x migration
+
+
+
+
 === v1.2.4 - March 2020
 
 * updated Device Communication Servers for all Traccar Protocols! +
