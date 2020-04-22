@@ -22,9 +22,9 @@
 @REM ----------------------------------------------------------------------------
 
 set "etl-folder=%cd%\"
-set "etl-libs=%etl-folder%libs\"
+set "etl-libs=%etl-folder%libs"
 @REM replace jars with variables ...
-java -cp jeets-dcs-traccar-1.3-SNAPSHOT-exec.jar -Dloader.path="file:///%etl-folder%target\ptc-etl-1.0-SNAPSHOT.jar" org.springframework.boot.loader.PropertiesLauncher .\setup\traccar.xml
+java -cp jeets-dcs-traccar-1.3-SNAPSHOT-exec.jar -Dloader.path="file:///%etl-folder%target\ptc-etl-1.0-SNAPSHOT.jar, file:///%etl-libs%" org.springframework.boot.loader.PropertiesLauncher .\setup\traccar.xml
 
 @REM Begin all REM lines with '@' in case MAVEN_BATCH_ECHO is 'on'
 @echo off

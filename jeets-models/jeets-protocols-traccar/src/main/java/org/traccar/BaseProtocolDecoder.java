@@ -250,7 +250,7 @@ public abstract class BaseProtocolDecoder extends ExtendedObjectDecoder {
     }
 
     protected void sendQueuedCommands(Channel channel, SocketAddress remoteAddress, long deviceId) {
-        System.err.println("sendQueuedCommands: CommandsManager not implemented in jeets yet.");
+        LOGGER.debug("sendQueuedCommands: CommandsManager not implemented in jeets yet.");
 //        CommandsManager commandsManager = Context.getCommandsManager();
 //        if (commandsManager != null) {
 //            for (Command command : commandsManager.readQueuedCommands(deviceId)) {
