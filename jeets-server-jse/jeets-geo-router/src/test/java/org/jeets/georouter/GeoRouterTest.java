@@ -74,7 +74,7 @@ public class GeoRouterTest extends CamelTestSupport {
 
         testEndpoint.assertIsSatisfied();
         
-        context.stopRoute(routeName);
+//      context.stopRoute(routeName);
         context.removeRoute(routeName);
     }
     

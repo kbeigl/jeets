@@ -1,8 +1,8 @@
 package org.jeets.dcs;
 
-import org.apache.camel.component.netty4.ClientInitializerFactory;
-import org.apache.camel.component.netty4.NettyProducer;
-import org.apache.camel.component.netty4.handlers.ClientChannelHandler;
+import org.apache.camel.component.netty.ClientInitializerFactory;
+import org.apache.camel.component.netty.NettyProducer;
+import org.apache.camel.component.netty.handlers.ClientChannelHandler;
 import org.jeets.protocol.Traccar;
 
 import io.netty.channel.Channel;

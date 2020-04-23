@@ -1,9 +1,9 @@
 package org.jeets.util;
 
-import org.apache.camel.impl.CompositeRegistry;
-import org.apache.camel.impl.JndiRegistry;
-import org.apache.camel.impl.PropertyPlaceholderDelegateRegistry;
-import org.apache.camel.impl.SimpleRegistry;
+//import org.apache.camel.impl.CompositeRegistry;
+//import org.apache.camel.impl.JndiRegistry;
+//import org.apache.camel.impl.PropertyPlaceholderDelegateRegistry;
+import org.apache.camel.support.SimpleRegistry;
 import org.apache.camel.spi.Registry;
 
 public final class MultiRegistry {
@@ -26,9 +26,9 @@ public final class MultiRegistry {
 
         Registry reg = registry;
         // Unwrap PropertyPlaceholderDelegateRegistry
-        if (registry instanceof PropertyPlaceholderDelegateRegistry) {
-            reg = ((PropertyPlaceholderDelegateRegistry) reg).getRegistry();
-        }
+//        if (registry instanceof PropertyPlaceholderDelegateRegistry) {
+//            reg = ((PropertyPlaceholderDelegateRegistry) reg).getRegistry();
+//        }
 
 //      if you are using the Spring framework to define your routes,
 //      the Spring ApplicationContextRegistry plug-in is automatically
@@ -46,15 +46,16 @@ public final class MultiRegistry {
 ////        skip lookup below
 //          return;
 //      } else
-        if (reg instanceof CompositeRegistry) {
-            // getRegistryList() not available in Camel 2.12
-            SimpleRegistry r = new SimpleRegistry();
-            r.put(name, bean);
-            ((CompositeRegistry) reg).addRegistry(r);
-        } else if (reg instanceof JndiRegistry) {
-            ((JndiRegistry) reg).bind(name, bean);
-        } else if (reg instanceof SimpleRegistry) {
-            ((SimpleRegistry) reg).put(name, bean);
+//        if (reg instanceof CompositeRegistry) {
+//            // getRegistryList() not available in Camel 2.12
+//            SimpleRegistry r = new SimpleRegistry();
+//            r.put(name, bean);
+//            ((CompositeRegistry) reg).addRegistry(r);
+//        } else if (reg instanceof JndiRegistry) {
+//            ((JndiRegistry) reg).bind(name, bean);
+//        } else 
+        if (reg instanceof SimpleRegistry) {
+            ((SimpleRegistry) reg).bind(name, bean);
 
         } else {
             throw new IllegalArgumentException("Couldn't add bean. Unknown registry type: " + reg.getClass());

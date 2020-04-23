@@ -4,7 +4,7 @@ import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.camel.CamelContext;
 import org.apache.camel.impl.DefaultCamelContext;
-import org.apache.camel.impl.SimpleRegistry;
+import org.apache.camel.support.SimpleRegistry;
 import org.jeets.dcsToAmq.steps.DeviceProtoExtractor;
 
 /**
@@ -21,8 +21,8 @@ public class Main {
 //      registry.bind( not .put );
         
         SimpleRegistry registry = new SimpleRegistry();
-        registry.put("device", new DeviceProtoExtractor(null));
-        registry.put("activeMqConnectionFactory", activeMqConnectionFactory);
+        registry.bind("device", new DeviceProtoExtractor(null));
+        registry.bind("activeMqConnectionFactory", activeMqConnectionFactory);
 
         CamelContext context = new DefaultCamelContext(registry);
         context.addRoutes(new DcsToAmqRoute());

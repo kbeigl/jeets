@@ -25,9 +25,9 @@ import io.netty.channel.ChannelPipeline;
 //import io.netty.channel.socket.DatagramPacket;
 import io.netty.handler.timeout.IdleStateHandler;
 
-import org.apache.camel.component.netty4.NettyConsumer;
-import org.apache.camel.component.netty4.ServerInitializerFactory;
-import org.apache.camel.component.netty4.handlers.ServerChannelHandler;
+import org.apache.camel.component.netty.NettyConsumer;
+import org.apache.camel.component.netty.ServerInitializerFactory;
+import org.apache.camel.component.netty.handlers.ServerChannelHandler;
 
 import org.traccar.handler.NetworkMessageHandler;
 import org.traccar.handler.OpenChannelHandler;

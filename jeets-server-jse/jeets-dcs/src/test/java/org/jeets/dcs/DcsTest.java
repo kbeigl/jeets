@@ -85,7 +85,7 @@ public class DcsTest extends CamelTestSupport {
         CamelContext context = super.createCamelContext();  
 
 //      props belong to CamelContext, set directly after creation
-        PropertiesComponent props = context.getComponent("properties", PropertiesComponent.class);  
+        PropertiesComponent props = (PropertiesComponent) context.getPropertiesComponent();  
         props.setLocation("classpath:dcs.properties");
 //      TODO: validate registering as "properties", advantages?
 //      context.addComponent("properties", props);

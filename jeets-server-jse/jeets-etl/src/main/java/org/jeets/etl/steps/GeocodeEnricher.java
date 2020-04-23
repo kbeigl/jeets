@@ -1,6 +1,6 @@
 package org.jeets.etl.steps;
 
-import org.apache.camel.processor.aggregate.AggregationStrategy;
+import org.apache.camel.AggregationStrategy;
 import org.jeets.model.traccar.jpa.Position;
 
 //import com.google.code.geocoder.model.GeocoderStatus;

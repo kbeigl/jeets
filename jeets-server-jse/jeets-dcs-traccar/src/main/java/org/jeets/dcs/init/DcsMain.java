@@ -26,7 +26,7 @@ public class DcsMain extends Main {
         main.bind("trackingSystem", new TrackingSystem());
 
         // add event listener
-        main.addMainListener(new Events());
+//      main.addMainListener(new Events());
         // set the properties from a file
 //      main.setPropertyPlaceholderLocations("example.properties");
         System.out.println("Starting Camel. Use CTRL + C to terminate the JVM.");
@@ -53,18 +53,16 @@ public class DcsMain extends Main {
     java -jar jeets-dcs-traccar-4.2.1-beta-jar-with-dependencies.jar -d 20
     */
 
-    /* currently not applied */
+    /* currently not applied
     public static class Events extends MainListenerSupport {
-
         @Override
         public void afterStart(MainSupport main) {
             System.out.println("DcsMain is now started!");
         }
-
         @Override
         public void beforeStop(MainSupport main) {
             System.out.println("DcsMain is now being stopped!");
         }
     }
-
+     */
 }

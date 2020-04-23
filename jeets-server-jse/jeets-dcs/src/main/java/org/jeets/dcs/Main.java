@@ -3,7 +3,7 @@ package org.jeets.dcs;
 import org.apache.camel.CamelContext;
 import org.apache.camel.component.properties.PropertiesComponent;
 import org.apache.camel.impl.DefaultCamelContext;
-import org.apache.camel.impl.SimpleRegistry;
+import org.apache.camel.support.SimpleRegistry;
 import org.jeets.dcs.steps.DeviceProtoExtractor;
 
 /**
@@ -23,7 +23,8 @@ public class Main {
         CamelContext context = new DefaultCamelContext(registry);
 
 //      props belong to CamelContext, set directly after creation
-        PropertiesComponent prop = context.getComponent("properties", PropertiesComponent.class);  
+//      PropertiesComponent prop = context.getComponent("properties", PropertiesComponent.class); // Camel 2 
+        PropertiesComponent prop = (PropertiesComponent) context.getPropertiesComponent();        // Camel 3  
         prop.setLocation("classpath:dcs.properties");
 //      System.out.println("configure Camel route from " +
 //			context.resolvePropertyPlaceholders("{{dcs.host}}") + ":" +
@@ -31,7 +32,8 @@ public class Main {
 //			context.resolvePropertyPlaceholders("{{dcs.protobuffer.protocol}}"));
 
         String protocolname = context.resolvePropertyPlaceholders("{{dcs.protobuffer.protocol}}");
-        registry.put(protocolname, new DeviceProtoExtractor(null));
+        registry.bind(protocolname, new DeviceProtoExtractor(null));  // Camel 3
+//      registry.put(protocolname, new DeviceProtoExtractor(null));   // Camel 2
 //      registry.put("ack", new ClientAckProtoExtractor(null));
 
         context.addRoutes(new DcsRoute() );

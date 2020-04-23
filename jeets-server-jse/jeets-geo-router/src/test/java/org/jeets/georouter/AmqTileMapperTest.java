@@ -61,7 +61,7 @@ public class AmqTileMapperTest extends CamelTestSupport {
         
         Thread.sleep(1000);
         
-        context.stopRoute(routeName);
+//      context.stopRoute(routeName);
         context.removeRoute(routeName);
     }
 

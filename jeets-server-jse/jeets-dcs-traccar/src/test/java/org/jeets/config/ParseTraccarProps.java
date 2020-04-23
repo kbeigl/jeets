@@ -7,8 +7,10 @@ import java.util.Properties;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.builder.xml.XPathBuilder;
-import org.apache.camel.processor.aggregate.AggregationStrategy;
+//import org.apache.camel.builder.xml.XPathBuilder;  // Camel 2
+//import org.apache.camel.processor.aggregate.AggregationStrategy;
+import org.apache.camel.language.xpath.XPathBuilder; // Camel 3
+import org.apache.camel.AggregationStrategy;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 

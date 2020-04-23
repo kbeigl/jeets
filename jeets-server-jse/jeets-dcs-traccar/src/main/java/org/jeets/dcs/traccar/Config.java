@@ -2,7 +2,7 @@ package org.jeets.dcs.traccar;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.netty4.ServerInitializerFactory;
+import org.apache.camel.component.netty.ServerInitializerFactory;
 import org.apache.camel.spi.Registry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

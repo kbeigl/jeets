@@ -27,7 +27,7 @@ import io.netty.util.concurrent.GlobalEventExecutor;
 
 import java.net.InetSocketAddress;
 
-import org.apache.camel.component.netty4.ServerInitializerFactory;
+import org.apache.camel.component.netty.ServerInitializerFactory;
 
 public abstract class TrackerServer {
 

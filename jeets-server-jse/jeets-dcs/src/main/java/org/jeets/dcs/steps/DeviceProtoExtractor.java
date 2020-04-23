@@ -16,9 +16,9 @@ package org.jeets.dcs.steps;
  * under the License.
  */
 
-import org.apache.camel.component.netty4.NettyConsumer;
-import org.apache.camel.component.netty4.ServerInitializerFactory;
-import org.apache.camel.component.netty4.handlers.ServerChannelHandler;
+import org.apache.camel.component.netty.NettyConsumer;
+import org.apache.camel.component.netty.ServerInitializerFactory;
+import org.apache.camel.component.netty.handlers.ServerChannelHandler;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import io.netty.handler.codec.protobuf.ProtobufDecoder;

@@ -33,8 +33,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-netty4-starter</artifactId>
+			<groupId>org.apache.camel.springboot</groupId>
+			<artifactId>camel-netty-starter</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.jeets</groupId>
@@ -44,8 +44,13 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
+<!--        <groupId>org.apache.camel.springboot</groupId>
+            <artifactId>camel-spring-boot-starter-test</artifactId>
+ -->
+	 		<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
+			<!-- independent of Camel ? ? ? -->
+			<version>${spring-boot-version}</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- only for ParseTraccarPropsTest ? remove ? -->
