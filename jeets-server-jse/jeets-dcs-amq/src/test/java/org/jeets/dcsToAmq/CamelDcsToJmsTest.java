@@ -87,7 +87,7 @@ public class CamelDcsToJmsTest extends CamelTestSupport {
         MockEndpoint mock = getMockEndpoint("mock:result");
         Builder devPosEv = org.jeets.protocol.util.Samples.createDeviceWithPositionWithOneEvent();
         Traccar.Acknowledge response = (Traccar.Acknowledge) template   // Traccar.Device
-                .requestBody("netty4:tcp://localhost:5200?clientInitializerFactory=#ack&sync=true", 
+                .requestBody("netty:tcp://localhost:5200?clientInitializerFactory=#ack&sync=true", 
                         devPosEv);
 
         LOG.info("client received response: " + response);              //     jpa.Device

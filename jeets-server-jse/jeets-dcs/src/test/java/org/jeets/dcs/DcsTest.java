@@ -46,8 +46,8 @@ public class DcsTest extends CamelTestSupport {
 //      start the test
         Traccar.Acknowledge response = (Traccar.Acknowledge) template
 //        		see DcsRoute for {{dcs.props}}
-//              .requestBody("netty4:tcp://localhost:{{port}}?clientInitializerFactory=#ack&sync=true", createProtoDevice());
-                .requestBody("netty4:tcp://localhost:5200?clientInitializerFactory=#ack&sync=true", createProtoDevice());
+//              .requestBody("netty:tcp://localhost:{{port}}?clientInitializerFactory=#ack&sync=true", createProtoDevice());
+                .requestBody("netty:tcp://localhost:5200?clientInitializerFactory=#ack&sync=true", createProtoDevice());
         System.out.println("client received response: " + response);
         assertEquals(789, response.getDeviceid());
         

@@ -1,10 +1,7 @@
 package org.jeets.dcs;
 
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.properties.PropertiesComponent;
 import org.jeets.model.traccar.jpa.Device;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
 
 public class DcsRoute extends RouteBuilder { // plain Camel without Swing!
 
@@ -21,9 +18,9 @@ public class DcsRoute extends RouteBuilder { // plain Camel without Swing!
 				getContext().resolvePropertyPlaceholders("{{dcs.protobuffer.port}}"),
 				getContext().resolvePropertyPlaceholders("{{dcs.protobuffer.protocol}}"));
 
-//      from("netty4:tcp:{{jeets.dcs.endpoint}}&sync=true")
+//      from("netty:tcp:{{jeets.dcs.endpoint}}&sync=true")
 //		EL #{{ raises EL syntax error: Expecting expression, but creates %23 and works. Fix some time.
-        from("netty4:tcp://{{dcs.host}}:{{dcs.protobuffer.port}}?serverInitializerFactory=#{{dcs.protobuffer.protocol}}&sync=true")
+        from("netty:tcp://{{dcs.host}}:{{dcs.protobuffer.port}}?serverInitializerFactory=#{{dcs.protobuffer.protocol}}&sync=true")
 //      Type Converter
         .convertBodyTo(Device.class)    // check exchange.getIn/Out
 //      Message Translator

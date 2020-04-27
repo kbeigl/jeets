@@ -131,7 +131,8 @@ public class Device2protocolsIT extends CamelTestSupport {
     @Override
     protected CamelContext createCamelContext() throws Exception {
         CamelContext context = super.createCamelContext();
-        PropertiesComponent props = context.getComponent("properties", PropertiesComponent.class);
+//      PropertiesComponent props = context.getComponent("properties", PropertiesComponent.class);
+        PropertiesComponent props = (PropertiesComponent) context.getPropertiesComponent();        // Camel 3  
         props.setLocation("classpath:folders.properties");
         sendFolder = context.resolvePropertyPlaceholders("{{device.send.folder}}");
 //      sync as parameters with device uri (external? -> via jeets.props)

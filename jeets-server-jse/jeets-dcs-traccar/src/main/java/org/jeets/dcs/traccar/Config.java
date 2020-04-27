@@ -98,7 +98,7 @@ public class Config {
             port = Context.getConfig().getInteger("ruptela.port");
             // String represents dynamic part for all protocols, see below
             // add traccar channelGroup, see Camel Netty Component: channelGroup (advanced)
-            String uri = "netty4:tcp://" + host + ":" + port + "?serverInitializerFactory=#" + routeName + "&sync=" + camelNettySync;
+            String uri = "netty:tcp://" + host + ":" + port + "?serverInitializerFactory=#" + routeName + "&sync=" + camelNettySync;
             return new DcsRouteBuilder(uri, routeName);
         }
         System.err.println("Ruptela is not configured. No Route created!");
@@ -119,7 +119,7 @@ public class Config {
             port = Context.getConfig().getInteger("teltonika.port");
             // String represents dynamic part for all protocols, see below
             // add traccar channelGroup, see Camel Netty Component: channelGroup (advanced)
-            String uri = "netty4:tcp://" + host + ":" + port + "?serverInitializerFactory=#" + routeName + "&sync=" + camelNettySync;
+            String uri = "netty:tcp://" + host + ":" + port + "?serverInitializerFactory=#" + routeName + "&sync=" + camelNettySync;
             return new DcsRouteBuilder(uri, routeName);
         }
         System.err.println("Teltonika is not configured. No Route created!");
@@ -162,7 +162,7 @@ public class Config {
 //  TODO see DcsRoutesFactory
     private void createTraccarDcsRoutes(CamelContext camelContext, Registry registry) {
 /*
-        StringBuffer uri = new StringBuffer("netty4:" + (server.isDatagram() ? "udp" : "tcp") + "://");
+        StringBuffer uri = new StringBuffer("netty:" + (server.isDatagram() ? "udp" : "tcp") + "://");
         uri.append((server.getAddress() == null ? "localhost" : server.getAddress()) + ":" + server.getPort() + "?");
         String serverInitializerFactory = server.isDatagram() ? protocolName + "-udp": protocolName;
         uri.append("serverInitializerFactory=#" + serverInitializerFactory);

@@ -18,7 +18,7 @@ public class DcsToAmqRoute extends RouteBuilder {
 
     public void configure() throws Exception {
 //      @formatter:off
-        from("netty4:tcp://localhost:" + PORT + "?serverInitializerFactory=#device&sync=true")
+        from("netty:tcp://localhost:" + PORT + "?serverInitializerFactory=#device&sync=true")
             .log("device from Netty:\n ${body}") 
 
 //          try something like this for jar-with-dependencies converter problem

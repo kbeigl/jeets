@@ -83,7 +83,7 @@ public class DcsTests /* extends TestCase */ {
     private String sendHexMessage(int port, String hexMessage) {
         byte[] byteMessage = decodeHexDump(hexMessage);
         String nettyParams = "?useByteBuf=true&allowDefaultCodec=false&producerPoolEnabled=false";
-        byte[] response = client.requestBody("netty4:tcp://localhost:" + port + nettyParams, byteMessage, byte[].class);
+        byte[] response = client.requestBody("netty:tcp://localhost:" + port + nettyParams, byteMessage, byte[].class);
         return hexDump(response);
     }
 
@@ -109,7 +109,7 @@ public class DcsTests /* extends TestCase */ {
     public void testStringEndpoint() throws Exception {
         String stringMessage = "StringMessage";
         System.out.println("request : " + stringMessage);
-        String result = (String) client.requestBody("netty4:tcp://localhost:7000?useByteBuf=true&decoder=#stringDecoder", stringMessage);
+        String result = (String) client.requestBody("netty:tcp://localhost:7000?useByteBuf=true&decoder=#stringDecoder", stringMessage);
         System.out.println("response: " + result);
         Assert.assertEquals("ACK: " + stringMessage, result);
     }

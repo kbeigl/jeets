@@ -38,7 +38,8 @@ public class DcsIT extends CamelTestSupport {
     public void testDcsRoute() throws Exception {
         LOG.info("create DcsRoute ...");
         
-        PropertiesComponent props = context.getComponent("properties", PropertiesComponent.class);  
+//      PropertiesComponent props = context.getComponent("properties", PropertiesComponent.class);  
+        PropertiesComponent props = (PropertiesComponent) context.getPropertiesComponent();        // Camel 3  
         props.setLocation("classpath:dcs.properties");
         
         context.addRoutes(new DcsRoute() );

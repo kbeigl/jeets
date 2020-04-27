@@ -44,7 +44,7 @@ public class DcsRoutesFactory {
             BaseProtocol protocolObject = protocolList.get(protocolName);
             for (TrackerServer server : protocolObject.getServerList()) {
                 String transport = server.isDatagram() ? "udp" : "tcp";
-                String uri = "netty4:" + transport + "://"; // change to StringBuffer
+                String uri = "netty:" + transport + "://"; // change to StringBuffer
                 String serverHost = (server.getAddress() == null) ? host : server.getAddress();
                 uri += serverHost + ":" + server.getPort() + "?";
                 serverInitializerName = (transport.equals("tcp")) ? protocolName : protocolName + "-" + transport;
@@ -54,7 +54,7 @@ public class DcsRoutesFactory {
                 uri += "&sync=true";
 
 //              "&workerPool=#sharedPool&usingExecutorService=false" register in XML,
-//              see .../camel-netty4/src/main/docs/netty4-component.adoc
+//              see .../camel-netty/src/main/docs/netty4-component.adoc
 //              register netty4 as jeets-dcs ;)
 
 //              register serverIni for each protocol (or move before for loop?)

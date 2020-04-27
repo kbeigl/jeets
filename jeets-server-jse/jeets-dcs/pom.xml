@@ -42,6 +42,16 @@
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-netty</artifactId>
 		</dependency>
+		<!-- included below
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-base</artifactId>
+		</dependency>
+		 -->
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-core-engine</artifactId>
+		</dependency>
 
 		<!-- for testing (camel-spring-test?) -->
 		<dependency>
