@@ -20,7 +20,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd                          http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
     <!-- working example apart from Spring* stuff below -->
-    <bean class="org.jeets.device.Device" id="device">
+    <bean class="org.jeets.device.console.Device" id="device">
         <!-- ptc janus-2        195.82.63.162 -->
         <!-- ptc lenovo WLAN    192.168.178.31 -->
         <constructor-arg value="localhost"/>
@@ -33,7 +33,7 @@
         <!-- PTC WLI one-way -->
         <!-- <constructor-arg value="false"/> -->
     </bean>
-    <bean class="org.jeets.device.ConsoleRoute" id="consoleroute"/>
+    <bean class="org.jeets.device.console.ConsoleRoute" id="consoleroute"/>
     <!-- Camel runtime -->
     <camelContext id="camelContext-deviceConsole" xmlns="http://camel.apache.org/schema/spring">
         <routeBuilder ref="consoleroute"/>

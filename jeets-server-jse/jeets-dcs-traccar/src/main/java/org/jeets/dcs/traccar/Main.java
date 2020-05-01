@@ -15,6 +15,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.traccar.Context;
 
 @SpringBootApplication  // → @SpringBootConfiguration → @Configuration
+// convenience annotation equivalent to declaring @Configuration, @EnableAutoConfiguration, @ComponentScan.
 @ComponentScan(basePackages="org.jeets.dcs.traccar")
 // By default, the @SpringBootApplication annotation scans all classes in the same package (in other project!?) or below.
 public class Main {

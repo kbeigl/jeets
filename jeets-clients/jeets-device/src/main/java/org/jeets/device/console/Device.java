@@ -128,7 +128,7 @@ public class Device {
 //      Currently the reconnection is programmed in the MessageLoop.
 //      nettyConfig.setConnectTimeout(10000);   // default 10000 ms = 10 sec);
 
-        NettyComponent netty4 = context.getComponent("netty4", NettyComponent.class);
+        NettyComponent netty4 = context.getComponent("netty", NettyComponent.class);
 //      [main] DEBUG DefaultComponent + Cannot resolve property placeholders on component: 
 //         org.apache.camel.component.netty4.NettyComponent@9f46d94 as PropertiesComponent is not in use  ???
 //      netty4.setConfiguration(nettyConfig);
@@ -435,47 +435,5 @@ public class Device {
 //      try {return Hex.decodeHex(string);}
 //      catch (DecoderException e) {}
     }
-
-//  -----------------------------------------------------------------
-
-    /*  wrap tearDown in finalization ?
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        System.out.println("finalizing Device instance...");
-    } */
-
-    /** get {@link #reconnectTimeout}
-    public int getReconnectTimeout() {
-        return reconnectTimeout;
-    } */
-
-    /** set {@link #reconnectTimeout}
-    public void setReconnectTimeout(int reconnectTimeout) {
-        this.reconnectTimeout = reconnectTimeout;
-    } */
-
-    /**
-     * Timeout in seconds to wait for server problems when sending a message via
-     * request only.
-    private long requestOnlyTimeout = 2;     */
-
-    /* requestTimeout (producer)
-     * 
-     * Allows to use a timeout for the Netty producer when calling a remote server.
-     * By default no timeout is in use. The value is in milli seconds, so eg 30000
-     * is 30 seconds. The requestTimeout is using Netty’s ReadTimeoutHandler to
-     * trigger the timeout.
-     */
-
-    /** get {@link #requestOnlyTimeout} 
-    public long getRequestOnlyTimeout() {
-        return requestOnlyTimeout;
-    }   */
-
-    /** set {@link #requestOnlyTimeout} 
-    public void setRequestOnlyTimeout(long requestOnlyTimeout) {
-        this.requestOnlyTimeout = requestOnlyTimeout;
-    }   */
 
 }
