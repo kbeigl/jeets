@@ -1,21 +1,23 @@
 package org.jeets.device;
 
-//import org.jeets.dcs.traccar.Main;
-//import org.springframework.boot.SpringApplication;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+// import org.springframework.context.annotation.ComponentScan;
 
-public final class Main {
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-    public Main() {}
-    
-//  see dcs.traccar.Main, and javadoc:
-//    SpringApplication.run(Main.class, args);
+@SpringBootApplication
+// @ComponentScan(basePackages="org.jeets.device")
+public class Main {
 
+//private Main() {};
 
-    public static void main(String[] args) throws Exception {
-        org.apache.camel.spring.Main main = new org.apache.camel.spring.Main();
-        main.setApplicationContextUri("META-INF/spring/device.xml");
-        main.run();
-        main.close(); // reached?
+    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
+
+    public static void main(String[] args) {
+        LOGGER.info("run SpringApplication ...");
+        SpringApplication.run(Main.class, args);
     }
 
 }

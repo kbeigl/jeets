@@ -27,6 +27,10 @@ import io.netty.buffer.ByteBufUtil;
  */
 public class Device {
 
+    public Device() { // to be removed
+        System.out.println("create Device");
+    }
+
     /*
      * Currently synchronous request-reply and send are implemented. Later their
      * asynchronous counter parts should be added with Futures or Callback to

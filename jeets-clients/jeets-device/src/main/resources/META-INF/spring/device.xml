@@ -18,8 +18,8 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd                         http://camel.apache.org/schema/spring       http://camel.apache.org/schema/spring/camel-spring.xsd">
-    <bean class="org.jeets.device.LineParser" id="LineParser"/>
     <bean class="org.jeets.device.Device" id="Device"/>
+    <bean class="org.jeets.device.LineParser" id="LineParser"/>
     <camelContext id="camelContext-device" xmlns="http://camel.apache.org/schema/spring">
         <errorHandler deadLetterUri="log:dead?level=ERROR"
             id="redeliverEH" type="DeadLetterChannel">
