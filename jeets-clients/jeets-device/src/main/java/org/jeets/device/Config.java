@@ -12,9 +12,12 @@ public class Config {
 
     @Bean(name = "Device")
     public Device createDevice() {
-        System.out.println("create Device @Bean");
         return new Device();
     }
 
+    @Bean(name = "LineParser")
+    public LineParser createLineParser() {
+        return new LineParser();
+    }
 
 }

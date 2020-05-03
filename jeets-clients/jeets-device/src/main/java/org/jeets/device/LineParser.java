@@ -30,7 +30,7 @@ public class LineParser {
 //          TODO add check for empty lines
             return;
         }
-        log.debug("parseFileOne( " + line + " )");
+        log.info("parseFileOne( " + line + " )");
 
 //      TODO Exception handling
         {
