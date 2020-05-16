@@ -1,7 +1,7 @@
 package org.jeets.dcsToAmq.steps;
 /**
- * Copyright 2017 The Java EE Tracking System - JeeTS
- * Copyright 2017 Kristof Beiglböck kbeigl@jeets.org
+ * Copyright 2020 The Java EE Tracking System - JeeTS
+ * Copyright 2020 Kristof Beiglböck kbeigl@jeets.org
  *
  * The JeeTS Project licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
@@ -17,7 +17,9 @@ package org.jeets.dcsToAmq.steps;
  */
 
 import java.util.Date;
+
 import org.apache.camel.Converter;
+//import org.apache.camel.TypeConverters;
 import org.apache.camel.Exchange;
 import org.jeets.model.traccar.jpa.Device;
 import org.jeets.protocol.Traccar;
@@ -29,11 +31,13 @@ import org.slf4j.LoggerFactory;
  * A Message Transformer of a Device Proto Message to a Device @Entity Bean
  */
 @Converter
-public final class DeviceProtoToEntityTransformer {
+//@Converter(loader = true)
+//@Converter(generateLoader = true)
+public final class DeviceProtoToEntityTransformer /* implements TypeConverters */ {
 
     private static final Logger LOG = LoggerFactory.getLogger(DeviceProtoToEntityTransformer.class);
 
-    private DeviceProtoToEntityTransformer() {
+    public DeviceProtoToEntityTransformer() {
     }
 
     /**
@@ -41,6 +45,7 @@ public final class DeviceProtoToEntityTransformer {
      */
     @Converter
     public static Device toDevice(Traccar.Device deviceProto, Exchange exchange) throws Exception {
+//  public static Device toDevice(Traccar.Device deviceProto) throws Exception {
         LOG.info("Transformer receives device proto: {} at {}", 
                 deviceProto.getUniqueid(), new Date().getTime());
 

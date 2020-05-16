@@ -21,6 +21,11 @@ public class Main {
     	System.out.println("starting jeets-dcs ...");
         SimpleRegistry registry = new SimpleRegistry();
         CamelContext context = new DefaultCamelContext(registry);
+        
+//      temporarily for Camel 2 backward compatibility
+//      see https://camel.apache.org/components/latest/file-component.html
+//      From Camel 3 onwards ...
+        context.setLoadTypeConverters(true);
 
 //      props belong to CamelContext, set directly after creation
 //      PropertiesComponent prop = context.getComponent("properties", PropertiesComponent.class); // Camel 2 

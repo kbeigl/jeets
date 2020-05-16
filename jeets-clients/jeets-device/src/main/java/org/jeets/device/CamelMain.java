@@ -14,7 +14,6 @@ public final class CamelMain {
         org.apache.camel.spring.Main main = new org.apache.camel.spring.Main();
         main.setApplicationContextUri("META-INF/spring/device.xml");
         main.run();
-        main.close(); // reached?
     }
 
 }

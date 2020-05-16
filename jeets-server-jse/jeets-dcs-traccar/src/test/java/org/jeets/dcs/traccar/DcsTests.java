@@ -109,7 +109,7 @@ public class DcsTests /* extends TestCase */ {
     public void testStringEndpoint() throws Exception {
         String stringMessage = "StringMessage";
         System.out.println("request : " + stringMessage);
-        String result = (String) client.requestBody("netty:tcp://localhost:7000?useByteBuf=true&decoder=#stringDecoder", stringMessage);
+        String result = (String) client.requestBody("netty:tcp://localhost:7000?useByteBuf=true&decoders=#stringDecoder", stringMessage);
         System.out.println("response: " + result);
         Assert.assertEquals("ACK: " + stringMessage, result);
     }

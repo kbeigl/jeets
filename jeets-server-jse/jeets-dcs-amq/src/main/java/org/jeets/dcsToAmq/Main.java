@@ -25,6 +25,12 @@ public class Main {
         registry.bind("activeMqConnectionFactory", activeMqConnectionFactory);
 
         CamelContext context = new DefaultCamelContext(registry);
+
+//      temporarily for Camel 2 backward compatibility
+//      see https://camel.apache.org/components/latest/file-component.html
+//      From Camel 3 onwards ...
+        context.setLoadTypeConverters(true);
+
         context.addRoutes(new DcsToAmqRoute());
         context.start();
     }

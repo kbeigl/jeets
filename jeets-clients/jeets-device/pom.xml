@@ -39,13 +39,10 @@
 			<artifactId>camel-netty</artifactId>
 			<!-- <artifactId>camel-netty-starter</artifactId> -->
 		</dependency>
-
-		<!-- 
 		<dependency>
 			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-spring</artifactId>
+			<artifactId>camel-spring-main</artifactId>
 		</dependency>
-		 -->
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-stream</artifactId>

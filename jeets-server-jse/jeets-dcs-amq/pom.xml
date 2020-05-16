@@ -66,25 +66,6 @@
 		<plugin>
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-resources-plugin</artifactId>
-			<!-- move to maven-assembly-plugin (not needed here yet)
-			<executions>
-				<execution>
-					<id>copy-resources</id>
-					<phase>validate</phase>
-					<goals>
-						<goal>copy-resources</goal>
-					</goals>
-					<configuration>
-						<outputDirectory>${basedir}/target/classes/META-INF/services/org/apache/camel</outputDirectory>
-						<resources>
-							<resource>
-								<directory>src/main/resources/META-INF/services/org/apache/camel</directory>
-							</resource>
-						</resources>
-					</configuration>
-				</execution>
-			</executions>
-			 -->
 			<configuration>
 				<encoding>UTF-8</encoding>
 			</configuration>

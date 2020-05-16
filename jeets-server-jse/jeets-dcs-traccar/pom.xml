@@ -42,7 +42,8 @@
 		</dependency>
 
 		<dependency>
-<!--        <groupId>org.apache.camel.springboot</groupId>
+<!--        
+			<groupId>org.apache.camel.springboot</groupId>
             <artifactId>camel-spring-boot-starter-test</artifactId>
  -->
 	 		<groupId>org.springframework.boot</groupId>
@@ -99,7 +100,11 @@
 					<propertyExpansion>config_loc=${project.basedir}</propertyExpansion>
 				</configuration>
 			</plugin>
-			 -->
+			
+			enforcer shows different behavior 
+			in Eclipse > Run as > Maven Install
+			versus command line:    mvn install
+			
 			<plugin>
 				<artifactId>maven-enforcer-plugin</artifactId>
 				<version>1.4.1</version>
@@ -127,6 +132,7 @@
 					</dependency>
 				</dependencies>
 			</plugin>
+			 -->
 
 		</plugins>
 	</build>

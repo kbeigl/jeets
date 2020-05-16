@@ -6,7 +6,8 @@ import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.component.properties.PropertiesComponent;
-import org.apache.camel.impl.JndiRegistry;
+import org.apache.camel.spi.Registry;
+import org.apache.camel.support.SimpleRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.jeets.dcs.steps.DeviceProtoExtractor;
 import org.jeets.model.traccar.jpa.Device;
@@ -19,14 +20,12 @@ public class DcsTest extends CamelTestSupport {
 	public void testDcsRoute() throws Exception {
 
         context.addRoutes(new RouteBuilder() {
-
         	public void configure() throws Exception {
 //              this route segment is processed by a pool of five threads
                 from("seda:jeets-dcs")
 //              .log("seda out: ${body}")
                 .process(new Processor() {
                     public void process(Exchange exchange) throws Exception {
-                        
 //                      receives Acknowledge ?! instead of...
                         Device device = (Device) exchange.getIn().getBody();
                         System.out.println("simulate 5s persist of jpa.Device {} with {} positions." + 
@@ -66,17 +65,15 @@ public class DcsTest extends CamelTestSupport {
     }
 
 	@Override
-	protected JndiRegistry createRegistry() throws Exception {
-	    JndiRegistry registry = super.createRegistry();
-
+    protected Registry createCamelRegistry() throws Exception {
+	    Registry registry = new SimpleRegistry();
 //      registry.bind("{{dcs.protobuffer.protocol}}", new DeviceProtoExtractor(null));    // request  to server
         registry.bind("protobuffer", new DeviceProtoExtractor(null));    // request  to server
         registry.bind("ack", new ClientAckProtoExtractor(null));    // response to client
-
         return registry;
     }
 
-	@Override
+    @Override
 	protected RouteBuilder createRouteBuilder() throws Exception {
 		return new DcsRoute();
 	}
@@ -84,6 +81,13 @@ public class DcsTest extends CamelTestSupport {
     protected CamelContext createCamelContext() throws Exception {  
         CamelContext context = super.createCamelContext();  
 
+        System.out.println("createCamelContext");
+        
+//      temporarily for Camel 2 backward compatibility
+//      see https://camel.apache.org/components/latest/file-component.html
+//      From Camel 3 onwards ...
+        context.setLoadTypeConverters(true);
+        
 //      props belong to CamelContext, set directly after creation
         PropertiesComponent props = (PropertiesComponent) context.getPropertiesComponent();  
         props.setLocation("classpath:dcs.properties");
