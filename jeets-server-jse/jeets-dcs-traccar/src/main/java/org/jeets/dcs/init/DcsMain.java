@@ -20,9 +20,9 @@ public class DcsMain extends Main {
         DcsMain main = new DcsMain();
 //      name irrelevant, looked up by Type?
         main.bind("dcsRoutesFactory", new DcsRoutesFactory());
-        main.addRouteBuilder(new DcsRoutesFactoryDslRoute());
+        main.getCamelContext().addRoutes(new DcsRoutesFactoryDslRoute());
 //      consume DCS messages
-        main.addRouteBuilder(new ConsumerDslRoute());
+        main.getCamelContext().addRoutes(new ConsumerDslRoute());
         main.bind("trackingSystem", new TrackingSystem());
 
         // add event listener

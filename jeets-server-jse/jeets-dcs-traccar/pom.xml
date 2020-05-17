@@ -46,12 +46,13 @@
 			<groupId>org.apache.camel.springboot</groupId>
             <artifactId>camel-spring-boot-starter-test</artifactId>
  -->
+			<!-- independent of Camel ? ? ? -->
 	 		<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
-			<!-- independent of Camel ? ? ? -->
 			<version>${spring-boot-version}</version>
 			<scope>test</scope>
 		</dependency>
+		
 		<!-- only for ParseTraccarPropsTest ? remove ? -->
 		<dependency>
 			<groupId>org.apache.camel</groupId>

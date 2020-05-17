@@ -1,6 +1,6 @@
 package org.jeets.dcsToAmq;
 
-import javax.jms.ConnectionFactory;
+//import javax.jms.ConnectionFactory;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.camel.CamelContext;
@@ -9,8 +9,6 @@ import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.jms.JmsComponent;
 import org.apache.camel.component.mock.MockEndpoint;
-//import org.apache.camel.impl.JndiRegistry;
-import org.apache.camel.spi.Registry;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.jeets.dcsToAmq.DcsToAmqRoute;
 import org.jeets.dcsToAmq.steps.DeviceProtoExtractor;
@@ -38,14 +36,10 @@ public class CamelDcsToJmsTest extends CamelTestSupport {
     @Test
     public void testDeviceToJms() throws Exception {
         
-        bindBeans();
+//      cast to JMS spec
+//      ConnectionFactory connectionFactory = activeMqConnectionFactory;
 
-        // cast to JMS spec
-        ConnectionFactory connectionFactory = activeMqConnectionFactory;
-
-        // CamelContext is provided as 'context' member instance by
-        // CamelTestSupport. Explicit 'test-' component name
-        context.addComponent("test-jms", JmsComponent.jmsComponentAutoAcknowledge(connectionFactory));
+        context.addComponent("test-jms", JmsComponent.jmsComponentAutoAcknowledge(activeMqConnectionFactory));
 
         context.addRoutes(new RouteBuilder() {
             public void configure() {
@@ -54,11 +48,8 @@ public class CamelDcsToJmsTest extends CamelTestSupport {
             }
         });
 
-        context.start();
         template.sendBody("test-jms:queue:device.in", Samples.createDeviceEntity());
-
         Thread.sleep(1000);
-//      template.stop();
         context.stop();
     }
 
@@ -69,15 +60,9 @@ public class CamelDcsToJmsTest extends CamelTestSupport {
      */
     @Test
     public void testDeviceFromNettyToAmqToMock() throws Exception {
-        LOG.info("create and add DcsToAmqRoute ...");
 
-//      temporarily for Camel 2 backward compatibility
-//      see https://camel.apache.org/components/latest/file-component.html
-//      From Camel 3 onwards ...
-//        context.setLoadTypeConverters(true);
-
-        bindBeans();
-
+        context.getRegistry().bind("device", new DeviceProtoExtractor(null));
+        context.getRegistry().bind("ack", new AckProtoExtractor(null));           
         context.addRoutes(new DcsToAmqRoute() );
         context.addRoutes(new RouteBuilder() {
             public void configure() throws Exception {
@@ -117,51 +102,18 @@ public class CamelDcsToJmsTest extends CamelTestSupport {
 
     protected CamelContext createCamelContext() throws Exception {  
         CamelContext context = super.createCamelContext();  
-
-        System.out.println("createCamelContext");
-
 //      temporarily for Camel 2 backward compatibility
-//      see https://camel.apache.org/components/latest/file-component.html
-//      From Camel 3 onwards ...
         context.setLoadTypeConverters(true);
         
-        return context;
-    }
-    
-    /*
-     * createRegistry() from camel-test is deprecated. Use createCamelRegistry if
-     * you want to control which registry to use, however if you need to bind beans
-     * to the registry then this is possible already with the bind method on
-     * registry, and there is no need to override this method.
-     */
-//    @Override
-//    protected Registry createCamelRegistry() throws Exception {
-//        Registry registry = super.createCamelRegistry();
-    
-    private void bindBeans() {
-
-        LOG.info("bindBeans on " + context);
-
-//        context.setLoadTypeConverters(true);
-
-//      settings from Main.main
-        context.getRegistry().bind("device", new DeviceProtoExtractor(null));    // request  to server
-//        registry.bind("device", new DeviceProtoExtractor(null));    // request  to server
 //      use Vm Transport for testing
         activeMqConnectionFactory = Main.getConnectionFactory(true);
         context.getRegistry().bind("activeMqConnectionFactory", activeMqConnectionFactory);
-//        registry.bind("activeMqConnectionFactory", activeMqConnectionFactory);
 
 //      cast to JMS spec
 //      ConnectionFactory connectionFactory = activeMqConnectionFactory;
-//      registry.bind("mqConnectionFactory", connectionFactory);
+//      context.getRegistry().bind("mqConnectionFactory", connectionFactory);
 
-        // for response test
-        context.getRegistry().bind("ack", new AckProtoExtractor(null));           
-//        registry.bind("ack", new AckProtoExtractor(null));           
-
-//        return registry;
-//        return context.getRegistry();
+        return context;
     }
-
+    
 }

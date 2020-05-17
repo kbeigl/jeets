@@ -83,8 +83,8 @@
 		<artifactId>properties-maven-plugin</artifactId>
 	</plugin>
 
+	<!-- allows to run with mvn spring-boot:run -->
 	<plugin>
-		<!-- allows to run with mvn spring-boot:run -->
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-maven-plugin</artifactId>
 		<version>${spring-boot-version}</version>
