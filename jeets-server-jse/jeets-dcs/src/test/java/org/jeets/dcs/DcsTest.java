@@ -77,15 +77,12 @@ public class DcsTest extends CamelTestSupport {
 	protected RouteBuilder createRouteBuilder() throws Exception {
 		return new DcsRoute();
 	}
-	
+
     protected CamelContext createCamelContext() throws Exception {  
         CamelContext context = super.createCamelContext();  
 
-        System.out.println("createCamelContext");
-        
 //      temporarily for Camel 2 backward compatibility
 //      see https://camel.apache.org/components/latest/file-component.html
-//      From Camel 3 onwards ...
         context.setLoadTypeConverters(true);
         
 //      props belong to CamelContext, set directly after creation

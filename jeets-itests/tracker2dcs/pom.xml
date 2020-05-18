@@ -25,7 +25,7 @@
 	</parent>
 
 	<artifactId>tracker2dcs</artifactId>
-	<version>1.2.3</version>
+	<!-- <version>1.2.3</version> -->
 	<packaging>jar</packaging>
 
 	<name>tracker2dcs-itest</name>
@@ -47,6 +47,20 @@
 	</dependencies>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+<!-- 
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<filtering>true</filtering>
+			</testResource>
+		</testResources>
+ -->
 		<plugins>
 				<plugin>
 					<artifactId>maven-failsafe-plugin</artifactId>
@@ -56,6 +70,10 @@
 				<plugin>
 					<groupId>org.commonjava.maven.plugins</groupId>
 					<artifactId>directory-maven-plugin</artifactId>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>properties-maven-plugin</artifactId>
 				</plugin>
 				<plugin>
 				<groupId>com.bazaarvoice.maven.plugins</groupId>
