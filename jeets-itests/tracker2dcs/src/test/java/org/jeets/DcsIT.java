@@ -3,12 +3,14 @@ package org.jeets;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.component.properties.PropertiesComponent;
-import org.apache.camel.impl.JndiRegistry;
+import org.apache.camel.spi.Registry;
+import org.apache.camel.support.SimpleRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.jeets.dcs.DcsRoute;
 import org.jeets.dcs.steps.DeviceProtoExtractor;
@@ -36,13 +38,7 @@ public class DcsIT extends CamelTestSupport {
      */
     @Test
     public void testDcsRoute() throws Exception {
-        LOG.info("create DcsRoute ...");
-        
-//      PropertiesComponent props = context.getComponent("properties", PropertiesComponent.class);  
-        PropertiesComponent props = (PropertiesComponent) context.getPropertiesComponent();        // Camel 3  
-        props.setLocation("classpath:dcs.properties");
-        
-        context.addRoutes(new DcsRoute() );
+
         context.addRoutes(new RouteBuilder() {
             public void configure() throws Exception {
                 from("seda:jeets-dcs")
@@ -98,11 +94,40 @@ public class DcsIT extends CamelTestSupport {
     }
 
     @Override
-    protected JndiRegistry createRegistry() throws Exception {
-        JndiRegistry registry = super.createRegistry();
-//      registry.bind("{{dcs.protobuffer.protocol}}", new DeviceProtoExtractor(null));
-        registry.bind("protobuffer", new DeviceProtoExtractor(null));
+    protected Registry createCamelRegistry() throws Exception {
+        Registry registry = new SimpleRegistry();
+//      registry.bind("{{dcs.protobuffer.protocol}}", new DeviceProtoExtractor(null));    // request  to server
+        registry.bind("protobuffer", new DeviceProtoExtractor(null));    // request  to server
+//      registry.bind("ack", new ClientAckProtoExtractor(null));    // response to client
         return registry;
     }
+
+    @Override
+    protected RouteBuilder createRouteBuilder() throws Exception {
+        return new DcsRoute();
+    }
+
+    protected CamelContext createCamelContext() throws Exception {  
+        CamelContext context = super.createCamelContext();  
+
+//      temporarily for Camel 2 backward compatibility
+//      see https://camel.apache.org/components/latest/file-component.html
+        context.setLoadTypeConverters(true);
+        
+        PropertiesComponent props = (PropertiesComponent) context.getPropertiesComponent();  
+        props.setLocation("classpath:dcs.properties");
+//      TODO: validate registering as "properties", advantages?
+//      context.addComponent("properties", props);
+  
+        return context;  
+    }  
+
+//    @Override
+//    protected JndiRegistry createRegistry() throws Exception {
+//        JndiRegistry registry = super.createRegistry();
+////      registry.bind("{{dcs.protobuffer.protocol}}", new DeviceProtoExtractor(null));
+//        registry.bind("protobuffer", new DeviceProtoExtractor(null));
+//        return registry;
+//    }
     
 }

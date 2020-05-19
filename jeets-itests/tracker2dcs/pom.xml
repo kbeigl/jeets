@@ -88,7 +88,7 @@
 							<workingDir>${project.name}</workingDir>
 							<waitForInterrupt>false</waitForInterrupt>
 							<!-- <healthcheckUrl>http://localhost:8381/healthcheck</healthcheckUrl> -->
-							<!-- <waitAfterLaunch>10</waitAfterLaunch> -->
+							<waitAfterLaunch>10</waitAfterLaunch>
 							<processLogFile>${project.build.directory}\${project.name}\${tracker-project-latest}.log</processLogFile>
 							<arguments>
 								<argument>java</argument>

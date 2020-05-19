@@ -38,7 +38,8 @@
 		<camel.version>3.3.0</camel.version>
 
 		<!-- replace with / 'link to' camel-spring-boot-starter version !!
-			 or how to use camel-ized plugin ? target: mvn spring-boot:run -->
+			 or how to use camel-ized plugin ? target: mvn spring-boot:run 
+			 requrired for repackaging phase to exec jar -->
 	    <spring-boot-version>2.2.7.RELEASE</spring-boot-version>
 	    <!-- matches camel.version 3.3.0 -->
 		<!-- align with JEE (i.e WildFly branch) -->
@@ -97,7 +98,7 @@
 
         <device-version-latest>1.3-SNAPSHOT</device-version-latest>
         <device-project-latest>jeets-device-${device-version-latest}</device-project-latest>
-		<device-jar-with-dependencies>${device-project-latest}-jar-with-dependencies.jar</device-jar-with-dependencies>
+		<device-exec-jar>${device-project-latest}-exec.jar</device-exec-jar>
         <device-send-folder>${jeets.repo.directory}/jeets-clients/jeets-device/send</device-send-folder>
         <data-send-folder>${jeets.repo.directory}/jeets-data/device.send</data-send-folder>
 
@@ -409,7 +410,7 @@
                 <plugin>  ** used in jeets-protocols-traccar **
 	                <artifactId>maven-enforcer-plugin</artifactId>
 	                <version>1.4.1</version>
-				-->
+ -->
 			</plugins>
 		</pluginManagement>
 	</build>

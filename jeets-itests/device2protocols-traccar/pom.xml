@@ -113,7 +113,7 @@
 							<arguments>
 								<argument>java</argument>
 								<argument>-jar</argument>
-								<argument>target/${device-jar-with-dependencies}</argument>
+								<argument>target/${device-exec-jar}</argument>
 							</arguments>
 						</configuration>
 					</execution>
