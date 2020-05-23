@@ -19,7 +19,7 @@ public class SamplesTest {
 
 	@Test
     public void buildAckMessage() {
-		log.debug("buildAckMessage device(unique{}) ...", 888);
+		log.info("buildAckMessage device(unique{}) ...", 888);
         
     	Traccar.Acknowledge.Builder ackBuilder = Samples.createAckProto();
         assertEquals(Samples.deviceId, ackBuilder.getDeviceid());

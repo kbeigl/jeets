@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 The JEE Tracking System - JeeTS
+ * Copyright 2020 The JEE Tracking System - JeeTS
  *
  * The JEE Tracking System licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
@@ -12,13 +12,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  *
- * This protocol is modelled after the traccar database model.
+ * This protocol is modeled after the traccar database model.
  * traccar is a GTS by Anton Tananaev (anton.tananaev@gmail.com)
  * Protocol fields and messages and their relations are aligned 
  * with traccar's fields, tables and their relations.
  */
 syntax = "proto3";
-package org.jeets.protocol;
+package org.jeets.protobuf;
 option java_outer_classname = "Traccar"; // = default
 option optimize_for = SPEED;
 

@@ -26,35 +26,84 @@
 	</parent>
 
 	<artifactId>jeets-protocols</artifactId>
-	<version>1.2.0</version>
+	<!-- <version>1.2.0</version> -->
 	<packaging>jar</packaging>
 
+<!-- 
     <properties>
         <protobuf.version>3.11.0</protobuf.version>
     </properties>
-
+ -->
 	<dependencies>
 		<dependency>
 			<groupId>com.google.protobuf</groupId>
 			<artifactId>protobuf-java</artifactId>
 			<version>${protobuf-version}</version>
 		</dependency>
+<!-- 	? ? ? from camel-protobuf pom
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java-util</artifactId>
+            <version>${protobuf-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+ -->
 		<dependency>
 			<!-- exclude hibernate/jpa implementation? -->
-			<!-- inherits logging setup -->
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-pu-traccar</artifactId>
 		</dependency>
 	</dependencies>
 
     <build>
-	<!-- Useful in development time, remove to hide source. -->
+		<!-- Useful in development time, remove to hide source. -->
         <sourceDirectory>src/main/java</sourceDirectory>
         <resources>
             <resource>
-                <directory>protobuffers</directory>
+                <directory>src/main/proto</directory>
             </resource>
         </resources>
+
+        <!-- move up in hierarchy
+             Operating system and CPU architecture detection extension
+        	 see camel-protobuf pom to skip assembly and launch  -->
+        <extensions>
+            <extension>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>${os-maven-plugin-version}</version>
+            </extension>
+        </extensions>
+		<!-- Protobuf Java code generator plugin from camel-protobuf 
+			different approach than protocols-traccar -->
+		<plugins>
+			<plugin>
+				<groupId>org.xolstice.maven.plugins</groupId>
+				<artifactId>protobuf-maven-plugin</artifactId>
+				<version>${protobuf-maven-plugin-version}</version>
+				<extensions>true</extensions>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+						<configuration>
+							<protocArtifact>
+								com.google.protobuf:protoc:${protobuf-version}:exe:${os.detected.classifier}
+							</protocArtifact>
+							<!-- <checkStaleness>true</checkStaleness> -->
+							<skip>${skipTests}</skip>
+							<clearOutputDirectory>false</clearOutputDirectory>
+							<outputDirectory>src/main/java</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+    
     </build>
 
 </project>

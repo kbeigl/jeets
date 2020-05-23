@@ -14,8 +14,9 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -34,14 +35,11 @@
 	<url>jeets.org/</url>
 
 	<properties>
-		<!-- <camel.version>2.24.0</camel.version> -->
 		<camel.version>3.3.0</camel.version>
-
-		<!-- replace with / 'link to' camel-spring-boot-starter version !!
-			 or how to use camel-ized plugin ? target: mvn spring-boot:run 
-			 requrired for repackaging phase to exec jar -->
 	    <spring-boot-version>2.2.7.RELEASE</spring-boot-version>
-	    <!-- matches camel.version 3.3.0 -->
+		<!-- 'link to' camel-spring-boot-starter version !!
+			 or how to use camel-ized plugin ? target: mvn spring-boot:run 
+			 required for repackaging phase to -exec.jar -->
 		<!-- align with JEE (i.e WildFly branch) -->
 
         <!-- matches traccar 4.2
@@ -60,10 +58,10 @@
         <openjpa-version>2.4.1</openjpa-version>
         <apache-derby-version>10.11.2-RC</apache-derby-version>
         
-		<!-- to be removed -->
-		<protobuf-version>3.11.0</protobuf-version>
-		<!-- traccar protocols -->
-		<protobuf.version>3.11.0</protobuf.version>
+		<!-- jeets and traccar protocols -->
+        <protobuf-version>3.11.1</protobuf-version>
+        <protobuf-maven-plugin-version>0.6.1</protobuf-maven-plugin-version>
+        <os-maven-plugin-version>1.6.0</os-maven-plugin-version>
 
 		<!-- project settings -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -189,24 +187,33 @@
 	</dependencyManagement>
 
 	<dependencies>
-		<!-- Caution! This makes all projects to [boot]
-        <dependency>
-            <groupId>org.apache.camel.springboot</groupId>
-            <artifactId>camel-spring-boot-starter</artifactId>
-        </dependency>
-		 -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!-- logging -->
+
+		<!-- TEST-logging from camel-protobuf pom
+    		 includes slf4j and log4j2 -->
 	    <dependency>
-	    	<!-- includes slf4j and log4j2 -->
 	        <groupId>org.apache.logging.log4j</groupId>
 	        <artifactId>log4j-slf4j-impl</artifactId>
-			<!-- scope ? -->
 	    </dependency>
+
+      <!-- compare logging in cia2 samples parent pom:
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-log4j12</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+      </dependency>
+	 -->
  	</dependencies>
 
 	<profiles>
