@@ -10,8 +10,8 @@ import java.util.Set;
 import org.jeets.model.traccar.jpa.Device;
 import org.jeets.model.traccar.jpa.Event;
 import org.jeets.model.traccar.jpa.Position;
-import org.jeets.protocol.Traccar;
-import org.jeets.protocol.Traccar.EventType;
+import org.jeets.protobuf.Traccar;
+import org.jeets.protobuf.Traccar.EventType;
 
 /**
  * Transform Traccar Entities to binary Protobuffers for sending messages from

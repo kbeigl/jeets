@@ -8,7 +8,11 @@
 * added `my-etl-traccar` 
 for Maven Archetype generation of customized Traccar ETL microservice
 
- * Camel migration 2.24.0 to 3.3.0
+* Camel migration 2.24.0 to 3.3.0
+
+* `jeets-protocols` +
+** automated generation of ProtoBuffers from *.proto files in Maven build +
+
 
 
 

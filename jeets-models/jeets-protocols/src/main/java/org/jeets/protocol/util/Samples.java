@@ -2,7 +2,7 @@ package org.jeets.protocol.util;
 
 import java.util.Date;
 
-import org.jeets.protocol.Traccar;
+import org.jeets.protobuf.Traccar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -109,7 +109,6 @@ public class Samples {
     public static Traccar.Device.Builder createDeviceProto() {
         Traccar.Device.Builder deviceBuilder = Traccar.Device.newBuilder();
         deviceBuilder.setUniqueid(uniqueId);
-//      setName and setLastupdate are not plausible on client side
         return deviceBuilder;
         // createAckForDeviceMessage();
     }

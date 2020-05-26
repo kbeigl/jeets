@@ -9,6 +9,7 @@ import java.util.Set;
 import org.jeets.model.traccar.jpa.Device;
 import org.jeets.model.traccar.jpa.Event;
 import org.jeets.model.traccar.jpa.Position;
+import org.jeets.protobuf.Traccar;
 import org.jeets.protocol.util.Samples;
 import org.jeets.protocol.util.Transformer;
 import org.junit.Test;

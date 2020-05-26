@@ -147,7 +147,6 @@
 							<inputDirectories>
 								<include>src/main/proto</include>
 							</inputDirectories>
-							<cleanOutputFolder>false</cleanOutputFolder>
 							<outputDirectory>src/main/java</outputDirectory>
 						</configuration>
 					</execution>

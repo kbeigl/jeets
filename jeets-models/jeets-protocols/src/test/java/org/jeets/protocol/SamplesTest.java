@@ -2,7 +2,7 @@ package org.jeets.protocol;
 
 import static org.junit.Assert.*;
 
-import org.jeets.protocol.Traccar;
+import org.jeets.protobuf.Traccar;
 import org.jeets.protocol.util.Samples;
 import org.junit.Test;
 import org.slf4j.Logger;
