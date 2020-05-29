@@ -17,7 +17,7 @@ import java.util.zip.ZipFile;
  * <p>
  * problem description<br>
  * When you add the package org.traccar.protocol (with *ProtocolTest classes) in
- * the jeets-dcs-traccar test/ folder the original loading method (i.e.
+ * the jeets-dcs test/ folder the original loading method (i.e.
  * constructor) does not find the same package in the included
  * jeets-protocols-traccar.jar .. somewhere in the class path.
  * <p>

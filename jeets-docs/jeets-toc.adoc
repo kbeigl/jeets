@@ -22,7 +22,7 @@ Instructions to compile and test the complete repository.
 In case of problems please report issues here.
 
 * link:./ReleaseNotes.adoc[Release Notes] +
-major improvements and development steps.
+Major improvements and development steps.
 
 === Developing JeeTS with Eclipse
 
@@ -77,9 +77,9 @@ Template to send byte or hex messages and collect the response.
 
 == jeets-server-jse
 
-The *jeets-server* folders are holding the server components
+The *jeets-server-jse* folder is holding the server components
 to compose a Tracking System according to your needs.
-The *jeets-server-jse* components are build with the Java Standard 
+The components are build with the Java Standard 
 Edition combined with various Frameworks and can be launched
 from command line.
 
@@ -91,33 +91,22 @@ being JPA Entities aligned with the Data/base Model.
 The complete process is usually referred to as Device Communication 
 and each Protocol has one or more Device Communication Server.
 
-==== Creating a Device Communication Server
-
-In order to grasp the JeeTS modeling process from the monolithic 
-Traccar GTS to individual components you can look 
-at the following projects consecutively:
-
-* link:../jeets-server-jse/jeets-dcs/README.adoc[jeets-dcs] +
-combines the above projects (pu and protocols) to receive binary 
-Protobuffer messages and transform them to Java Entities.
-
 
 === Running Traccar Device Communication Servers
 
-After you have grasped the cascaded approach you can proceed
-to build the stand alone application *jeets-dcs-traccar.jar* 
+Build the stand alone application *jeets-dcs.jar* 
 to receive Tracker Messages from any Tracker supported by Traccar!
-The cascaded build works analog to the example above
-only with more complex modules:
 
 . link:../jeets-models/jeets-protocols-traccar/jeets-protocols-traccar.adoc[jeets-protocols-traccar] +
 provides all protocols from the (main releases of) Traccar GTS 
 
-. link:../jeets-server-jse/jeets-dcs-traccar/ReadMe.adoc[jeets-dcs-traccar] +
+. link:../jeets-server-jse/jeets-dcs/ReadMe.adoc[jeets-dcs] +
 combines the above projects to receive messages from any Tracker
 supported by Traccar protocol implementations.
+Combine with jeets-protocols to receive binary Protobuffer messages 
+and transform them to Java Entities.
 The application applies the Camel Framework to create Routes 
-from each protocol port to a unified output of Traccar Entities.
+from each protocol port to one unified output of Traccar Entities.
 
 
 == jeets-itests

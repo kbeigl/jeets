@@ -13,10 +13,14 @@ for Maven Archetype generation of customized Traccar ETL microservice
 * `jeets-protocols` +
 ** automated generation of ProtoBuffers from *.proto files in Maven build +
 
+* generalized `jeets-dcs-traccar` to `jeets-dcs` +
+  to serve additional / alternate protocols to Traccar protocols
+** includes `jeets-protocols` and   !!TODO!!
+** includes `jeets-protocols-traccar`
 
 
-
-( * restructure repository with jeets-traccar section )
+( * restructure repository with jeets-traccar 
+    and / or device-communication section ? )
  
 
 

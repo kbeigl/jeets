@@ -34,10 +34,9 @@
 
 	<modules>
 		<module>jeets-dcs</module>
-		<module>jeets-dcs-traccar</module>
-		<module>jeets-etl</module>
-		<!-- relies on jeets-dcs-traccar ! -->
+		<!-- relies on jeets-dcs ! -->
 		<module>my-etl-traccar</module>
+		<module>jeets-etl</module>
 		<module>jeets-db-managers</module>
 		<module>jeets-dcs-amq</module>
 		<module>jeets-geo-router</module>

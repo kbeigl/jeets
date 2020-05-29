@@ -19,7 +19,7 @@ Anton Tananaev is doing an incredible job maintaining
 about 200 protocols on a daily basis.
 
 The main purpose of this project is to provide all Traccar protocols for your own Tracking Application.
-The `jeets-dcs-traccar` project demos how to use the protocols with the Spring/Boot/Starter- and Camel Frameworks
+The `jeets-dcs` project demos how to use the protocols with the Spring/Boot/Starter- and Camel Frameworks
 to create Netty Camel Routes directly from the hardware Endpoint, i.e. port.
 
 
