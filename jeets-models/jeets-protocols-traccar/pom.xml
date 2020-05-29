@@ -29,6 +29,7 @@
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-netty-http</artifactId>
 		</dependency>
+		<!-- override with camel-protobuf ? -->
 		<dependency>
 			<groupId>com.google.protobuf</groupId>
 			<artifactId>protobuf-java</artifactId>

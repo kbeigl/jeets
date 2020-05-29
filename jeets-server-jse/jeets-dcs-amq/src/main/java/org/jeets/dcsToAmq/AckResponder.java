@@ -5,7 +5,7 @@ import java.util.Date;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.jeets.model.traccar.jpa.Device;
-import org.jeets.protocol.Traccar;
+import org.jeets.protobuf.Traccar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

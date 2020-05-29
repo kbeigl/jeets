@@ -1,4 +1,4 @@
-package org.jeets.etl;
+package org.jeets.dcs;
 
 import java.util.Date;
 
@@ -17,8 +17,7 @@ import org.slf4j.LoggerFactory;
  * use it to create the message.
  */
 public class ProtoBean {
-//  class is not needed in main (any more)
-//  -> move to util package or test environment
+
     private static final Logger LOG = LoggerFactory.getLogger(ProtoBean.class);
 
     double lat = 49.99d, lon = 12.11d;
@@ -31,7 +30,7 @@ public class ProtoBean {
         Traccar.Device.Builder deviceBuilder = Device.newBuilder();
         deviceBuilder.setUniqueid(unique);
         deviceBuilder.addPosition(createProtoPosition());
-        LOG.info("created DeviceProto: {}", deviceBuilder);
+        LOG.info("created DeviceProto: {}", deviceBuilder.getUniqueid());
 //      for testing it would be better to return the builder for modifications!
         return deviceBuilder.build();
 //      createAckForDeviceMessage();

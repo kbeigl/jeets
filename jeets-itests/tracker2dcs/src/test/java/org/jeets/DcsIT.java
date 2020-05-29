@@ -24,18 +24,6 @@ public class DcsIT extends CamelTestSupport {
 
     private static final Logger LOG = LoggerFactory.getLogger(DcsIT.class);
 
-    /**
-     * Compare original DcsRouteTest in jeets-dcs
-     * <p>
-     * TODO: harmonize settings for host, port, messages!, device name 
-     * (also for queuing) etc. for tracker, dcs, dcsIT projects. <br>
-     * <p>
-     * Actually the DCS is not treated as a Component. This test simply uses the
-     * DcsRoute inside the test environment analogous to applying the DcsRoute
-     * in any higher level module.
-     * 
-     * @throws Exception
-     */
     @Test
     public void testDcsRoute() throws Exception {
 
@@ -122,12 +110,4 @@ public class DcsIT extends CamelTestSupport {
         return context;  
     }  
 
-//    @Override
-//    protected JndiRegistry createRegistry() throws Exception {
-//        JndiRegistry registry = super.createRegistry();
-////      registry.bind("{{dcs.protobuffer.protocol}}", new DeviceProtoExtractor(null));
-//        registry.bind("protobuffer", new DeviceProtoExtractor(null));
-//        return registry;
-//    }
-    
 }

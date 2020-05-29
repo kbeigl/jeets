@@ -24,18 +24,18 @@
         
   <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
     <dataFormats>
-      <protobuf id="protobuf1" instanceClass="org.apache.camel.dataformat.protobuf.generated.AddressBookProtos$Person"/>
+      <protobuf id="protobuf1" instanceClass="org.jeets.protobuf.Traccar$Device"/>
     </dataFormats>
     <route>
       <from uri="direct:in"/>
       <marshal>
-        <protobuf instanceClass="org.apache.camel.dataformat.protobuf.generated.AddressBookProtos$Person"/>
+        <protobuf instanceClass="org.jeets.protobuf.Traccar$Device"/>
       </marshal>
     </route>
     <route>
       <from uri="direct:back"/>
       <unmarshal>
-        <protobuf instanceClass="org.apache.camel.dataformat.protobuf.generated.AddressBookProtos$Person"/>
+        <protobuf instanceClass="org.jeets.protobuf.Traccar$Device"/>
       </unmarshal>
       <to uri="mock:reverse"/>
     </route>
@@ -56,7 +56,7 @@
   </camelContext>
  
   <bean id="protobuf2" class="org.apache.camel.dataformat.protobuf.ProtobufDataFormat">
-    <property name="instanceClass" value="org.apache.camel.dataformat.protobuf.generated.AddressBookProtos$Person"/>
+    <property name="instanceClass" value="org.jeets.protobuf.Traccar$Device"/>
   </bean>
 
 </beans>

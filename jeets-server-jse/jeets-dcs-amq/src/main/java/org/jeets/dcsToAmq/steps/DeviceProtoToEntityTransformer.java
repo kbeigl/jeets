@@ -22,7 +22,7 @@ import org.apache.camel.Converter;
 //import org.apache.camel.TypeConverters;
 import org.apache.camel.Exchange;
 import org.jeets.model.traccar.jpa.Device;
-import org.jeets.protocol.Traccar;
+import org.jeets.protobuf.Traccar;
 import org.jeets.protocol.util.Transformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

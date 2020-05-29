@@ -35,9 +35,15 @@
 	<description>JeeTS Extract Transform and Load (ETL) tool</description>
 
 	<dependencies>
+		<!-- spontaneous replacement for jeets-dcs, reconsider -->
 		<dependency>
 			<groupId>org.jeets</groupId>
-			<artifactId>jeets-dcs</artifactId>
+			<artifactId>jeets-protocols</artifactId>
+		</dependency>
+		<!-- spontaneous integration of netty, reconsider -->
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-netty</artifactId>
 		</dependency>
 		<!-- db type should be set on a higher level  -->
 		<dependency>

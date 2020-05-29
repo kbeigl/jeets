@@ -18,15 +18,19 @@ package org.apache.camel.dataformat.protobuf;
 
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.camel.dataformat.protobuf.generated.AddressBookProtos.Person;
+//import org.apache.camel.dataformat.protobuf.generated.AddressBookProtos.Person;
 import org.apache.camel.test.junit4.CamelTestSupport;
+import org.jeets.protobuf.Traccar.Device;
 import org.junit.Test;
 
 public class ProtobufMarshalAndUnmarshalJsonTest extends CamelTestSupport {
     
-    private static final String PERSON_TEST_NAME = "Martin";
-    private static final String PERSON_TEST_JSON = "{\"name\": \"Martin\",\"id\": 1234}";
-    private static final int PERSON_TEST_ID = 1234;
+    private static final String DEVICE_TEST_UNIQUE_ID = org.jeets.model.traccar.util.Samples.uniqueId;
+    private static final String DEVICE_TEST_JSON 
+    = "{\"uniqueid\": \"" + DEVICE_TEST_UNIQUE_ID + "\"}";
+//    TODO create json object with Device / Position/s / Event/s
+//    check json jars ..
+//    private static final int DEVICE_TEST_ID = 1234;
     
     @Test
     public void testMarshalAndUnmarshal() throws Exception {
@@ -41,17 +45,17 @@ public class ProtobufMarshalAndUnmarshalJsonTest extends CamelTestSupport {
     private void marshalAndUnmarshal(String inURI, String outURI) throws Exception {
         MockEndpoint mock = getMockEndpoint("mock:reverse");
         mock.expectedMessageCount(1);
-        mock.message(0).body().isInstanceOf(Person.class);
+        mock.message(0).body().isInstanceOf(Device.class);
         
-        Object marshalled = template.requestBody(inURI, PERSON_TEST_JSON);
+        Object marshalled = template.requestBody(inURI, DEVICE_TEST_JSON);
 
         template.sendBody(outURI, marshalled);
 
         mock.assertIsSatisfied();
 
-        Person output = mock.getReceivedExchanges().get(0).getIn().getBody(Person.class);
-        assertEquals(PERSON_TEST_NAME, output.getName());
-        assertEquals(PERSON_TEST_ID, output.getId());
+        Device output = mock.getReceivedExchanges().get(0).getIn().getBody(Device.class);
+        assertEquals(DEVICE_TEST_UNIQUE_ID, output.getUniqueid());
+//        assertEquals(DEVICE_TEST_ID, output.getId());
     }
 
     @Override
@@ -59,12 +63,14 @@ public class ProtobufMarshalAndUnmarshalJsonTest extends CamelTestSupport {
         return new RouteBuilder() {
             @Override
             public void configure() throws Exception {
-                ProtobufDataFormat format = new ProtobufDataFormat(Person.getDefaultInstance(), ProtobufDataFormat.CONTENT_TYPE_FORMAT_JSON);
+                ProtobufDataFormat format = new ProtobufDataFormat(Device.getDefaultInstance(), ProtobufDataFormat.CONTENT_TYPE_FORMAT_JSON);
 
                 from("direct:in").unmarshal(format).to("mock:reverse");
                 from("direct:back").marshal(format);
 
-                from("direct:marshal").unmarshal().protobuf("org.apache.camel.dataformat.protobuf.generated.AddressBookProtos$Person", "json").to("mock:reverse");
+                from("direct:marshal").unmarshal()
+                .protobuf("org.jeets.protobuf.Traccar$Device", "json")
+                .to("mock:reverse");
                 from("direct:unmarshalA").marshal().protobuf();
             }
         };

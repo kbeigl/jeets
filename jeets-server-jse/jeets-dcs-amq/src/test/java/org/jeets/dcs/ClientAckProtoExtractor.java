@@ -1,4 +1,4 @@
-package org.jeets.dcsToAmq;
+package org.jeets.dcs;
 
 import org.apache.camel.component.netty.ClientInitializerFactory;
 import org.apache.camel.component.netty.NettyProducer;
@@ -12,10 +12,10 @@ import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 
-public class AckProtoExtractor extends ClientInitializerFactory {
+public class ClientAckProtoExtractor extends ClientInitializerFactory {
     private NettyProducer producer;
 
-    public AckProtoExtractor(NettyProducer producer) {
+    public ClientAckProtoExtractor(NettyProducer producer) {
         this.producer = producer;
     }
 
@@ -31,7 +31,7 @@ public class AckProtoExtractor extends ClientInitializerFactory {
 
     @Override
     public ClientInitializerFactory createPipelineFactory(NettyProducer producer) {
-        return new AckProtoExtractor(producer);
+        return new ClientAckProtoExtractor(producer);
     }
     
 }

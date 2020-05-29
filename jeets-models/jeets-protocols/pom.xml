@@ -35,9 +35,7 @@
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-protobuf</artifactId>
 		</dependency>
-
 		<dependency>
-			<!-- exclude hibernate/jpa implementation? -->
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-pu-traccar</artifactId>
 		</dependency>

@@ -11,7 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 // @ComponentScan(basePackages="org.jeets.device")
 public class Main {
 
-//private Main() {};
+//  private Main() {};
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 

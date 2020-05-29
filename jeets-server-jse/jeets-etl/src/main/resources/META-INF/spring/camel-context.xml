@@ -16,34 +16,24 @@
   * under the License.
   -->
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-    http://www.springframework.org/schema/beans/spring-beans.xsd
-	http://camel.apache.org/schema/spring
-	http://camel.apache.org/schema/spring/camel-spring.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans     http://www.springframework.org/schema/beans/spring-beans.xsd  http://camel.apache.org/schema/spring  http://camel.apache.org/schema/spring/camel-spring.xsd">
     <!-- Bean to simulate incoming Device Protobuffer message
   <bean id="protoBean" class="org.jeets.server.etl.ProtoBean"/>	
    -->
     <camelContext id="camel" trace="true" xmlns="http://camel.apache.org/schema/spring">
-
-		<!-- this is only a first approach to combine DCS and (empty!) ETL properties -->
-	    <propertyPlaceholder id="properties" location="dcs.properties,etl.properties"/>
-	    
-	    <!-- we can use property placeholders when we define the JMX agent
+        <!-- this is only a first approach to combine DCS and (empty!) ETL properties -->
+        <propertyPlaceholder id="properties" location="dcs.properties,etl.properties"/>
+        <!-- we can use property placeholders when we define the JMX agent
 		<jmxAgent id="agent" registryPort="{{myjmx.port}}" usePlatformMBeanServer="{{myjmx.usePlatform}}" 
 			createConnector="true" statisticsLevel="RoutesOnly" /> -->
-    
         <routeBuilder ref="EtlRoute"/>
         <routeBuilder ref="DcsRoute"/>
         <!-- or list packages to look for routes: 
 	    <package>org.jeets.etl</package>
 	    <package>org.jeets.dcs</package> -->
-
-	</camelContext>
-	
+    </camelContext>
     <bean class="org.jeets.etl.EtlRoute" id="EtlRoute"/>
     <bean class="org.jeets.dcs.DcsRoute" id="DcsRoute"/>
-    
     <!-- Bean to extract incoming Device Protobuffer message
 	<bean id="device" class="org.jeets.etl.DeviceProtoExtractor"> 
   	id, i.e. protocol name should be retrieved from DCS (props) -->
@@ -52,7 +42,6 @@
             <null/>
         </constructor-arg>
     </bean>
-    
     <bean class="org.apache.camel.component.jpa.JpaComponent" id="jpa">
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
         <property name="transactionManager" ref="transactionManager"/>

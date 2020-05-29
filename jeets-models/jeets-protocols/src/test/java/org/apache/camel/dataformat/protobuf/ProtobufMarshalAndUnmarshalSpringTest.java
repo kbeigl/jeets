@@ -20,9 +20,10 @@ import org.apache.camel.CamelException;
 import org.apache.camel.FailedToCreateRouteException;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.camel.dataformat.protobuf.generated.AddressBookProtos;
-import org.apache.camel.dataformat.protobuf.generated.AddressBookProtos.Person;
 import org.apache.camel.test.spring.CamelSpringTestSupport;
+import org.jeets.protobuf.Traccar;
+import org.jeets.protobuf.Traccar.Device;
+import org.jeets.protocol.util.Samples;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -64,11 +65,13 @@ public class ProtobufMarshalAndUnmarshalSpringTest extends CamelSpringTestSuppor
     }
 
     private void marshalAndUnmarshal(String inURI, String outURI) throws Exception {
-        AddressBookProtos.Person input = AddressBookProtos.Person.newBuilder().setName("Martin").setId(1234).build();
+        
+        Traccar.Device input = 
+                Samples.createDeviceWithPositionWithTwoEvents().build();
 
         MockEndpoint mock = getMockEndpoint("mock:reverse");
         mock.expectedMessageCount(1);
-        mock.message(0).body().isInstanceOf(Person.class);
+        mock.message(0).body().isInstanceOf(Device.class);
         mock.message(0).body().isEqualTo(input);
 
         Object marshalled = template.requestBody(inURI, input);
@@ -77,7 +80,10 @@ public class ProtobufMarshalAndUnmarshalSpringTest extends CamelSpringTestSuppor
 
         mock.assertIsSatisfied();
 
-        Person output = mock.getReceivedExchanges().get(0).getIn().getBody(Person.class);
-        assertEquals("Martin", output.getName());
+        Device output = mock.getReceivedExchanges()
+                .get(0).getIn().getBody(Device.class);
+
+//      TODO: move assertions from SamplesTest here
+//      assertEquals("Martin", output.getName());
     }
 }

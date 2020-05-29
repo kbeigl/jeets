@@ -27,11 +27,7 @@
 	</parent>
 
 	<artifactId>jeets-dcs</artifactId>
-    <!-- <version>1.2.0</version> -->
 	<packaging>jar</packaging>
-
-	<url>http://jeets.org</url>
-	<description>JeeTS Device Communication Server</description>
 
 	<dependencies>
 		<dependency>
@@ -42,18 +38,11 @@
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-netty</artifactId>
 		</dependency>
-		<!-- included below
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-base</artifactId>
-		</dependency>
-		 -->
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-core-engine</artifactId>
 		</dependency>
 
-		<!-- for testing (camel-spring-test?) -->
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-test</artifactId>

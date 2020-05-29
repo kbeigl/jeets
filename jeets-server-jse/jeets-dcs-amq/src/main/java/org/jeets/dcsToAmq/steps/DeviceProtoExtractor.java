@@ -26,7 +26,7 @@ import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 
-import org.jeets.protocol.Traccar;
+import org.jeets.protobuf.Traccar;
 
 /**
  * Initialize Channel to serve a Traccar.Device Protobuffer Message to the
