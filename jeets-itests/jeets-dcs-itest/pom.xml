@@ -24,11 +24,10 @@
 		<version>1.3-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>device2dcs-traccar</artifactId>
-	<!-- <version>1.2.4</version> -->
+	<artifactId>jeets-dcs-itest</artifactId>
 	<packaging>jar</packaging>
 
-	<name>device2dcs-traccar-itest</name>
+	<name>jeets-dcs-itest</name>
 	<url>jeets.org</url>
 
 	<dependencies>
@@ -65,18 +64,18 @@
 					<execution>
 						<id>start-jar</id>
 						<configuration>
-							<name>jeets-dcs-traccar</name>
+							<name>jeets-dcs</name>
 							<!-- workDir is vital for relative path hidden in traccar.xml (see argument below) -->
-							<workingDir>${jeets.repo.directory}/jeets-server-jse/jeets-dcs-traccar/</workingDir>
+							<workingDir>${jeets.repo.directory}/jeets-server-jse/jeets-dcs/</workingDir>
 							<waitForInterrupt>false</waitForInterrupt>
 							<!-- <healthcheckUrl>http://localhost:8381/healthcheck</healthcheckUrl> -->
 							<waitAfterLaunch>10</waitAfterLaunch>
 							<!-- try logging client and server to one log file > parse and assert in IT !! -->
-							<processLogFile>${project.build.directory}\${project.name}\${dcs-traccar-project-latest}.log</processLogFile>
+							<processLogFile>${project.build.directory}\${project.name}\${dcs-project-latest}.log</processLogFile>
 							<arguments>
 								<argument>java</argument>
 								<argument>-jar</argument>
-								<argument>target/${dcs-traccar-jar}</argument>
+								<argument>target/${dcs-jar}</argument>
 								<argument>./setup/traccar.xml</argument>
 							</arguments>
 						</configuration>

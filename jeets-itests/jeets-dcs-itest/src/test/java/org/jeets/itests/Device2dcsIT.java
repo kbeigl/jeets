@@ -38,7 +38,7 @@ public class Device2dcsIT extends CamelTestSupport {
 
     private void testProtocolFile(String fileName) throws Exception, InterruptedException {
         context.addRoutes( new FileRouteBuilder(fileName) );
-        Thread.sleep(60000); // change to NotifyBuilder
+        Thread.sleep(60*1000); // change to NotifyBuilder
 //      FIXME
 //      60 seconds works to wait for delivery problem
 //      Failed delivery for . Exhausted after delivery attempt: 1 
@@ -60,6 +60,7 @@ public class Device2dcsIT extends CamelTestSupport {
 
         @Override
         public void configure() throws Exception {
+//          TODO modify files timestamps to 'now'
             from("file://{{data.send.folder}}?noop=true&fileName=" + fileName)
             .routeId("send-file")
             .to("file://{{device.send.folder}}");

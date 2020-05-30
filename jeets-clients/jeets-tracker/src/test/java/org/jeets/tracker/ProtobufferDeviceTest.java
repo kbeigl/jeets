@@ -50,6 +50,7 @@ public class ProtobufferDeviceTest {
         String testId = "testId";
         deviceBuilder.setUniqueid(testId);
         Traccar.Device deviceOrm = deviceBuilder.build();
+
         assertEquals(testId, deviceOrm.getUniqueid());
         assertTrue(deviceOrm.getPositionCount()==1);
         assertTrue(deviceOrm.getPosition(0).getEventCount()==1);

@@ -35,7 +35,7 @@
 		<!-- <module>common-itests</module> -->
 		<module>tracker2dcs</module>
 		<module>device2protocols-traccar</module>
-		<module>device2dcs-traccar</module>
+		<module>jeets-dcs-itest</module>
 	</modules>
 
 	<profiles>
