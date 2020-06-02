@@ -1,9 +1,8 @@
-package org.jeets.dcs;
+package org.jeets.dcx;
 
 import java.util.Date;
 
 import org.apache.camel.Handler;
-import org.jeets.dcx.ProtoBean;
 import org.jeets.protobuf.Traccar;
 import org.jeets.protobuf.Traccar.AlarmType;
 import org.jeets.protobuf.Traccar.Device;

@@ -69,7 +69,6 @@ public class Tracker {
         sendPositionProto(Transformer.entityToProtoPosition(positionEntity));
     }
 
-
     /**
      * All newly added Positions are collected in a Queue. Then the Tracker
      * internally submits the positions to the server - as connectivity allows.

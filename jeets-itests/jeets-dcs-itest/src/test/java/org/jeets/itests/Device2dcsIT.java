@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  * see java docs, comments and developer notes in Device2protocolsIT
  */
 public class Device2dcsIT extends CamelTestSupport {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(Device2dcsIT.class);
 
     private String sendFolder, sentFolder;
@@ -29,7 +29,7 @@ public class Device2dcsIT extends CamelTestSupport {
         for (int i = 0; i < testfiles.length; i++) {
             testProtocolFile(testfiles[i]);
         }
-        
+
         File file = new File(sentFolder);
         assertTrue(file.isDirectory());
         assertEquals(testfiles.length, file.listFiles().length);

@@ -1,9 +1,8 @@
-package org.jeets.dcs;
+package org.jeets.dcx;
 
 import org.apache.camel.component.netty.ClientInitializerFactory;
 import org.apache.camel.component.netty.NettyProducer;
 import org.apache.camel.component.netty.handlers.ClientChannelHandler;
-import org.jeets.dcx.ClientAckProtoExtractor;
 import org.jeets.protobuf.Traccar;
 
 import io.netty.channel.Channel;
