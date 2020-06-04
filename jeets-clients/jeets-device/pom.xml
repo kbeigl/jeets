@@ -32,6 +32,7 @@
 
 	<dependencies>
 		<dependency>
+			<!-- for *sending* messages, i.e. ENcoder -->
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-protocols</artifactId>
 		</dependency>
