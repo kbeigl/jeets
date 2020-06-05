@@ -32,7 +32,11 @@
 	<url>jeets.org</url>
 
 	<dependencies>
-		<!-- implicit dep: jeets-tracker -->
+		<dependency>
+			<groupId>org.jeets</groupId>
+			<artifactId>jeets-protocols</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-dcs</artifactId>
