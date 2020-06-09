@@ -34,9 +34,8 @@
 
     <entry key='adm.port'>5092</entry>
 
-<!--
 	<entry key='protobuffer.port'>5200</entry>
-
+<!--
     <entry key='xexun.port'>5006</entry>
     <entry key='xexun.extended'>false</entry>
     <entry key='totem.port'>5007</entry>

@@ -88,20 +88,21 @@ public class ProtobufMarshalAndUnmarshalTest extends CamelTestSupport {
         return new RouteBuilder() {
             @Override
             public void configure() throws Exception {
-                ProtobufDataFormat format 
-                = new ProtobufDataFormat(Device.getDefaultInstance());
 
+                ProtobufDataFormat format = 
+                        new ProtobufDataFormat(Device.getDefaultInstance());
                 from("direct:in").marshal(format);
                 from("direct:back").unmarshal(format).to("mock:reverse");
 
                 from("direct:marshal").marshal().protobuf();
+                
                 from("direct:unmarshalA").unmarshal()
                     .protobuf("org.jeets.protobuf.Traccar$Device")
-                    .to("mock:reverse");
+                .to("mock:reverse");
 
                 from("direct:unmarshalB").unmarshal()
                     .protobuf(Device.getDefaultInstance())
-                    .to("mock:reverse");
+                .to("mock:reverse");
             }
         };
     }

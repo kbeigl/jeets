@@ -4,12 +4,17 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.jeets.model.traccar.jpa.Device;
-import org.jeets.protobuf.Traccar;;;
+import org.jeets.protobuf.Traccar;
 
 public class DcsRoute extends RouteBuilder { // plain Camel without Swing!
+//  with camel-endpointdsl: extends EndpointRouteBuilder {
 
+    @Override
     public void configure() throws Exception {
-//		EL #{{ raises EL syntax error: Expecting expression, but creates %23 and works. Fix some time.
+
+//      with camel-endpointdsl
+//      from( netty("tcp://localhost:5200").sync(true) )
+//      EL #{{ raises EL syntax error: Expecting expression, but creates %23 and works. Fix some time.
         from("netty:tcp://localhost:5200?serverInitializerFactory=#protobuffer&sync=true")
         .convertBodyTo(Device.class)    // check exchange.getIn/Out
         .inOnly("seda:jeets-dcs?concurrentConsumers=4&waitForTaskToComplete=Never")
@@ -27,6 +32,6 @@ public class DcsRoute extends RouteBuilder { // plain Camel without Swing!
                 exchange.getOut().setBody(ackBuilder.build(), Traccar.Acknowledge.class);
             }
         });
+
     }
-    
 }

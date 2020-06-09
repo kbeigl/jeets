@@ -27,7 +27,6 @@
 	</parent>
 
 	<artifactId>jeets-protocols</artifactId>
-	<!-- <version>1.2.0</version> -->
 	<packaging>jar</packaging>
 
 	<dependencies>
@@ -35,6 +34,12 @@
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-core</artifactId>
 		</dependency>
+		<!-- we'll see ..
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-endpointdsl</artifactId>
+		</dependency>
+		 -->
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-netty</artifactId>
@@ -43,9 +48,17 @@
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-protobuf</artifactId>
 		</dependency>
+		<!-- for jpa.Device -->
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-pu-traccar</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jeets</groupId>
+			<artifactId>jeets-protocols-traccar</artifactId>
+			<!-- remove explicit version, define in parent pom -->
+			<version>4.8.0316</version>
+			<scope>provided</scope>
 		</dependency>
 
         <dependency>

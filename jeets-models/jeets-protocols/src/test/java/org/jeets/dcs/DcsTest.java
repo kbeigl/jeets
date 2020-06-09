@@ -26,14 +26,14 @@ public class DcsTest extends CamelTestSupport {
 //              this route segment is processed by a pool of five threads
                 from("seda:jeets-dcs")
                 .log("seda out: ${body}")
-                .process(new Processor() {
-                    public void process(Exchange exchange) throws Exception {
-//                      receives Acknowledge ?! instead of...
-                        Device device = (Device) exchange.getIn().getBody();
-                                System.out.println("persist jpa.Device " + device.getUniqueid()
-                                        + " with " + device.getPositions().size() + " positions.");
-                    }
-                })
+//                .process(new Processor() {
+//                    public void process(Exchange exchange) throws Exception {
+////                      receives Acknowledge ?! instead of...
+//                        Device device = (Device) exchange.getIn().getBody();
+//                        System.out.println("persist jpa.Device " + device.getUniqueid()
+//                            + " with " + device.getPositions().size() + " positions.");
+//                    }
+//                })
                 .to("mock:result");
             }
         });

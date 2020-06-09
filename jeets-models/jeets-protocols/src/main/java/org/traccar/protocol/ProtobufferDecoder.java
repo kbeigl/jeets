@@ -17,8 +17,7 @@ package org.traccar.protocol;
 
 import io.netty.channel.Channel;
 
-import org.jeets.protocol.Traccar;
-import org.jeets.protocol.Traccar.Position;
+import org.jeets.protobuf.Traccar;
 import org.traccar.BaseProtocolDecoder;
 import org.traccar.DeviceSession;
 import org.traccar.NetworkMessage;

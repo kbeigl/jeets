@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.traccar.BaseProtocol;
 import org.traccar.Context;
 import org.traccar.TrackerServer;
+import org.traccar.protocol.ProtobufferProtocol;
 import org.traccar.protocol.RuptelaProtocol;
 import org.traccar.protocol.TeltonikaProtocol;
 
@@ -62,6 +63,12 @@ public class Config {
     @Bean(name = "teltonika")
     public ServerInitializerFactory getTeltonikaPipeline() {
         Class<?> protocolClass = TeltonikaProtocol.class;
+        return createServerInitializerFactory(protocolClass);
+    }
+
+    @Bean(name = "protobuffer")
+    public ServerInitializerFactory getProtobufferPipeline() {
+        Class<?> protocolClass = ProtobufferProtocol.class;
         return createServerInitializerFactory(protocolClass);
     }
 
@@ -117,12 +124,24 @@ public class Config {
         int port = -1; // 5027
         if (Context.getConfig().hasKey("teltonika.port")) {
             port = Context.getConfig().getInteger("teltonika.port");
-            // String represents dynamic part for all protocols, see below
-            // add traccar channelGroup, see Camel Netty Component: channelGroup (advanced)
             String uri = "netty:tcp://" + host + ":" + port + "?serverInitializerFactory=#" + routeName + "&sync=" + camelNettySync;
             return new DcsRouteBuilder(uri, routeName);
         }
         System.err.println("Teltonika is not configured. No Route created!");
+        return null;
+    }
+
+//  from jeets-protocols with Traccar logic
+    @Bean(name = "protobufferXRoute") 
+    public RouteBuilder createProtobufferRoute() {
+        String routeName = "protobuffer";
+        int port = -1; // 5027
+        if (Context.getConfig().hasKey("protobuffer.port")) {
+            port = Context.getConfig().getInteger("protobuffer.port");
+            String uri = "netty:tcp://" + host + ":" + port + "?serverInitializerFactory=#" + routeName + "&sync=" + camelNettySync;
+            return new DcsRouteBuilder(uri, routeName);
+        }
+        System.err.println("Protobuffer is not configured. No Route created!");
         return null;
     }
 
