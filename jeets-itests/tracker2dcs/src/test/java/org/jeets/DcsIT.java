@@ -13,9 +13,9 @@ import org.apache.camel.spi.Registry;
 import org.apache.camel.support.SimpleRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.jeets.dcx.DcsRoute;
-import org.jeets.dcx.steps.DeviceProtoExtractor;
 import org.jeets.model.traccar.jpa.Device;
 import org.jeets.model.traccar.jpa.Position;
+import org.jeets.protocol.TraccarProtocol;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,7 +85,7 @@ public class DcsIT extends CamelTestSupport {
     protected Registry createCamelRegistry() throws Exception {
         Registry registry = new SimpleRegistry();
 //      registry.bind("{{dcs.protobuffer.protocol}}", new DeviceProtoExtractor(null));    // request  to server
-        registry.bind("protobuffer", new DeviceProtoExtractor(null));    // request  to server
+        registry.bind("protobuffer", new TraccarProtocol(null));    // request  to server
 //      registry.bind("ack", new ClientAckProtoExtractor(null));    // response to client
         return registry;
     }

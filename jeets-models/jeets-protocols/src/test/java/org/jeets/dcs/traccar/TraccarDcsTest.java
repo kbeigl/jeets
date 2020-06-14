@@ -1,4 +1,4 @@
-package org.jeets.dcs;
+package org.jeets.dcs.traccar;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
@@ -8,15 +8,12 @@ import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.spi.Registry;
 import org.apache.camel.support.SimpleRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
-import org.jeets.dcx.ClientAckProtoExtractor;
-import org.jeets.dcx.DcsRoute;
-import org.jeets.dcx.ProtoBean;
-import org.jeets.dcx.steps.DeviceProtoExtractor;
 import org.jeets.model.traccar.jpa.Device;
 import org.jeets.protobuf.Traccar;
+import org.jeets.protocol.TraccarProtocol;
 import org.junit.Test;
 
-public class DcsTest extends CamelTestSupport {
+public class TraccarDcsTest extends CamelTestSupport {
 
     @Test
 	public void testDcsRoute() throws Exception {
@@ -26,14 +23,14 @@ public class DcsTest extends CamelTestSupport {
 //              this route segment is processed by a pool of five threads
                 from("seda:jeets-dcs")
                 .log("seda out: ${body}")
-//                .process(new Processor() {
-//                    public void process(Exchange exchange) throws Exception {
-////                      receives Acknowledge ?! instead of...
-//                        Device device = (Device) exchange.getIn().getBody();
-//                        System.out.println("persist jpa.Device " + device.getUniqueid()
-//                            + " with " + device.getPositions().size() + " positions.");
-//                    }
-//                })
+                .process(new Processor() {
+                    public void process(Exchange exchange) throws Exception {
+//                      receives Acknowledge ?! instead of...
+                        Device device = (Device) exchange.getIn().getBody();
+                        System.out.println("persist jpa.Device " + device.getUniqueid()
+                            + " with " + device.getPositions().size() + " positions.");
+                    }
+                })
                 .to("mock:result");
             }
         });
@@ -58,14 +55,14 @@ public class DcsTest extends CamelTestSupport {
 	@Override
     protected Registry createCamelRegistry() throws Exception {
 	    Registry registry = new SimpleRegistry();
-        registry.bind("protobuffer", new DeviceProtoExtractor(null));    // request to server
-        registry.bind("ack", new ClientAckProtoExtractor(null));        // response to client
+        registry.bind("protobuffer", new TraccarProtocol(null));  // request to server
+        registry.bind("ack", new TraccarClientProtocol(null));   // response to client
         return registry;
     }
 
     @Override
 	protected RouteBuilder createRouteBuilder() throws Exception {
-		return new DcsRoute();
+		return new DcsRouteTraccar();
 	}
 
     protected CamelContext createCamelContext() throws Exception {  

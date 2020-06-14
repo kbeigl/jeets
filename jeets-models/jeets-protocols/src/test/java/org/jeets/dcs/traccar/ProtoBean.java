@@ -1,4 +1,4 @@
-package org.jeets.dcx;
+package org.jeets.dcs.traccar;
 
 import java.util.Date;
 
@@ -13,8 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Register ProtoBean to simulate incoming Device Protobuffer message or simply
- * use it to create the message.
+ * Register ProtoBean to simulate incoming Device Protobuffer message 
+ * or simply use to create the message.
  */
 public class ProtoBean {
 

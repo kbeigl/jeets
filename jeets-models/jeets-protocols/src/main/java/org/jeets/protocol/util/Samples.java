@@ -7,13 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * These samples demonstrate how to create Protobuffer messages and can be used
- * for development and testing.
+ * These samples demonstrate how to create Protobuffer messages 
+ * and can be used for development and testing.
  * <p>
  * Note that the methods return a Protobuffer Builder which can be modified
  * after creation and should be .build() before transmission etc.
- *
- * @author kbeigl@jeets.org
  */
 public class Samples {
 	

@@ -1,4 +1,4 @@
-package org.jeets.dcx;
+package org.jeets.dcs.traccar;
 
 import org.apache.camel.component.netty.ClientInitializerFactory;
 import org.apache.camel.component.netty.NettyProducer;
@@ -12,10 +12,10 @@ import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 
-public class ClientAckProtoExtractor extends ClientInitializerFactory {
+public class TraccarClientProtocol extends ClientInitializerFactory {
     private NettyProducer producer;
 
-    public ClientAckProtoExtractor(NettyProducer producer) {
+    public TraccarClientProtocol(NettyProducer producer) {
         this.producer = producer;
     }
 
@@ -31,7 +31,7 @@ public class ClientAckProtoExtractor extends ClientInitializerFactory {
 
     @Override
     public ClientInitializerFactory createPipelineFactory(NettyProducer producer) {
-        return new ClientAckProtoExtractor(producer);
+        return new TraccarClientProtocol(producer);
     }
     
 }

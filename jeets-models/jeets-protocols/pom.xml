@@ -54,6 +54,7 @@
 			<artifactId>jeets-pu-traccar</artifactId>
 		</dependency>
 		<dependency>
+			<!-- long term: replace with traccar model only -->
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-protocols-traccar</artifactId>
 			<!-- remove explicit version, define in parent pom -->

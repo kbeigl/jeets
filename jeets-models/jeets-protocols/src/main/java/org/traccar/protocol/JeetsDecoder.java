@@ -34,9 +34,9 @@ import java.util.List;
  *
  * @author Kristof Beiglböck kbeigl@jeets.org
  */
-public class ProtobufferDecoder extends BaseProtocolDecoder {
+public class JeetsDecoder extends BaseProtocolDecoder {
 
-    public ProtobufferDecoder(Protocol protocol) {
+    public JeetsDecoder(Protocol protocol) {
         super(protocol);
     }
 

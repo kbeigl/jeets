@@ -1,21 +1,24 @@
-package org.jeets.dcx.steps;
+package org.jeets.protocol;
 
 import java.util.Date;
 import org.apache.camel.Converter;
 import org.apache.camel.Exchange;
-import org.jeets.dcx.steps.DeviceProtoToEntityTransformer;
 import org.jeets.model.traccar.jpa.Device;
 import org.jeets.protobuf.Traccar;
+import org.jeets.protocol.TraccarDecoder;
 import org.jeets.protocol.util.Transformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * DeviceProtoToEntityTransformer
+ */
 @Converter
-public final class DeviceProtoToEntityTransformer {
+public final class TraccarDecoder {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DeviceProtoToEntityTransformer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TraccarDecoder.class);
 
-    private DeviceProtoToEntityTransformer() {}
+    private TraccarDecoder() {}
 
     @Converter
     public static Device toDevice(Traccar.Device deviceProto, Exchange exchange) throws Exception {

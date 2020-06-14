@@ -15,4 +15,4 @@
 # limitations under the License.
 #
 ### DEPRECATED
-org.jeets.dcx.steps.DeviceProtoToEntityTransformer
+org.jeets.protocol.TraccarDecoder

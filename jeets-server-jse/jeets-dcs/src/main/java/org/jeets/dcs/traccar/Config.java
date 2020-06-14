@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.traccar.BaseProtocol;
 import org.traccar.Context;
 import org.traccar.TrackerServer;
-import org.traccar.protocol.ProtobufferProtocol;
+import org.traccar.protocol.JeetsProtocol;
 import org.traccar.protocol.RuptelaProtocol;
 import org.traccar.protocol.TeltonikaProtocol;
 
@@ -37,18 +37,6 @@ public class Config {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Config.class);
 
-    @Bean(name = "stringDecoder")
-    public StringDecoder createStringDecoder() {
-        return new StringDecoder();
-    }
-
-    @Bean(name = "stringEncoder")
-    public StringEncoder createStringEncoder() {
-        return new StringEncoder();
-    }
-
-//  ********* see DcsRoutesFactory to be replaced *********
-
 //  currently we are relying on the listed order of Beans ..
 
     /** Register 'ruptela' ServerInitializerFactory for TCP transport. */
@@ -59,17 +47,77 @@ public class Config {
         return createServerInitializerFactory(protocolClass);
     }
 
-    /** Register 'teltonika' ServerInitializerFactory for TCP transport. */
     @Bean(name = "teltonika")
     public ServerInitializerFactory getTeltonikaPipeline() {
         Class<?> protocolClass = TeltonikaProtocol.class;
         return createServerInitializerFactory(protocolClass);
     }
 
-    @Bean(name = "protobuffer")
-    public ServerInitializerFactory getProtobufferPipeline() {
-        Class<?> protocolClass = ProtobufferProtocol.class;
+    @Bean(name = "device")
+    public ServerInitializerFactory getDevicePipeline() {
+        Class<?> protocolClass = JeetsProtocol.class;
         return createServerInitializerFactory(protocolClass);
+    }
+
+    /* Hard coded Routes can only be used after 'protocol' serverInitializerFactory
+     * is registered. */
+
+//  TODO meaningless name, missusing Bean to start route ..
+    @Bean(name = "ruptelaXRoute") 
+//  @Component !?
+    public RouteBuilder createRuptelaRoute() {
+        String routeName = "ruptela";
+        int port = -1; // 5046
+        if (Context.getConfig().hasKey("ruptela.port")) {
+            port = Context.getConfig().getInteger("ruptela.port");
+            // String represents dynamic part for all protocols, see below
+            // add traccar channelGroup, see Camel Netty Component: channelGroup (advanced)
+            String uri = "netty:tcp://" + host + ":" + port + "?serverInitializerFactory=#" + routeName + "&sync=" + camelNettySync;
+            return new DcsRouteBuilder(uri, routeName);
+        }
+        System.err.println("Ruptela is not configured. No Route created!");
+        return null;
+    }
+
+    /* hold the protocol instance to retrieve individual server ? Register
+     * 'teltonika' ServerInitializerFactory for TCP Register 'teltonika-udp'
+     * ServerInitializerFactory for UDP */
+
+    @Bean(name = "teltonikaXRoute") 
+    public RouteBuilder createTeltonikaRoute() {
+        String routeName = "teltonika";
+        int port = -1; // 5027
+        if (Context.getConfig().hasKey("teltonika.port")) {
+            port = Context.getConfig().getInteger("teltonika.port");
+            String uri = "netty:tcp://" + host + ":" + port + "?serverInitializerFactory=#" + routeName + "&sync=" + camelNettySync;
+            return new DcsRouteBuilder(uri, routeName);
+        }
+        System.err.println("Teltonika is not configured. No Route created!");
+        return null;
+    }
+
+//  from jeets-protocols with Traccar logic
+    @Bean(name = "protobufferXRoute") 
+    public RouteBuilder createProtobufferRoute() {
+        String routeName = "device";
+        int port = -1; // 5027
+        if (Context.getConfig().hasKey("device.port")) {
+            port = Context.getConfig().getInteger("device.port");
+            String uri = "netty:tcp://" + host + ":" + port + "?serverInitializerFactory=#" + routeName + "&sync=" + camelNettySync;
+            return new DcsRouteBuilder(uri, routeName);
+        }
+        System.err.println("DeviceProtocol is not configured. No Route created!");
+        return null;
+    }
+
+    @Bean(name = "stringDecoder")
+    public StringDecoder createStringDecoder() {
+        return new StringDecoder();
+    }
+
+    @Bean(name = "stringEncoder")
+    public StringEncoder createStringEncoder() {
+        return new StringEncoder();
     }
 
     /**
@@ -89,61 +137,6 @@ public class Config {
      * used instead of 127.0.0.1.
      */
     private String host = "0.0.0.0";
-
-    /*
-     * Hard coded Routes can only be used after 'ruptela' serverInitializerFactory
-     * is registered.
-     */
-
-//  TODO meaningless name, missusing Bean to start route ..
-    @Bean(name = "ruptelaXRoute") 
-//  @Component !?
-    public RouteBuilder createRuptelaRoute() {
-        String routeName = "ruptela";
-        int port = -1; // 5046
-        if (Context.getConfig().hasKey("ruptela.port")) {
-            port = Context.getConfig().getInteger("ruptela.port");
-            // String represents dynamic part for all protocols, see below
-            // add traccar channelGroup, see Camel Netty Component: channelGroup (advanced)
-            String uri = "netty:tcp://" + host + ":" + port + "?serverInitializerFactory=#" + routeName + "&sync=" + camelNettySync;
-            return new DcsRouteBuilder(uri, routeName);
-        }
-        System.err.println("Ruptela is not configured. No Route created!");
-        return null;
-    }
-
-//  hold the protocol instance to retrieve individual server ?
-//    /** Register 'teltonika' ServerInitializerFactory for TCP transport. */
-//    @Bean(name = "teltonika")
-//    /** Register 'teltonika-udp' ServerInitializerFactory for UDP transport. */
-//    @Bean(name = "teltonika")
-
-    @Bean(name = "teltonikaXRoute") 
-    public RouteBuilder createTeltonikaRoute() {
-        String routeName = "teltonika";
-        int port = -1; // 5027
-        if (Context.getConfig().hasKey("teltonika.port")) {
-            port = Context.getConfig().getInteger("teltonika.port");
-            String uri = "netty:tcp://" + host + ":" + port + "?serverInitializerFactory=#" + routeName + "&sync=" + camelNettySync;
-            return new DcsRouteBuilder(uri, routeName);
-        }
-        System.err.println("Teltonika is not configured. No Route created!");
-        return null;
-    }
-
-//  from jeets-protocols with Traccar logic
-    @Bean(name = "protobufferXRoute") 
-    public RouteBuilder createProtobufferRoute() {
-        String routeName = "protobuffer";
-        int port = -1; // 5027
-        if (Context.getConfig().hasKey("protobuffer.port")) {
-            port = Context.getConfig().getInteger("protobuffer.port");
-            String uri = "netty:tcp://" + host + ":" + port + "?serverInitializerFactory=#" + routeName + "&sync=" + camelNettySync;
-            return new DcsRouteBuilder(uri, routeName);
-        }
-        System.err.println("Protobuffer is not configured. No Route created!");
-        return null;
-    }
 
     /**
      * Currently only creating "tcp" servers
@@ -236,6 +229,7 @@ public class Config {
             .routeId(routeId)
 //          .routeGroup("hello-group")
 //          .startupOrder(order)
+//          this log expects a org.traccar.model.Position !!
             .log("DCS ${body.protocol} output: position ( time: ${body.deviceTime} "
                     + "lat: ${body.latitude} lon: ${body.longitude} )")
 

@@ -31,9 +31,9 @@ import org.traccar.TrackerServer;
  *
  * @author Kristof Beiglböck kbeigl@jeets.org
  */
-public class ProtobufferProtocol extends BaseProtocol {
+public class JeetsProtocol extends BaseProtocol {
 
-    public ProtobufferProtocol() {
+    public JeetsProtocol() {
         addServer(new TrackerServer(false, getName()) {
             @Override
 			protected void addProtocolHandlers(PipelineBuilder pipeline) {
@@ -41,7 +41,7 @@ public class ProtobufferProtocol extends BaseProtocol {
 				pipeline.addLast(new ProtobufDecoder(Device.getDefaultInstance()));
 				pipeline.addLast(new ProtobufVarint32LengthFieldPrepender());
 				pipeline.addLast(new ProtobufEncoder());
-				pipeline.addLast(new ProtobufferDecoder(ProtobufferProtocol.this));
+				pipeline.addLast(new JeetsDecoder(JeetsProtocol.this));
 			}
         });
     }

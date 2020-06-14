@@ -1,4 +1,4 @@
-package org.jeets.protocol;
+package org.jeets.protocol.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
