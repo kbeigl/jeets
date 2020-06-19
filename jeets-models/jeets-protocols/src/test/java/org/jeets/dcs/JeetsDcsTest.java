@@ -6,8 +6,9 @@ import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.spi.Registry;
 import org.apache.camel.support.SimpleRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
-import org.jeets.dcs.traccar.TraccarClientProtocol;
 import org.jeets.protobuf.Traccar;
+import org.jeets.protocol.DcsRouteJeets;
+import org.jeets.protocol.TraccarClientProtocol;
 import org.jeets.protocol.TraccarProtocol;
 import org.jeets.protocol.util.Samples;
 import org.junit.Test;
@@ -17,10 +18,7 @@ public class JeetsDcsTest extends CamelTestSupport {
 
     @Test
     public void testJeetsDcsRoute() throws Exception {
-//      use standard DCS Route ..
-        String from = "netty:tcp://localhost:5200?serverInitializerFactory=#traccar&sync=true";
-        String routeId = "traccar";
-        context.addRoutes(new DcsRouteJeets(from, routeId));
+
 //      .. and pickup output: jpa.Device
         context.addRoutes(new RouteBuilder() {
             public void configure() throws Exception {
@@ -32,10 +30,11 @@ public class JeetsDcsTest extends CamelTestSupport {
 
 //      start test
         Traccar.Acknowledge response = (Traccar.Acknowledge) template
-                .requestBody("netty:tcp://localhost:5200?clientInitializerFactory=#ack&sync=true", 
+                .requestBody("netty:tcp://localhost:5200"
+                        + "?clientInitializerFactory=#ack&sync=true", 
                         Samples.createDeviceWithPositionWithOneEvent());
-//                        createProtoDevice()
-//      evaluate and assert result
+
+//      evaluate and assert result/s
         System.out.print("client received response: " + response);
         assertEquals(789, response.getDeviceid());
         
@@ -50,10 +49,14 @@ public class JeetsDcsTest extends CamelTestSupport {
 //      Main.run("./setup/traccar.xml");
 //  }
 
-//    @Override
-//    protected RouteBuilder createRouteBuilder() throws Exception {
-//        return new DcsRouteBuilder("","");
-//    }
+    @Override
+    protected RouteBuilder createRouteBuilder() throws Exception {
+//      'traccar' must be registered before use
+        String from = "netty:tcp://localhost:5200"
+                + "?serverInitializerFactory=#traccar&sync=true";
+        String routeId = "traccar";
+        return new DcsRouteJeets(from, routeId);
+    }
 
     @Override
     protected Registry createCamelRegistry() throws Exception {

@@ -6,7 +6,8 @@ import org.apache.camel.builder.RouteBuilder;
 import org.jeets.model.traccar.jpa.Device;
 import org.jeets.protobuf.Traccar;
 
-public class DcsRouteTraccar extends RouteBuilder { // plain Camel, no Spring!
+public class DcsRouteTraccar extends RouteBuilder {
+//  plain Camel, no Spring!
 //  with camel-endpointdsl: extends EndpointRouteBuilder {
 
     @Override
@@ -15,7 +16,7 @@ public class DcsRouteTraccar extends RouteBuilder { // plain Camel, no Spring!
 //      with camel-endpointdsl
 //      from( netty("tcp://localhost:5200").sync(true) )
         from("netty:tcp://localhost:5200?serverInitializerFactory=#protobuffer&sync=true")
-//      org.traccar.model.Position
+//      org.traccar.model.Position ?? traccar.proto to Device.class
         .convertBodyTo(Device.class)    // check exchange.getIn/Out
         .inOnly("seda:jeets-dcs?concurrentConsumers=4&waitForTaskToComplete=Never")
         .process(new Processor() {

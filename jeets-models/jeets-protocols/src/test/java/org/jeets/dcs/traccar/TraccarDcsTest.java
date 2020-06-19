@@ -10,6 +10,7 @@ import org.apache.camel.support.SimpleRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.jeets.model.traccar.jpa.Device;
 import org.jeets.protobuf.Traccar;
+import org.jeets.protocol.TraccarClientProtocol;
 import org.jeets.protocol.TraccarProtocol;
 import org.junit.Test;
 

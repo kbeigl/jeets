@@ -63,7 +63,7 @@
 		</dependency>
 
         <dependency>
-			<!-- spring only for testing -->
+			<!-- spring for protobuf un/marshal -->
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-test-spring</artifactId>
             <scope>test</scope>

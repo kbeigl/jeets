@@ -35,8 +35,8 @@
 	<modules>
 		<module>jeets-pu-traccar</module>
 		<module>jeets-pu-gtfs</module>
-		<module>jeets-protocols</module>
 		<module>jeets-protocols-traccar</module>
+		<module>jeets-protocols</module>
 	</modules>
 
 	<dependencyManagement>

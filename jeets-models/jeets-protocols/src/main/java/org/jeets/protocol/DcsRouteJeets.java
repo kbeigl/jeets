@@ -1,4 +1,4 @@
-package org.jeets.dcs;
+package org.jeets.protocol;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -15,7 +15,7 @@ import org.jeets.protobuf.Traccar;
  */
 public class DcsRouteJeets extends RouteBuilder {
     private final String from;
-    private final String routeId;
+    private final String routeId;  // substring of 'from' !
 
     public DcsRouteJeets(String from, String routeId) {
         this.from = from;
@@ -35,9 +35,9 @@ public class DcsRouteJeets extends RouteBuilder {
 //      .routeGroup("hello-group")
 //      .startupOrder(order)
 
-        .log("DCS out: ${body}")        // protobuffer Device
-        .convertBodyTo(Device.class)    // check exchange.getIn/Out
-        .log("DCS out: ${body}")        // jpa Device 
+        .log("DCS out: ${body}")        // proto Device
+        .convertBodyTo(Device.class)
+        .log("DCS out: ${body}")        //   jpa Device 
         .process(new Processor() {
             public void process(Exchange exchange) throws Exception {
                 Device device = exchange.getIn().getBody(Device.class);
@@ -53,7 +53,8 @@ public class DcsRouteJeets extends RouteBuilder {
 //      this point expects an org.jeets.model.traccar.jpa.Device !!
 //        .log("DCS ${body.protocol} output: position ( time: ${body.deviceTime} "
 //                + "lat: ${body.latitude} lon: ${body.longitude} )")
-        .to("direct:jeets.model.traccar.jpa.Device");  
+        .to("direct:jeets.model.traccar.jpa.Device");
+//      .inOnly("seda:jeets-dcs?concurrentConsumers=4&waitForTaskToComplete=Never")
     }
 
 }

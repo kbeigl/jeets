@@ -1,4 +1,4 @@
-package org.jeets.dcs.traccar;
+package org.jeets.protocol;
 
 import org.apache.camel.component.netty.ClientInitializerFactory;
 import org.apache.camel.component.netty.NettyProducer;
