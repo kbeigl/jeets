@@ -1,4 +1,4 @@
-package org.jeets.dcs.traccar.string;
+package org.jeets.dcs.string;
 
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;

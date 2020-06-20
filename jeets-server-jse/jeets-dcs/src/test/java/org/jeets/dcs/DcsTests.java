@@ -1,4 +1,4 @@
-package org.jeets.dcs.traccar;
+package org.jeets.dcs;
 
 import org.apache.camel.ConsumerTemplate;
 import org.apache.camel.ProducerTemplate;

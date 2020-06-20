@@ -1,4 +1,4 @@
-package org.jeets.dcs.traccar;
+package org.jeets.dcs;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
@@ -16,7 +16,7 @@ import org.traccar.Context;
 
 @SpringBootApplication  // → @SpringBootConfiguration → @Configuration
 // convenience annotation equivalent to declaring @Configuration, @EnableAutoConfiguration, @ComponentScan.
-@ComponentScan(basePackages="org.jeets.dcs.traccar")
+@ComponentScan(basePackages="org.jeets.dcs")
 // By default, the @SpringBootApplication annotation scans all classes in the same package (in other project!?) or below.
 public class Main {
 
