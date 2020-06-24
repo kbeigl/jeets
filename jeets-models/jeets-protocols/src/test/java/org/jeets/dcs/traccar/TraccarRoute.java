@@ -6,7 +6,7 @@ import org.apache.camel.builder.RouteBuilder;
 import org.jeets.model.traccar.jpa.Device;
 import org.jeets.protobuf.Traccar;
 
-public class DcsRouteTraccar extends RouteBuilder {
+public class TraccarRoute extends RouteBuilder {
 //  plain Camel, no Spring!
 //  with camel-endpointdsl: extends EndpointRouteBuilder {
 

@@ -28,7 +28,7 @@ public class TraccarDcsTest extends CamelTestSupport {
                     public void process(Exchange exchange) throws Exception {
 //                      receives Acknowledge ?! instead of...
                         Device device = (Device) exchange.getIn().getBody();
-                        System.out.println("persist jpa.Device " + device.getUniqueid()
+                        System.out.println("received jpa.Device " + device.getUniqueid()
                             + " with " + device.getPositions().size() + " positions.");
                     }
                 })
@@ -63,7 +63,7 @@ public class TraccarDcsTest extends CamelTestSupport {
 
     @Override
 	protected RouteBuilder createRouteBuilder() throws Exception {
-		return new DcsRouteTraccar();
+		return new TraccarRoute();
 	}
 
     protected CamelContext createCamelContext() throws Exception {  

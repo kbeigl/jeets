@@ -35,7 +35,7 @@ public class DcsTests /* extends TestCase */ {
     public void testTeltonikaServer() throws Exception {
         String protocol = "teltonika";
         int port = getPort(protocol + ".port");
-//      from teltonika.jdev test file for message content
+//      TODO: use teltonika.jdev test file for message content
         String hexMessage = "000f333536333037303432343431303133";
         String hexResponse = sendHexMessage(port, hexMessage);
         Assert.assertEquals("01", hexResponse);
@@ -87,9 +87,7 @@ public class DcsTests /* extends TestCase */ {
         return hexDump(response);
     }
 
-    /**
-     * Context is initialized with DCS Main start ..
-     */
+//  Context is initialized with DCS Main start .. 
 
     private int getPort(String protocolPort) {
         Assert.assertTrue(protocolPort + " is not defined in config file!", 

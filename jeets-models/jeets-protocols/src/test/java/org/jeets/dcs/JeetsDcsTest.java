@@ -7,7 +7,7 @@ import org.apache.camel.spi.Registry;
 import org.apache.camel.support.SimpleRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.jeets.protobuf.Traccar;
-import org.jeets.protocol.DcsRouteJeets;
+import org.jeets.protocol.JeetsRoute;
 import org.jeets.protocol.TraccarClientProtocol;
 import org.jeets.protocol.TraccarProtocol;
 import org.jeets.protocol.util.Samples;
@@ -55,7 +55,7 @@ public class JeetsDcsTest extends CamelTestSupport {
         String from = "netty:tcp://localhost:5200"
                 + "?serverInitializerFactory=#traccar&sync=true";
         String routeId = "traccar";
-        return new DcsRouteJeets(from, routeId);
+        return new JeetsRoute(from, routeId);
     }
 
     @Override

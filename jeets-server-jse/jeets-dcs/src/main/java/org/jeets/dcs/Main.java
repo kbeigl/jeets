@@ -36,7 +36,7 @@ public class Main {
 
         try {
             Context.init(configFile);
-//          FIX logger
+//          TODO fix logger
             logSystemInfo();
             SpringApplication.run(Main.class, args);
 

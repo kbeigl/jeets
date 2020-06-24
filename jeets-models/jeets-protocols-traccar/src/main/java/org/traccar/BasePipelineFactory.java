@@ -167,11 +167,11 @@ public abstract class BasePipelineFactory extends ChannelInitializer<Channel> {
         return pipeline;
     }
 
-    /* Create a consumer linked channel pipeline factory */
+    /* Create a consumer linked channel pipeline factory 
     @Deprecated
     public ServerInitializerFactory createPipelineFactory(NettyConsumer nettyConsumer) {
         System.err.println("createPipelineFactory for " + nettyConsumer + " DEactivated !!!");
         return null;
     }
-
+    */
 }

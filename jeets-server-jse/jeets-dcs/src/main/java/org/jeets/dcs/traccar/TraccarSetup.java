@@ -11,11 +11,13 @@ import org.traccar.TrackerServer;
 /**
  * Proprietary setup for Traccar Netty Pipelines.
  * <p>
- * Consider moving these methods and routes to protocols-traccar
+ * Consider moving these methods and routes to protocols-traccar. i.e. each
+ * -protocols- project should supply a dedicated RouteBuilder with an Endpoint
+ * (DCS output) which can be picked up by the dcs-manager.
  */
-public class Setup {
+public class TraccarSetup {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Setup.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TraccarSetup.class);
 
     /**
      * Currently only creating "tcp" servers
@@ -28,7 +30,6 @@ public class Setup {
         String transport = "tcp";
         TrackerServer server = getProtocolServer(transport, protocol);
         // compose URI and attach to server.setCamelUri() !
-        // server can be null !
         if (server == null) {
             LOGGER.warn("No server found for '" + transport + ":" + protocolName);
             return null;

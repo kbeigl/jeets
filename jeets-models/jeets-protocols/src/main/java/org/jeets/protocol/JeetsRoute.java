@@ -13,11 +13,11 @@ import org.jeets.protobuf.Traccar;
  * Every jeets-protocol should be tested against this RouteBuilder as a
  * prerequisite for any subsequent DCS Manager.
  */
-public class DcsRouteJeets extends RouteBuilder {
+public class JeetsRoute extends RouteBuilder {
     private final String from;
     private final String routeId;  // substring of 'from' !
 
-    public DcsRouteJeets(String from, String routeId) {
+    public JeetsRoute(String from, String routeId) {
         this.from = from;
         this.routeId = routeId;
     }
@@ -38,6 +38,7 @@ public class DcsRouteJeets extends RouteBuilder {
         .log("DCS out: ${body}")        // proto Device
         .convertBodyTo(Device.class)
         .log("DCS out: ${body}")        //   jpa Device 
+
         .process(new Processor() {
             public void process(Exchange exchange) throws Exception {
                 Device device = exchange.getIn().getBody(Device.class);
@@ -50,9 +51,8 @@ public class DcsRouteJeets extends RouteBuilder {
                 exchange.getOut().setBody(ackBuilder.build(), Traccar.Acknowledge.class);
             }
         })
-//      this point expects an org.jeets.model.traccar.jpa.Device !!
-//        .log("DCS ${body.protocol} output: position ( time: ${body.deviceTime} "
-//                + "lat: ${body.latitude} lon: ${body.longitude} )")
+//      .log("DCS ${body.protocol} output: position ( time: ${body.deviceTime} "
+//          + "lat: ${body.latitude} lon: ${body.longitude} )")
         .to("direct:jeets.model.traccar.jpa.Device");
 //      .inOnly("seda:jeets-dcs?concurrentConsumers=4&waitForTaskToComplete=Never")
     }

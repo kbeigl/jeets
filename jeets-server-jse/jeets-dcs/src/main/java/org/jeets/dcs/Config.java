@@ -9,13 +9,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import org.traccar.BaseProtocol;
 import org.traccar.Context;
-import org.traccar.TrackerServer;
 import org.traccar.protocol.JeetsProtocol;
 import org.traccar.protocol.RuptelaProtocol;
 import org.traccar.protocol.TeltonikaProtocol;
-import org.jeets.dcs.traccar.Setup;
+
+import org.jeets.dcs.traccar.TraccarSetup;
+import org.jeets.dcs.traccar.TraccarRoute;
 
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
@@ -41,41 +41,35 @@ public class Config {
 
 //  currently we are relying on the listed order of Beans ..
 
+//  jeets-protocols-traccar -----------------------------------------
+
     /** Register 'ruptela' ServerInitializerFactory for TCP transport. */
     @Bean(name = "ruptela")
     public ServerInitializerFactory getRuptelaPipeline() {
 //      traverse default.xml protocols and ports
         Class<?> protocolClass = RuptelaProtocol.class;
-        return Setup.createServerInitializerFactory(protocolClass);
-    }
-
-    @Bean(name = "teltonika")
-    public ServerInitializerFactory getTeltonikaPipeline() {
-        Class<?> protocolClass = TeltonikaProtocol.class;
-        return Setup.createServerInitializerFactory(protocolClass);
-    }
-
-    @Bean(name = "device")
-    public ServerInitializerFactory getDevicePipeline() {
-        Class<?> protocolClass = JeetsProtocol.class;
-        return Setup.createServerInitializerFactory(protocolClass);
+        return TraccarSetup.createServerInitializerFactory(protocolClass);
     }
 
     /* Hard coded Routes can only be used after 'protocol' serverInitializerFactory
      * is registered. */
 
-//  TODO meaningless name, missusing Bean to start route ..
+//  TODO meaningless name, abusing Bean to start route ..
     @Bean(name = "ruptelaXRoute") 
 //  @Component !?
     public RouteBuilder createRuptelaRoute() {
+//      analog: Context.getServerManager().start()
         String routeName = "ruptela";
         int port = -1; // 5046
         if (Context.getConfig().hasKey("ruptela.port")) {
             port = Context.getConfig().getInteger("ruptela.port");
             // String represents dynamic part for all protocols, see below
             // add traccar channelGroup, see Camel Netty Component: channelGroup (advanced)
-            String uri = "netty:tcp://" + host + ":" + port + "?serverInitializerFactory=#" + routeName + "&sync=" + camelNettySync;
-            return new DcsRouteBuilder(uri, routeName);
+            String uri = "netty:tcp://" + host + ":" + port 
+                    + "?serverInitializerFactory=#" + routeName 
+                    + "&sync=" + camelNettySync;
+//          "&workerPool=#sharedPool&usingExecutorService=false" .. ?
+            return new TraccarRoute(uri, routeName);
         }
         System.err.println("Ruptela is not configured. No Route created!");
         return null;
@@ -85,6 +79,12 @@ public class Config {
      * 'teltonika' ServerInitializerFactory for TCP Register 'teltonika-udp'
      * ServerInitializerFactory for UDP */
 
+    @Bean(name = "teltonika")
+    public ServerInitializerFactory getTeltonikaPipeline() {
+        Class<?> protocolClass = TeltonikaProtocol.class;
+        return TraccarSetup.createServerInitializerFactory(protocolClass);
+    }
+
     @Bean(name = "teltonikaXRoute") 
     public RouteBuilder createTeltonikaRoute() {
         String routeName = "teltonika";
@@ -92,13 +92,20 @@ public class Config {
         if (Context.getConfig().hasKey("teltonika.port")) {
             port = Context.getConfig().getInteger("teltonika.port");
             String uri = "netty:tcp://" + host + ":" + port + "?serverInitializerFactory=#" + routeName + "&sync=" + camelNettySync;
-            return new DcsRouteBuilder(uri, routeName);
+            return new TraccarRoute(uri, routeName);
         }
         System.err.println("Teltonika is not configured. No Route created!");
         return null;
     }
 
-//  from jeets-protocols with Traccar logic
+//  jeets-protocols with Traccar logic ------------------------------
+
+    @Bean(name = "device")
+    public ServerInitializerFactory getDevicePipeline() {
+        Class<?> protocolClass = JeetsProtocol.class;
+        return TraccarSetup.createServerInitializerFactory(protocolClass);
+    }
+
     @Bean(name = "protobufferXRoute") 
     public RouteBuilder createProtobufferRoute() {
         String routeName = "device";
@@ -106,11 +113,14 @@ public class Config {
         if (Context.getConfig().hasKey("device.port")) {
             port = Context.getConfig().getInteger("device.port");
             String uri = "netty:tcp://" + host + ":" + port + "?serverInitializerFactory=#" + routeName + "&sync=" + camelNettySync;
-            return new DcsRouteBuilder(uri, routeName);
+            return new TraccarRoute(uri, routeName);
         }
-        System.err.println("DeviceProtocol is not configured. No Route created!");
+//      throw Exception ?
+        LOGGER.error("DeviceProtocol is not configured. No Route created!");
         return null;
     }
+
+//  Netty En/Decoders out of the box with @Component and @Service --- !!
 
     @Bean(name = "stringDecoder")
     public StringDecoder createStringDecoder() {
@@ -139,78 +149,5 @@ public class Config {
      * used instead of 127.0.0.1.
      */
     private String host = "0.0.0.0";
-
-//  TODO see DcsRoutesFactory
-    private void createTraccarDcsRoutes(CamelContext camelContext, Registry registry) {
-/*
-        StringBuffer uri = new StringBuffer("netty:" + (server.isDatagram() ? "udp" : "tcp") + "://");
-        uri.append((server.getAddress() == null ? "localhost" : server.getAddress()) + ":" + server.getPort() + "?");
-        String serverInitializerFactory = server.isDatagram() ? protocolName + "-udp": protocolName;
-        uri.append("serverInitializerFactory=#" + serverInitializerFactory);
-        uri.append("&sync=true");
-//      "&workerPool=#sharedPool&usingExecutorService=false" .. ?
-        String camelUri = uri.toString();
-        System.out.println("Camel URI: " + camelUri);
-
-        System.out.println("create Route '" + serverInitializerFactory + "' from(\"" + uri + "\") ...");
-???     CamelContext context = new DefaultCamelContext();
-        try {
-            camelContext.addRoutes(new DcsRouteBuilder(camelContext, uri, serverInitializerFactory));
-//          add route counter in addition to: protocolList.size() + " *Protocol objects"
-//          may need to 'clean' Netty stuff from TrackerServer not to confuse Netty
-        } catch (Exception e) {
-            System.err.println("Problem adding route " + uri + "\n" + e.getMessage());
-//          LOGGER.warn("One of the protocols is disabled due to port conflict");
-            if (e instanceof java.net.BindException) {
-                portFailures.put(uri, server.getPort());
-//              unregister ServerInitFactory ?
-            }
-//          e.printStackTrace();
-        }
- */
-    }
-
-    /**
-     * DCS Routes for ALL Protocols are directed to one output endpoint where the
-     * traccar.model objects can be picked up by the system.
-     * <p>
-     * Re-using the same routeId, will quietly stop and replace the earlier route.
-     */
-//  SpringRouteBuilder !?
-    private static final class DcsRouteBuilder extends RouteBuilder {
-        private final String from;
-        private final String routeId;
-
-        private DcsRouteBuilder(String from, String routeId) {
-            this.from = from;
-            this.routeId = routeId;
-        }
-
-        /**
-         * At this point the serverInitializerFactory is configured with it's
-         * &lt;name&gt; only as meaningless String. Only before the Route is
-         * instantiated by a first message the serverInitializerFactory has to be
-         * registered.
-         */
-        @Override
-        public void configure() throws Exception {
-            from(from)
-            .routeId(routeId)
-//          .routeGroup("hello-group")
-//          .startupOrder(order)
-//          this log expects a org.traccar.model.Position !!
-            .log("DCS ${body.protocol} output: position ( time: ${body.deviceTime} "
-                    + "lat: ${body.latitude} lon: ${body.longitude} )")
-
-//          Fine tuning with seda endpoint etc.
-//          .to("seda:traccar.model");
-//          jeets-dcs:traccar.model  ;)
-            .to("direct:traccar.model");  
-//          already set in sync=false (?):
-//          .setExchangePattern(ExchangePattern.InOnly)
-//          .to("seda:jeets-dcs?concurrentConsumers=4&waitForTaskToComplete=Never")
-//          .inOnly("seda:jeets-dcs?concurrentConsumers=4&waitForTaskToComplete=Never")
-        }
-    }
 
 }
