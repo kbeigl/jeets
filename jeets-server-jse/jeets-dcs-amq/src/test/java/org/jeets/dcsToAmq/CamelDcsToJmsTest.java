@@ -14,8 +14,8 @@ import org.jeets.dcsToAmq.DcsToAmqRoute;
 import org.jeets.dcsToAmq.steps.DeviceProtoExtractor;
 import org.jeets.model.traccar.jpa.Device;
 import org.jeets.model.traccar.util.Samples;
-import org.jeets.protobuf.Traccar;
-import org.jeets.protobuf.Traccar.Device.Builder;
+import org.jeets.protobuf.Jeets;
+import org.jeets.protobuf.Jeets.Device.Builder;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,7 +83,7 @@ public class CamelDcsToJmsTest extends CamelTestSupport {
 //      now send message from client
         MockEndpoint mock = getMockEndpoint("mock:result");
         Builder devPosEv = org.jeets.protocol.util.Samples.createDeviceWithPositionWithOneEvent();
-        Traccar.Acknowledge response = (Traccar.Acknowledge) template   // Traccar.Device
+        Jeets.Acknowledge response = (Jeets.Acknowledge) template   // Jeets.Device
                 .requestBody("netty:tcp://localhost:5200?clientInitializerFactory=#ack&sync=true", 
                         devPosEv);
 

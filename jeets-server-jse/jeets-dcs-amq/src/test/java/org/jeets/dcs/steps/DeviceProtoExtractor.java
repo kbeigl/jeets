@@ -10,7 +10,7 @@ import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 
-import org.jeets.protobuf.Traccar;
+import org.jeets.protobuf.Jeets;
 
 public class DeviceProtoExtractor extends ServerInitializerFactory {
     private NettyConsumer consumer;
@@ -23,7 +23,7 @@ public class DeviceProtoExtractor extends ServerInitializerFactory {
     protected void initChannel(Channel ch) throws Exception {
         ChannelPipeline channelPipeline = ch.pipeline();
         channelPipeline.addLast(new ProtobufVarint32FrameDecoder());
-        channelPipeline.addLast(new ProtobufDecoder(Traccar.Device.getDefaultInstance()));
+        channelPipeline.addLast(new ProtobufDecoder(Jeets.Device.getDefaultInstance()));
         channelPipeline.addLast(new ProtobufVarint32LengthFieldPrepender());
         channelPipeline.addLast(new ProtobufEncoder());
         channelPipeline.addLast(new ServerChannelHandler(consumer));          

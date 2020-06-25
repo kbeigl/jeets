@@ -4,7 +4,7 @@ import java.util.Date;
 import org.apache.camel.Converter;
 import org.apache.camel.Exchange;
 import org.jeets.model.traccar.jpa.Device;
-import org.jeets.protobuf.Traccar;
+import org.jeets.protobuf.Jeets;
 import org.jeets.protocol.util.Transformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +17,7 @@ public final class DeviceProtoToEntityTransformer {
     private DeviceProtoToEntityTransformer() {}
 
     @Converter
-    public static Device toDevice(Traccar.Device deviceProto, Exchange exchange) throws Exception {
+    public static Device toDevice(Jeets.Device deviceProto, Exchange exchange) throws Exception {
         LOG.info("Transformer receives device proto: {} at {}", 
                 deviceProto.getUniqueid(), new Date().getTime());
 

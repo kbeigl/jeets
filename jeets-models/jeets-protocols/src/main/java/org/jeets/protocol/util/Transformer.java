@@ -10,8 +10,8 @@ import java.util.Set;
 import org.jeets.model.traccar.jpa.Device;
 import org.jeets.model.traccar.jpa.Event;
 import org.jeets.model.traccar.jpa.Position;
-import org.jeets.protobuf.Traccar;
-import org.jeets.protobuf.Traccar.EventType;
+import org.jeets.protobuf.Jeets;
+import org.jeets.protobuf.Jeets.EventType;
 
 /**
  * Transform Traccar Entities to binary Protobuffers for sending messages from
@@ -45,7 +45,7 @@ public class Transformer {
 	 * @param deviceProto
 	 * @return
 	 */
-    public static Device protoToEntityDevice( Traccar.Device deviceProto ) { // throws TransformException
+    public static Device protoToEntityDevice( Jeets.Device deviceProto ) { // throws TransformException
 
     	Device deviceEntity = new Device();
         deviceEntity.setUniqueid(deviceProto.getUniqueid());
@@ -59,14 +59,14 @@ public class Transformer {
 //      TODO: assert chronological order (somewhere in the line) - LinkedHashSet ? 
 //      .. and determine lastPosition for deviceEntity.setLastPosition(position);
       
-        for (Traccar.Position positionProto : deviceProto.getPositionList()) {
+        for (Jeets.Position positionProto : deviceProto.getPositionList()) {
             Position positionEntity = protoToEntityPosition(positionProto);
 
             positionEntity.setDevice(deviceEntity);     // n:1
             positionEntities.add(positionEntity);
 
 //          positionProto holds eventProtos
-            for (Traccar.Event eventProto : positionProto.getEventList()) {
+            for (Jeets.Event eventProto : positionProto.getEventList()) {
                 Event eventEntity = protoToEntityEvent(eventProto);
                 eventEntity.setDevice(deviceEntity);   // n:1
 //              event and position should have identical timestamp
@@ -98,7 +98,7 @@ public class Transformer {
 	 * @param positionProto
 	 * @return positionEntity
 	 */
-    public static Position protoToEntityPosition(Traccar.Position positionProto) {
+    public static Position protoToEntityPosition(Jeets.Position positionProto) {
 
     	Position positionEntity = new Position();
 //      these don't exist in proto, set transformation time
@@ -129,7 +129,7 @@ public class Transformer {
     /* TODO: study Traccar GTS, implement transformation of
      * Traccar.EventType.KEY_ALARM / Traccar.AlarmType.ALARM_SOS,
      * test persist and inspect database entries */
-    public static Event protoToEntityEvent(Traccar.Event eventProto) {
+    public static Event protoToEntityEvent(Jeets.Event eventProto) {
         Event eventEntity = new Event();
         eventEntity.setType(eventProto.getEvent().name());
         return eventEntity;
@@ -158,15 +158,15 @@ public class Transformer {
     /**
      * Transform Device Entity to modifiable Device Builder.
      */
-    public static Traccar.Device.Builder entityToProtoDevice(Device deviceEntity) {
+    public static Jeets.Device.Builder entityToProtoDevice(Device deviceEntity) {
     	
-        Traccar.Device.Builder deviceBuilder = Traccar.Device.newBuilder();
+        Jeets.Device.Builder deviceBuilder = Jeets.Device.newBuilder();
         deviceBuilder.setUniqueid(deviceEntity.getUniqueid());
 
 		List<Position> positionEntities = deviceEntity.getPositions();
 		Set<Event> eventEntities = deviceEntity.getEvents();
 		for (Position positionEntity : positionEntities) {
-			Traccar.Position.Builder positionBuilder = entityToProtoPosition(positionEntity);
+			Jeets.Position.Builder positionBuilder = entityToProtoPosition(positionEntity);
 
 //  		nested reverse lookup: find the Event with the current positionEntity
 			for (Iterator<Event> ev = eventEntities.iterator(); ev.hasNext();) {
@@ -191,8 +191,8 @@ public class Transformer {
     /**
      * Transform Position Entity to modifiable Position Builder.
      */
-    public static Traccar.Position.Builder entityToProtoPosition(Position positionEntity) {
-        Traccar.Position.Builder positionBuilder = Traccar.Position.newBuilder();
+    public static Jeets.Position.Builder entityToProtoPosition(Position positionEntity) {
+        Jeets.Position.Builder positionBuilder = Jeets.Position.newBuilder();
 //      required attribute for transmission => NullPointerException !!
         positionBuilder.setDevicetime(positionEntity.getDevicetime().getTime()); // no millis ?
         positionBuilder.setFixtime(positionEntity.getFixtime().getTime()); 
@@ -215,8 +215,8 @@ public class Transformer {
     /**
      * Transform Event Entity to modifiable Event Builder.
      */
-    public static Traccar.Event.Builder entityToProtoEvent(Event eventEntity) {
-        Traccar.Event.Builder eventBuilder = Traccar.Event.newBuilder();
+    public static Jeets.Event.Builder entityToProtoEvent(Event eventEntity) {
+        Jeets.Event.Builder eventBuilder = Jeets.Event.newBuilder();
 //      the eventProto should only handle client events
 //      since Protos are designed for one direction only
         eventBuilder.setEvent(stringToEventTypeProto(eventEntity.getType()));

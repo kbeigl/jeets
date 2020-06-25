@@ -4,7 +4,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.jeets.model.traccar.jpa.Device;
-import org.jeets.protobuf.Traccar;
+import org.jeets.protobuf.Jeets;
 
 public class TraccarRoute extends RouteBuilder {
 //  plain Camel, no Spring!
@@ -25,10 +25,10 @@ public class TraccarRoute extends RouteBuilder {
                 Device devEntity = (Device) exchange.getIn().getBody(Device.class);
 //              LOG.info("DcsProcessor received Device: {} at {}", devProto.getUniqueid(), new Date().getTime());
 
-                Traccar.Acknowledge.Builder ackBuilder = Traccar.Acknowledge.newBuilder();
+                Jeets.Acknowledge.Builder ackBuilder = Jeets.Acknowledge.newBuilder();
 //              ackBuilder.setDeviceid(devEntity.getUniqueid());
                 ackBuilder.setDeviceid(789);
-                exchange.getOut().setBody(ackBuilder.build(), Traccar.Acknowledge.class);
+                exchange.getOut().setBody(ackBuilder.build(), Jeets.Acknowledge.class);
             }
         });
 

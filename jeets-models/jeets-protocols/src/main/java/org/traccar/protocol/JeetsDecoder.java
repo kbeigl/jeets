@@ -17,7 +17,7 @@ package org.traccar.protocol;
 
 import io.netty.channel.Channel;
 
-import org.jeets.protobuf.Traccar;
+import org.jeets.protobuf.Jeets;
 import org.traccar.BaseProtocolDecoder;
 import org.traccar.DeviceSession;
 import org.traccar.NetworkMessage;
@@ -43,7 +43,7 @@ public class JeetsDecoder extends BaseProtocolDecoder {
 	@Override
 	protected Object decode(Channel channel, SocketAddress remoteAddress, Object msg) throws Exception {
 
-		Traccar.Device protoDevice = (Traccar.Device) msg; // extract protobuffer
+		Jeets.Device protoDevice = (Jeets.Device) msg; // extract protobuffer
 		System.out.println("received device:\n" + protoDevice.toString());
 
 		DeviceSession deviceSession = getDeviceSession(channel, remoteAddress, protoDevice.getUniqueid());
@@ -57,7 +57,7 @@ public class JeetsDecoder extends BaseProtocolDecoder {
 		// send ACK after successful transformation
 		if (deviceSession != null) {
 			if (channel != null) {
-				Traccar.Acknowledge.Builder ackBuilder = Traccar.Acknowledge.newBuilder();
+				Jeets.Acknowledge.Builder ackBuilder = Jeets.Acknowledge.newBuilder();
 				ackBuilder.setDeviceid(123);
 				channel.writeAndFlush(new NetworkMessage(ackBuilder.build(), remoteAddress));
 				System.out.println("responded with ack:\n" + ackBuilder.toString());
@@ -83,7 +83,7 @@ public class JeetsDecoder extends BaseProtocolDecoder {
      * @return entityPositions
      */
     private List<org.traccar.model.Position> 
-    transformDeviceProtoToPositionEntities(Traccar.Device protoDevice, long deviceId) {
+    transformDeviceProtoToPositionEntities(Jeets.Device protoDevice, long deviceId) {
         List<org.traccar.model.Position> entityPositions = new ArrayList<org.traccar.model.Position>();
         for (int pos = 0; pos < protoDevice.getPositionCount(); pos++) {
         	org.traccar.model.Position entityPosition = 
@@ -94,7 +94,7 @@ public class JeetsDecoder extends BaseProtocolDecoder {
     }
 
     protected org.traccar.model.Position 
-    transfromPositionProtoToEntity(Traccar.Position protoPosition, long deviceId) {
+    transfromPositionProtoToEntity(Jeets.Position protoPosition, long deviceId) {
 
     	org.traccar.model.Position entityPosition = new org.traccar.model.Position(getProtocolName());
     	entityPosition.setDeviceId(deviceId);

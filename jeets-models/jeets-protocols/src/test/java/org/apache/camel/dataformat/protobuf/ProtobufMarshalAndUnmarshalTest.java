@@ -20,8 +20,8 @@ import org.apache.camel.CamelException;
 import org.apache.camel.FailedToCreateRouteException;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.jeets.protobuf.Traccar;
-import org.jeets.protobuf.Traccar.Device;
+import org.jeets.protobuf.Jeets;
+import org.jeets.protobuf.Jeets.Device;
 import org.jeets.protocol.util.Samples;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Test;
@@ -62,7 +62,7 @@ public class ProtobufMarshalAndUnmarshalTest extends CamelTestSupport {
 
     private void marshalAndUnmarshal(String inURI, String outURI) throws Exception {
 
-        Traccar.Device input = 
+        Jeets.Device input = 
                 Samples.createDeviceWithPositionWithTwoEvents().build();
 
         MockEndpoint mock = getMockEndpoint("mock:reverse");
@@ -97,7 +97,7 @@ public class ProtobufMarshalAndUnmarshalTest extends CamelTestSupport {
                 from("direct:marshal").marshal().protobuf();
                 
                 from("direct:unmarshalA").unmarshal()
-                    .protobuf("org.jeets.protobuf.Traccar$Device")
+                    .protobuf("org.jeets.protobuf.Jeets$Device")
                 .to("mock:reverse");
 
                 from("direct:unmarshalB").unmarshal()

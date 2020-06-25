@@ -9,7 +9,7 @@ import org.apache.camel.spi.Registry;
 import org.apache.camel.support.SimpleRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.jeets.model.traccar.jpa.Device;
-import org.jeets.protobuf.Traccar;
+import org.jeets.protobuf.Jeets;
 import org.jeets.protocol.TraccarClientProtocol;
 import org.jeets.protocol.TraccarProtocol;
 import org.junit.Test;
@@ -37,7 +37,7 @@ public class TraccarDcsTest extends CamelTestSupport {
         });
 
         MockEndpoint mock = getMockEndpoint("mock:result");
-        Traccar.Acknowledge response = (Traccar.Acknowledge) template
+        Jeets.Acknowledge response = (Jeets.Acknowledge) template
                 .requestBody("netty:tcp://localhost:5200?clientInitializerFactory=#ack&sync=true", createProtoDevice());
         System.out.println("client received response: " + response);
         assertEquals(789, response.getDeviceid());
@@ -47,9 +47,9 @@ public class TraccarDcsTest extends CamelTestSupport {
 	}
 
 //  TODO: replace with ..Samples
-    Traccar.Device createProtoDevice() {
+    Jeets.Device createProtoDevice() {
         ProtoBean protoMaker = new ProtoBean();
-        Traccar.Device deviceProto = protoMaker.createProtoDevice();
+        Jeets.Device deviceProto = protoMaker.createProtoDevice();
         return deviceProto;
     }
 

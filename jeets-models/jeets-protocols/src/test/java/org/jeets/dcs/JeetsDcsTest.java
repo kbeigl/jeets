@@ -6,7 +6,7 @@ import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.spi.Registry;
 import org.apache.camel.support.SimpleRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
-import org.jeets.protobuf.Traccar;
+import org.jeets.protobuf.Jeets;
 import org.jeets.protocol.JeetsRoute;
 import org.jeets.protocol.TraccarClientProtocol;
 import org.jeets.protocol.TraccarProtocol;
@@ -29,7 +29,7 @@ public class JeetsDcsTest extends CamelTestSupport {
         MockEndpoint mock = getMockEndpoint("mock:result");
 
 //      start test
-        Traccar.Acknowledge response = (Traccar.Acknowledge) template
+        Jeets.Acknowledge response = (Jeets.Acknowledge) template
                 .requestBody("netty:tcp://localhost:5200"
                         + "?clientInitializerFactory=#ack&sync=true", 
                         Samples.createDeviceWithPositionWithOneEvent());

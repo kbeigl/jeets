@@ -3,12 +3,12 @@ package org.jeets.dcs.traccar;
 import java.util.Date;
 
 import org.apache.camel.Handler;
-import org.jeets.protobuf.Traccar;
-import org.jeets.protobuf.Traccar.AlarmType;
-import org.jeets.protobuf.Traccar.Device;
-import org.jeets.protobuf.Traccar.Event;
-import org.jeets.protobuf.Traccar.EventType;
-import org.jeets.protobuf.Traccar.Position;
+import org.jeets.protobuf.Jeets;
+import org.jeets.protobuf.Jeets.AlarmType;
+import org.jeets.protobuf.Jeets.Device;
+import org.jeets.protobuf.Jeets.Event;
+import org.jeets.protobuf.Jeets.EventType;
+import org.jeets.protobuf.Jeets.Position;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,8 +26,8 @@ public class ProtoBean {
     AlarmType sosAlarm = AlarmType.ALARM_SOS;
 
     @Handler
-    public Traccar.Device createProtoDevice() {
-        Traccar.Device.Builder deviceBuilder = Device.newBuilder();
+    public Jeets.Device createProtoDevice() {
+        Jeets.Device.Builder deviceBuilder = Device.newBuilder();
         deviceBuilder.setUniqueid(unique);
         deviceBuilder.addPosition(createProtoPosition());
         LOG.info("created DeviceProto: {}", deviceBuilder.getUniqueid());
@@ -36,8 +36,8 @@ public class ProtoBean {
 //      createAckForDeviceMessage();
     }
 
-    private Traccar.Position createProtoPosition() {
-        Traccar.Position.Builder positionBuilder = Position.newBuilder();
+    private Jeets.Position createProtoPosition() {
+        Jeets.Position.Builder positionBuilder = Position.newBuilder();
         positionBuilder.setDevicetime(new Date().getTime());  // 2016-10-10 16:31:36 no millis ?
         positionBuilder.setFixtime(new Date().getTime());     // 2016-10-10 16:31:36
         positionBuilder.setValid(true);
@@ -52,8 +52,8 @@ public class ProtoBean {
         return positionBuilder.build();
     }
     
-    private Traccar.Event createProtoEvent() {
-        Traccar.Event.Builder eventBuilder = Event.newBuilder();
+    private Jeets.Event createProtoEvent() {
+        Jeets.Event.Builder eventBuilder = Event.newBuilder();
         eventBuilder.setEvent(alarmEvent);
         eventBuilder.setAlarm(sosAlarm);
         return eventBuilder.build();

@@ -5,7 +5,7 @@ import java.util.Date;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.jeets.model.traccar.jpa.Device;
-import org.jeets.protobuf.Traccar;
+import org.jeets.protobuf.Jeets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,10 +25,10 @@ public class AckResponder implements Processor {
 //      else
 //          message received, validation failed > NoACK NAK (?)
  */
-        Traccar.Acknowledge.Builder ackBuilder = Traccar.Acknowledge.newBuilder();
+        Jeets.Acknowledge.Builder ackBuilder = Jeets.Acknowledge.newBuilder();
 //      ackBuilder.setDeviceid(devEntity.getUniqueid());
         ackBuilder.setDeviceid(789);
-        exchange.getOut().setBody(ackBuilder.build(), Traccar.Acknowledge.class);
+        exchange.getOut().setBody(ackBuilder.build(), Jeets.Acknowledge.class);
     }
 
 }

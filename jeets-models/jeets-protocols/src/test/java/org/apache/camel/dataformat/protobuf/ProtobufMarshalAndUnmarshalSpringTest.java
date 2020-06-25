@@ -21,8 +21,8 @@ import org.apache.camel.FailedToCreateRouteException;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.spring.CamelSpringTestSupport;
-import org.jeets.protobuf.Traccar;
-import org.jeets.protobuf.Traccar.Device;
+import org.jeets.protobuf.Jeets;
+import org.jeets.protobuf.Jeets.Device;
 import org.jeets.protocol.util.Samples;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -66,7 +66,7 @@ public class ProtobufMarshalAndUnmarshalSpringTest extends CamelSpringTestSuppor
 
     private void marshalAndUnmarshal(String inURI, String outURI) throws Exception {
         
-        Traccar.Device input = 
+        Jeets.Device input = 
                 Samples.createDeviceWithPositionWithTwoEvents().build();
 
         MockEndpoint mock = getMockEndpoint("mock:reverse");

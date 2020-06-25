@@ -20,7 +20,7 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 //import org.apache.camel.dataformat.protobuf.generated.AddressBookProtos.Person;
 import org.apache.camel.test.junit4.CamelTestSupport;
-import org.jeets.protobuf.Traccar.Device;
+import org.jeets.protobuf.Jeets.Device;
 import org.junit.Test;
 
 public class ProtobufMarshalAndUnmarshalJsonTest extends CamelTestSupport {
@@ -69,7 +69,7 @@ public class ProtobufMarshalAndUnmarshalJsonTest extends CamelTestSupport {
                 from("direct:back").marshal(format);
 
                 from("direct:marshal").unmarshal()
-                .protobuf("org.jeets.protobuf.Traccar$Device", "json")
+                .protobuf("org.jeets.protobuf.Jeets$Device", "json")
                 .to("mock:reverse");
                 from("direct:unmarshalA").marshal().protobuf();
             }
