@@ -28,7 +28,7 @@
 	<artifactId>jeets-parent</artifactId>
 	<packaging>pom</packaging>
 
-	<name>--- JeeTS Parent - global definitions   ---</name>
+	<name>--- JeeTS Parent - Global Definitions   ---</name>
 	<description>
 		Parent POM for common definitions and constants for all JeeTS sources.
 	</description>

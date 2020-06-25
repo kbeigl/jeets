@@ -13,7 +13,7 @@
  * under the License.
  *
  * This protocol is modeled after the traccar database model.
- * traccar is a GTS by Anton Tananaev (anton.tananaev@gmail.com)
+ * Traccar is a GTS by Anton Tananaev (anton.tananaev@gmail.com)
  * Protocol fields and messages and their relations are aligned 
  * with traccar's fields, tables and their relations.
  */
