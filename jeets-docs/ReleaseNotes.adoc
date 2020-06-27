@@ -5,17 +5,18 @@
 
 === v1.3 - ?? 2020
 
-* Camel migration 2.24.0 to 3.3.0
+* Camel Migration 2.24.x to 3.3.0
 
 * `jeets-protocols` +
 ** automated generation of ProtoBuffers from *.proto files in Maven build +
-** implemented jeets.proto/buffers as the JeeTS Protocol (compatible to Traccar Database Model)
+** implemented jeets.proto/buffers as _the_ JeeTS Protocol +
+   compatible to Traccar Database Model
 ** currently depends on `jeets-protocols-traccar` +
-   to enable compiling additional protocols the Traccar way 
+   to enable compiling additional protocols in Traccar style
 
 * generalized `jeets-dcs-traccar` to `jeets-dcs-mamager` +
-** includes `jeets-protocols-traccar`
 ** includes `jeets-protocols` with additional / alternate protocols to Traccar protocols
+*** includes `jeets-protocols-traccar`
 
 * added `my-etl-traccar` 
 for Maven Archetype generation of custom Traccar ETL MicroService

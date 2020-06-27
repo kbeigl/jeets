@@ -8,8 +8,8 @@ import org.apache.camel.support.SimpleRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.jeets.protobuf.Jeets;
 import org.jeets.protocol.JeetsRoute;
-import org.jeets.protocol.TraccarClientProtocol;
-import org.jeets.protocol.TraccarProtocol;
+import org.jeets.protocol.JeetsClientProtocol;
+import org.jeets.protocol.JeetsProtocol;
 import org.jeets.protocol.util.Samples;
 import org.junit.Test;
 //import org.traccar.Main;
@@ -51,18 +51,18 @@ public class JeetsDcsTest extends CamelTestSupport {
 
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
-//      'traccar' must be registered before use
+//      'jeets' must be registered before use
         String from = "netty:tcp://localhost:5200"
-                + "?serverInitializerFactory=#traccar&sync=true";
-        String routeId = "traccar";
+                + "?serverInitializerFactory=#jeets&sync=true";
+        String routeId = "jeets";
         return new JeetsRoute(from, routeId);
     }
 
     @Override
     protected Registry createCamelRegistry() throws Exception {
         Registry registry = new SimpleRegistry();
-        registry.bind("traccar", new TraccarProtocol(null));    // request to server
-        registry.bind("ack", new TraccarClientProtocol(null)); // response to client
+        registry.bind("jeets", new JeetsProtocol(null));    // request to server
+        registry.bind("ack", new JeetsClientProtocol(null)); // response to client
         return registry;
     }
 

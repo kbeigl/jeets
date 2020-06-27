@@ -12,9 +12,9 @@ import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 
 import org.jeets.protobuf.Jeets.Device;
-import org.jeets.protocol.TraccarProtocol;
+import org.jeets.protocol.JeetsProtocol;
 
-public class TraccarProtocol extends ServerInitializerFactory {
+public class JeetsProtocol extends ServerInitializerFactory {
 
     /**
      * Override to implement Traccar.Acknowledge.Builder and send via
@@ -39,7 +39,7 @@ public class TraccarProtocol extends ServerInitializerFactory {
 
     private NettyConsumer consumer;
 
-    public TraccarProtocol(NettyConsumer consumer) {
+    public JeetsProtocol(NettyConsumer consumer) {
         this.consumer = consumer;
     }
 
@@ -55,6 +55,6 @@ public class TraccarProtocol extends ServerInitializerFactory {
 
     @Override
     public ServerInitializerFactory createPipelineFactory(NettyConsumer consumer) {
-        return new TraccarProtocol(consumer);
+        return new JeetsProtocol(consumer);
     }
 }

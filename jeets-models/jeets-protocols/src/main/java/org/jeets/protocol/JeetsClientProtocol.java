@@ -12,10 +12,10 @@ import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 
-public class TraccarClientProtocol extends ClientInitializerFactory {
+public class JeetsClientProtocol extends ClientInitializerFactory {
     private NettyProducer producer;
 
-    public TraccarClientProtocol(NettyProducer producer) {
+    public JeetsClientProtocol(NettyProducer producer) {
         this.producer = producer;
     }
 
@@ -31,7 +31,7 @@ public class TraccarClientProtocol extends ClientInitializerFactory {
 
     @Override
     public ClientInitializerFactory createPipelineFactory(NettyProducer producer) {
-        return new TraccarClientProtocol(producer);
+        return new JeetsClientProtocol(producer);
     }
     
 }

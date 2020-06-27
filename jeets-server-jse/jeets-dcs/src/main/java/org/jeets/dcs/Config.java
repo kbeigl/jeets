@@ -13,9 +13,9 @@ import org.traccar.Context;
 import org.traccar.protocol.JeetsProtocol;
 import org.traccar.protocol.RuptelaProtocol;
 import org.traccar.protocol.TeltonikaProtocol;
-
-import org.jeets.dcs.traccar.TraccarSetup;
 import org.jeets.dcs.traccar.TraccarRoute;
+//import org.traccar.protocol.TraccarRoute;
+import org.jeets.dcs.traccar.TraccarSetup;
 
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;

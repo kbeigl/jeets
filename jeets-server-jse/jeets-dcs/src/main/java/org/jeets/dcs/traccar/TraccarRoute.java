@@ -3,14 +3,15 @@ package org.jeets.dcs.traccar;
 import org.apache.camel.builder.RouteBuilder;
 
 /**
- * DCS Routes for ALL Traccar Protocols are directed to one output endpoint
- * 'traccar.model' where the traccar.model objects can be picked up by the
- * system.
+ * DCS Routes for ALL ORIGINAL Traccar Protocols are directed to one output
+ * Endpoint 'traccar.model' where the traccar.model objects can be picked up by
+ * the system.
  * <p>
  * Note: Re-using the same routeId, will quietly stop and replace the earlier
- * route.
+ * route!
  */
 //SpringRouteBuilder !?
+//with camel-endpointdsl: extends EndpointRouteBuilder {
 public class TraccarRoute extends RouteBuilder {
     private final String from;
     private final String routeId;
