@@ -1,9 +1,9 @@
 package org.jeets.dcs;
 
-import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.netty.ServerInitializerFactory;
-import org.apache.camel.spi.Registry;
+import org.jeets.traccar.routing.TraccarRoute;
+import org.jeets.traccar.routing.TraccarSetup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -13,9 +13,6 @@ import org.traccar.Context;
 import org.traccar.protocol.JeetsProtocol;
 import org.traccar.protocol.RuptelaProtocol;
 import org.traccar.protocol.TeltonikaProtocol;
-import org.jeets.dcs.traccar.TraccarRoute;
-//import org.traccar.protocol.TraccarRoute;
-import org.jeets.dcs.traccar.TraccarSetup;
 
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
@@ -39,11 +36,16 @@ public class Config {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Config.class);
 
-//  currently we are relying on the listed order of Beans ..
-
 //  jeets-protocols-traccar -----------------------------------------
 
-    /** Register 'ruptela' ServerInitializerFactory for TCP transport. */
+    /**
+     * Register 'ruptela' ServerInitializerFactory for TCP transport.
+     * <p>
+     * Spring way to register the ServerInitializerFactory analog to Camel way via
+     * <br>
+     * <code>
+     * registry.bind("ruptela", new RuptelaProtocol(null)) </code>
+     */
     @Bean(name = "ruptela")
     public ServerInitializerFactory getRuptelaPipeline() {
 //      traverse default.xml protocols and ports
@@ -51,8 +53,8 @@ public class Config {
         return TraccarSetup.createServerInitializerFactory(protocolClass);
     }
 
-    /* Hard coded Routes can only be used after 'protocol' serverInitializerFactory
-     * is registered. */
+    /* Hard coded Routes can be *created* in advance, but can only be *used* after
+     * 'protocol' serverInitializerFactory is registered.       */
 
 //  TODO meaningless name, abusing Bean to start route ..
     @Bean(name = "ruptelaXRoute") 
@@ -100,15 +102,15 @@ public class Config {
 
 //  jeets-protocols with Traccar logic ------------------------------
 
-    @Bean(name = "device")
+    @Bean(name = "device") // TODO: "jeets" 
     public ServerInitializerFactory getDevicePipeline() {
         Class<?> protocolClass = JeetsProtocol.class;
         return TraccarSetup.createServerInitializerFactory(protocolClass);
     }
 
-    @Bean(name = "protobufferXRoute") 
+    @Bean(name = "protobufferXRoute")
     public RouteBuilder createProtobufferRoute() {
-        String routeName = "device";
+        String routeName = "device";  // TODO: "jeets"
         int port = -1; // 5027
         if (Context.getConfig().hasKey("device.port")) {
             port = Context.getConfig().getInteger("device.port");

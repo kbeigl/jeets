@@ -41,10 +41,14 @@ public abstract class TrackerServer {
     public TrackerServer(boolean datagram, String protocol) {
 
         this.datagram = datagram;
-        address = Context.getConfig().getString(protocol + ".address");
-        port = Context.getConfig().getInteger(protocol + ".port");
+        if (Context.getConfig() != null) {
+//          required for Camel ?
+            address = Context.getConfig().getString(protocol + ".address");
+            port = Context.getConfig().getInteger(protocol + ".port");
+        }
 
 //      one factory instance for each TrackerServer instance
+//      set breakpoint and analyze multiple calls
         pipelineFactory = new BasePipelineFactory(this, protocol) {
             @Override
             protected void addProtocolHandlers(PipelineBuilder pipeline) {

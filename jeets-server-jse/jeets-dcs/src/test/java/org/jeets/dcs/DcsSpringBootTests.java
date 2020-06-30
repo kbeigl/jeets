@@ -22,7 +22,7 @@ import io.netty.buffer.ByteBufUtil;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest // (classes = Main.class)
-public class DcsTests /* extends TestCase */ {
+public class DcsSpringBootTests {
 
     @Autowired
     private ProducerTemplate client;
@@ -58,7 +58,7 @@ public class DcsTests /* extends TestCase */ {
         Assert.assertEquals("356307042441013", position.getString("org.jeets.dcs.device.uniqueid"));
         Assert.assertEquals(port, position.getInteger("org.jeets.dcs.device.port"));
         Assert.assertEquals("teltonika", position.getProtocol());
-}
+    }
 
     @Test
     public void testRuptelaServer() throws Exception {
@@ -87,7 +87,7 @@ public class DcsTests /* extends TestCase */ {
         return hexDump(response);
     }
 
-//  Context is initialized with DCS Main start .. 
+//  Context is initialized in Spring @Configuration .. 
 
     private int getPort(String protocolPort) {
         Assert.assertTrue(protocolPort + " is not defined in config file!", 

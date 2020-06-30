@@ -42,7 +42,7 @@ public abstract class BasePipelineFactory extends ChannelInitializer<Channel> {
     private final TrackerServer server;
     private final String protocol;
     private int timeout;
-//  Shared Handler/s
+//  shared handler/s
     private RemoteAddressHandler remoteAddressHandler;
 
     /* construct BPF for registration only, i.e. without NettyConsumer */
@@ -50,15 +50,18 @@ public abstract class BasePipelineFactory extends ChannelInitializer<Channel> {
         this.server = server;
         this.protocol = protocol;
         timeout = 0;
-        timeout = Context.getConfig().getInteger(protocol + ".timeout");
-        if (timeout == 0) {
-            timeout = Context.getConfig().getInteger(protocol + ".resetDelay"); // temporary
+        if (Context.getConfig() != null) {
+//          required for Camel ? move to props
+            timeout = Context.getConfig().getInteger(protocol + ".timeout");
             if (timeout == 0) {
-                timeout = Context.getConfig().getInteger("server.timeout");
+                timeout = Context.getConfig().getInteger(protocol + ".resetDelay"); // temporary
+                if (timeout == 0) {
+                    timeout = Context.getConfig().getInteger("server.timeout");
+                }
             }
-        }
-        if (Context.getConfig().getBoolean("processing.remoteAddress.enable")) {
-            remoteAddressHandler = new RemoteAddressHandler();
+            if (Context.getConfig().getBoolean("processing.remoteAddress.enable")) {
+                remoteAddressHandler = new RemoteAddressHandler();
+            }
         }
     }
 
@@ -167,11 +170,4 @@ public abstract class BasePipelineFactory extends ChannelInitializer<Channel> {
         return pipeline;
     }
 
-    /* Create a consumer linked channel pipeline factory 
-    @Deprecated
-    public ServerInitializerFactory createPipelineFactory(NettyConsumer nettyConsumer) {
-        System.err.println("createPipelineFactory for " + nettyConsumer + " DEactivated !!!");
-        return null;
-    }
-    */
 }

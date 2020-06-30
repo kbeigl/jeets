@@ -13,16 +13,21 @@ import org.jeets.protocol.JeetsProtocol;
 import org.jeets.protocol.util.Samples;
 import org.junit.Test;
 //import org.traccar.Main;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JeetsDcsTest extends CamelTestSupport {
+
+    private static final Logger LOG = LoggerFactory.getLogger(JeetsDcsTest.class);
 
     @Test
     public void testJeetsDcsRoute() throws Exception {
 
-//      .. and pickup output: jpa.Device
+//      pickup output: jpa.Device
         context.addRoutes(new RouteBuilder() {
             public void configure() throws Exception {
                 from("direct:jeets.model.traccar.jpa.Device")
+                .log("jpa.Device: ${body}")
                 .to("mock:result");
             }
         });
@@ -35,7 +40,7 @@ public class JeetsDcsTest extends CamelTestSupport {
                         Samples.createDeviceWithPositionWithOneEvent());
 
 //      evaluate and assert result/s
-        System.out.print("client received response: " + response);
+        LOG.info("client received response: " + response);
         assertEquals(789, response.getDeviceid());
         
         mock.expectedMessageCount(1);

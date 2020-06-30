@@ -1,4 +1,4 @@
-package org.jeets.dcs.traccar;
+package org.jeets.traccar.routing;
 
 import org.apache.camel.component.netty.ServerInitializerFactory;
 import org.slf4j.Logger;
@@ -19,9 +19,7 @@ public class TraccarSetup {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TraccarSetup.class);
 
-    /**
-     * Currently only creating "tcp" servers
-     */
+    /* Currently only creating "tcp" servers */
     public static ServerInitializerFactory createServerInitializerFactory(Class<?> protocolClass) {
         contextInit(); // as needed
         // could do without:
@@ -79,7 +77,8 @@ public class TraccarSetup {
         } catch (NullPointerException npe) {
 //          Context is not initialized yet, do now
             try {
-//              TODO remove hard coded path
+//              TODO remove hard coded path here and match inside traccar.xml file!
+//              the . directory refers to the project home! setup dir has to exist.
                 Context.init("./setup/traccar.xml");
             } catch (Exception ex) {
                 ex.printStackTrace();
