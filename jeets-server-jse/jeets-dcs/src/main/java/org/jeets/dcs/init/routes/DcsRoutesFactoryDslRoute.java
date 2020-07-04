@@ -21,7 +21,6 @@ public class DcsRoutesFactoryDslRoute extends RouteBuilder {
     public void configure() throws Exception {
 //      implicit check if file exists, not actually loaded
         from("file:setup/?fileName=traccar.xml&noop=true&initialDelay=0")
-//      from("file:{{path}}?fileName={{xmlfile}}&noop=true")
         .routeId("DcsRoutesFactoryDslRoute")
         .startupOrder(0)
 //      catch file not found ?

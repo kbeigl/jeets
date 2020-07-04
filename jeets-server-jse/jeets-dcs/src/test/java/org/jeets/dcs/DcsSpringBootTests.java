@@ -35,6 +35,7 @@ public class DcsSpringBootTests {
     public void testTeltonikaServer() throws Exception {
         String protocol = "teltonika";
         int port = getPort(protocol + ".port");
+
 //      TODO: use teltonika.jdev test file for message content
         String hexMessage = "000f333536333037303432343431303133";
         String hexResponse = sendHexMessage(port, hexMessage);

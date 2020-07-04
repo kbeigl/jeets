@@ -7,12 +7,20 @@ import java.lang.management.RuntimeMXBean;
 import java.nio.charset.Charset;
 import java.util.Locale;
 
+import org.apache.camel.component.netty.ServerInitializerFactory;
+import org.jeets.traccar.routing.TraccarSetup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.traccar.Context;
+import org.traccar.protocol.TeltonikaProtocol;
+
+import io.netty.handler.codec.string.StringDecoder;
 
 @SpringBootApplication  // → @SpringBootConfiguration → @Configuration
 // convenience annotation equivalent to declaring @Configuration, @EnableAutoConfiguration, @ComponentScan.
@@ -33,16 +41,56 @@ public class Main {
         }
 
         final String configFile = args[args.length - 1];
+        
+        System.out.println("running Main ...");
 
         try {
-            Context.init(configFile);
+//          Traccar context
+//            Context.init(configFile); temporarily handled by TraccarSetup
 //          TODO fix logger
             logSystemInfo();
-            SpringApplication.run(Main.class, args);
+            
+            /*
+             * You should use an ApplicationContext with GenericApplicationContext and its
+             * subclass AnnotationConfigApplicationContext as the common implementations for
+             * custom bootstrapping. These are the primary entry points to Spring’s core
+             * container for all common purposes: loading of configuration files, triggering
+             * a classpath scan, programmatically registering bean definitions and annotated
+             * classes, and (as of 5.0) registering functional bean definitions.
+             */
+//          Spring(BootApplication) context
+//          ApplicationContext ctx = new AnnotationConfigApplicationContext(Config.class);
+            AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(Config.class);
 
+//          method #1 works with new Object() and lambda but not with method below
+//          ctx.registerBean("teltonika", ServerInitializerFactory.class, () -> 
+//              TraccarSetup.createServerInitializerFactory(TeltonikaProtocol.class));
+  
+//            ctx.registerBean("stringDecoder", StringDecoder.class,
+//                    () -> new StringDecoder());
+  
+//          method #2 with GenericBeanDefinition
+//            GenericBeanDefinition gbd = new GenericBeanDefinition();
+//            gbd.setBeanClass(ServerInitializerFactory.class);
+//            ctx.registerBeanDefinition("teltonika", beanDefinition);
+            
+//          check not null (not sufficient!)
+            ServerInitializerFactory sif = (ServerInitializerFactory) ctx.getBean("teltonika");
+            System.out.println("HASHCODE" + sif.hashCode());
+            
+//          can't call post processed beans here yet
+//            String myBean = (String) ctx.getBean("bean-1");
+//            System.out.println(myBean.toString());
+//            ctx.refresh();
+            
 //          TODO realize these via Spring life cycle management, see deprecated Camel below
 //          Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
 //          Runtime.getRuntime().addShutdownHook(new Thread() { ..
+//          ctx.registerShutdownHook();
+            
+            SpringApplication.run(Main.class, args);
+
+            System.out.println("SpringApplication running ...");
 
         } catch (Exception e) {
             System.err.println("Main method error: " + e);

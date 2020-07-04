@@ -7,7 +7,6 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.spi.Registry;
 import org.jeets.util.ClassFinder;
-import org.jeets.util.MultiRegistry;
 import org.traccar.BaseProtocol;
 import org.traccar.Context;
 import org.traccar.TrackerServer;
@@ -59,7 +58,9 @@ public class DcsRoutesFactory {
 
 //              register serverIni for each protocol (or move before for loop?)
                 System.out.println("register: " + serverInitializerName + " => " + protocolObject);
-                MultiRegistry.addToRegistry(registry, serverInitializerName, server.getServerInitializerFactory());
+//              Camel 3
+                camelContext.getRegistry().bind(serverInitializerName, server.getServerInitializerFactory());
+//              MultiRegistry.addToRegistry(registry, serverInitializerName, server.getServerInitializerFactory());
 
                 System.out.println("create Route '" + serverInitializerName + "' from(\"" + uri + "\") ...");
                 try {

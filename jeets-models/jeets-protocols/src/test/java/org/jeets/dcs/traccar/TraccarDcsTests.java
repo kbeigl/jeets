@@ -24,7 +24,6 @@ public class TraccarDcsTests extends CamelTestSupport {
     public void testTeltonikaServer() throws Exception {
         String protocol = "teltonika";
 
-//      no Context required yet
         Class<?> protocolClass = TeltonikaProtocol.class;
         ServerInitializerFactory teltonikaPipeline = 
                 TraccarSetup.createServerInitializerFactory(protocolClass);
@@ -35,17 +34,15 @@ public class TraccarDcsTests extends CamelTestSupport {
         int port = getPort(protocol + ".port");
         LOG.info(protocol + " port: " + port);
         
-        String uri = "netty:tcp://" + host + ":" + port + "?serverInitializerFactory=#" + protocol + "&sync=" + camelNettySync;
+        String uri = "netty:tcp://" + host + ":" + port + 
+                "?serverInitializerFactory=#" + protocol + "&sync=" + camelNettySync;
         context.addRoutes(new TraccarRoute(uri, protocol));
-        
-        LOG.info("created TraccarRoute with " + teltonikaPipeline.toString());
         
 //      now start the actual test
         testingTeltonikaServer();
 
     }
 
-//  TODO: apply availablePortFinder instead of config file ?
 //  CamelTestSupport provides
 //  ConsumerTemplate consumer > server
 //  ProducerTemplate template > client
@@ -80,26 +77,19 @@ public class TraccarDcsTests extends CamelTestSupport {
 
 //  see jeets-device code
     private String sendHexMessage(int port, String hexMessage) {
-        byte[] byteMessage = decodeHexDump(hexMessage);
+        byte[] byteMessage = ByteBufUtil.decodeHexDump(hexMessage);
         String nettyParams = "?useByteBuf=true&allowDefaultCodec=false&producerPoolEnabled=false";
         byte[] response = template.requestBody("netty:tcp://localhost:" + port + nettyParams, byteMessage, byte[].class);
-        return hexDump(response);
+        return ByteBufUtil.hexDump(response);
     }
 
 //  Context is initialized in Spring @Configuration .. 
 
+//  TODO: apply availablePortFinder instead of config file ?
     private int getPort(String protocolPort) {
         Assert.assertTrue(protocolPort + " is not defined in config file!", 
                Context.getConfig().hasKey(protocolPort));
         return Context.getConfig().getInteger(protocolPort);
-    }
-
-    private byte[] decodeHexDump(String hexString) {
-        return ByteBufUtil.decodeHexDump(hexString);
-    }
-    
-    private String hexDump(byte[] bytes) {
-        return ByteBufUtil.hexDump(bytes);
     }
 
     /**

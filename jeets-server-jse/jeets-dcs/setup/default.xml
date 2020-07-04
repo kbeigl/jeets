@@ -20,24 +20,25 @@
 
     <entry key='commands.queueing'>true</entry>
 
+
+    <entry key='teltonika.port'>5027</entry>
+    <entry key='ruptela.port'>5046</entry>
+
+	<!-- jeets-protocols -->
+	<entry key='device.port'>5200</entry>
+
+<!--
     <entry key='gps103.port'>5001</entry>
     <entry key='tk103.port'>5002</entry>
     <entry key='gl100.port'>5003</entry>
     <entry key='gl200.port'>5004</entry>
     <entry key='t55.port'>5005</entry>
 
-    <entry key='teltonika.port'>5027</entry>
-    <entry key='ruptela.port'>5046</entry>
-
     <entry key='carscop.port'>5040</entry>
     <entry key='osmand.port'>5055</entry>
 
     <entry key='adm.port'>5092</entry>
 
-	<!-- jeets-protocols -->
-	<entry key='device.port'>5200</entry>
-
-<!--
     <entry key='xexun.port'>5006</entry>
     <entry key='xexun.extended'>false</entry>
     <entry key='totem.port'>5007</entry>

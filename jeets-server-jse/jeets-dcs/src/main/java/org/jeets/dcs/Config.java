@@ -38,6 +38,14 @@ public class Config {
 
 //  jeets-protocols-traccar -----------------------------------------
 
+    /*
+     * Note: Routes are created with 'protocol' String for serverInitializerFactory
+     * and depend on previous creation of serverInitializerFactory in other @Bean.
+     * Currently this is working, but it is unclear how the order is handled by
+     * Spring internally. Spring is most probably not aware what the "netty" String
+     * requires ??
+     */
+
     /**
      * Register 'ruptela' ServerInitializerFactory for TCP transport.
      * <p>
@@ -53,15 +61,12 @@ public class Config {
         return TraccarSetup.createServerInitializerFactory(protocolClass);
     }
 
-    /* Hard coded Routes can be *created* in advance, but can only be *used* after
-     * 'protocol' serverInitializerFactory is registered.       */
-
 //  TODO meaningless name, abusing Bean to start route ..
     @Bean(name = "ruptelaXRoute") 
 //  @Component !?
     public RouteBuilder createRuptelaRoute() {
 //      analog: Context.getServerManager().start()
-        String routeName = "ruptela";
+        String routeName = "ruptela"; // = serverInitializerFactory 
         int port = -1; // 5046
         if (Context.getConfig().hasKey("ruptela.port")) {
             port = Context.getConfig().getInteger("ruptela.port");
@@ -81,23 +86,23 @@ public class Config {
      * 'teltonika' ServerInitializerFactory for TCP Register 'teltonika-udp'
      * ServerInitializerFactory for UDP */
 
+//    @Bean(name = "teltonikaXRoute") 
+//    public RouteBuilder createTeltonikaRoute() {
+//        String routeName = "teltonika";
+//        int port = -1; // 5027
+//        if (Context.getConfig().hasKey("teltonika.port")) {
+//            port = Context.getConfig().getInteger("teltonika.port");
+//            String uri = "netty:tcp://" + host + ":" + port + "?serverInitializerFactory=#" + routeName + "&sync=" + camelNettySync;
+//            return new TraccarRoute(uri, routeName);
+//        }
+//        System.err.println("Teltonika is not configured. No Route created!");
+//        return null;
+//    }
+
     @Bean(name = "teltonika")
     public ServerInitializerFactory getTeltonikaPipeline() {
         Class<?> protocolClass = TeltonikaProtocol.class;
         return TraccarSetup.createServerInitializerFactory(protocolClass);
-    }
-
-    @Bean(name = "teltonikaXRoute") 
-    public RouteBuilder createTeltonikaRoute() {
-        String routeName = "teltonika";
-        int port = -1; // 5027
-        if (Context.getConfig().hasKey("teltonika.port")) {
-            port = Context.getConfig().getInteger("teltonika.port");
-            String uri = "netty:tcp://" + host + ":" + port + "?serverInitializerFactory=#" + routeName + "&sync=" + camelNettySync;
-            return new TraccarRoute(uri, routeName);
-        }
-        System.err.println("Teltonika is not configured. No Route created!");
-        return null;
     }
 
 //  jeets-protocols with Traccar logic ------------------------------
