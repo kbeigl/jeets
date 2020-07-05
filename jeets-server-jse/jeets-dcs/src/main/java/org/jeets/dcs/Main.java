@@ -7,25 +7,17 @@ import java.lang.management.RuntimeMXBean;
 import java.nio.charset.Charset;
 import java.util.Locale;
 
-import org.apache.camel.component.netty.ServerInitializerFactory;
 import org.jeets.traccar.routing.TraccarSetup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
-import org.traccar.Context;
-import org.traccar.protocol.TeltonikaProtocol;
-
-import io.netty.handler.codec.string.StringDecoder;
 
 @SpringBootApplication  // → @SpringBootConfiguration → @Configuration
 // convenience annotation equivalent to declaring @Configuration, @EnableAutoConfiguration, @ComponentScan.
 @ComponentScan(basePackages="org.jeets.dcs")
-// By default, the @SpringBootApplication annotation scans all classes in the same package (in other project!?) or below.
+// By default, the @SpringBootApplication annotation scans all classes in the same package (in other project!?) including sub packages.
 public class Main {
 
 //  private Main() {};
@@ -41,61 +33,46 @@ public class Main {
         }
 
         final String configFile = args[args.length - 1];
-        
-        System.out.println("running Main ...");
 
         try {
-//          Traccar context
-//            Context.init(configFile); temporarily handled by TraccarSetup
+//          Traccar Context is mandatory!
+//          the . directory refers to the project home! setup dir has to exist.
+            TraccarSetup.contextInit(configFile);
 //          TODO fix logger
             logSystemInfo();
-            
-            /*
-             * You should use an ApplicationContext with GenericApplicationContext and its
-             * subclass AnnotationConfigApplicationContext as the common implementations for
-             * custom bootstrapping. These are the primary entry points to Spring’s core
-             * container for all common purposes: loading of configuration files, triggering
-             * a classpath scan, programmatically registering bean definitions and annotated
-             * classes, and (as of 5.0) registering functional bean definitions.
-             */
-//          Spring(BootApplication) context
-//          ApplicationContext ctx = new AnnotationConfigApplicationContext(Config.class);
-            AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(Config.class);
-
-//          method #1 works with new Object() and lambda but not with method below
-//          ctx.registerBean("teltonika", ServerInitializerFactory.class, () -> 
-//              TraccarSetup.createServerInitializerFactory(TeltonikaProtocol.class));
-  
-//            ctx.registerBean("stringDecoder", StringDecoder.class,
-//                    () -> new StringDecoder());
-  
-//          method #2 with GenericBeanDefinition
-//            GenericBeanDefinition gbd = new GenericBeanDefinition();
-//            gbd.setBeanClass(ServerInitializerFactory.class);
-//            ctx.registerBeanDefinition("teltonika", beanDefinition);
-            
-//          check not null (not sufficient!)
-            ServerInitializerFactory sif = (ServerInitializerFactory) ctx.getBean("teltonika");
-            System.out.println("HASHCODE" + sif.hashCode());
-            
-//          can't call post processed beans here yet
-//            String myBean = (String) ctx.getBean("bean-1");
-//            System.out.println(myBean.toString());
-//            ctx.refresh();
-            
-//          TODO realize these via Spring life cycle management, see deprecated Camel below
-//          Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-//          Runtime.getRuntime().addShutdownHook(new Thread() { ..
-//          ctx.registerShutdownHook();
-            
-            SpringApplication.run(Main.class, args);
-
-            System.out.println("SpringApplication running ...");
-
         } catch (Exception e) {
             System.err.println("Main method error: " + e);
             throw new RuntimeException(e);
         }
+            
+        /*
+         * You should use an ApplicationContext with GenericApplicationContext and its
+         * subclass AnnotationConfigApplicationContext as the common implementations for
+         * custom bootstrapping. These are the primary entry points to Spring’s core
+         * container for all common purposes: loading of configuration files, triggering
+         * a classpath scan, programmatically registering bean definitions and annotated
+         * classes, and (as of 5.0) registering functional bean definitions.
+         */
+//      Spring(BootApplication) context
+//      ApplicationContext ctx = new AnnotationConfigApplicationContext(Config.class);
+//      AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(Config.class);
+//      String[] beanNames = ctx.getBeanDefinitionNames();
+//      Arrays.sort(beanNames);
+//      for (String beanName : beanNames) { System.out.println(beanName); }
+//      ServerInitializerFactory sif = (ServerInitializerFactory) ctx.getBean("teltonika");
+//      System.out.println("HASHCODE" + sif.hashCode());
+
+//      TODO realize these via Spring life cycle management, see deprecated Camel below
+//      Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+//      Runtime.getRuntime().addShutdownHook(new Thread() { ..
+//      docs.spring.io/spring-boot/docs/2.1.10.RELEASE/reference/html/boot-features-spring-application.html
+//      ctx.registerShutdownHook();
+        
+//      can't call post processed beans before starting SpringApp
+
+        SpringApplication.run(Main.class, args);
+        System.out.println("SpringApplication running ...");
+
     }
 
     /* create this Camel mechanism (doesn't work here) in Spring

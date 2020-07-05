@@ -21,15 +21,13 @@ import io.netty.buffer.ByteBufUtil;
  * validates and asserts the system entity provided as DCS output.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest // (classes = Main.class)
+@SpringBootTest(classes = Main.class)
 public class DcsSpringBootTests {
 
     @Autowired
     private ProducerTemplate client;
     @Autowired
     private ConsumerTemplate server;
-//    @Autowired
-//    protected CamelContext camelContext;
 
     @Test
     public void testTeltonikaServer() throws Exception {
@@ -80,28 +78,18 @@ public class DcsSpringBootTests {
         Assert.assertEquals(port, position.getInteger("org.jeets.dcs.device.port"));
     }
 
-//  see jeets-device code
+//  compare jeets-device and jeets-protocols redundant code
     private String sendHexMessage(int port, String hexMessage) {
-        byte[] byteMessage = decodeHexDump(hexMessage);
+        byte[] byteMessage = ByteBufUtil.decodeHexDump(hexMessage);
         String nettyParams = "?useByteBuf=true&allowDefaultCodec=false&producerPoolEnabled=false";
         byte[] response = client.requestBody("netty:tcp://localhost:" + port + nettyParams, byteMessage, byte[].class);
-        return hexDump(response);
+        return ByteBufUtil.hexDump(response);
     }
-
-//  Context is initialized in Spring @Configuration .. 
 
     private int getPort(String protocolPort) {
         Assert.assertTrue(protocolPort + " is not defined in config file!", 
                Context.getConfig().hasKey(protocolPort));
         return Context.getConfig().getInteger(protocolPort);
-    }
-
-    private byte[] decodeHexDump(String hexString) {
-        return ByteBufUtil.decodeHexDump(hexString);
-    }
-    
-    private String hexDump(byte[] bytes) {
-        return ByteBufUtil.hexDump(bytes);
     }
 
     @Test

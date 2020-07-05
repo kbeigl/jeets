@@ -1,4 +1,4 @@
-package org.jeets.dcs;
+package org.jeets.dcs.traccar;
 
 import org.jeets.traccar.routing.TraccarRoute;
 import org.springframework.beans.BeansException;
@@ -7,17 +7,31 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.annotation.Configuration;
 import org.traccar.Context;
 
+/**
+ * This class is modeled after and replaces Traccar's ServerManager only with
+ * Spring and camel-netty server management via composing URI Strings.
+ */
 @Configuration
-// https://stackoverflow.com/questions/43272472/how-to-create-multiple-beans-of-same-type-according-to-configuration-in-spring
-public class TraccarServerManager implements BeanFactoryPostProcessor {
+public class ServerManager implements BeanFactoryPostProcessor {
+
+    /**
+     * The method BeanFactoryPostProcessor.postProcessBeanFactory is called by
+     * Spring startup process just after all bean definitions have been loaded, but
+     * no beans have been instantiated yet.
+     */
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        for (int i = 0; i < 3; i++) {
-            System.out.println("register my bean: " + i);
-            beanFactory.registerSingleton("bean-" + i, new String("MyBean-" + i));
-        }
+
+//      GenericBeanDefinition bd = new GenericBeanDefinition();
+//      bd.setBeanClass(MyBean.class);
+//      bd.getPropertyValues().add("strProp", "my string property");
+//      ((DefaultListableBeanFactory) beanFactory).registerBeanDefinition("myBeanName", bd);
+//      registerBeanDefinition vs registerSingleton ??
+
+//      for (int i = 0; i < 3; i++) {
         
-//      currently this setup fails, if run stand alone
+//      currently this setup 
+//         fails, if run stand alone
 //      succeeds, if run after Parse Tests
 //        which loads Context.init(file) and holds Context !
         
@@ -30,14 +44,16 @@ public class TraccarServerManager implements BeanFactoryPostProcessor {
         }
 
     }
+    
+//  add get/setters for host ! Individual hosts for different protocols ?
 
     /**
-     * The from endpoint for each protocol must be set to false!
+     * The Consumer Endpoint (from) for each Traccar protocol must be set to false!
      * <p>
      * The Traccar Pipeline and -Decoders are implemented WITH ACK response, i.e.
      * channel.writeAndFlush. Therefore the Camel endpoint, i.e. NettyConsumer,
-     * should NOT return a (addtional) response. This behavior should be observed ..
-     * <br>
+     * should NOT return a (additional) response. This behavior should be observed
+     * .. <br>
      * Note that this boolean variable is attached to the URI as String 'true' /
      * 'false'. Maybe apply String for type safety.
      */

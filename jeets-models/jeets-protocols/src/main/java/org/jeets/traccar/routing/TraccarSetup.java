@@ -12,8 +12,8 @@ import org.traccar.TrackerServer;
  * Proprietary setup for Traccar Netty Pipelines.
  * <p>
  * Consider moving these methods and routes to protocols-traccar. i.e. each
- * -protocols- project should supply a dedicated RouteBuilder with an Endpoint
- * (DCS output) which can be picked up by the dcs-manager.
+ * -protocols- project should supply a dedicated RouteBuilder with a Consumer
+ * Endpoint (DCS output) which can be picked up by the dcs-manager.
  */
 public class TraccarSetup {
 
@@ -21,7 +21,6 @@ public class TraccarSetup {
 
     /* Currently only creating "tcp" servers */
     public static ServerInitializerFactory createServerInitializerFactory(Class<?> protocolClass) {
-        contextInit(); // as needed
         // could do without:
         String protocolName = BaseProtocol.nameFromClass(protocolClass);
         BaseProtocol protocol = instantiateProtocol(protocolClass);
@@ -67,21 +66,24 @@ public class TraccarSetup {
     }
 
     /**
-     * Initialize traccar.Context only once. Method returns fast, if context is
-     * initialized and NullPointerException does not occur.
+     * Always apply this method to Initialize traccar.Context to ensure that it is
+     * only loaded once!
+     * <p>
+     * Method returns fast, if context already is initialized.
+     * 
+     * @param configFile
      */
     @SuppressWarnings("deprecation")
-    private static void contextInit() {
+    public static void contextInit(String configFile) {
         try {
             Context.getConfig().getString("event.enable");
         } catch (NullPointerException npe) {
 //          Context is not initialized yet, do now
             try {
-//              TODO remove hard coded path here and match inside traccar.xml file!
-//              the . directory refers to the project home! setup dir has to exist.
-                Context.init("./setup/traccar.xml");
+                Context.init(configFile);
             } catch (Exception ex) {
-                ex.printStackTrace();
+                System.err.println("Traccar Context could not be initialized and is mandatory!"); // change to logger
+//              ex.printStackTrace();
             }
         }
     }

@@ -18,18 +18,7 @@ import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 
 /**
- * Currently all available protocols are registered with a name to be applied in
- * Camel routes.
- * <p>
- * The registration should not take too much resources (for the time being) and
- * does not imply an instantiated Camel route. Later the hard coded registration
- * should be replaced with a dynamic registration (via a BaseClass?) according
- * to a configuration file.
- * <p>
- * A similar dynamic solution should be created for the TypeConverters hard
- * coded in /resources/META-INF/services/org/apache/camel/TypeConverter
- *
- * @author kbeigl@jeets.org
+ * Use this class to implement / test individual DCSs.
  */
 @Configuration // source of bean definitions for the application context
 public class Config {
@@ -38,22 +27,9 @@ public class Config {
 
 //  jeets-protocols-traccar -----------------------------------------
 
-    /*
-     * Note: Routes are created with 'protocol' String for serverInitializerFactory
-     * and depend on previous creation of serverInitializerFactory in other @Bean.
-     * Currently this is working, but it is unclear how the order is handled by
-     * Spring internally. Spring is most probably not aware what the "netty" String
-     * requires ??
-     */
+//  A dynamic solution should be created for the TypeConverters hard
+//  coded in /resources/META-INF/services/org/apache/camel/TypeConverter
 
-    /**
-     * Register 'ruptela' ServerInitializerFactory for TCP transport.
-     * <p>
-     * Spring way to register the ServerInitializerFactory analog to Camel way via
-     * <br>
-     * <code>
-     * registry.bind("ruptela", new RuptelaProtocol(null)) </code>
-     */
     @Bean(name = "ruptela")
     public ServerInitializerFactory getRuptelaPipeline() {
 //      traverse default.xml protocols and ports
@@ -61,9 +37,7 @@ public class Config {
         return TraccarSetup.createServerInitializerFactory(protocolClass);
     }
 
-//  TODO meaningless name, abusing Bean to start route ..
     @Bean(name = "ruptelaXRoute") 
-//  @Component !?
     public RouteBuilder createRuptelaRoute() {
 //      analog: Context.getServerManager().start()
         String routeName = "ruptela"; // = serverInitializerFactory 
@@ -140,12 +114,6 @@ public class Config {
     }
 
     /**
-     * The from endpoint for each protocol must be set to false!
-     * <p>
-     * The Traccar Pipeline and -Decoders are implemented WITH ACK response, i.e.
-     * channel.writeAndFlush. Therefore the Camel endpoint, i.e. NettyConsumer,
-     * should NOT return a (addtional) response. This behavior should be observed ..
-     * <br>
      * Note that this boolean variable is attached to the URI as String 'true' /
      * 'false'. Maybe apply String for type safety.
      */

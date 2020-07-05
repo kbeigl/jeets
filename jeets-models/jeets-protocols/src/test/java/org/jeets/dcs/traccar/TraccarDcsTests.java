@@ -75,7 +75,7 @@ public class TraccarDcsTests extends CamelTestSupport {
         Assert.assertEquals("teltonika", position.getProtocol());
     }
 
-//  see jeets-device code
+//  compare jeets-device code and jeets-dcs Test - redundant code!
     private String sendHexMessage(int port, String hexMessage) {
         byte[] byteMessage = ByteBufUtil.decodeHexDump(hexMessage);
         String nettyParams = "?useByteBuf=true&allowDefaultCodec=false&producerPoolEnabled=false";
@@ -83,7 +83,7 @@ public class TraccarDcsTests extends CamelTestSupport {
         return ByteBufUtil.hexDump(response);
     }
 
-//  Context is initialized in Spring @Configuration .. 
+//  Traccar Context must be initialized .. 
 
 //  TODO: apply availablePortFinder instead of config file ?
     private int getPort(String protocolPort) {
@@ -112,7 +112,8 @@ public class TraccarDcsTests extends CamelTestSupport {
 
     @BeforeClass
     public static void setup() {
-        LOG.info("startup - Context.init ???");
+        LOG.info("startup - Context.init ...");
+        TraccarSetup.contextInit(".\\setup\\traccar.xml");
     }
  
 }
