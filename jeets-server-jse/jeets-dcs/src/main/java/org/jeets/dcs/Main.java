@@ -7,7 +7,6 @@ import java.lang.management.RuntimeMXBean;
 import java.nio.charset.Charset;
 import java.util.Locale;
 
-import org.jeets.traccar.routing.TraccarSetup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -28,22 +27,14 @@ public class Main {
 
         Locale.setDefault(Locale.ENGLISH);
 
+//      TODO: propagate path and file to ServerManager for Context.init(configFile)
+//      better: use property file and handling
         if (args.length <= 0) {
             throw new RuntimeException("Configuration file is not provided");
         }
-
         final String configFile = args[args.length - 1];
 
-        try {
-//          Traccar Context is mandatory!
-//          the . directory refers to the project home! setup dir has to exist.
-            TraccarSetup.contextInit(configFile);
-//          TODO fix logger
-            logSystemInfo();
-        } catch (Exception e) {
-            System.err.println("Main method error: " + e);
-            throw new RuntimeException(e);
-        }
+        logSystemInfo();
             
         /*
          * You should use an ApplicationContext with GenericApplicationContext and its

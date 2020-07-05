@@ -2,6 +2,7 @@ package org.jeets.dcs;
 
 import org.apache.camel.ConsumerTemplate;
 import org.apache.camel.ProducerTemplate;
+import org.jeets.traccar.routing.TraccarSetup;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +22,8 @@ import io.netty.buffer.ByteBufUtil;
  * validates and asserts the system entity provided as DCS output.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
+// SpringJUnit4ClassRunner is an implementation of JUnit4's ClassRunner 
+// that embeds Spring's TestContextManager into a JUnit test.
 @SpringBootTest(classes = Main.class)
 public class DcsSpringBootTests {
 
@@ -32,7 +35,9 @@ public class DcsSpringBootTests {
     @Test
     public void testTeltonikaServer() throws Exception {
         String protocol = "teltonika";
-        int port = getPort(protocol + ".port");
+//      int port = getPort(protocol + ".port");
+        int port = TraccarSetup.getProtocolPort(protocol);
+//      catch port = 0 ?
 
 //      TODO: use teltonika.jdev test file for message content
         String hexMessage = "000f333536333037303432343431303133";
@@ -62,7 +67,9 @@ public class DcsSpringBootTests {
     @Test
     public void testRuptelaServer() throws Exception {
         String protocol = "ruptela";
-        int port = getPort(protocol + ".port");
+        int port = TraccarSetup.getProtocolPort(protocol);
+//      catch port = 0 ?
+
 //      from ruptela.jdev test file for message content
         String hexMessage = "002f0003142b0bae2b9b0100015de029a6000004872bb81e0387440328316a090000090703ad00fb011b0b011e0ff300001d8d";
         String hexResponse = sendHexMessage(port, hexMessage);
@@ -86,11 +93,11 @@ public class DcsSpringBootTests {
         return ByteBufUtil.hexDump(response);
     }
 
-    private int getPort(String protocolPort) {
-        Assert.assertTrue(protocolPort + " is not defined in config file!", 
-               Context.getConfig().hasKey(protocolPort));
-        return Context.getConfig().getInteger(protocolPort);
-    }
+//    private int getPort(String protocolPort) {
+//        Assert.assertTrue(protocolPort + " is not defined in config file!", 
+//               Context.getConfig().hasKey(protocolPort));
+//        return Context.getConfig().getInteger(protocolPort);
+//    }
 
     @Test
     public void testStringEndpoint() throws Exception {

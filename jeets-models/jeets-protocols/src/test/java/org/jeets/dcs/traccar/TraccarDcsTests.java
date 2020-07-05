@@ -9,7 +9,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.traccar.Context;
 import org.traccar.model.Position;
 import org.traccar.protocol.TeltonikaProtocol;
 
@@ -31,7 +30,9 @@ public class TraccarDcsTests extends CamelTestSupport {
 //      SpringBoot: @Bean(name = "teltonika")
         context.getRegistry().bind(protocol, teltonikaPipeline);
         
-        int port = getPort(protocol + ".port");
+        int port = TraccarSetup.getProtocolPort(protocol);
+//      catch port = 0 ?
+//      int port = getPort(protocol + ".port");
         LOG.info(protocol + " port: " + port);
         
         String uri = "netty:tcp://" + host + ":" + port + 
@@ -40,7 +41,6 @@ public class TraccarDcsTests extends CamelTestSupport {
         
 //      now start the actual test
         testingTeltonikaServer();
-
     }
 
 //  CamelTestSupport provides
@@ -49,7 +49,10 @@ public class TraccarDcsTests extends CamelTestSupport {
 
     public void testingTeltonikaServer() throws Exception {
         String protocol = "teltonika";
-        int port = getPort(protocol + ".port");
+//      int port = getPort(protocol + ".port");
+        int port = TraccarSetup.getProtocolPort(protocol);
+//      catch port = 0 ?
+
 //      TODO: use teltonika.jdev test file for message content
         String hexMessage = "000f333536333037303432343431303133";
         String hexResponse = sendHexMessage(port, hexMessage);
@@ -86,11 +89,11 @@ public class TraccarDcsTests extends CamelTestSupport {
 //  Traccar Context must be initialized .. 
 
 //  TODO: apply availablePortFinder instead of config file ?
-    private int getPort(String protocolPort) {
-        Assert.assertTrue(protocolPort + " is not defined in config file!", 
-               Context.getConfig().hasKey(protocolPort));
-        return Context.getConfig().getInteger(protocolPort);
-    }
+//    private int getPort(String protocolPort) {
+//        Assert.assertTrue(protocolPort + " is not defined in config file!", 
+//               Context.getConfig().hasKey(protocolPort));
+//        return Context.getConfig().getInteger(protocolPort);
+//    }
 
     /**
      * The from endpoint for each protocol must be set to false!

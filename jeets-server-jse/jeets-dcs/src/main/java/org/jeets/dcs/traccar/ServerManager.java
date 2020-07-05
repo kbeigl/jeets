@@ -1,6 +1,7 @@
 package org.jeets.dcs.traccar;
 
 import org.jeets.traccar.routing.TraccarRoute;
+import org.jeets.traccar.routing.TraccarSetup;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -22,26 +23,26 @@ public class ServerManager implements BeanFactoryPostProcessor {
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
 
-//      GenericBeanDefinition bd = new GenericBeanDefinition();
-//      bd.setBeanClass(MyBean.class);
-//      bd.getPropertyValues().add("strProp", "my string property");
-//      ((DefaultListableBeanFactory) beanFactory).registerBeanDefinition("myBeanName", bd);
-//      registerBeanDefinition vs registerSingleton ??
+//      Traccar Context is mandatory!
+//      the . directory refers to the project home! setup dir has to exist.
+        TraccarSetup.contextInit("./setup/traccar.xml");
 
+//      define internal sub/method/s
 //      for (int i = 0; i < 3; i++) {
-        
-//      currently this setup 
-//         fails, if run stand alone
-//      succeeds, if run after Parse Tests
-//        which loads Context.init(file) and holds Context !
-        
-        String routeName = "teltonika";
+
+        String protocol = "teltonika";
         int port = -1; // 5027
-        if (Context.getConfig().hasKey("teltonika.port")) {
-            port = Context.getConfig().getInteger("teltonika.port");
-            String uri = "netty:tcp://" + host + ":" + port + "?serverInitializerFactory=#" + routeName + "&sync=" + camelNettySync;
-            beanFactory.registerSingleton("teltonikaXRoute", new TraccarRoute(uri, routeName));
+        try {
+            port = TraccarSetup.getProtocolPort(protocol);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
+//      catch port = 0 / -1 ?
+
+        String uri = "netty:tcp://" + host + ":" + port 
+                + "?serverInitializerFactory=#" + protocol + "&sync=" + camelNettySync;
+        beanFactory.registerSingleton("teltonikaXRoute", new TraccarRoute(uri, protocol));
 
     }
     

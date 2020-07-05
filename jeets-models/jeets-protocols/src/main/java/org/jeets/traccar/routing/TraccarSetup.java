@@ -66,6 +66,32 @@ public class TraccarSetup {
     }
 
     /**
+     * Retrieve Traccar Protocol Port.
+     * <p>
+     * Prerequisite of calling this method is the contextInit method with a
+     * configuration file. If the port was not found in the Context port #0 is
+     * returned and should be handled by the caller.
+     * 
+     * @param protocol
+     * @return
+     * @throws Exception
+     */
+    public static int getProtocolPort(String protocol) throws Exception {
+        String protocolPortKey = protocol + ".port";
+        try {
+            if (Context.getConfig().hasKey(protocolPortKey)) {
+                return Context.getConfig().getInteger(protocolPortKey);
+            } else {
+                System.err.println(protocol + " is not defined in config file!"); 
+//              "Port for " + protocolPort + " was not found in Context."
+            }
+        } catch (NullPointerException npe) {
+            throw new Exception("Traccar Context was not initialized. Make sure to apply contextInit at application startup!");
+        }
+        return 0; // ?
+    }
+
+    /**
      * Always apply this method to Initialize traccar.Context to ensure that it is
      * only loaded once!
      * <p>
@@ -75,6 +101,7 @@ public class TraccarSetup {
      */
     @SuppressWarnings("deprecation")
     public static void contextInit(String configFile) {
+//      TODO: supply fallback values for jeets structure, i.e. mvn build and test
         try {
             Context.getConfig().getString("event.enable");
         } catch (NullPointerException npe) {
