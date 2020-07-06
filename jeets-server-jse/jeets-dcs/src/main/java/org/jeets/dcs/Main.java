@@ -13,13 +13,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
-@SpringBootApplication  // → @SpringBootConfiguration → @Configuration
-// convenience annotation equivalent to declaring @Configuration, @EnableAutoConfiguration, @ComponentScan.
+@SpringBootApplication
 @ComponentScan(basePackages="org.jeets.dcs")
-// By default, the @SpringBootApplication annotation scans all classes in the same package (in other project!?) including sub packages.
 public class Main {
-
-//  private Main() {};
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
@@ -27,40 +23,21 @@ public class Main {
 
         Locale.setDefault(Locale.ENGLISH);
 
-//      TODO: propagate path and file to ServerManager for Context.init(configFile)
-//      better: use property file and handling
         if (args.length <= 0) {
             throw new RuntimeException("Configuration file is not provided");
         }
+//      TODO: propagate configFile to ServerManager for Context.init
+//      better: use property file and handling (test and prod!?)
         final String configFile = args[args.length - 1];
 
         logSystemInfo();
             
-        /*
-         * You should use an ApplicationContext with GenericApplicationContext and its
-         * subclass AnnotationConfigApplicationContext as the common implementations for
-         * custom bootstrapping. These are the primary entry points to Spring’s core
-         * container for all common purposes: loading of configuration files, triggering
-         * a classpath scan, programmatically registering bean definitions and annotated
-         * classes, and (as of 5.0) registering functional bean definitions.
-         */
-//      Spring(BootApplication) context
-//      ApplicationContext ctx = new AnnotationConfigApplicationContext(Config.class);
-//      AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(Config.class);
-//      String[] beanNames = ctx.getBeanDefinitionNames();
-//      Arrays.sort(beanNames);
-//      for (String beanName : beanNames) { System.out.println(beanName); }
-//      ServerInitializerFactory sif = (ServerInitializerFactory) ctx.getBean("teltonika");
-//      System.out.println("HASHCODE" + sif.hashCode());
-
 //      TODO realize these via Spring life cycle management, see deprecated Camel below
 //      Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
 //      Runtime.getRuntime().addShutdownHook(new Thread() { ..
 //      docs.spring.io/spring-boot/docs/2.1.10.RELEASE/reference/html/boot-features-spring-application.html
 //      ctx.registerShutdownHook();
         
-//      can't call post processed beans before starting SpringApp
-
         SpringApplication.run(Main.class, args);
         System.out.println("SpringApplication running ...");
 

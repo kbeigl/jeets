@@ -66,10 +66,10 @@ public class TraccarSetup {
     }
 
     /**
-     * Retrieve Traccar Protocol Port.
+     * Retrieve Traccar Protocol Port from Context.
      * <p>
      * Prerequisite of calling this method is the contextInit method with a
-     * configuration file. If the port was not found in the Context port #0 is
+     * configuration file. If the port was not found in the Context port #-1 is
      * returned and should be handled by the caller.
      * 
      * @param protocol
@@ -88,11 +88,11 @@ public class TraccarSetup {
         } catch (NullPointerException npe) {
             throw new Exception("Traccar Context was not initialized. Make sure to apply contextInit at application startup!");
         }
-        return 0; // ?
+        return -1; // ?
     }
 
     /**
-     * Always apply this method to Initialize traccar.Context to ensure that it is
+     * Always apply this method to Initialize Traccar Context to ensure that it is
      * only loaded once!
      * <p>
      * Method returns fast, if context already is initialized.

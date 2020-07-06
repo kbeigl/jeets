@@ -6,11 +6,10 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.annotation.Configuration;
-import org.traccar.Context;
 
 /**
  * This class is modeled after and replaces Traccar's ServerManager only with
- * Spring and camel-netty server management via composing URI Strings.
+ * Spring and camel-netty server management by composing URI Strings.
  */
 @Configuration
 public class ServerManager implements BeanFactoryPostProcessor {
@@ -24,6 +23,8 @@ public class ServerManager implements BeanFactoryPostProcessor {
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
 
 //      Traccar Context is mandatory!
+//      TODO: propagate configFile to ServerManager for Context.init
+//      better: use property file and handling (test and prod!?)
 //      the . directory refers to the project home! setup dir has to exist.
         TraccarSetup.contextInit("./setup/traccar.xml");
 
@@ -35,10 +36,15 @@ public class ServerManager implements BeanFactoryPostProcessor {
         try {
             port = TraccarSetup.getProtocolPort(protocol);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            System.err.println(e.getMessage());
+//          e.printStackTrace();
+//          Context not initialized > System.exit
+//          throw new RuntimeException(e.getMessage()); 
         }
 //      catch port = 0 / -1 ?
+//      else
+//      java.lang.IllegalArgumentException: hostname can't be null
+//      at java.net.InetSocketAddress.checkHost(InetSocketAddress.java:149)
 
         String uri = "netty:tcp://" + host + ":" + port 
                 + "?serverInitializerFactory=#" + protocol + "&sync=" + camelNettySync;

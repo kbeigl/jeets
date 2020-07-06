@@ -60,19 +60,6 @@ public class Config {
      * 'teltonika' ServerInitializerFactory for TCP Register 'teltonika-udp'
      * ServerInitializerFactory for UDP */
 
-//    @Bean(name = "teltonikaXRoute") 
-//    public RouteBuilder createTeltonikaRoute() {
-//        String routeName = "teltonika";
-//        int port = -1; // 5027
-//        if (Context.getConfig().hasKey("teltonika.port")) {
-//            port = Context.getConfig().getInteger("teltonika.port");
-//            String uri = "netty:tcp://" + host + ":" + port + "?serverInitializerFactory=#" + routeName + "&sync=" + camelNettySync;
-//            return new TraccarRoute(uri, routeName);
-//        }
-//        System.err.println("Teltonika is not configured. No Route created!");
-//        return null;
-//    }
-
     @Bean(name = "teltonika")
     public ServerInitializerFactory getTeltonikaPipeline() {
         Class<?> protocolClass = TeltonikaProtocol.class;

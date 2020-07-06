@@ -9,7 +9,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.traccar.Context;
 import org.traccar.model.Position;
 
 import io.netty.buffer.ByteBufUtil;
@@ -22,9 +21,7 @@ import io.netty.buffer.ByteBufUtil;
  * validates and asserts the system entity provided as DCS output.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-// SpringJUnit4ClassRunner is an implementation of JUnit4's ClassRunner 
-// that embeds Spring's TestContextManager into a JUnit test.
-@SpringBootTest(classes = Main.class)
+@SpringBootTest // (classes = Main.class)
 public class DcsSpringBootTests {
 
     @Autowired
@@ -92,12 +89,6 @@ public class DcsSpringBootTests {
         byte[] response = client.requestBody("netty:tcp://localhost:" + port + nettyParams, byteMessage, byte[].class);
         return ByteBufUtil.hexDump(response);
     }
-
-//    private int getPort(String protocolPort) {
-//        Assert.assertTrue(protocolPort + " is not defined in config file!", 
-//               Context.getConfig().hasKey(protocolPort));
-//        return Context.getConfig().getInteger(protocolPort);
-//    }
 
     @Test
     public void testStringEndpoint() throws Exception {
