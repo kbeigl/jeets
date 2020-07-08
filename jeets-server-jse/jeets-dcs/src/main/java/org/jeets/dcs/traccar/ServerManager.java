@@ -1,5 +1,9 @@
 package org.jeets.dcs.traccar;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.Enumeration;
+
 import org.jeets.dcs.Config;
 import org.jeets.traccar.routing.TraccarRoute;
 import org.jeets.traccar.routing.TraccarSetup;
@@ -9,6 +13,7 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Configuration;
+import org.traccar.protocol.TeltonikaProtocol;
 
 /**
  * This class is modeled after and replaces Traccar's ServerManager only with
@@ -56,16 +61,8 @@ public class ServerManager implements BeanFactoryPostProcessor {
         String protocol = "teltonika"; // or "TeltonikaProtocol"
         int port = -1;
 
-//      better GET context somehow
-        ApplicationContext ctx = new AnnotationConfigApplicationContext(Config.class);
-        try {
-//          load class by package.class String without import statement!.
-            beanFactory.registerSingleton(protocol, TraccarSetup.createServerInitializerFactory(
-                    ctx.getClassLoader().loadClass("org.traccar.protocol.TeltonikaProtocol")));
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        beanFactory.registerSingleton(protocol, 
+                TraccarSetup.createServerInitializerFactory(TeltonikaProtocol.class));
 
         try {
             port = TraccarSetup.getProtocolPort(protocol);
