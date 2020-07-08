@@ -71,7 +71,7 @@ public class ServerManager {
         for (String name : names) {
             Class protocolClass = Class.forName(packageName + '.' + name);
             if (BaseProtocol.class.isAssignableFrom(protocolClass)
-                    && Context.getConfig().hasKey(BaseProtocol.nameFromClass(protocolClass) + ".port")) {
+            && Context.getConfig().hasKey(BaseProtocol.nameFromClass(protocolClass) + ".port")) {
 //              if (protocolClass.getCanonicalName().equals("org.traccar.protocol.RuptelaProtocol")) {  }
                     BaseProtocol protocol = (BaseProtocol) protocolClass.newInstance();
                     serverList.addAll(protocol.getServerList());

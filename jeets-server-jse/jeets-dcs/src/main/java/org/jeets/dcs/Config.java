@@ -30,14 +30,14 @@ public class Config {
 //  A dynamic solution should be created for the TypeConverters hard
 //  coded in /resources/META-INF/services/org/apache/camel/TypeConverter
 
-    @Bean(name = "ruptela")
+    @Bean(name = "ruptela") // is this a singleton !?
     public ServerInitializerFactory getRuptelaPipeline() {
 //      traverse default.xml protocols and ports
         Class<?> protocolClass = RuptelaProtocol.class;
         return TraccarSetup.createServerInitializerFactory(protocolClass);
     }
 
-    @Bean(name = "ruptelaXRoute") 
+    @Bean(name = "ruptelaRoute") 
     public RouteBuilder createRuptelaRoute() {
 //      analog: Context.getServerManager().start()
         String routeName = "ruptela"; // = serverInitializerFactory 
@@ -54,16 +54,6 @@ public class Config {
         }
         System.err.println("Ruptela is not configured. No Route created!");
         return null;
-    }
-
-    /* hold the protocol instance to retrieve individual server ? Register
-     * 'teltonika' ServerInitializerFactory for TCP Register 'teltonika-udp'
-     * ServerInitializerFactory for UDP */
-
-    @Bean(name = "teltonika")
-    public ServerInitializerFactory getTeltonikaPipeline() {
-        Class<?> protocolClass = TeltonikaProtocol.class;
-        return TraccarSetup.createServerInitializerFactory(protocolClass);
     }
 
 //  jeets-protocols with Traccar logic ------------------------------

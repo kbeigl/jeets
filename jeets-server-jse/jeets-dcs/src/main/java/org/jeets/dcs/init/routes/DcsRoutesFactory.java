@@ -17,8 +17,6 @@ import org.traccar.TrackerServer;
  * Traverse *Protocol classes in org.traccar.protocol and align with properties'
  * port from configuration file. Register protocol object and create route with
  * composed URI.
- *
- * @author kbeigl@jeets.org
  */
 public class DcsRoutesFactory {
 
@@ -29,6 +27,7 @@ public class DcsRoutesFactory {
 
         Map<String, BaseProtocol> protocolList = getInstantiatedProtocols("org.traccar.protocol");
         System.out.println("instantiated " + protocolList.size() + " *Protocol objects");
+
         Map<String, Integer> portFailures = new ConcurrentHashMap<>();
 //      introduce counter before and after ? in test?
         for (String protocolName: protocolList.keySet()) {
@@ -88,15 +87,22 @@ public class DcsRoutesFactory {
 //      System.out.println("DcsRoutesFactory DONE !");
     }
 
-    private Map<String, BaseProtocol> getInstantiatedProtocols(String packageName) {
+    /**
+     * Use ClassFinder to instantiate ALL *Protocols classes available in the
+     * package.
+     * <p>
+     * This method is currently not applied since most systems do not activate ALL
+     * available protocols but rather a smaller subset. Then the instantiated
+     * Protocols with TrackerServer would need to be garbage collected after method
+     * return. <br>
+     * TODO Anyhow the method can be useful for testing without config file.
+    private Map<String, BaseProtocol> getAllInstantiatedProtocols(String packageName) {
+        List<Object> allBaseProtocols = 
+                ClassFinder.getInstances(packageName, "org.traccar.BaseProtocol");
+    }
+     */
 
-        /* ClassFinder could be used to instantiate ALL *Protocols at once:
-         * List<Object> allBaseProtocols =
-         *      ClassFinder.getInstances(packageName, "org.traccar.BaseProtocol");
-         * This method was not applied since most systems do not activate ALL
-         * available protocols and the instantiated Protocols with TrackerServer
-         * would need to be garbage collected after method return.
-         */
+    private Map<String, BaseProtocol> getInstantiatedProtocols(String packageName) {
 
         Map<String, BaseProtocol> protocolList = new ConcurrentHashMap<>();
         List<Class<?>> protocolClasses =

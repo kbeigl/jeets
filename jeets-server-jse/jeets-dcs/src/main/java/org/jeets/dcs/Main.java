@@ -11,10 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages="org.jeets.dcs")
+// @ComponentScan(basePackages= {"org.jeets.dcs","org.traccar.protocol"})
 public class Main {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
@@ -31,26 +30,26 @@ public class Main {
         final String configFile = args[args.length - 1];
 
         logSystemInfo();
-            
-//      TODO realize these via Spring life cycle management, see deprecated Camel below
+
+        SpringApplication.run(Main.class, args);
+        System.out.println("SpringApplication running ...");
+
+//      move to test to validate beans
+//      Spring(BootApplication) context
+//      AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(Config.class);
+//      String[] beanNames = ctx.getBeanDefinitionNames();
+//      Arrays.sort(beanNames);
+//      for (String beanName : beanNames) { System.out.println(beanName); }
+//      ServerInitializerFactory sif = (ServerInitializerFactory) ctx.getBean("teltonika");
+//      System.out.println("HASHCODE" + sif.hashCode());
+
+//      TODO realize these via Spring life cycle management
 //      Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
 //      Runtime.getRuntime().addShutdownHook(new Thread() { ..
 //      docs.spring.io/spring-boot/docs/2.1.10.RELEASE/reference/html/boot-features-spring-application.html
 //      ctx.registerShutdownHook();
         
-        SpringApplication.run(Main.class, args);
-        System.out.println("SpringApplication running ...");
-
     }
-
-    /* create this Camel mechanism (doesn't work here) in Spring
-     * see https://camel.apache.org/components/3.0.x/spring-boot.html
-     * CUSTOM CAMEL CONTEXT CONFIGURATION 
-     * beforeApplicationStart(CamelContext context)
-    public static class Events extends MainListenerSupport {
-        public void afterStart(MainSupport main) { }
-        public void beforeStop(MainSupport main) { }
-    }    */
 
     public static void logSystemInfo() {
         try {

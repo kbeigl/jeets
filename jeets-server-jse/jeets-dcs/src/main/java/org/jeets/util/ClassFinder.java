@@ -32,8 +32,9 @@ import java.util.zip.ZipFile;
  * Also note that the search is restricted to paths containing 'jeets' in order
  * to search only in the jeets world. See javadoc for getPathesFromClasspath
  * method.
- *
- * @author kbeigl@jeets.org
+ * <p>
+ * Another way to detect all subtypes of a type is by using this library: <br>
+ * https://github.com/ronmamo/reflections
  */
 public final class ClassFinder {
 
@@ -51,24 +52,27 @@ public final class ClassFinder {
 
         String packageName = "org.traccar.protocol";
         String classNameSearched = null;
+        long start = System.currentTimeMillis();
 
-        System.out.println("\n---- Gefundene Klassen:");
         List<Class<?>> classes = getClasses(packageName, classNameSearched);
+        System.out.println("\n---- " + classes.size() + " found classes:");
         for (Class<?> clazz : classes) {
             System.out.println(clazz);
         }
 
-        System.out.println("\n---- Instanziierte Objekte:");
         List<Object> objects = getInstances(packageName, classNameSearched);
+        System.out.println("\n---- " + objects.size() + " instatiated objects");
         for (Object obj : objects) {
             System.out.println(obj.getClass());
         }
+        
+        System.out.println(System.currentTimeMillis() - start + " millis");
     }
 
     // Finde Klassen und instanziiere sie:
     public static List<Object> getInstances(String packageName, String classNameSearched)
             throws ClassNotFoundException {
-        List<Class<?>> classes = ClassFinder.getClasses(packageName, classNameSearched);
+        List<Class<?>> classes = getClasses(packageName, classNameSearched);
         List<Object> objects = new ArrayList<Object>();
         for (Class<?> clazz : classes) {
             if (!clazz.isInterface() && (clazz.getModifiers() & Modifier.ABSTRACT) == 0) {
@@ -106,7 +110,7 @@ public final class ClassFinder {
     }
 
     /**
-     * Note!<br>
+     * TODO Update this:<br>
      * Currently only paths containing 'jeets' are respected. This may be fine tuned
      * later, since jeets can be the root directory, in the jar name or in the path
      * to a class file. Anyhow it performs better without going through all third
@@ -119,9 +123,9 @@ public final class ClassFinder {
         List<String> pathes = new ArrayList<String>();
         while (tokenizer.hasMoreElements()) {
             String target = tokenizer.nextToken();
-            if (target.contains("jeets")) {
+//            if (target.contains("jeets")) {
                 pathes.add(target);
-            }
+//            }
         }
         return Collections.unmodifiableList(pathes);
     }

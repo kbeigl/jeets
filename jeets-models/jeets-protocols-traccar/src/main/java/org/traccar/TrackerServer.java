@@ -99,6 +99,7 @@ public abstract class TrackerServer {
         return address;
     }
 
+//  observe DEBUG messages when this is created > remove for JeeTS
     private final ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
     public ChannelGroup getChannelGroup() {
