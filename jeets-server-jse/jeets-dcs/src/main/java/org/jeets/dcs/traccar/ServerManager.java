@@ -1,18 +1,15 @@
 package org.jeets.dcs.traccar;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.Enumeration;
+import java.util.Set;
 
-import org.jeets.dcs.Config;
 import org.jeets.traccar.routing.TraccarRoute;
 import org.jeets.traccar.routing.TraccarSetup;
+import org.reflections.Reflections;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Configuration;
+import org.traccar.BaseProtocol;
 import org.traccar.protocol.TeltonikaProtocol;
 
 /**
@@ -54,6 +51,23 @@ public class ServerManager implements BeanFactoryPostProcessor {
         // better: use property file and handling (test and prod!?)
         // the . directory refers to the project home! setup dir has to exist.
         TraccarSetup.contextInit("./setup/traccar.xml");
+
+        /*
+         * The org.traccar.ServerManager scans directories or simple jars. This solution
+         * doesn't work for SpringBoot jars and would require coding over several
+         * ClassLoaders etc. With the reflections library it boils down to a few lines
+         * at the cost of importing javassist-3.26.0-GA-sources.jar 764 kb and
+         * reflections-0.9.12-sources.jar 52 kb. The scanning takes place when starting
+         * up the application, performs only once. This could be optimized by scanning
+         * via Maven. see www.baeldung.com/reflections-library
+         */
+        Reflections reflections = new Reflections("org.traccar.protocol");
+//      INFO Reflections took 12 sec to scan 2 urls, producing 11 keys and 754 values 
+        Set<Class<? extends BaseProtocol>> set = 
+                reflections.getSubTypesOf(BaseProtocol.class);
+        set.forEach(System.out::println);
+        
+        
 
         // define internal sub/method/s
         // for (int i = 0; i < 3; i++) {

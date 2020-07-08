@@ -13,7 +13,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-// @ComponentScan(basePackages= {"org.jeets.dcs","org.traccar.protocol"})
 public class Main {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
@@ -33,15 +32,6 @@ public class Main {
 
         SpringApplication.run(Main.class, args);
         System.out.println("SpringApplication running ...");
-
-//      move to test to validate beans
-//      Spring(BootApplication) context
-//      AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(Config.class);
-//      String[] beanNames = ctx.getBeanDefinitionNames();
-//      Arrays.sort(beanNames);
-//      for (String beanName : beanNames) { System.out.println(beanName); }
-//      ServerInitializerFactory sif = (ServerInitializerFactory) ctx.getBean("teltonika");
-//      System.out.println("HASHCODE" + sif.hashCode());
 
 //      TODO realize these via Spring life cycle management
 //      Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
