@@ -66,15 +66,20 @@ public class TraccarSetup {
     }
 
     /**
-     * Retrieve Traccar Protocol Port from Context.
+     * Retrieve Traccar &ltprotocol&gt.port number from Context.
      * <p>
-     * Prerequisite of calling this method is the contextInit method with a
+     * Prerequisite of calling this method is the {@link #contextInit} method on a
      * configuration file. If the port was not found in the Context port #-1 is
-     * returned and should be handled by the caller.
+     * returned and should be handled by the caller. Else it will raise an Exception
+     * when trying to bind it: <br>
+     * <code>java.lang.IllegalArgumentException: hostname can't be null
+     * at java.net.InetSocketAddress.checkHost(InetSocketAddress.java:149) </code>
      * 
      * @param protocol
-     * @return
-     * @throws Exception
+     * @return port#
+     * @throws Exception if the &ltprotocol&gt.port was not read into the Context
+     *                   with {@link #contextInit} or is not defined in xml config
+     *                   file
      */
     public static int getProtocolPort(String protocol) throws Exception {
         String protocolPortKey = protocol + ".port";
@@ -82,11 +87,12 @@ public class TraccarSetup {
             if (Context.getConfig().hasKey(protocolPortKey)) {
                 return Context.getConfig().getInteger(protocolPortKey);
             } else {
-                System.err.println(protocol + " is not defined in config file!"); 
-//              "Port for " + protocolPort + " was not found in Context."
+                System.err.println(protocol + " protocol port is not defined in Context (and config file?)"); 
+//              returns -1 below
             }
         } catch (NullPointerException npe) {
-            throw new Exception("Traccar Context was not initialized. Make sure to apply contextInit at application startup!");
+            throw new Exception("Traccar Context was not initialized. "
+                    + "Make sure to apply contextInit at application startup!");
         }
         return -1; // ?
     }
@@ -95,7 +101,8 @@ public class TraccarSetup {
      * Always apply this method to Initialize Traccar Context to ensure that it is
      * only loaded once!
      * <p>
-     * Method returns fast, if context already is initialized.
+     * Method returns fast, if context already is initialized. Therefore it doesn't
+     * harm to call it multiple times.
      * 
      * @param configFile
      */

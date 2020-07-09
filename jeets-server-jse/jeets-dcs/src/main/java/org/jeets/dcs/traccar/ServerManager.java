@@ -1,7 +1,6 @@
 package org.jeets.dcs.traccar;
 
 import java.util.Set;
-
 import org.jeets.traccar.routing.TraccarRoute;
 import org.jeets.traccar.routing.TraccarSetup;
 import org.reflections.Reflections;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.annotation.Configuration;
 import org.traccar.BaseProtocol;
-import org.traccar.protocol.TeltonikaProtocol;
 
 /**
  * This class is modeled after and replaces Traccar's ServerManager only with
@@ -36,74 +34,80 @@ public class ServerManager implements BeanFactoryPostProcessor {
      */
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        setupTraccarServers(beanFactory);
+        try {
+            setupTraccarServers(beanFactory);
+        } catch (Exception e) {
+            System.err.println("Context was not initialized. Traccar servers can not be launched.");
+            System.err.println(e.getMessage());
+        }
     }
 
     /**
      * Setup the Traccar servers with ports defined in the setup file and register
      * them in Spring to be handled by Camel and Netty (starter).
      * 
-     * @param beanFactory
+     * @param beanFactory for Bean registration in application context
+     * @throws Exception 
      */
-    private void setupTraccarServers(ConfigurableListableBeanFactory beanFactory) {
-        // Traccar Context is mandatory!
-        // TODO: propagate configFile to ServerManager for Context.init
-        // better: use property file and handling (test and prod!?)
-        // the . directory refers to the project home! setup dir has to exist.
+    private void setupTraccarServers(ConfigurableListableBeanFactory beanFactory) throws Exception {
+
+        /* 
+         * TODO: propagate configFile to ServerManager for Context.init
+         * better: use property file and handling (test and prod!?)
+         * the . directory refers to the project home!
+         */
+
+        // Traccar Context is mandatory (hard coded in *Protocol classes!)
         TraccarSetup.contextInit("./setup/traccar.xml");
 
         /*
          * The org.traccar.ServerManager scans directories or simple jars. This solution
          * doesn't work for SpringBoot jars and would require coding over several
-         * ClassLoaders etc. With the reflections library it boils down to a few lines
-         * at the cost of importing javassist-3.26.0-GA-sources.jar 764 kb and
-         * reflections-0.9.12-sources.jar 52 kb. The scanning takes place when starting
+         * ClassLoaders, paths etc. With the Reflections Library it boils down to two
+         * lines at the cost of importing javassist-3.26.0-GA-sources.jar 764 kb and
+         * reflections-0.9.12-sources.jar 52 kb. Scanning only takes place when starting
          * up the application, performs only once. This could be optimized by scanning
-         * via Maven. see www.baeldung.com/reflections-library
+         * at Maven build time. see www.baeldung.com/reflections-library
          */
         Reflections reflections = new Reflections("org.traccar.protocol");
-//      INFO Reflections took 12 sec to scan 2 urls, producing 11 keys and 754 values 
-        Set<Class<? extends BaseProtocol>> set = 
-                reflections.getSubTypesOf(BaseProtocol.class);
-        set.forEach(System.out::println);
-        
-        
+        Set<Class<? extends BaseProtocol>> protocolClasses = reflections.getSubTypesOf(BaseProtocol.class);
+//      protocolClasses.forEach(System.out::println);
 
-        // define internal sub/method/s
-        // for (int i = 0; i < 3; i++) {
-        
-        String protocol = "teltonika"; // or "TeltonikaProtocol"
+        String protocol = null;
         int port = -1;
+        for (Class<? extends BaseProtocol> clazz : protocolClasses) {
+//          code from BaseProtocol.nameFromClass(class);
+            String className = clazz.getSimpleName(); // TeltonikaProtocol
+            protocol = className.substring(0, className.length() - 8).toLowerCase();
 
-        beanFactory.registerSingleton(protocol, 
-                TraccarSetup.createServerInitializerFactory(TeltonikaProtocol.class));
+            if (protocol.equals("teltonika")) {
 
-        try {
-            port = TraccarSetup.getProtocolPort(protocol);
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-            // e.printStackTrace();
-            // Context not initialized > System.exit
-            // throw new RuntimeException(e.getMessage());
+                beanFactory.registerSingleton(protocol, // TeltonikaProtocol.class
+                        TraccarSetup.createServerInitializerFactory(clazz));
+
+                port = TraccarSetup.getProtocolPort(protocol);
+                if (port != -1) {
+                    String uri = "netty:tcp://" + host + ":" + port 
+                            + "?serverInitializerFactory=#" + protocol + "&sync=" + camelNettySync;
+                    beanFactory.registerSingleton(protocol + "Route", new TraccarRoute(uri, protocol));
+                } else {
+                    System.err.println("port# for " + protocol
+                            + " is not defined in configuration file. Server is not launched!");
+                }
+
+            }
         }
-        // catch port = 0 / -1 ? else:
-        // java.lang.IllegalArgumentException: hostname can't be null
-        // at java.net.InetSocketAddress.checkHost(InetSocketAddress.java:149)
-
-        String uri = "netty:tcp://" + host + ":" + port 
-                + "?serverInitializerFactory=#" + protocol + "&sync=" + camelNettySync;
-        beanFactory.registerSingleton(protocol + "Route", new TraccarRoute(uri, protocol));
     }
 
-//  add get/setters for host ! Individual hosts for different protocols ?
+//  add get/setters for host ! Individual hosts for different protocols (?)
 
     /**
      * The Consumer Endpoint (from) for each Traccar protocol must be set to false!
      * <p>
      * The Traccar Pipeline and -Decoders are implemented WITH ACK response, i.e.
-     * channel.writeAndFlush. Therefore the Camel endpoint, i.e. NettyConsumer,
-     * should NOT return a (additional) response. This behavior should be observed
-     * .. <br>
+     * channel.writeAndFlush. Therefore the Camel Endpoint, i.e. NettyConsumer,
+     * should NOT return a (additional) response.
+     * <p>
      * Note that this boolean variable is attached to the URI as String 'true' /
      * 'false'. Maybe apply String for type safety.
      */
