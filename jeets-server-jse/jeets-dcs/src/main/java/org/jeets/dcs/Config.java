@@ -11,54 +11,26 @@ import org.springframework.context.annotation.Configuration;
 
 import org.traccar.Context;
 import org.traccar.protocol.JeetsProtocol;
-import org.traccar.protocol.RuptelaProtocol;
-import org.traccar.protocol.TeltonikaProtocol;
-
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 
 /**
  * Use this class to implement / test individual DCSs.
  */
-@Configuration // source of bean definitions for the application context
+@Configuration
 public class Config {
-
+    
     private static final Logger LOGGER = LoggerFactory.getLogger(Config.class);
 
-//  jeets-protocols-traccar -----------------------------------------
+//  jeets-protocols -------------------------------------------------
+//  TODO provide prop file with protocols and ports
 
+//  jeets-protocols-traccar -----------------------------------------
 //  A dynamic solution should be created for the TypeConverters hard
 //  coded in /resources/META-INF/services/org/apache/camel/TypeConverter
 
-    @Bean(name = "ruptela") // is this a singleton !?
-    public ServerInitializerFactory getRuptelaPipeline() {
-//      traverse default.xml protocols and ports
-        Class<?> protocolClass = RuptelaProtocol.class;
-        return TraccarSetup.createServerInitializerFactory(protocolClass);
-    }
-
-    @Bean(name = "ruptelaRoute") 
-    public RouteBuilder createRuptelaRoute() {
-//      analog: Context.getServerManager().start()
-        String routeName = "ruptela"; // = serverInitializerFactory 
-        int port = -1; // 5046
-        if (Context.getConfig().hasKey("ruptela.port")) {
-            port = Context.getConfig().getInteger("ruptela.port");
-            // String represents dynamic part for all protocols, see below
-            // add traccar channelGroup, see Camel Netty Component: channelGroup (advanced)
-            String uri = "netty:tcp://" + host + ":" + port 
-                    + "?serverInitializerFactory=#" + routeName 
-                    + "&sync=" + camelNettySync;
-//          "&workerPool=#sharedPool&usingExecutorService=false" .. ?
-            return new TraccarRoute(uri, routeName);
-        }
-        System.err.println("Ruptela is not configured. No Route created!");
-        return null;
-    }
-
 //  jeets-protocols with Traccar logic ------------------------------
-
-    @Bean(name = "device") // TODO: "jeets" 
+    @Bean(name = "device") // TODO: "jeets" != jeets traccar!
     public ServerInitializerFactory getDevicePipeline() {
         Class<?> protocolClass = JeetsProtocol.class;
         return TraccarSetup.createServerInitializerFactory(protocolClass);
@@ -78,7 +50,7 @@ public class Config {
         return null;
     }
 
-//  Netty En/Decoders out of the box with @Component and @Service --- !!
+//  Netty En/Decoder out of the box
 
     @Bean(name = "stringDecoder")
     public StringDecoder createStringDecoder() {

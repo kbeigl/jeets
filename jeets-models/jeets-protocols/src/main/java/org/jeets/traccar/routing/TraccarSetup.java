@@ -21,14 +21,12 @@ public class TraccarSetup {
 
     /* Currently only creating "tcp" servers */
     public static ServerInitializerFactory createServerInitializerFactory(Class<?> protocolClass) {
-        // could do without:
-        String protocolName = BaseProtocol.nameFromClass(protocolClass);
         BaseProtocol protocol = instantiateProtocol(protocolClass);
         String transport = "tcp";
         TrackerServer server = getProtocolServer(transport, protocol);
         // compose URI and attach to server.setCamelUri() !
         if (server == null) {
-            LOGGER.warn("No server found for '" + transport + ":" + protocolName);
+            LOGGER.warn("No server found for '" + transport + ":" + BaseProtocol.nameFromClass(protocolClass));
             return null;
         }
         return server.getServerInitializerFactory();
@@ -87,7 +85,7 @@ public class TraccarSetup {
             if (Context.getConfig().hasKey(protocolPortKey)) {
                 return Context.getConfig().getInteger(protocolPortKey);
             } else {
-                System.err.println(protocol + " protocol port is not defined in Context (and config file?)"); 
+                LOGGER.debug(protocol + " protocol port is not defined in Context (and config file?)"); 
 //              returns -1 below
             }
         } catch (NullPointerException npe) {

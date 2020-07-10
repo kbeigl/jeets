@@ -76,25 +76,24 @@ public class ServerManager implements BeanFactoryPostProcessor {
         String protocol = null;
         int port = -1;
         for (Class<? extends BaseProtocol> clazz : protocolClasses) {
-//          code from BaseProtocol.nameFromClass(class);
+//          see BaseProtocol.nameFromClass(class);
             String className = clazz.getSimpleName(); // TeltonikaProtocol
             protocol = className.substring(0, className.length() - 8).toLowerCase();
 
-            if (protocol.equals("teltonika")) {
+            port = TraccarSetup.getProtocolPort(protocol);
+            if (port != -1) {
 
                 beanFactory.registerSingleton(protocol, // TeltonikaProtocol.class
                         TraccarSetup.createServerInitializerFactory(clazz));
 
-                port = TraccarSetup.getProtocolPort(protocol);
-                if (port != -1) {
-                    String uri = "netty:tcp://" + host + ":" + port 
-                            + "?serverInitializerFactory=#" + protocol + "&sync=" + camelNettySync;
-                    beanFactory.registerSingleton(protocol + "Route", new TraccarRoute(uri, protocol));
-                } else {
-                    System.err.println("port# for " + protocol
-                            + " is not defined in configuration file. Server is not launched!");
-                }
+                String uri = "netty:tcp://" + host + ":" + port + "?serverInitializerFactory=#" + protocol + "&sync="
+                        + camelNettySync;
+                beanFactory.registerSingleton(protocol + "Route", new TraccarRoute(uri, protocol));
 
+            } else {
+//                log.debug
+//                System.err.println("port# for " + protocol + " is not defined in configuration file. " 
+//                        + className + " Server is not launched!");
             }
         }
     }
