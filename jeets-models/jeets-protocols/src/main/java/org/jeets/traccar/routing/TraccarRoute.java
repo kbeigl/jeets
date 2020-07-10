@@ -26,10 +26,15 @@ public class TraccarRoute extends RouteBuilder {
      * &lt;name&gt; only as meaningless String. Only before the Route is
      * instantiated by a first message the serverInitializerFactory has to be
      * registered.
+     * <p>
+     * DCS Routes for ALL Protocols are directed to one output endpoint where the
+     * traccar.model objects can be picked up by the system. Later a jeets.model
+     * output for JPA specified Entities will be added as an alternative.
      */
     @Override
     public void configure() throws Exception {
         from(from)
+//      using the same id again, will quietly stop and replace the earlier route!!
         .routeId(routeId)
 //      .routeGroup("hello-group")
 //      .startupOrder(order)

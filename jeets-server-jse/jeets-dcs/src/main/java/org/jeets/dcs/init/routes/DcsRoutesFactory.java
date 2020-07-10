@@ -11,16 +11,7 @@ import org.traccar.BaseProtocol;
 import org.traccar.Context;
 import org.traccar.TrackerServer;
 
-/**
- * This Factory replaces the org.traccar.ServerManager
- * <p>
- * Traverse *Protocol classes in org.traccar.protocol and align with properties'
- * port from configuration file. Register protocol object and create route with
- * composed URI.
- */
 public class DcsRoutesFactory {
-
-//  default for every server without specified address
     private final String host = "localhost";
 
     public void createTraccarDcsRoutes(CamelContext camelContext, Registry registry) {
@@ -87,21 +78,7 @@ public class DcsRoutesFactory {
 //      System.out.println("DcsRoutesFactory DONE !");
     }
 
-    /**
-     * Use ClassFinder to instantiate ALL *Protocols classes available in the
-     * package.
-     * <p>
-     * This method is currently not applied since most systems do not activate ALL
-     * available protocols but rather a smaller subset. Then the instantiated
-     * Protocols with TrackerServer would need to be garbage collected after method
-     * return. <br>
-     * TODO Anyhow the method can be useful for testing without config file.
-    private Map<String, BaseProtocol> getAllInstantiatedProtocols(String packageName) {
-        List<Object> allBaseProtocols = 
-                ClassFinder.getInstances(packageName, "org.traccar.BaseProtocol");
-    }
-     */
-
+    @Deprecated
     private Map<String, BaseProtocol> getInstantiatedProtocols(String packageName) {
 
         Map<String, BaseProtocol> protocolList = new ConcurrentHashMap<>();
@@ -124,11 +101,7 @@ public class DcsRoutesFactory {
         return protocolList;
     }
 
-    /**
-     * DCS Routes for ALL Protocols are directed to one output endpoint where the
-     * traccar.model objects can be picked up by the system. Later a jeets.model
-     * output for JPA specified Entities will be added as an alternative.
-     */
+    @Deprecated
     private static final class DcsRouteBuilder extends RouteBuilder {
         private final String from;
         private final String routeId;
@@ -142,12 +115,7 @@ public class DcsRoutesFactory {
         @Override
         public void configure() throws Exception {
             from(from)
-//          using the same id again, will quietly stop and replace the earlier route
             .routeId(routeId)
-//          may become helpful, use outer loop to increment (keep external <key,val> references!)
-//          .startupOrder(order)
-//          Fine tuning with seda endpoint etc.
-//          .to("seda:traccar.model");
             .to("direct:traccar.model");
         }
     }

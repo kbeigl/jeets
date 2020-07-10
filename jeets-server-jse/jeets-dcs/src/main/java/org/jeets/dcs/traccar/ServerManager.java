@@ -36,7 +36,7 @@ public class ServerManager implements BeanFactoryPostProcessor {
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         try {
             setupTraccarServers(beanFactory);
-        } catch (Exception e) {
+        } catch (Exception e) { // TODO handle other cause/s !
             System.err.println("Context was not initialized. Traccar servers can not be launched.");
             System.err.println(e.getMessage());
         }
@@ -61,17 +61,12 @@ public class ServerManager implements BeanFactoryPostProcessor {
         TraccarSetup.contextInit("./setup/traccar.xml");
 
         /*
-         * The org.traccar.ServerManager scans directories or simple jars. This solution
-         * doesn't work for SpringBoot jars and would require coding over several
-         * ClassLoaders, paths etc. With the Reflections Library it boils down to two
-         * lines at the cost of importing javassist-3.26.0-GA-sources.jar 764 kb and
-         * reflections-0.9.12-sources.jar 52 kb. Scanning only takes place when starting
-         * up the application, performs only once. This could be optimized by scanning
-         * at Maven build time. see www.baeldung.com/reflections-library
+         * Scanning only takes place when starting up the application, performs only
+         * once. This could be optimized by scanning at Maven build time. Observe
+         * startup delay. see www.baeldung.com/reflections-library
          */
         Reflections reflections = new Reflections("org.traccar.protocol");
         Set<Class<? extends BaseProtocol>> protocolClasses = reflections.getSubTypesOf(BaseProtocol.class);
-//      protocolClasses.forEach(System.out::println);
 
         String protocol = null;
         int port = -1;

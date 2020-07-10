@@ -10,8 +10,6 @@ import org.jeets.dcs.init.tracking.TrackingSystem;
 /**
  * Main class to initialize static traccar.Context, create and run DC servers on
  * all (available) ports. Shutdown with CTRL + C
- *
- * @author kbeigl@jeets.org
  */
 public class DcsMain extends Main {
 
@@ -28,11 +26,6 @@ public class DcsMain extends Main {
         main.configure().addRoutesBuilder(new ConsumerDslRoute());
         main.bind("trackingSystem", new TrackingSystem());
 
-        // add event listener
-//      main.addMainListener(new Events());
-        // set the properties from a file
-//      main.setPropertyPlaceholderLocations("example.properties");
-        System.out.println("Starting Camel. Use CTRL + C to terminate the JVM.");
         main.run(args); // see built in args below
     }
 
