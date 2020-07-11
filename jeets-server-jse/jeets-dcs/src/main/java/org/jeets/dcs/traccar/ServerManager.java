@@ -29,16 +29,17 @@ public class ServerManager implements BeanFactoryPostProcessor {
 
     /**
      * The method BeanFactoryPostProcessor.postProcessBeanFactory is called by
-     * Spring startup process just after all bean definitions have been loaded, but
-     * no beans have been instantiated yet.
+     * Spring startup process just after all bean definitions have been loaded,
+     * **but no beans have been instantiated yet**, i.e. @Bean definitions.
      */
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         try {
             setupTraccarServers(beanFactory);
-        } catch (Exception e) { // TODO handle other cause/s !
-            System.err.println("Context was not initialized. Traccar servers can not be launched.");
+        } catch (Exception e) { 
+            // TODO handle other cause/s than getProtocolPort contextInit Exception!
             System.err.println(e.getMessage());
+//          System.exit(0); // don't apply at dev time and handle with care !!  
         }
     }
 
@@ -81,9 +82,14 @@ public class ServerManager implements BeanFactoryPostProcessor {
                 beanFactory.registerSingleton(protocol, // TeltonikaProtocol.class
                         TraccarSetup.createServerInitializerFactory(clazz));
 
-                String uri = "netty:tcp://" + host + ":" + port + "?serverInitializerFactory=#" + protocol + "&sync="
-                        + camelNettySync;
-                beanFactory.registerSingleton(protocol + "Route", new TraccarRoute(uri, protocol));
+//              register netty as jeets-dcs ;)
+                String uri = "netty:tcp://" + host + ":" + port 
+                        + "?serverInitializerFactory=#" + protocol 
+                        + "&sync=" + camelNettySync;
+//              "&workerPool=#sharedPool&usingExecutorService=false" register in XML,
+
+                beanFactory.registerSingleton(protocol + "Route", 
+                        new TraccarRoute(uri, protocol));
 
             } else {
 //                log.debug

@@ -43,11 +43,7 @@ public class TraccarDcsTests extends CamelTestSupport {
         testingTeltonikaServer();
     }
 
-//  CamelTestSupport provides
-//  ConsumerTemplate consumer > server
-//  ProducerTemplate template > client
-
-//  redundant to dcs > DcsSpringBootTests
+//  redundant to dcs > DcsSpringBootTests => prototype!
     public void testingTeltonikaServer() throws Exception {
         String protocol = "teltonika";
 //      int port = getPort(protocol + ".port");

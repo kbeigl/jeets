@@ -64,6 +64,7 @@
 
         <dependency>
 			<!-- spring for protobuf un/marshal -->
+			<!-- NO spring in project artifact! only in Test! -->
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-test-spring</artifactId>
             <scope>test</scope>

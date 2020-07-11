@@ -2,6 +2,10 @@ package org.jeets.dcs;
 
 import org.apache.camel.ConsumerTemplate;
 import org.apache.camel.ProducerTemplate;
+import org.jeets.protobuf.Jeets;
+import org.jeets.protobuf.Jeets.Acknowledge;
+import org.jeets.protobuf.Jeets.Device.Builder;
+import org.jeets.protocol.util.Samples;
 import org.jeets.traccar.routing.TraccarSetup;
 import org.junit.Assert;
 import org.junit.Test;
@@ -10,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.traccar.model.Position;
-
 import io.netty.buffer.ByteBufUtil;
 
 /**
@@ -28,13 +31,55 @@ public class DcsSpringBootTests {
     private ProducerTemplate client;
     @Autowired
     private ConsumerTemplate server;
+    private String host = "netty:tcp://localhost:";
+    
+    /**
+     * Test org.jeets.protocol.JeetsDecoder and -Protocol
+     * 
+     * @throws Exception
+     */
+    @Test
+    public void testJeetsServer() throws Exception {
+        
+//      no config mechanism yet, use props file
+        
+    }
 
+    /**
+     * Test org.traccar.protocol.JeetsDecoder and -Protocol
+     */
+    @Test
+    public void testTraccarJeetsServer() throws Exception {
+        String protocol = "jeets";
+        int port = TraccarSetup.getProtocolPort(protocol);
+
+        Builder protoMessage = Samples.createDeviceWithPositionWithOneEvent();
+        System.out.println("sending " + protoMessage);
+        Jeets.Acknowledge ack = sendProtoMessage(port, protoMessage);
+        System.out.println("received " + ack);
+        Assert.assertEquals(ack.getDeviceid(), 123);
+
+//      This happens every other run ??
+// ???  [ShutdownTask] o.a.c.i.engine.DefaultShutdownStrategy: 
+//      Waiting as there are still 1 inflight and pending exchanges to complete, timeout in 45 seconds. 
+//      Inflights per route: [jeetsRoute = 1]
+//      [ServerTCPWorker] org.traccar.MainEventHandler: [3e4ef5b6] disconnected
+        
+    }
+
+    private Jeets.Acknowledge sendProtoMessage(int port, Builder protoMessage) {
+//      requires registered ack=JeetsClientProtocol, currently as fixed @Bean
+        String nettyParams = "?clientInitializerFactory=#ack&sync=true";
+        Jeets.Acknowledge ack = (Acknowledge) 
+                client.requestBody(host + port + nettyParams, protoMessage);
+        return ack;
+    }
+    
     @Test
     public void testTeltonikaServer() throws Exception {
         String protocol = "teltonika";
-//      int port = getPort(protocol + ".port");
         int port = TraccarSetup.getProtocolPort(protocol);
-//      catch port = 0 ?
+//      catch port = -1 ?
 
 //      TODO: use teltonika.jdev test file for message content
         String hexMessage = "000f333536333037303432343431303133";
@@ -86,15 +131,18 @@ public class DcsSpringBootTests {
     private String sendHexMessage(int port, String hexMessage) {
         byte[] byteMessage = ByteBufUtil.decodeHexDump(hexMessage);
         String nettyParams = "?useByteBuf=true&allowDefaultCodec=false&producerPoolEnabled=false";
-        byte[] response = client.requestBody("netty:tcp://localhost:" + port + nettyParams, byteMessage, byte[].class);
+        byte[] response = client.requestBody(host + port + nettyParams, byteMessage, byte[].class);
         return ByteBufUtil.hexDump(response);
     }
 
     @Test
     public void testStringEndpoint() throws Exception {
         String stringMessage = "StringMessage";
+        String nettyParams = "?useByteBuf=true&decoders=#stringDecoder";
+        int port = 7000; // hard coded
         System.out.println("request : " + stringMessage);
-        String result = (String) client.requestBody("netty:tcp://localhost:7000?useByteBuf=true&decoders=#stringDecoder", stringMessage);
+        String result = (String) client.
+                requestBody(host + port + nettyParams, stringMessage);
         System.out.println("response: " + result);
         Assert.assertEquals("ACK: " + stringMessage, result);
     }

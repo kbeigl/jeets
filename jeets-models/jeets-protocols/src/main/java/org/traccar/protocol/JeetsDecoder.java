@@ -18,6 +18,8 @@ package org.traccar.protocol;
 import io.netty.channel.Channel;
 
 import org.jeets.protobuf.Jeets;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.traccar.BaseProtocolDecoder;
 import org.traccar.DeviceSession;
 import org.traccar.NetworkMessage;
@@ -36,6 +38,7 @@ import java.util.List;
  */
 public class JeetsDecoder extends BaseProtocolDecoder {
 
+    private static final Logger LOG = LoggerFactory.getLogger(JeetsDecoder.class);
     public JeetsDecoder(Protocol protocol) {
         super(protocol);
     }
@@ -44,7 +47,7 @@ public class JeetsDecoder extends BaseProtocolDecoder {
 	protected Object decode(Channel channel, SocketAddress remoteAddress, Object msg) throws Exception {
 
 		Jeets.Device protoDevice = (Jeets.Device) msg; // extract protobuffer
-		System.out.println("received device:\n" + protoDevice.toString());
+		LOG.debug("received device:\n" + protoDevice.toString());
 
 		DeviceSession deviceSession = getDeviceSession(channel, remoteAddress, protoDevice.getUniqueid());
 		if (deviceSession == null) {
@@ -60,7 +63,7 @@ public class JeetsDecoder extends BaseProtocolDecoder {
 				Jeets.Acknowledge.Builder ackBuilder = Jeets.Acknowledge.newBuilder();
 				ackBuilder.setDeviceid(123);
 				channel.writeAndFlush(new NetworkMessage(ackBuilder.build(), remoteAddress));
-				System.out.println("responded with ack:\n" + ackBuilder.toString());
+				LOG.debug("responded with ack:" + ackBuilder.toString());
 			}
 		}
 		

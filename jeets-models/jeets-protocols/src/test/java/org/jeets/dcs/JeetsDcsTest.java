@@ -12,7 +12,6 @@ import org.jeets.protocol.JeetsClientProtocol;
 import org.jeets.protocol.JeetsProtocol;
 import org.jeets.protocol.util.Samples;
 import org.junit.Test;
-//import org.traccar.Main;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,13 +46,6 @@ public class JeetsDcsTest extends CamelTestSupport {
         assertMockEndpointsSatisfied();
     }
 
-//  @Test
-//  public void testTraccarDcsRoute() throws Exception {
-//// point to jeets-data config folder 
-//// or create test.xml file with one or two ports only.
-//      Main.run("./setup/traccar.xml");
-//  }
-
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
 //      'jeets' must be registered before use
@@ -66,7 +58,7 @@ public class JeetsDcsTest extends CamelTestSupport {
     @Override
     protected Registry createCamelRegistry() throws Exception {
         Registry registry = new SimpleRegistry();
-        registry.bind("jeets", new JeetsProtocol(null));    // request to server
+        registry.bind("jeets", new JeetsProtocol(null));      // request to server
         registry.bind("ack", new JeetsClientProtocol(null)); // response to client
         return registry;
     }

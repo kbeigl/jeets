@@ -17,65 +17,46 @@ public class DcsRoutesFactory {
     public void createTraccarDcsRoutes(CamelContext camelContext, Registry registry) {
 
         Map<String, BaseProtocol> protocolList = getInstantiatedProtocols("org.traccar.protocol");
-        System.out.println("instantiated " + protocolList.size() + " *Protocol objects");
 
+        System.out.println("instantiated " + protocolList.size() + " *Protocol objects");
         Map<String, Integer> portFailures = new ConcurrentHashMap<>();
-//      introduce counter before and after ? in test?
+
         for (String protocolName: protocolList.keySet()) {
-            String serverInitializerName = protocolName;
-//          register ONE serverIni instance for all protocols here? or for each server below?
-//          Util.addToRegistry(registry, serverInitializerFactory, server(x).getPipelineFactory());
-//          public AtrackProtocol() {
-//          addServer(new TrackerServer(tcp, protocolName) {
-//          addServer(new TrackerServer(udp, protocolName) {
-            if (protocolName.equals("teltonika")
-             || protocolName.equals("ruptela") ) {   // single out at dev time
+            String serverInitializerName = protocolName; // "teltonika"
+
             BaseProtocol protocolObject = protocolList.get(protocolName);
             for (TrackerServer server : protocolObject.getServerList()) {
                 String transport = server.isDatagram() ? "udp" : "tcp";
-                String uri = "netty:" + transport + "://"; // change to StringBuffer
-                String serverHost = (server.getAddress() == null) ? host : server.getAddress();
+                String uri = "netty:" + transport + "://";
+                String serverHost = (server.getAddress() == null) ? 
+                        host : server.getAddress();
                 uri += serverHost + ":" + server.getPort() + "?";
-                serverInitializerName = (transport.equals("tcp")) ? protocolName : protocolName + "-" + transport;
-                uri += "serverInitializerFactory=#" + serverInitializerName;
-//              sync=true for all protocols ? see TrackerServer.start:
-//              Channel channel = bootstrap.bind(endpoint).sync().channel();
-                uri += "&sync=true";
+                serverInitializerName = (transport.equals("tcp")) ? 
+                        protocolName : protocolName + "-" + transport;
+                uri += "serverInitializerFactory=#" + serverInitializerName + "&sync=true";
 
-//              "&workerPool=#sharedPool&usingExecutorService=false" register in XML,
-//              see .../camel-netty/src/main/docs/netty4-component.adoc
-//              register netty4 as jeets-dcs ;)
-
-//              register serverIni for each protocol (or move before for loop?)
                 System.out.println("register: " + serverInitializerName + " => " + protocolObject);
-//              Camel 3
                 camelContext.getRegistry().bind(serverInitializerName, server.getServerInitializerFactory());
-//              MultiRegistry.addToRegistry(registry, serverInitializerName, server.getServerInitializerFactory());
 
                 System.out.println("create Route '" + serverInitializerName + "' from(\"" + uri + "\") ...");
                 try {
                     camelContext.addRoutes(new DcsRouteBuilder(camelContext, uri, serverInitializerName));
-//                  add route counter in addition to: protocolList.size() + " *Protocol objects"
-//                  may need to 'clean' Netty stuff from TrackerServer not to confuse Netty
                 } catch (Exception e) {
                     System.err.println("Problem adding route " + uri + "\n" + e.getMessage());
-//                  LOGGER.warn("One of the protocols is disabled due to port conflict");
                     if (e instanceof java.net.BindException) {
                         portFailures.put(uri, server.getPort());
-//                      unregister ServerInitFactory ?
                     }
 //                  e.printStackTrace();
                 }
             }
-            }   // end single protocol
         }
+
         if (!portFailures.isEmpty()) {
             System.err.println("The following routes could not created due to 'port already in use'");
             portFailures.forEach((k, v) -> {
                 System.err.println("\tport=" + v + " - uri=" + k);
             });
         }
-//      System.out.println("DcsRoutesFactory DONE !");
     }
 
     @Deprecated

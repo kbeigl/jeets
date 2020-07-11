@@ -114,7 +114,7 @@ public class TraccarSetup {
             try {
                 Context.init(configFile);
             } catch (Exception ex) {
-                System.err.println("Traccar Context could not be initialized and is mandatory!"); // change to logger
+                LOGGER.error("Traccar Context could not be initialized and is mandatory!");
 //              ex.printStackTrace();
             }
         }

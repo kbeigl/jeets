@@ -1,16 +1,11 @@
 package org.jeets.dcs;
 
-import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.netty.ServerInitializerFactory;
-import org.jeets.traccar.routing.TraccarRoute;
-import org.jeets.traccar.routing.TraccarSetup;
+import org.jeets.protocol.JeetsClientProtocol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import org.traccar.Context;
-import org.traccar.protocol.JeetsProtocol;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 
@@ -20,7 +15,7 @@ import io.netty.handler.codec.string.StringEncoder;
 @Configuration
 public class Config {
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(Config.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Config.class);
 
 //  jeets-protocols -------------------------------------------------
 //  TODO provide prop file with protocols and ports
@@ -30,27 +25,12 @@ public class Config {
 //  coded in /resources/META-INF/services/org/apache/camel/TypeConverter
 
 //  jeets-protocols with Traccar logic ------------------------------
-    @Bean(name = "device") // TODO: "jeets" != jeets traccar!
-    public ServerInitializerFactory getDevicePipeline() {
-        Class<?> protocolClass = JeetsProtocol.class;
-        return TraccarSetup.createServerInitializerFactory(protocolClass);
+    @Bean(name = "ack") // TODO: "jeets" <> jeets traccar!
+    public JeetsClientProtocol getDevicePipeline() {
+        return new JeetsClientProtocol(null);
     }
 
-    @Bean(name = "protobufferXRoute")
-    public RouteBuilder createProtobufferRoute() {
-        String routeName = "device";  // TODO: "jeets"
-        int port = -1; // 5027
-        if (Context.getConfig().hasKey("device.port")) {
-            port = Context.getConfig().getInteger("device.port");
-            String uri = "netty:tcp://" + host + ":" + port + "?serverInitializerFactory=#" + routeName + "&sync=" + camelNettySync;
-            return new TraccarRoute(uri, routeName);
-        }
-//      throw Exception ?
-        LOGGER.error("DeviceProtocol is not configured. No Route created!");
-        return null;
-    }
-
-//  Netty En/Decoder out of the box
+//  Netty En/Decoder out of the box ! -------------------------------
 
     @Bean(name = "stringDecoder")
     public StringDecoder createStringDecoder() {
