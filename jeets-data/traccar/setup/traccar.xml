@@ -5,8 +5,8 @@
 <properties>
 
     <entry key='config.default'>C:/kris/virtex/github.jeets/jeets-data/traccar/setup/default.xml</entry>
-
     <!--
+    <entry key='config.default'>${jeets.traccar.data.path}/default.xml</entry>
     <entry key='config.default'>./setup/default.xml</entry>
 
     This is the main configuration file. All your configuration parameters should be placed in this file.

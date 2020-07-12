@@ -14,16 +14,18 @@
 ** currently depends on `jeets-protocols-traccar` +
    to enable compiling additional protocols in Traccar style
 
-* generalized `jeets-dcs-traccar` to `jeets-dcs-mamager` +
+* generalized `jeets-dcs-traccar` to `jeets-dcs-manager` +
 ** includes `jeets-protocols` with additional / alternate protocols to Traccar protocols
 *** includes `jeets-protocols-traccar`
 
 * added `my-etl-traccar` 
 for Maven Archetype generation of custom Traccar ETL MicroService
 
+* moved all project data to jeets-data folder +
+ applied variable replacement for traccar/setup folder 
 
 ( * restructure repository with jeets-traccar 
-    and / or device-communication section ? )
+and / or device-communication section ? )
  
 
 
