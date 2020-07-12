@@ -73,6 +73,12 @@
 	</dependencies>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
 		<plugins>
 		<!-- TODO move up in hierarchy -->
 			<plugin>
@@ -92,59 +98,16 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- transfered from traccar pom
-			checkstyle works on project- but not on repo level ???
-			stackoverflow.com/questions/50993349/checkstyle-suppressionfilter-module-file-path-for-eclipse-and-maven-compatibilit
+			<!-- the following two entries are mandatory in order to apply the jeets.props file
+			     without them variable replacement only replaces variables from pom files!! -->
 			<plugin>
-				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.0.0</version>
-				<executions>
-					<execution>
-						<id>checkstyle</id>
-						<phase>validate</phase>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<configLocation>${project.basedir}/config/checkstyle.xml</configLocation>
-					<propertyExpansion>config_loc=${project.basedir}</propertyExpansion>
-				</configuration>
+				<groupId>org.commonjava.maven.plugins</groupId>
+				<artifactId>directory-maven-plugin</artifactId>
 			</plugin>
-			
-			enforcer shows different behavior 
-			in Eclipse > Run as > Maven Install
-			versus command line:    mvn install
-			
 			<plugin>
-				<artifactId>maven-enforcer-plugin</artifactId>
-				<version>1.4.1</version>
-				<executions>
-					<execution>
-						<id>enforce-bytecode-version</id>
-						<goals>
-							<goal>enforce</goal>
-						</goals>
-						<configuration>
-							<rules>
-								<enforceBytecodeVersion>
-									<maxJdkVersion>1.8</maxJdkVersion>
-								</enforceBytecodeVersion>
-							</rules>
-							<fail>true</fail>
-						</configuration>
-					</execution>
-				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>extra-enforcer-rules</artifactId>
-						<version>1.0-beta-9</version>
-					</dependency>
-				</dependencies>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
 			</plugin>
-			 -->
 
 		</plugins>
 	</build>

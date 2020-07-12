@@ -59,7 +59,8 @@ public class ServerManager implements BeanFactoryPostProcessor {
          */
 
         // Traccar Context is mandatory (hard coded in *Protocol classes!)
-        TraccarSetup.contextInit("./setup/traccar.xml");
+//      TraccarSetup.contextInit("./setup/traccar.xml");
+        TraccarSetup.contextInit("C:/kris/virtex/github.jeets/jeets-data/traccar/setup/traccar.xml");
 
         /*
          * Scanning only takes place when starting up the application, performs only

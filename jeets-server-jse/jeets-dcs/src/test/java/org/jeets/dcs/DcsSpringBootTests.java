@@ -26,6 +26,8 @@ import io.netty.buffer.ByteBufUtil;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest // (classes = Main.class)
 public class DcsSpringBootTests {
+    
+//  create exclusive Traccar Server Tests <> Jeets and Netty Decoder Tests
 
     @Autowired
     private ProducerTemplate client;
@@ -54,16 +56,20 @@ public class DcsSpringBootTests {
         int port = TraccarSetup.getProtocolPort(protocol);
 
         Builder protoMessage = Samples.createDeviceWithPositionWithOneEvent();
+//      TODO: change proto uniqueId to String
+//      String protoDevice = "protoDevice";
+//      protoMessage.setUniqueid(protoDevice);
         System.out.println("sending " + protoMessage);
         Jeets.Acknowledge ack = sendProtoMessage(port, protoMessage);
         System.out.println("received " + ack);
+//      Assert.assertEquals(ack.getDeviceid(), protoDevice);
         Assert.assertEquals(ack.getDeviceid(), 123);
 
-//      This happens every other run ??
+//      This happens every other run (in Eclipse?) ? check DCS Consumer !
 // ???  [ShutdownTask] o.a.c.i.engine.DefaultShutdownStrategy: 
 //      Waiting as there are still 1 inflight and pending exchanges to complete, timeout in 45 seconds. 
 //      Inflights per route: [jeetsRoute = 1]
-//      [ServerTCPWorker] org.traccar.MainEventHandler: [3e4ef5b6] disconnected
+//      [ServerTCPWorker] org.traccar.MainEventHandler: [3e4ef5b6] disconnected AFTER 30s (locate timeout config)
         
     }
 
