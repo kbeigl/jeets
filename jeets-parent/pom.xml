@@ -76,7 +76,8 @@
 		<skip.unit.tests>false</skip.unit.tests>
 		<skip.integration.tests>true</skip.integration.tests>
 		<!-- skip tests via command line:
-		mvn clean install -Dskip.unit.tests=true -->
+		mvn clean install -Dskip.unit.tests=true 
+		while -DskipTests does not apply here -->
 
 		<!-- add multiple referenced versions here (itests etc.), 
 			   add single referenced in dependencyManagement below.
@@ -318,6 +319,7 @@
 							<phase>initialize</phase>
 							<!-- <id>directories</id> -->
 							<configuration>
+								<!-- root for all paths ! -->
 								<property>jeets.repo.directory</property>
 							</configuration>
 						</execution>
@@ -329,7 +331,8 @@
 					<version>1.0.0</version>
 					<configuration>
 						<files>
-							<!-- Properties are read from a single property file -->
+							<!-- Properties are read from a single property file 
+							      AND hardcode in the pom files like this: -->
 							<file>${jeets.repo.directory}/${jeets.properties.file}</file>
 						</files>
 					</configuration>
