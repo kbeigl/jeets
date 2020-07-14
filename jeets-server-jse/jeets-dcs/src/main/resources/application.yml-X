@@ -1,0 +1,11 @@
+logging:
+  level:
+  root: INFO
+
+camel:
+springboot:
+tracing: false
+
+traccar:
+path: ${jeets.traccar.path}
+setup: ${jeets.traccar.setup}

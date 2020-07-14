@@ -82,6 +82,7 @@
 		<plugins>
 		<!-- TODO move up in hierarchy -->
 			<plugin>
+				<!-- Package as an executable jar/war -->
 				<!-- allows to run with mvn spring-boot:run -->
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>

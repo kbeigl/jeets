@@ -10,7 +10,8 @@ public class TraccarContextTest extends CamelTestSupport {
     public void testContextInit() throws Exception {
 
 //      Context.init("./setup/traccar.xml");
-        Context.init("C:/kris/virtex/github.jeets/jeets-data/traccar/setup/traccar.xml");
+//      Context.init({{{jeets.traccar.path}}}/setup/traccar.xml);
+        Context.init("C:/kris/virtex/github.jeets/jeets-models/jeets-protocols-traccar/setup/traccar.xml");
         
         assertNotNull("Config was not loaded", Context.getConfig());
 //      validate if default values are overridden
