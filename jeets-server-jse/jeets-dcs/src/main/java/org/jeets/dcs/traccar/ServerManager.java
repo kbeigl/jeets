@@ -7,7 +7,12 @@ import org.reflections.Reflections;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.bind.BindResult;
+import org.springframework.boot.context.properties.bind.Binder;
+import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.traccar.BaseProtocol;
 
 /**
@@ -25,17 +30,41 @@ import org.traccar.BaseProtocol;
  * from torsten horn.
  */
 @Configuration
-public class ServerManager implements BeanFactoryPostProcessor {
+public class ServerManager implements BeanFactoryPostProcessor, EnvironmentAware {
+
+    private Environment environment;
+
+    @Override
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
+    }
 
     /**
      * The method BeanFactoryPostProcessor.postProcessBeanFactory is called by
      * Spring startup process just after all bean definitions have been loaded,
      * **but no beans have been instantiated yet**, i.e. @Bean definitions.
+     * <p>
+     * Spring boot internally uses Binder APIs to "map" the resolved properties into
+     * the @ConfigurationProperties beans. This resolution happens during the spring
+     * boot startup process AFTER the BeanFactoryPostProcessors get created. <br>
+     * Therefore the Binder API is applied EnvironmentAware to load the properties
+     * explicitly.
      */
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+
+        /*
+         * explicitly load traccar.setupFile property (default: traccar.xml). Method can
+         * also be extended to load an explicit *Properties class
+         * with @ConfigurationProperties with: .bind("traccar.setupFile",
+         * TraccarProperties.class)
+         */
+        BindResult<String> bindResult = Binder.get(environment).bind("traccar.setupfile", String.class);
+        String setupFile = bindResult.get();
+        System.out.println("traccar.setupfile: " + setupFile);
+        
         try {
-            setupTraccarServers(beanFactory);
+            setupTraccarServers(setupFile, beanFactory);
         } catch (Exception e) { 
             // TODO handle other cause/s than getProtocolPort contextInit Exception!
             System.err.println(e.getMessage());
@@ -46,27 +75,22 @@ public class ServerManager implements BeanFactoryPostProcessor {
     /**
      * Setup the Traccar servers with ports defined in the setup file and register
      * them in Spring to be handled by Camel and Netty (starter).
+     * @param setupFile
      * 
      * @param beanFactory for Bean registration in application context
      * @throws Exception 
      */
-    private void setupTraccarServers(ConfigurableListableBeanFactory beanFactory) throws Exception {
-
-        /* 
-         * TODO: propagate configFile to ServerManager for Context.init
-         * better: use property file and handling (test and prod!?)
-         * the . directory refers to the project home!
-         */
+    private void setupTraccarServers(String setupFile, ConfigurableListableBeanFactory beanFactory) throws Exception {
 
         // Traccar Context is mandatory (hard coded in *Protocol classes!)
 //      TraccarSetup.contextInit("./setup/traccar.xml");
-//      TraccarSetup.contextInit({{{jeets.traccar.path}}}/setup/traccar.xml);
-        TraccarSetup.contextInit("C:/kris/virtex/github.jeets/jeets-models/jeets-protocols-traccar/setup/traccar.xml");
-
+        TraccarSetup.contextInit(setupFile);
         /*
          * Scanning only takes place when starting up the application, performs only
          * once. This could be optimized by scanning at Maven build time. Observe
          * startup delay. see www.baeldung.com/reflections-library
+         * 
+         * INFO Reflections took 477 ms to scan 2 urls, producing 11 keys and 754 values
          */
         Reflections reflections = new Reflections("org.traccar.protocol");
         Set<Class<? extends BaseProtocol>> protocolClasses = reflections.getSubTypesOf(BaseProtocol.class);
