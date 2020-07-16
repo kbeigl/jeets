@@ -1,10 +1,11 @@
 package org.jeets.dcs.traccar;
 
+import java.io.FileNotFoundException;
 import java.util.Set;
 
 import org.jeets.traccar.routing.TraccarRoute;
 import org.jeets.traccar.routing.TraccarSetup;
-import org.reflections.Reflections;
+//import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -16,6 +17,11 @@ import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.traccar.BaseProtocol;
+
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ClassInfo;
+import io.github.classgraph.ClassInfoList;
+import io.github.classgraph.ScanResult;
 
 /**
  * This class is modeled after and replaces Traccar's ServerManager only with
@@ -67,6 +73,7 @@ public class ServerManager implements BeanFactoryPostProcessor, EnvironmentAware
         LOG.info("traccar.setupfile: " + setupFile);
 
         try {
+//          move contextInit(setupFile) here ?
             setupTraccarServers(setupFile, beanFactory);
         } catch (Exception e) { 
             // TODO handle other cause/s than getProtocolPort contextInit Exception!
@@ -74,7 +81,11 @@ public class ServerManager implements BeanFactoryPostProcessor, EnvironmentAware
             e.printStackTrace();
 //          traccar code: throw new RuntimeException("Configuration file is not provided");
 //          System.exit(0); // don't apply at dev time and handle with care !!  
+//          keep running for non Traccar Servers inside DCS Manager ! exit in protocols-traccar
         }
+        
+//      TODO setup other servers (jeets-protocol, netty En/Decoders etc.)
+        
     }
 
     /**
@@ -92,15 +103,45 @@ public class ServerManager implements BeanFactoryPostProcessor, EnvironmentAware
         TraccarSetup.contextInit(setupFile);
 
         /*
+         * TODO move to traccar project getProtocolClasses --------------------
+         */
+        Set<Class<? extends BaseProtocol>> protocolClasses = null;
+
+        /*
          * Scanning only takes place when starting up the application, executes only
          * once. This could be optimized by scanning at Maven build time. see
          * www.baeldung.com/reflections-library
          * 
          * INFO Reflections took 477 ms to scan 2 urls, producing 11 keys and 754 values
-         */
         Reflections reflections = new Reflections("org.traccar.protocol");
-        Set<Class<? extends BaseProtocol>> protocolClasses = reflections.getSubTypesOf(BaseProtocol.class);
+        protocolClasses = reflections.getSubTypesOf(BaseProtocol.class);
+         */
+        
+//      also see Build-time scanning in Maven for ClassGraph
+        long start = System.currentTimeMillis();
+//      apply ClassGraph instead of Reflection Library
+        try (
+                ScanResult result = new ClassGraph()
+//              .initializeLoadedClasses() ! ?
+//              .verbose() // very verbose! How to turn on in DEBUG logging?
+                .enableClassInfo() // implied below
+                .acceptPackages("org.traccar.protocol") // Scan packages and subpackages
+                .acceptJars("jeets*.jar") // scan only jeets* sources !!
+                .scan(); // Perform the scan and return a ScanResult
+        ) {
+            // Use the ScanResult within the try block
+            ClassInfoList classInfos = result.getSubclasses("org.traccar.BaseProtocol");
+//          Found 208 classInfos in 1031 millis
+            System.out.println("Found " + classInfos.size() + " classInfos "
+                    + "in " + (System.currentTimeMillis() - start) + " millis"); // 208 classInfos
 
+            for (ClassInfo protocolClassInfo : classInfos) {
+                protocolClassInfo.loadClass().newInstance();
+            }
+
+        }
+//      -----------------------------------------------------------------------
+            
         String protocol = null;
         int port = -1;
         for (Class<? extends BaseProtocol> clazz : protocolClasses) {
@@ -124,7 +165,8 @@ public class ServerManager implements BeanFactoryPostProcessor, EnvironmentAware
                         new TraccarRoute(uri, protocol));
 
             } else {
-                LOG.debug("port# for " + protocol + " is not defined in configuration file. " + className + " Server is not launched!");
+                LOG.debug("port# for " + protocol + " is not defined in configuration file. " 
+                        + className + " Server is not launched!");
             }
         }
     }
