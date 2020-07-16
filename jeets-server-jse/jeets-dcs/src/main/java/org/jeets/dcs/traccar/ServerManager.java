@@ -1,13 +1,15 @@
 package org.jeets.dcs.traccar;
 
 import java.util.Set;
+
 import org.jeets.traccar.routing.TraccarRoute;
 import org.jeets.traccar.routing.TraccarSetup;
 import org.reflections.Reflections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.BindResult;
 import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.context.EnvironmentAware;
@@ -32,6 +34,7 @@ import org.traccar.BaseProtocol;
 @Configuration
 public class ServerManager implements BeanFactoryPostProcessor, EnvironmentAware {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ServerManager.class);
     private Environment environment;
 
     @Override
@@ -57,17 +60,19 @@ public class ServerManager implements BeanFactoryPostProcessor, EnvironmentAware
          * explicitly load traccar.setupFile property (default: traccar.xml). Method can
          * also be extended to load an explicit *Properties class
          * with @ConfigurationProperties with: .bind("traccar.setupFile",
-         * TraccarProperties.class)
+         * TraccarProperties.class) see stackoverflow.com/questions/61343153
          */
         BindResult<String> bindResult = Binder.get(environment).bind("traccar.setupfile", String.class);
         String setupFile = bindResult.get();
-        System.out.println("traccar.setupfile: " + setupFile);
-        
+        LOG.info("traccar.setupfile: " + setupFile);
+
         try {
             setupTraccarServers(setupFile, beanFactory);
         } catch (Exception e) { 
             // TODO handle other cause/s than getProtocolPort contextInit Exception!
-            System.err.println(e.getMessage());
+            LOG.error("Traccar Server setup failed: " + e.getMessage());
+            e.printStackTrace();
+//          traccar code: throw new RuntimeException("Configuration file is not provided");
 //          System.exit(0); // don't apply at dev time and handle with care !!  
         }
     }
@@ -82,13 +87,14 @@ public class ServerManager implements BeanFactoryPostProcessor, EnvironmentAware
      */
     private void setupTraccarServers(String setupFile, ConfigurableListableBeanFactory beanFactory) throws Exception {
 
-        // Traccar Context is mandatory (hard coded in *Protocol classes!)
+//      Traccar Context is mandatory (hard coded in *Protocol classes!)
 //      TraccarSetup.contextInit("./setup/traccar.xml");
         TraccarSetup.contextInit(setupFile);
+
         /*
-         * Scanning only takes place when starting up the application, performs only
-         * once. This could be optimized by scanning at Maven build time. Observe
-         * startup delay. see www.baeldung.com/reflections-library
+         * Scanning only takes place when starting up the application, executes only
+         * once. This could be optimized by scanning at Maven build time. see
+         * www.baeldung.com/reflections-library
          * 
          * INFO Reflections took 477 ms to scan 2 urls, producing 11 keys and 754 values
          */
@@ -118,9 +124,7 @@ public class ServerManager implements BeanFactoryPostProcessor, EnvironmentAware
                         new TraccarRoute(uri, protocol));
 
             } else {
-//                log.debug
-//                System.err.println("port# for " + protocol + " is not defined in configuration file. " 
-//                        + className + " Server is not launched!");
+                LOG.debug("port# for " + protocol + " is not defined in configuration file. " + className + " Server is not launched!");
             }
         }
     }

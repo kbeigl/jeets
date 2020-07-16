@@ -21,13 +21,6 @@ public class Main {
 
         Locale.setDefault(Locale.ENGLISH);
 
-        if (args.length <= 0) {
-            throw new RuntimeException("Configuration file is not provided");
-        }
-//      TODO: propagate configFile to ServerManager for Context.init
-//      better: use property file and handling (test and prod!?)
-        final String configFile = args[args.length - 1];
-
         logSystemInfo();
 
         SpringApplication.run(Main.class, args);
