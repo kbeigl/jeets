@@ -1,8 +1,10 @@
 package org.jeets.dcs.traccar;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Set;
 
+import org.apache.camel.component.netty.ServerInitializerFactory;
 import org.jeets.traccar.routing.TraccarRoute;
 import org.jeets.traccar.routing.TraccarSetup;
 //import org.reflections.Reflections;
@@ -17,6 +19,7 @@ import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.traccar.BaseProtocol;
+import org.traccar.TrackerServer;
 
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfo;
@@ -96,16 +99,108 @@ public class ServerManager implements BeanFactoryPostProcessor, EnvironmentAware
      * @param beanFactory for Bean registration in application context
      * @throws Exception 
      */
+//  TODO move to traccar project AND add tests (while stand alone is removed?)
     private void setupTraccarServers(String setupFile, ConfigurableListableBeanFactory beanFactory) throws Exception {
 
 //      Traccar Context is mandatory (hard coded in *Protocol classes!)
 //      TraccarSetup.contextInit("./setup/traccar.xml");
         TraccarSetup.contextInit(setupFile);
 
-        /*
-         * TODO move to traccar project getProtocolClasses --------------------
-         */
-        Set<Class<? extends BaseProtocol>> protocolClasses = null;
+//      TODO move to traccar project getProtocolClasses --------------------
+        
+//      also see Build-time scanning in Maven for ClassGraph
+        long start = System.currentTimeMillis();
+//      apply ClassGraph instead of Reflection Library
+        try (
+                ScanResult result = new ClassGraph()
+//              this would also init unused protocols
+//              .initializeLoadedClasses()
+//              .verbose() // very verbose! Only turn on if DEBUG .. ?
+                .enableClassInfo() // implied below
+                .acceptPackages("org.traccar.protocol") // with subpackages
+                .acceptJars("jeets*.jar") // scan only jeets* sources !!
+                .scan();
+        ) {
+            ClassInfoList classInfos = result.getSubclasses("org.traccar.BaseProtocol").directOnly();
+//          Found 208 BaseProtocol classes in 1031 millis
+            LOG.info("Found " + classInfos.size() + " BaseProtocol classes in " + (System.currentTimeMillis() - start)
+                    + " millis");
+
+//          do we really want to reference all classes (include configured ports only)
+//          List<Class<?>> controlClassRefs = classInfos.loadClasses();
+
+            String protocolName = null;
+            int port = -1;
+            for (ClassInfo protocolClassInfo : classInfos) {
+//              i.e. rewrite TraccarSetup.instantiateProtocol
+//              must stick to ClassInfo for loading! see javadocs
+
+                String className = protocolClassInfo.getSimpleName(); // TeltonikaProtocol
+                protocolName = className.substring(0, className.length() - 8).toLowerCase();
+
+//              load class only, if port is configured
+                port = TraccarSetup.getProtocolPort(protocolName);
+                if (port != -1) {
+
+                    /*
+                     * You should do all class loading through ClassGraph, using
+                     * ClassInfo#loadClass() or ClassInfoList#loadClasses(), and never using
+                     * Class.forName(className), otherwise you may end up with some classes loaded
+                     * by the context classloader, and some by another classloader. This can cause
+                     * ClassCastException or other problems at weird places in your code.
+                     */
+//                  Class<? extends BaseProtocol> clazz = (Class<? extends BaseProtocol>) protocolClassInfo.loadClass();
+                    Class<?> clazz = protocolClassInfo.loadClass();
+//                  clazz is loaded, but not yet initialized
+//                    String className = clazz.getSimpleName(); // TeltonikaProtocol
+//                    protocolName = className.substring(0, className.length() - 8).toLowerCase();
+                    LOG.info("protocol name: " + protocolName + " class: " + protocolClassInfo);
+
+//                  private static BaseProtocol instantiateProtocol(Class<?> protocolClass) {
+                    BaseProtocol protocolInstance = null;
+                    try {
+//                      invoke BaseProtocol constructor, initialize ..
+                        protocolInstance = (BaseProtocol) clazz.newInstance();
+//                      assertion
+//                      System.out.println("protocolName: " + protocolInstance.getName());
+
+                    } catch (InstantiationException | IllegalAccessException e) {
+                        LOG.error(protocolClassInfo + " could not be instantiated!");
+                        e.printStackTrace();
+                    }
+
+//                  public static ServerInitializerFactory createServerInitializerFactory(Class<?> protocolClass) {
+                    String transport = "tcp";
+                    TrackerServer server = TraccarSetup.getProtocolServer(transport, protocolInstance);
+                    // compose URI and attach to server.setCamelUri() !
+                    if (server == null) {
+                        LOG.warn("No server found for '" + transport + ":" + protocolName);
+//                      return null;  ??
+                    }
+//                  return server.getServerInitializerFactory();
+
+                    beanFactory.registerSingleton(protocolName, // TeltonikaProtocol.class
+                            server.getServerInitializerFactory());
+//                          TraccarSetup.createServerInitializerFactory(clazz));
+
+//                  register netty as jeets-dcs ;)
+                    String uri = "netty:tcp://" + host + ":" + port 
+                            + "?serverInitializerFactory=#" + protocolName 
+                            + "&sync=" + camelNettySync;
+//                  "&workerPool=#sharedPool&usingExecutorService=false" register in XML,
+
+                    beanFactory.registerSingleton(protocolName + "Route", // teltonikaRoute
+                            new TraccarRoute(uri, protocolName));
+
+                } else {
+                    LOG.info("port# for " + protocolName + " is not defined in configuration file. ");
+//                        + className + " Server is not launched!");
+                }
+
+            }
+
+        }
+//      -----------------------------------------------------------------------
 
         /*
          * Scanning only takes place when starting up the application, executes only
@@ -113,62 +208,40 @@ public class ServerManager implements BeanFactoryPostProcessor, EnvironmentAware
          * www.baeldung.com/reflections-library
          * 
          * INFO Reflections took 477 ms to scan 2 urls, producing 11 keys and 754 values
-        Reflections reflections = new Reflections("org.traccar.protocol");
-        protocolClasses = reflections.getSubTypesOf(BaseProtocol.class);
-         */
-        
-//      also see Build-time scanning in Maven for ClassGraph
-        long start = System.currentTimeMillis();
-//      apply ClassGraph instead of Reflection Library
-        try (
-                ScanResult result = new ClassGraph()
-//              .initializeLoadedClasses() ! ?
-//              .verbose() // very verbose! How to turn on in DEBUG logging?
-                .enableClassInfo() // implied below
-                .acceptPackages("org.traccar.protocol") // Scan packages and subpackages
-                .acceptJars("jeets*.jar") // scan only jeets* sources !!
-                .scan(); // Perform the scan and return a ScanResult
-        ) {
-            // Use the ScanResult within the try block
-            ClassInfoList classInfos = result.getSubclasses("org.traccar.BaseProtocol");
-//          Found 208 classInfos in 1031 millis
-            System.out.println("Found " + classInfos.size() + " classInfos "
-                    + "in " + (System.currentTimeMillis() - start) + " millis"); // 208 classInfos
+         * 
+         * 
+        Set<Class<? extends BaseProtocol>> protocolClasses = null;
+//      Reflections reflections = new Reflections("org.traccar.protocol");
+//      protocolClasses = reflections.getSubTypesOf(BaseProtocol.class);
 
-            for (ClassInfo protocolClassInfo : classInfos) {
-                protocolClassInfo.loadClass().newInstance();
-            }
-
-        }
-//      -----------------------------------------------------------------------
-            
-        String protocol = null;
+        String protocolName = null;
         int port = -1;
         for (Class<? extends BaseProtocol> clazz : protocolClasses) {
 //          see BaseProtocol.nameFromClass(class);
             String className = clazz.getSimpleName(); // TeltonikaProtocol
-            protocol = className.substring(0, className.length() - 8).toLowerCase();
+            protocolName = className.substring(0, className.length() - 8).toLowerCase();
 
-            port = TraccarSetup.getProtocolPort(protocol);
+            port = TraccarSetup.getProtocolPort(protocolName);
             if (port != -1) {
 
-                beanFactory.registerSingleton(protocol, // TeltonikaProtocol.class
+                beanFactory.registerSingleton(protocolName, // TeltonikaProtocol.class
                         TraccarSetup.createServerInitializerFactory(clazz));
 
 //              register netty as jeets-dcs ;)
                 String uri = "netty:tcp://" + host + ":" + port 
-                        + "?serverInitializerFactory=#" + protocol 
+                        + "?serverInitializerFactory=#" + protocolName 
                         + "&sync=" + camelNettySync;
 //              "&workerPool=#sharedPool&usingExecutorService=false" register in XML,
 
-                beanFactory.registerSingleton(protocol + "Route", 
-                        new TraccarRoute(uri, protocol));
+                beanFactory.registerSingleton(protocolName + "Route", // teltonikaRoute
+                        new TraccarRoute(uri, protocolName));
 
             } else {
-                LOG.debug("port# for " + protocol + " is not defined in configuration file. " 
+                LOG.debug("port# for " + protocolName + " is not defined in configuration file. " 
                         + className + " Server is not launched!");
             }
         }
+         */
     }
 
 //  add get/setters for host ! Individual hosts for different protocols (?)

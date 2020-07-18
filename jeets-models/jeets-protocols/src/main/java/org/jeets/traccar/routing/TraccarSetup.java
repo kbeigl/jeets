@@ -17,25 +17,30 @@ import org.traccar.TrackerServer;
  */
 public class TraccarSetup {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TraccarSetup.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TraccarSetup.class);
 
     /* Currently only creating "tcp" servers */
     public static ServerInitializerFactory createServerInitializerFactory(Class<?> protocolClass) {
-        BaseProtocol protocol = instantiateProtocol(protocolClass);
+        BaseProtocol protocolInstance = instantiateProtocol(protocolClass);
         String transport = "tcp";
-        TrackerServer server = getProtocolServer(transport, protocol);
+        TrackerServer server = getProtocolServer(transport, protocolInstance);
         // compose URI and attach to server.setCamelUri() !
         if (server == null) {
-            LOGGER.warn("No server found for '" + transport + ":" + BaseProtocol.nameFromClass(protocolClass));
+            LOG.warn("No server found for '" + transport + ":" + BaseProtocol.nameFromClass(protocolClass));
             return null;
         }
         return server.getServerInitializerFactory();
     }
 
     /**
-     * Pick udp or tcp server, if present.
+     * Pick udp or tcp server, if present. <br>
+     * merge with instantiateProtocol javadoc below
+     * 
+     * @param transport
+     * @param protocol
+     * @return
      */
-    private static TrackerServer getProtocolServer(String transport, BaseProtocol protocol) {
+    public static TrackerServer getProtocolServer(String transport, BaseProtocol protocol) {
         for (TrackerServer server : protocol.getServerList()) {
             if (transport.equals("udp") && server.isDatagram()) {
                 return server;
@@ -85,7 +90,7 @@ public class TraccarSetup {
             if (Context.getConfig().hasKey(protocolPortKey)) {
                 return Context.getConfig().getInteger(protocolPortKey);
             } else {
-                LOGGER.debug(protocol + " protocol port is not defined in Context (and config file?)"); 
+                LOG.debug(protocol + " protocol port is not defined in Context (and config file?)"); 
 //              returns -1 below
             }
         } catch (NullPointerException npe) {
@@ -114,7 +119,7 @@ public class TraccarSetup {
             try {
                 Context.init(configFile);
             } catch (Exception ex) {
-                LOGGER.error("Traccar Context could not be initialized and is mandatory!");
+                LOG.error("Traccar Context could not be initialized and is mandatory!");
 //              ex.printStackTrace();
             }
         }
