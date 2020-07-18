@@ -103,7 +103,7 @@ public final class Context {
             Log.setupLogger(config);
         }
 
-//      LOGGER.warn("DataManager was removed -> remove database.url");
+//      DataManager was removed -> remove database.url
 
         mediaManager = new MediaManager(config.getString("media.path"));
 //      deviceManager = new DeviceManager( dataManager );

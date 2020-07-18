@@ -1,4 +1,4 @@
-package org.jeets.traccar.routing;
+package org.jeets.traccar;
 
 import org.apache.camel.builder.RouteBuilder;
 

@@ -6,7 +6,7 @@ import org.jeets.protobuf.Jeets;
 import org.jeets.protobuf.Jeets.Acknowledge;
 import org.jeets.protobuf.Jeets.Device.Builder;
 import org.jeets.protocol.util.Samples;
-import org.jeets.traccar.routing.TraccarSetup;
+import org.jeets.traccar.TraccarSetup;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

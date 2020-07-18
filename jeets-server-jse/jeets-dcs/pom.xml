@@ -38,29 +38,12 @@
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-protocols</artifactId>
 		</dependency>
+		<!-- above already includes below -->
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-protocols-traccar</artifactId>
 			<!-- remove explicit version, define in parent pom -->
 			<version>4.8.0316</version>
-		</dependency>
-
-		<!-- SHOW STOPPER
-		Reflections Library works fine for development and run in Eclipse,
-		but it turns out not to be thread safe and scanning the Spring jar throws 
-		ERROR org.jeets.dcs.traccar.ServerManager - Traccar Server setup failed: zip file closed
-        java.lang.IllegalStateException: zip file closed
-		<dependency>
-			<groupId>org.reflections</groupId>
-			<artifactId>reflections</artifactId>
-			<version>0.9.12</version>
-		</dependency>
-		 -->
-		<!-- also observe development of fast-classpath-scanner 4.0 -->
-		<dependency>
-			<groupId>io.github.classgraph</groupId>
-			<artifactId>classgraph</artifactId>
-			<version>4.8.87</version>
 		</dependency>
 
 		<dependency>

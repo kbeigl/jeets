@@ -24,8 +24,7 @@ for Maven Archetype generation of custom Traccar ETL MicroService
 * moved all project data to jeets-data folder +
  applied variable replacement for traccar/setup folder 
 
-( * restructure repository with jeets-traccar 
-and / or device-communication section ? )
+( * restructure repository: create section Extract Transform & Load Data includes DCS and Loaders)
  
 
 

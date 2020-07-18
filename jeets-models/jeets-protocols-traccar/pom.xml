@@ -35,6 +35,13 @@
 			<artifactId>protobuf-java</artifactId>
 			<version>${protobuf-version}</version>
 		</dependency>
+		<!-- currently classgraph is only used in this project to scan for BaseProtocols. 
+		On a longer term classgraph should be provided in a jeets-util.jar ... -->
+		<dependency>
+			<groupId>io.github.classgraph</groupId>
+			<artifactId>classgraph</artifactId>
+			<version>4.8.87</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.glassfish</groupId>
@@ -47,6 +54,11 @@
 			<artifactId>jackson-jaxrs-json-provider</artifactId>
 		</dependency>
 
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-test</artifactId>
+            <scope>test</scope>
+        </dependency>
 	</dependencies>
 
 	<build>

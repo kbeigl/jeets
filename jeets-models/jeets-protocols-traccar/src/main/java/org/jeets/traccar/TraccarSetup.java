@@ -1,4 +1,7 @@
-package org.jeets.traccar.routing;
+package org.jeets.traccar;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.camel.component.netty.ServerInitializerFactory;
 import org.slf4j.Logger;
@@ -7,6 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.traccar.BaseProtocol;
 import org.traccar.Context;
 import org.traccar.TrackerServer;
+
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ClassInfo;
+import io.github.classgraph.ClassInfoList;
+import io.github.classgraph.ScanResult;
 
 /**
  * Proprietary setup for Traccar Netty Pipelines.
@@ -19,8 +27,69 @@ public class TraccarSetup {
 
     private static final Logger LOG = LoggerFactory.getLogger(TraccarSetup.class);
 
+    /**
+     * Scan class path with ClassGraph and only return the classes configured in
+     * configFile. Scan is restricted to org.traccar.BaseProtocol packages inside
+     * jeets- jars. (also verify for java -jar execution!)
+     * <p>
+     * Note that ClassGraph is applied in a try .. resources block to handle
+     * ClassInfo/List/s in it. The returned classes are loaded inside the method but
+     * have not been initialized yet!
+     */
+    public static Map<Integer, Class<?>> getConfiguredBaseProtocolClasses() throws Exception {
+        
+//      if (!isContextInitialized()) 
+//            throw RuntimeException ...
+
+        Map<Integer, Class<?>> protocolClasses  = new HashMap<Integer, Class<?>>();
+        long start = System.currentTimeMillis();
+//      also see Build-time scanning in Maven for ClassGraph
+        try (
+                ScanResult result = new ClassGraph()
+//              this would also init unused protocols
+//              .initializeLoadedClasses()
+//              .verbose() // very verbose! Only turn on if DEBUG .. ?
+//              .enableClassInfo() // implied below
+                .acceptPackages("org.traccar.protocol") // with subpackages
+                .acceptJars("jeets*.jar") // scan only jeets* sources !!
+                .scan();
+        ) {
+            ClassInfoList classInfos = result.getSubclasses("org.traccar.BaseProtocol").directOnly();
+            LOG.info("Found " + classInfos.size() + " BaseProtocol classes "
+                    + "in " + (System.currentTimeMillis() - start) + " millis");
+
+            String protocolName = null;
+            int port = -1;
+            for (ClassInfo protocolClassInfo : classInfos) {
+
+                String className = protocolClassInfo.getSimpleName(); // TeltonikaProtocol
+                protocolName = className.substring(0, className.length() - 8).toLowerCase();
+//              load class only, if port exists
+                port = TraccarSetup.getProtocolPort(protocolName);
+
+                if (port == -1) {
+                    LOG.debug("port# for '" + protocolName + "' protocol is not defined in configuration file.");
+                } else {
+
+                    /*
+                     * You should do all class loading through ClassGraph, using
+                     * ClassInfo#loadClass() or ClassInfoList#loadClasses(), and never using
+                     * Class.forName(className), otherwise you may end up with some classes loaded
+                     * by the context classloader, and some by another classloader. This can cause
+                     * ClassCastException or other problems at weird places in your code.
+                     */
+                    protocolClasses.put(port, protocolClassInfo.loadClass());
+//                  clazz is loaded, but not yet initialized!
+                    
+                    LOG.info("loaded protocol: " + protocolName + "\tport#" + port + "\tclass: " + className );
+                }
+            }
+        }
+        return protocolClasses; // can be empty
+    }
+    
     /* Currently only creating "tcp" servers */
-    public static ServerInitializerFactory createServerInitializerFactory(Class<?> protocolClass) {
+     public static ServerInitializerFactory createServerInitializerFactory(Class<? extends BaseProtocol> protocolClass) {
         BaseProtocol protocolInstance = instantiateProtocol(protocolClass);
         String transport = "tcp";
         TrackerServer server = getProtocolServer(transport, protocolInstance);
@@ -86,14 +155,15 @@ public class TraccarSetup {
      */
     public static int getProtocolPort(String protocol) throws Exception {
         String protocolPortKey = protocol + ".port";
-        try {
+
+        if (isContextInitialized()) {
             if (Context.getConfig().hasKey(protocolPortKey)) {
                 return Context.getConfig().getInteger(protocolPortKey);
             } else {
                 LOG.debug(protocol + " protocol port is not defined in Context (and config file?)"); 
 //              returns -1 below
             }
-        } catch (NullPointerException npe) {
+        } else {
             throw new Exception("Traccar Context was not initialized. "
                     + "Make sure to apply contextInit at application startup!");
         }
@@ -102,27 +172,40 @@ public class TraccarSetup {
 
     /**
      * Always apply this method to Initialize Traccar Context to ensure that it is
-     * only loaded once!
+     * only loaded once! Method has public access in order to supply configFile from
+     * external environment and setup traccar.Context only once.
      * <p>
      * Method returns fast, if context already is initialized. Therefore it doesn't
      * harm to call it multiple times.
      * 
-     * @param configFile
+     * @param configFile - path with file String
      */
-    @SuppressWarnings("deprecation")
     public static void contextInit(String configFile) {
-//      TODO: supply fallback values for jeets structure, i.e. mvn build and test
-        try {
-            Context.getConfig().getString("event.enable");
-        } catch (NullPointerException npe) {
+        if (!isContextInitialized()) {
 //          Context is not initialized yet, do now
             try {
+                LOG.info("Initializing traccar.Context with " + configFile); 
                 Context.init(configFile);
-            } catch (Exception ex) {
+            } catch (Exception ex) { 
+//              TODO throw IOException explicitly to provide infos
                 LOG.error("Traccar Context could not be initialized and is mandatory!");
 //              ex.printStackTrace();
+//              RuntimeException or System.exit(status) ?
             }
+        } // else return
+    }
+
+    /**
+     * Traccar Setup methods will only work with an initialized traccar.Context.
+     */
+    private static boolean isContextInitialized() {
+        try {
+//          Context.getConfig().getString("event.enable");
+            Context.getConfig().getString("whatever");
+        } catch (NullPointerException npe) {
+            return false;
         }
+        return true;
     }
 
 }
