@@ -9,6 +9,7 @@ public class TraccarContextTest extends CamelTestSupport {
     @Test
     public void testContextInit() throws Exception {
 
+//      TODO use TraccarSetup.. !
 //      Context.init("./setup/traccar.xml");
 //      Context.init({{{jeets.traccar.path}}}/setup/traccar.xml);
         Context.init("C:/kris/virtex/github.jeets/jeets-models/jeets-protocols-traccar/setup/traccar.xml");

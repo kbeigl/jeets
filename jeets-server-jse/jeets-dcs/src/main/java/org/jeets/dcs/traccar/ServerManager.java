@@ -2,13 +2,11 @@ package org.jeets.dcs.traccar;
 
 import org.jeets.traccar.TraccarRoute;
 import org.jeets.traccar.TraccarSetup;
-//import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.boot.context.properties.bind.BindResult;
 import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Configuration;
@@ -66,8 +64,7 @@ public class ServerManager implements BeanFactoryPostProcessor, EnvironmentAware
          * with @ConfigurationProperties with: .bind("traccar.setupFile",
          * TraccarProperties.class) see stackoverflow.com/questions/61343153
          */
-        BindResult<String> bindResult = Binder.get(environment).bind("traccar.setupfile", String.class);
-        String setupFile = bindResult.get();
+        String setupFile = Binder.get(environment).bind("traccar.setupfile", String.class).get();
         LOG.info("using traccar.setupfile: " + setupFile);
 
         try {
@@ -94,7 +91,6 @@ public class ServerManager implements BeanFactoryPostProcessor, EnvironmentAware
      * @param beanFactory for Bean registration in application context
      * @throws Exception 
      */
-//  TODO move to traccar project AND add tests (while stand alone is removed?)
     private void setupTraccarServers(String setupFile, ConfigurableListableBeanFactory beanFactory) throws Exception {
 
 //      Traccar Context is mandatory (hard coded in *Protocol classes!)
@@ -120,7 +116,7 @@ public class ServerManager implements BeanFactoryPostProcessor, EnvironmentAware
 
                 String className = protocolClassInfo.getSimpleName(); // TeltonikaProtocol
                 protocolName = className.substring(0, className.length() - 8).toLowerCase();
-                port = TraccarSetup.getProtocolPort(protocolName);
+                port = TraccarSetup.getConfiguredProtocolPort(protocolName);
 
                 if (port == -1) {
                     LOG.debug("port# for '" + protocolName + "' protocol is not defined in configuration file.");

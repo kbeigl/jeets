@@ -30,6 +30,7 @@
 	<packaging>jar</packaging>
 
 	<dependencies>
+		<!-- reduce by internal deps to jeets-protocols-traccar -->
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-core</artifactId>
@@ -54,7 +55,7 @@
 			<artifactId>jeets-pu-traccar</artifactId>
 		</dependency>
 		<dependency>
-			<!-- long term: replace with traccar model only -->
+			<!-- long term: replace with traccar model exclusively -->
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-protocols-traccar</artifactId>
 			<!-- remove explicit version, define in parent pom -->

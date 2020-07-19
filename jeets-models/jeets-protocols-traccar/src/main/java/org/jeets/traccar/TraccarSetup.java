@@ -19,9 +19,8 @@ import io.github.classgraph.ScanResult;
 /**
  * Proprietary setup for Traccar Netty Pipelines.
  * <p>
- * Consider moving these methods and routes to protocols-traccar. i.e. each
- * -protocols- project should supply a dedicated RouteBuilder with a Consumer
- * Endpoint (DCS output) which can be picked up by the dcs-manager.
+ * Each -protocols- project should supply a dedicated RouteBuilder with a
+ * Consumer Endpoint (DCS output) which can be picked up by a dcs-manager.
  */
 public class TraccarSetup {
 
@@ -38,7 +37,7 @@ public class TraccarSetup {
      */
     public static Map<Integer, Class<?>> getConfiguredBaseProtocolClasses() throws Exception {
         
-//      if (!isContextInitialized()) 
+//      if (!isContextInitialized()) // align with getConfiguredProtocolPort
 //            throw RuntimeException ...
 
         Map<Integer, Class<?>> protocolClasses  = new HashMap<Integer, Class<?>>();
@@ -51,28 +50,26 @@ public class TraccarSetup {
 //              .verbose() // very verbose! Only turn on if DEBUG .. ?
 //              .enableClassInfo() // implied below
                 .acceptPackages("org.traccar.protocol") // with subpackages
-                .acceptJars("jeets*.jar") // scan only jeets* sources !!
+                .acceptJars("jeets*.jar") // scan only jeets* sources !! verify with dcs.jar libs
                 .scan();
         ) {
             ClassInfoList classInfos = result.getSubclasses("org.traccar.BaseProtocol").directOnly();
-            LOG.info("Found " + classInfos.size() + " BaseProtocol classes "
-                    + "in " + (System.currentTimeMillis() - start) + " millis");
+            LOG.info("Found {} BaseProtocol classes in {} millis", classInfos.size(), (System.currentTimeMillis() - start));
 
             String protocolName = null;
             int port = -1;
             for (ClassInfo protocolClassInfo : classInfos) {
 
                 String className = protocolClassInfo.getSimpleName(); // TeltonikaProtocol
-                protocolName = className.substring(0, className.length() - 8).toLowerCase();
+                protocolName = className.substring(0, className.length() - 8).toLowerCase(); // teltonika
 //              load class only, if port exists
-                port = TraccarSetup.getProtocolPort(protocolName);
+                port = TraccarSetup.getConfiguredProtocolPort(protocolName);
 
                 if (port == -1) {
-                    LOG.debug("port# for '" + protocolName + "' protocol is not defined in configuration file.");
+                    LOG.info("port# for '{}' protocol is not defined in configuration file.", protocolName);
                 } else {
-
                     /*
-                     * You should do all class loading through ClassGraph, using
+                     * ClassGraph: You should do all class loading through ClassGraph, using
                      * ClassInfo#loadClass() or ClassInfoList#loadClasses(), and never using
                      * Class.forName(className), otherwise you may end up with some classes loaded
                      * by the context classloader, and some by another classloader. This can cause
@@ -80,12 +77,11 @@ public class TraccarSetup {
                      */
                     protocolClasses.put(port, protocolClassInfo.loadClass());
 //                  clazz is loaded, but not yet initialized!
-                    
-                    LOG.info("loaded protocol: " + protocolName + "\tport#" + port + "\tclass: " + className );
+                    LOG.info("loaded protocol: {}\tport#{}\tclass: {}", protocolName, port, className );
                 }
             }
         }
-        return protocolClasses; // can be empty
+        return protocolClasses; // can be empty, size = 0
     }
     
     /* Currently only creating "tcp" servers */
@@ -94,19 +90,23 @@ public class TraccarSetup {
         String transport = "tcp";
         TrackerServer server = getProtocolServer(transport, protocolInstance);
         // compose URI and attach to server.setCamelUri() !
-        if (server == null) {
-            LOG.warn("No server found for '" + transport + ":" + BaseProtocol.nameFromClass(protocolClass));
+        if (server == null) { // BaseProtocol.nameFromClass will be removed!
+            LOG.warn("No server found for '{}:{}'", transport, BaseProtocol.nameFromClass(protocolClass));
             return null;
         }
         return server.getServerInitializerFactory();
     }
 
     /**
-     * Pick udp or tcp server, if present. <br>
-     * merge with instantiateProtocol javadoc below
+     * Pick udp or tcp server, if present.
+     * <p>
+     * Each BaseProtocol instance provides one or two TrackerServer instances for
+     * tcp and/or udp transport. Each server holds a configured BasePipelineFactory
+     * which is used to get a ServerInitializerFactory and register the instance for
+     * the camel-netty life cycle.
      * 
-     * @param transport
-     * @param protocol
+     * @param transport - tcp or udp
+     * @param protocol - protocol name as defined in configFile
      * @return
      */
     public static TrackerServer getProtocolServer(String transport, BaseProtocol protocol) {
@@ -121,17 +121,15 @@ public class TraccarSetup {
     }
 
     /**
-     * Each BaseProtocol instance provides one or two TrackerServer instances for
-     * tcp and/or udp transport. Each server holds a configured BasePipelineFactory
-     * which is used to get a ServerInitializerFactory and register the instance for
-     * the camel-netty life cycle.
+     * Loading and instantiating the Protocol class is clearly separated in order to
+     * apply ClassGraph.
      */
-    private static BaseProtocol instantiateProtocol(Class<?> protocolClass) {
+    private static BaseProtocol instantiateProtocol(Class<? extends BaseProtocol> protocolClass) {
         BaseProtocol protocol = null;
         try {
             protocol = (BaseProtocol) protocolClass.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
-            System.err.println(protocolClass + " could not be instantiated!");
+            LOG.error("{} could not be instantiated!", protocolClass);
             e.printStackTrace();
         }
         return protocol;
@@ -153,20 +151,21 @@ public class TraccarSetup {
      *                   with {@link #contextInit} or is not defined in xml config
      *                   file
      */
-    public static int getProtocolPort(String protocol) throws Exception {
+    public static int getConfiguredProtocolPort(String protocol) throws Exception {
         String protocolPortKey = protocol + ".port";
 
         if (isContextInitialized()) {
             if (Context.getConfig().hasKey(protocolPortKey)) {
                 return Context.getConfig().getInteger(protocolPortKey);
             } else {
-                LOG.debug(protocol + " protocol port is not defined in Context (and config file?)"); 
+                LOG.debug("{} protocol port is not defined in Context (and config file?)", protocol); 
 //              returns -1 below
             }
         } else {
             throw new Exception("Traccar Context was not initialized. "
                     + "Make sure to apply contextInit at application startup!");
         }
+
         return -1; // ?
     }
 
@@ -184,7 +183,7 @@ public class TraccarSetup {
         if (!isContextInitialized()) {
 //          Context is not initialized yet, do now
             try {
-                LOG.info("Initializing traccar.Context with " + configFile); 
+                LOG.info("Initializing traccar.Context with {}", configFile); 
                 Context.init(configFile);
             } catch (Exception ex) { 
 //              TODO throw IOException explicitly to provide infos

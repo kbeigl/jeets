@@ -24,7 +24,7 @@ public class DcsTests extends CamelTestSupport {
     private static final Logger LOG = LoggerFactory.getLogger(DcsTests.class);
 
     @Test
-    public void testAllServers() throws Exception {
+    public void testAllConfiguredServers() throws Exception {
         Map<Integer, Class<?>> protocolClasses = TraccarSetup.getConfiguredBaseProtocolClasses();
 
         if (protocolClasses.size() > 0) {
@@ -97,7 +97,7 @@ public class DcsTests extends CamelTestSupport {
 //      SpringBoot: @Bean(name = "teltonika")
         context.getRegistry().bind(protocol, teltonikaPipeline);
         
-        int port = TraccarSetup.getProtocolPort(protocol);
+        int port = TraccarSetup.getConfiguredProtocolPort(protocol);
 //      catch port = 0 ?
 //      int port = getPort(protocol + ".port");
         LOG.info(protocol + " port: " + port);
@@ -114,7 +114,7 @@ public class DcsTests extends CamelTestSupport {
     public void testTeltonikaMessages() throws Exception {
         String protocol = "teltonika";
 //      int port = getPort(protocol + ".port");
-        int port = TraccarSetup.getProtocolPort(protocol);
+        int port = TraccarSetup.getConfiguredProtocolPort(protocol);
 //      catch port = 0 ?
 
 //      TODO: use teltonika.jdev test file for message content

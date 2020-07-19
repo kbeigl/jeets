@@ -53,7 +53,7 @@ public class DcsSpringBootTests {
     @Test
     public void testTraccarJeetsServer() throws Exception {
         String protocol = "jeets";
-        int port = TraccarSetup.getProtocolPort(protocol);
+        int port = TraccarSetup.getConfiguredProtocolPort(protocol);
 
         Builder protoMessage = Samples.createDeviceWithPositionWithOneEvent();
 //      TODO: change proto uniqueId to String
@@ -84,7 +84,7 @@ public class DcsSpringBootTests {
     @Test
     public void testTeltonikaServer() throws Exception {
         String protocol = "teltonika";
-        int port = TraccarSetup.getProtocolPort(protocol);
+        int port = TraccarSetup.getConfiguredProtocolPort(protocol);
 //      catch port = -1 ?
 
 //      TODO: use teltonika.jdev test file for message content
@@ -115,7 +115,7 @@ public class DcsSpringBootTests {
     @Test
     public void testRuptelaServer() throws Exception {
         String protocol = "ruptela";
-        int port = TraccarSetup.getProtocolPort(protocol);
+        int port = TraccarSetup.getConfiguredProtocolPort(protocol);
 //      catch port = 0 ?
 
 //      from ruptela.jdev test file for message content

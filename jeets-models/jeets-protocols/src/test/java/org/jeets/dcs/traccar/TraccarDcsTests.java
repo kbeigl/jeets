@@ -9,6 +9,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.traccar.BaseProtocol;
 import org.traccar.model.Position;
 import org.traccar.protocol.TeltonikaProtocol;
 
@@ -17,20 +18,24 @@ import io.netty.buffer.ByteBufUtil;
 public class TraccarDcsTests extends CamelTestSupport {
 
 //  compare org.jeets.dcs.DcsSpringBootTests with Context
+//  redundant tests in jeets-protocols-traccar > unify
     private static final Logger LOG = LoggerFactory.getLogger(TraccarDcsTests.class);
 
+    /**
+     * Example of how to setup a single BaseProtocol server
+     */
     @Test
     public void testTeltonikaServer() throws Exception {
         String protocol = "teltonika";
 
-        Class<?> protocolClass = TeltonikaProtocol.class;
+        Class<? extends BaseProtocol> protocolClass = TeltonikaProtocol.class;
         ServerInitializerFactory teltonikaPipeline = 
                 TraccarSetup.createServerInitializerFactory(protocolClass);
 
 //      SpringBoot: @Bean(name = "teltonika")
         context.getRegistry().bind(protocol, teltonikaPipeline);
         
-        int port = TraccarSetup.getProtocolPort(protocol);
+        int port = TraccarSetup.getConfiguredProtocolPort(protocol);
 //      catch port = 0 ?
 //      int port = getPort(protocol + ".port");
         LOG.info(protocol + " port: " + port);
@@ -47,7 +52,7 @@ public class TraccarDcsTests extends CamelTestSupport {
     public void testingTeltonikaServer() throws Exception {
         String protocol = "teltonika";
 //      int port = getPort(protocol + ".port");
-        int port = TraccarSetup.getProtocolPort(protocol);
+        int port = TraccarSetup.getConfiguredProtocolPort(protocol);
 //      catch port = 0 ?
 
 //      TODO: use teltonika.jdev test file for message content
