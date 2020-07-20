@@ -44,11 +44,10 @@ public class DcsTests extends CamelTestSupport {
 
 //              register netty as jeets-dcs ;)
                 String uri = "netty:tcp://" + host + ":" + port 
-                        + "?serverInitializerFactory=#" + protocolName 
-                        + "&sync=" + camelNettySync;
+                        + "?serverInitializerFactory=#" + protocolName + "&sync=false";
 //              "&workerPool=#sharedPool&usingExecutorService=false" register in XML,
 
-                context.addRoutes(new TraccarRoute(uri, protocolName + "Route")); // teltonikaRoute
+                context.addRoutes(new TraccarRoute(uri, protocolName)); // id=teltonikaRoute
 //              SpringBoot: @Bean(name = protocolName + "Route")
 //              beanFactory.registerSingleton(protocolName + "Route", new TraccarRoute(uri, protocolName));
 
@@ -103,7 +102,7 @@ public class DcsTests extends CamelTestSupport {
         LOG.info(protocol + " port: " + port);
         
         String uri = "netty:tcp://" + host + ":" + port + 
-                "?serverInitializerFactory=#" + protocol + "&sync=" + camelNettySync;
+                "?serverInitializerFactory=#" + protocol + "&sync=false";
         context.addRoutes(new TraccarRoute(uri, protocol));
         
 //      now start the actual test
@@ -151,17 +150,6 @@ public class DcsTests extends CamelTestSupport {
     }
 
     /**
-     * The from endpoint for each protocol must be set to false!
-     * <p>
-     * The Traccar Pipeline and -Decoders are implemented WITH ACK response, i.e.
-     * channel.writeAndFlush. Therefore the Camel endpoint, i.e. NettyConsumer,
-     * should NOT return a (addtional) response. This behavior should be observed ..
-     * <br>
-     * Note that this boolean variable is attached to the URI as String 'true' /
-     * 'false'. Maybe apply String for type safety.
-     */
-    private boolean camelNettySync = false;
-    /**
      * camel-netty and/or spring are/is tedious about localhost, which doesn't
      * accept external access (in ubuntu). On the remote system 0.0.0.0 should be
      * used instead of 127.0.0.1.
@@ -177,5 +165,18 @@ public class DcsTests extends CamelTestSupport {
         LOG.info("startup - Context.init ...");
         TraccarSetup.contextInit(".\\setup\\traccar.xml");
     }
- 
+
+    /**
+//  SHOULD BE HARD CODED FOR TRACCAR
+  * The from endpoint for each protocol must be set to false!
+  * <p>
+  * The Traccar Pipeline and -Decoders are implemented WITH ACK response, i.e.
+  * channel.writeAndFlush. Therefore the Camel endpoint, i.e. NettyConsumer,
+  * should NOT return a (addtional) response. This behavior should be observed ..
+  * <br>
+  * Note that this boolean variable is attached to the URI as String 'true' /
+  * 'false'. Maybe apply String for type safety.
+ private boolean camelNettySync = false;
+  */
+
 }

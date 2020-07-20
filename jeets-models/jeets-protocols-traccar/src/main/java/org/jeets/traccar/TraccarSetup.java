@@ -54,7 +54,7 @@ public class TraccarSetup {
                 .scan();
         ) {
             ClassInfoList classInfos = result.getSubclasses("org.traccar.BaseProtocol").directOnly();
-            LOG.info("Found {} BaseProtocol classes in {} millis", classInfos.size(), (System.currentTimeMillis() - start));
+            LOG.info("found {} BaseProtocol classes in {} millis", classInfos.size(), (System.currentTimeMillis() - start));
 
             String protocolName = null;
             int port = -1;
@@ -65,8 +65,8 @@ public class TraccarSetup {
 //              load class only, if port exists
                 port = TraccarSetup.getConfiguredProtocolPort(protocolName);
 
-                if (port == -1) {
-                    LOG.info("port# for '{}' protocol is not defined in configuration file.", protocolName);
+                if (port == -1) { // LOG.warn ?
+                    LOG.debug("port# for '{}' protocol is not defined in configuration file.", protocolName);
                 } else {
                     /*
                      * ClassGraph: You should do all class loading through ClassGraph, using
@@ -183,7 +183,7 @@ public class TraccarSetup {
         if (!isContextInitialized()) {
 //          Context is not initialized yet, do now
             try {
-                LOG.info("Initializing traccar.Context with {}", configFile); 
+                LOG.info("initializing traccar.Context with {}", configFile); 
                 Context.init(configFile);
             } catch (Exception ex) { 
 //              TODO throw IOException explicitly to provide infos
