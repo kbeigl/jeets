@@ -35,8 +35,8 @@ public class TraccarRoute extends RouteBuilder {
     public void configure() throws Exception {
         from(from)
 //      using the same id again, will quietly stop and replace the earlier route!!
-        .routeId(routeId + "Route") // teltonikaRoute
-//      .routeGroup("hello-group")
+        .routeId(routeId + "Route") // teltonikaRoute or teltonikaTraccarRoute ?
+//      .routeGroup("hello-group")  // TraccarServers
 //      .startupOrder(order)
 //      this log expects a org.traccar.model.Position !!
         .log("DCS ${body.protocol} output: position ( time: ${body.deviceTime} "

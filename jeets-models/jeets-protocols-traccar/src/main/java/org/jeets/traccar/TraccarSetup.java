@@ -98,7 +98,7 @@ public class TraccarSetup {
     }
 
     /**
-     * Pick udp or tcp server, if present.
+     * Pick udp or tcp server, if exists.
      * <p>
      * Each BaseProtocol instance provides one or two TrackerServer instances for
      * tcp and/or udp transport. Each server holds a configured BasePipelineFactory
