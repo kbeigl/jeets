@@ -19,19 +19,19 @@ The project is a stripped down JeeTS version of the Traccar GTS and can run stan
 
 == Project Structure
 
-This `jeets-dcs` project wraps the `jeets-protocols-traccar` project 
+This `jeets-dcs-manager` project wraps the `jeets-protocols-traccar` project 
 in Spring/Boot and provides a Camel Endpoint to feed any System with live Tracking infos.
 The project artifact is a single runnable Java Archive (`.jar` file) and
 you can get an overview of third party software versions with
 [source,text]
 -----------------
-  jeets-dcs> mvn dependency:tree -Dverbose
+  jeets-dcs-manager> mvn dependency:tree -Dverbose
 -----------------
 
 Here's an extract of the major components, drivers and libraries with versions:
 [source,text]
 -----------------
-   org.jeets:jeets-dcs:jar:1.2.4
+   org.jeets:jeets-dcs-manager:jar:1.2.4
    +- org.apache.camel:camel-netty4-starter:jar:2.24.0
    |  +- org.springframework.boot:spring-boot-starter:jar:2.1.5.RELEASE
    |  |  +- org.springframework.boot:spring-boot:jar:2.1.5.RELEASE
@@ -65,7 +65,7 @@ can change from the repository root to the project folder
 and repeatedly build from there:
 [source,text]
 -----------------
-  cd jeets-server-jse\jeets-dcs
+  cd jeets-server-jse\jeets-dcs-manager
   mvn clean install
 -----------------
 
@@ -73,7 +73,7 @@ This project compiles a runnable `jar` file
 in the project's target folder which can be launched with:
 [source,text]
 -----------------
-  jeets-dcs> java -jar target/jeets-dcs-1.2.4-exec.jar ./setup/traccar.xml
+  jeets-dcs-manager> java -jar target/jeets-dcs-manager-1.2.4-exec.jar ./setup/traccar.xml
 -----------------
 Note that this project has its own `setup/` folder were you can place your traccar xml configuration files
 or provide the path to yours. If you are already using the Traccar GTS 
@@ -93,7 +93,7 @@ and you should switch to the `device2dcs/` directory and run it:
 Then you can look into the DCS log file in
 [source,text]
 -----------------
-  .../device2dcs-itest/jeets-dcs-1.2.4.log
+  .../device2dcs-itest/jeets-dcs-manager-1.2.4.log
 -----------------
 to see Spring and Camel start up and setup the routes for different ports and protocols:
 [source,text]
@@ -113,7 +113,7 @@ o.t.handler.StandardLoggingHandler: [33aa712f: teltonika > 127.0.0.1] HEX: 01
 
 :checkedbox: pass:normal[{startsb}&#10004;{endsb}]
 
-Note that this `jeets-dcs` project is still under development.
+Note that this `jeets-dcs-manager` project is still under development.
 Currently the project provides a Producer Endpoint, but no Consumer.
 Therefore the initial integration test is waiting for a time out on server side
 [source,text]
@@ -125,13 +125,13 @@ Therefore the initial integration test is waiting for a time out on server side
                                 No consumers available on endpoint: direct://traccar.model. 
 -----------------
 
-In subsequent releases you will see how to use this `jeets-dcs` component
+In subsequent releases you will see how to use this `jeets-dcs-manager` component
 to load the System Entities in your system.
 
 stay tuned!
 
 
-== What jeets-dcs is not
+== What jeets-dcs-manager is not
 
 The project remodels the existing protocols into the Camel-, Netty- and Spring- frameworks.
 This simplifies system configuration, performance tuning and integration with other systems.
@@ -140,7 +140,7 @@ Tracking logic or feed live information into a proprietary system.
 Or it can simply serve as a development environment for protocol implementations,
 performance testing etc.
 
-The jeets-dcs application can bind different protocol decoders to individual ports.
+The jeets-dcs-manager application can bind different protocol decoders to individual ports.
 Each protocol will extract client messages to system entities matching the Traccar database model.
 Generally this project remodels Traccar's `ServerManager()`, but most of the work lies
 in the protocol definitions perfectly maintained at traccar.org and not provided by JeeTS.
@@ -154,8 +154,8 @@ which are the actual performance bottle necks.
 
 // == DCS 2 ETL
 
-//     C:\kris\virtex\github.jeets\jeets-server-jse\jeets-dcs>
-//     java -cp target\jeets-dcs-4.6-191229-exec.jar 
+//     C:\kris\virtex\github.jeets\jeets-server-jse\jeets-dcs-manager>
+//     java -cp target\jeets-dcs-manager-4.6-191229-exec.jar 
 //          -Dloader.path=file:///C:\...\jeets-etl-traccar\target\jeets-etl-traccar-1.2.4-SNAPSHOT.jar
 //           org.springframework.boot.loader.PropertiesLauncher
 //           .\setup\traccar.xml

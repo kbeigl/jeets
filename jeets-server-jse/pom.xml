@@ -33,7 +33,7 @@
 	<name>--- Server Tracking Components (JSE)    ---</name>
 
 	<modules>
-		<module>jeets-dcs</module>
+		<module>jeets-dcs-manager</module>
 		<!-- relies on jeets-dcs ! -->
 		<module>my-etl-traccar</module>
 		<module>jeets-etl</module>
