@@ -6,6 +6,10 @@ import org.traccar.Context;
 
 public class TraccarContextTest extends CamelTestSupport {
 
+    /**
+     * Initialize static traccar.Context. The Context class is static and can be
+     * accessed from Traccar's original code.
+     */
     @Test
     public void testContextInit() throws Exception {
 

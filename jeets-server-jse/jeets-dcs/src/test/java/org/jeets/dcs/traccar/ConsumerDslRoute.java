@@ -1,7 +1,6 @@
-package org.jeets.dcs.init.routes;
+package org.jeets.dcs.traccar;
 
 import org.apache.camel.builder.RouteBuilder;
-import org.jeets.dcs.init.tracking.TrackingSystem;
 
 /**
  * This route is a simple implementation of a System.in endpoint consuming

@@ -25,7 +25,7 @@ public class DcsTests extends CamelTestSupport {
 
     @Test
     public void testAllConfiguredServers() throws Exception {
-        Map<Integer, Class<?>> protocolClasses = TraccarSetup.getConfiguredBaseProtocolClasses();
+        Map<Integer, Class<?>> protocolClasses = TraccarSetup.loadConfiguredBaseProtocolClasses();
 
         if (protocolClasses.size() > 0) {
             LOG.info("found " + protocolClasses.size() + " classes configured in configFile");
@@ -64,7 +64,7 @@ public class DcsTests extends CamelTestSupport {
 
     @Test
     public void testConfiguredBaseProtocolClasses() throws Exception {
-        Map<Integer, Class<?>> protocolClasses = TraccarSetup.getConfiguredBaseProtocolClasses();
+        Map<Integer, Class<?>> protocolClasses = TraccarSetup.loadConfiguredBaseProtocolClasses();
 
         if (protocolClasses.size() > 0) {
             LOG.info("found " + protocolClasses.size() + " classes configured in configFile");

@@ -24,6 +24,9 @@ import org.traccar.BaseProtocol;
  * *Protocol.classes. Then it traverses the classes, checks for *name*Protocol
  * entries (protocolname.port) in Context.Config to setup the Protocol server.
  * <p>
+ * Currently the ServerManager starts Traccar Protocols, Jeets Protocols
+ * compiled into Traccar and/or separately and a sample of a Netty En/Decoder.
+ * <p>
  * Context.Config does not provide the Properties object to traverse the *.port
  * entries to find protocol classes by protocol name. The ServerManager methods
  * to list classes of a package either for directories or jar files does not
@@ -62,7 +65,7 @@ public class ServerManager implements BeanFactoryPostProcessor, EnvironmentAware
          * TraccarProperties.class) see stackoverflow.com/questions/61343153
          */
         String traccarSetupFile = Binder.get(environment).bind("traccar.setupfile", String.class).get();
-        LOG.info("using traccar.setupfile: {}", traccarSetupFile);
+        LOG.debug("using traccar.setupfile: {}", traccarSetupFile);
 
         try {
 //          if (setupFile is bad) skip setupTraccarServers
@@ -99,11 +102,11 @@ public class ServerManager implements BeanFactoryPostProcessor, EnvironmentAware
     private void setupTraccarServers(ConfigurableListableBeanFactory beanFactory) throws Exception {
 
         long start = System.currentTimeMillis();
-        Map<Integer, Class<?>> protocolClasses = TraccarSetup.getConfiguredBaseProtocolClasses();
+        Map<Integer, Class<?>> protocolClasses = TraccarSetup.loadConfiguredBaseProtocolClasses();
         int protocolClassesSize = protocolClasses.size();
         if (protocolClassesSize > 0) {
 
-            LOG.info("found {} classes configured in configFile", protocolClassesSize);
+            LOG.debug("found {} classes configured in configFile", protocolClassesSize);
 
             for (int port : protocolClasses.keySet()) {
                 @SuppressWarnings("unchecked")
@@ -114,20 +117,36 @@ public class ServerManager implements BeanFactoryPostProcessor, EnvironmentAware
                 ServerInitializerFactory pipeline = 
                         TraccarSetup.createServerInitializerFactory(clazz);
                 beanFactory.registerSingleton(protocolName, pipeline);
+                /*
+                 * The Consumer Endpoint (from) for each Traccar protocol must be set to
+                 * sync=false! The Traccar Pipeline and -Decoders are implemented WITH ACK
+                 * response, i.e. channel.writeAndFlush. Therefore the Camel Endpoint, i.e.
+                 * NettyConsumer, should NOT return a (additional) response.
+                 */
                 String uri = "netty:tcp://" + host + ":" + port 
                         + "?serverInitializerFactory=#" + protocolName + "&sync=false";
-                LOG.info("added server {}", uri);
+                LOG.info("registered {} server \t{}", protocolName, uri);
 
 //              Bean name is irrelevant, not referenced
                 String routeBeanName = protocolName + "Bean";
 //              registered to instantiate new TraccarRoute with Consumer uri
 //              when: Apache Camel 3.3.0 (CamelContext: camel-1) is starting
                 beanFactory.registerSingleton(routeBeanName, new TraccarRoute(uri, protocolName));
-                LOG.info("registerd @{} with {}", routeBeanName, protocolName + "Route");
+                LOG.debug("registerd @{} with {}", routeBeanName, protocolName + "Route");
+                
+//              now server and serverInitFactory are registered, but Camel has not started!
+//              see comment below and on BindException in Main class
             }
 
-            LOG.info("Setup {} Traccar BaseProtocol servers in {} millis", 
+            LOG.info("Setup {} Traccar BaseProtocol servers in {} millis - ready for Camel to start!", 
                     protocolClassesSize, (System.currentTimeMillis() - start));
+//          Camel start occurs later in Spring:
+//          Apache Camel 3.3.0 (CamelContext: camel-1) is starting
+//          Creating shared NettyConsumerExecutorGroup with 9 threads
+//          ServerBootstrap binding to 0.0.0.0:5200
+//          Netty consumer  bound  to: 0.0.0.0:5200
+//          Route: jeetsRoute started and consuming from: netty://tcp://0.0.0.0:5200
+//          see comment on BindException in Main class
         
         } else {
             LOG.warn("No classes found, which are configured in configFile");
@@ -144,15 +163,4 @@ public class ServerManager implements BeanFactoryPostProcessor, EnvironmentAware
      */
     private String host = "0.0.0.0";
 
-    /**
-     * The Consumer Endpoint (from) for each Traccar protocol must be set to false!
-     * <p>
-     * The Traccar Pipeline and -Decoders are implemented WITH ACK response, i.e.
-     * channel.writeAndFlush. Therefore the Camel Endpoint, i.e. NettyConsumer,
-     * should NOT return a (additional) response.
-     * <p>
-     * Note that this boolean variable is attached to the URI as String 'true' /
-     * 'false'. Maybe apply String for type safety.
-    private boolean camelNettySync = false;
-     */
 }

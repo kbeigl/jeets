@@ -35,7 +35,7 @@ public class TraccarSetup {
      * ClassInfo/List/s in it. The returned classes are loaded inside the method but
      * have not been initialized yet!
      */
-    public static Map<Integer, Class<?>> getConfiguredBaseProtocolClasses() throws Exception {
+    public static Map<Integer, Class<?>> loadConfiguredBaseProtocolClasses() throws Exception {
         
 //      if (!isContextInitialized()) // align with getConfiguredProtocolPort
 //            throw RuntimeException ...
@@ -76,8 +76,8 @@ public class TraccarSetup {
                      * ClassCastException or other problems at weird places in your code.
                      */
                     protocolClasses.put(port, protocolClassInfo.loadClass());
-//                  clazz is loaded, but not yet initialized!
-                    LOG.info("loaded protocol: {}\tport#{}\tclass: {}", protocolName, port, className );
+//                  class is loaded, but not yet initialized, nor instantiated!
+                    LOG.info("loaded class: {}\tprotocol: {}\tport#{}", className, protocolName, port);
                 }
             }
         }
@@ -88,10 +88,11 @@ public class TraccarSetup {
      public static ServerInitializerFactory createServerInitializerFactory(Class<? extends BaseProtocol> protocolClass) {
         BaseProtocol protocolInstance = instantiateProtocol(protocolClass);
         String transport = "tcp";
+//      loop over "tcp" and "udp" - externally return 0-2 ServerInitFactories?
         TrackerServer server = getProtocolServer(transport, protocolInstance);
-        // compose URI and attach to server.setCamelUri() !
         if (server == null) { // BaseProtocol.nameFromClass will be removed!
-            LOG.warn("No server found for '{}:{}'", transport, BaseProtocol.nameFromClass(protocolClass));
+            LOG.warn("No server found for '{}:{}'", 
+                    transport, BaseProtocol.nameFromClass(protocolClass));
             return null;
         }
         return server.getServerInitializerFactory();
@@ -118,6 +119,16 @@ public class TraccarSetup {
             }
         }
         return null;
+//      old code ----------------------------------------------------
+//      String transport = server.isDatagram() ? "udp" : "tcp";
+//      String uri = "netty:" + transport + "://";
+//      configure host for individual host
+//      String serverHost = (server.getAddress() == null) ? host : server.getAddress();
+//      uri += serverHost + ":" + server.getPort() + "?";
+//      serverInitializerName = (transport.equals("tcp")) ? protocolName : protocolName + "-" + transport;
+//      uri += "serverInitializerFactory=#" + serverInitializerName 
+//  ???      + "&sync=true";
+//      -------------------------------------------------------------
     }
 
     /**

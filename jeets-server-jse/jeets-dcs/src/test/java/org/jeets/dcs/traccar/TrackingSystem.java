@@ -1,4 +1,4 @@
-package org.jeets.dcs.init.tracking;
+package org.jeets.dcs.traccar;
 
 import org.traccar.model.Position;
 
