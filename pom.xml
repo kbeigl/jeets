@@ -59,6 +59,7 @@
 		<module>jeets-parent</module>
 		<module>jeets-models</module>
 		<module>jeets-clients</module>
+		<module>jeets-server-etl</module>
 		<module>jeets-server-jse</module>
 		<module>jeets-server-jee</module>
 	 </modules>
