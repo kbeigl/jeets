@@ -6,13 +6,17 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.properties.PropertiesComponent;
 import org.apache.camel.test.junit4.CamelTestSupport;
+import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /*
- * see java docs, comments and developer notes in Device2protocolsIT
+ * see java docs, comments and developer notes in DcsSingleMessagesIT
  */
+// MUST RUN AFTER DcsSingleMessagesIT !! alphabetical order ?
+// currently also waiting for Tracker protobuffer messages!
+// .. disconnecting after each message ?
 public class Device2dcsIT extends CamelTestSupport {
 
     private static final Logger LOG = LoggerFactory.getLogger(Device2dcsIT.class);
@@ -22,7 +26,7 @@ public class Device2dcsIT extends CamelTestSupport {
     @Test
     public void testProtocolFiles() throws Exception {
 //      make sure to remove files from previous tests
-        assertTrue(deleteDirectory(sendFolder));
+        Assert.assertTrue(deleteDirectory(sendFolder));
 
         String[] testfiles = new String[] { "teltonika.jdev" };
 //              , "ruptela.jdev", "ruptela-teltonika.jdev" };
@@ -31,8 +35,8 @@ public class Device2dcsIT extends CamelTestSupport {
         }
 
         File file = new File(sentFolder);
-        assertTrue(file.isDirectory());
-        assertEquals(testfiles.length, file.listFiles().length);
+        Assert.assertTrue(file.isDirectory());
+        Assert.assertEquals(testfiles.length, file.listFiles().length);
 //      what about .error and dead letters?
     }
 
@@ -43,6 +47,7 @@ public class Device2dcsIT extends CamelTestSupport {
 //      60 seconds works to wait for delivery problem
 //      Failed delivery for . Exhausted after delivery attempt: 1 
 //      No consumers available on endpoint: direct://traccar.model.
+//      see snippet from tracker2dcs in DcsIT.bak with TypeConverters!
 
         LOG.info("Check if " + fileName + " was processed ..");
         File target = new File(sentFolder + fileName);

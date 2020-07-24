@@ -12,24 +12,31 @@ import org.apache.camel.component.properties.PropertiesComponent;
 import org.apache.camel.spi.Registry;
 import org.apache.camel.support.SimpleRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
-import org.jeets.dcx.DcsRoute;
 import org.jeets.model.traccar.jpa.Device;
 import org.jeets.model.traccar.jpa.Position;
-import org.jeets.protocol.TraccarProtocol;
+import org.jeets.protocol.JeetsProtocol;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DcsIT extends CamelTestSupport {
+public class DcsJeetsProtocol extends CamelTestSupport {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DcsIT.class);
+    /*
+     * This test is not an IT and should be moved to dcs or protocols.
+     * Currently is has its own dcs.properties > generalize
+     * Then add IT for explicit JeetsProtocol with Camel ACK
+     */
 
-    @Test
+    private static final Logger LOG = LoggerFactory.getLogger(DcsJeetsProtocol.class);
+
+//    @Test
     public void testDcsRoute() throws Exception {
 
+//      currently no Producer for Consumer Endpoint
+//      make it a SpringBootTest with DCS ?
         context.addRoutes(new RouteBuilder() {
             public void configure() throws Exception {
-                from("seda:jeets-dcs")
+                from("direct:traccar.model") // "seda:jeets-dcs"
                 .process(new Processor() {
                     public void process(Exchange exchange) throws Exception {
                         Object msg = exchange.getIn().getBody();
@@ -85,15 +92,15 @@ public class DcsIT extends CamelTestSupport {
     protected Registry createCamelRegistry() throws Exception {
         Registry registry = new SimpleRegistry();
 //      registry.bind("{{dcs.protobuffer.protocol}}", new DeviceProtoExtractor(null));    // request  to server
-        registry.bind("protobuffer", new TraccarProtocol(null));    // request  to server
+        registry.bind("protobuffer", new JeetsProtocol(null));    // request  to server
 //      registry.bind("ack", new ClientAckProtoExtractor(null));    // response to client
         return registry;
     }
 
-    @Override
-    protected RouteBuilder createRouteBuilder() throws Exception {
-        return new DcsRoute();
-    }
+//    @Override
+//    protected RouteBuilder createRouteBuilder() throws Exception {
+//        return new DcsRoute(); deprecated initial simple jeets-dcs
+//    }
 
     protected CamelContext createCamelContext() throws Exception {  
         CamelContext context = super.createCamelContext();  

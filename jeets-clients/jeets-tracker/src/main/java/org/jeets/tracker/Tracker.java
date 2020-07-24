@@ -10,8 +10,7 @@ import java.util.Queue;
 
 import org.jeets.tracker.netty.TraccarSender;
 import org.jeets.model.traccar.jpa.Position;
-import org.jeets.protocol.Traccar;
-import org.jeets.protocol.Traccar.Device.Builder;
+import org.jeets.protobuf.Jeets;
 import org.jeets.protocol.util.Transformer;
 
 /**
@@ -54,7 +53,7 @@ public class Tracker {
      * 
      * @param protoPositionBuilder
      */
-    public void sendPositionProto(Traccar.Position.Builder protoPositionBuilder) {
+    public void sendPositionProto(Jeets.Position.Builder protoPositionBuilder) {
         messageQueue.add(protoPositionBuilder);
         if (!messageLoopRunning) { // TODO: do this right!
             Thread t = new Thread(new MessageLoop(), "MessageLoop");
@@ -73,8 +72,8 @@ public class Tracker {
      * All newly added Positions are collected in a Queue. Then the Tracker
      * internally submits the positions to the server - as connectivity allows.
      */
-    private Queue<Traccar.Position.Builder> messageQueue = new LinkedList<Traccar.Position.Builder>();
-    private Traccar.Device.Builder devBuilder;
+    private Queue<Jeets.Position.Builder> messageQueue = new LinkedList<Jeets.Position.Builder>();
+    private Jeets.Device.Builder devBuilder;
 
     /**
      * All Positions are collected in a MessageQueue and the MessageLoop takes
@@ -115,16 +114,16 @@ public class Tracker {
         }
     }
 
-    private boolean transmitTraccarDevice(Builder devBuilder) {
+    private boolean transmitTraccarDevice(Jeets.Device.Builder devBuilder) {
 //      set devicetime just before transmission - every time
         for (int pos = 0; pos < devBuilder.getPositionCount(); pos++) {
             devBuilder.getPositionBuilder(pos).setDevicetime(new Date().getTime());
         }
 //      keep devBuilder if transmission goes wrong
-        Traccar.Device protoDevice = devBuilder.build();
+        Jeets.Device protoDevice = devBuilder.build();
 //      use in/for ACK? add fieldin Device?: java.util.UUID xTraceID = java.util.UUID.randomUUID();
         System.out.println("transmitTraccarDevice: " + protoDevice);
-        Traccar.Acknowledge ack = TraccarSender.transmitTraccarObject(protoDevice, host, port);
+        Jeets.Acknowledge ack = TraccarSender.transmitTraccarObject(protoDevice, host, port);
         if (ack == null) 
             return false;
         else {
@@ -141,7 +140,7 @@ public class Tracker {
      */
     private void loadDeviceBuilder() {
         if (devBuilder == null) {
-            devBuilder = Traccar.Device.newBuilder().setUniqueid(uniqueId);
+            devBuilder = Jeets.Device.newBuilder().setUniqueid(uniqueId);
         }
         while (!messageQueue.isEmpty())
             if (devBuilder.getPositionCount() < maxPosPerMsg)

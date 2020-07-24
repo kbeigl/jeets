@@ -3,7 +3,8 @@ package org.jeets.tracker.netty;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import org.jeets.protocol.Traccar.Acknowledge;
+import org.jeets.protobuf.Jeets.Acknowledge;
+
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

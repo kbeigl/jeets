@@ -34,7 +34,6 @@
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-protocols</artifactId>
-			<version>1.2.0</version>
 		</dependency>
 		<dependency>
             <groupId>org.apache.camel</groupId>

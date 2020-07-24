@@ -99,23 +99,6 @@
 					</execution>
 					<execution>
 						<id>start-device</id>
-						<phase>pre-integration-test</phase>
-						<goals>
-							<goal>start</goal>
-						</goals>
-						<configuration>
-							<name>jeets-device</name>
-							<workingDir>${jeets.repo.directory}/jeets-clients/jeets-device/</workingDir>
-							<waitForInterrupt>false</waitForInterrupt>
-							<!-- <healthcheckUrl>http://localhost:8381/healthcheck</healthcheckUrl> -->
-							<waitAfterLaunch>10</waitAfterLaunch>
-							<processLogFile>${project.build.directory}\${project.name}\${device-project-latest}.log</processLogFile>
-							<arguments>
-								<argument>java</argument>
-								<argument>-jar</argument>
-								<argument>target/${device-exec-jar}</argument>
-							</arguments>
-						</configuration>
 					</execution>
 					<execution>
 						<id>start-wliserver</id>

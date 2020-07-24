@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.concurrent.TimeUnit;
 
-import org.jeets.protocol.Traccar;
+import org.jeets.protobuf.Jeets;
 import org.jeets.protocol.util.Samples;
 import org.jeets.tracker.netty.TraccarAckInitializer;
 import org.jeets.tracker.netty.TraccarMessageHandler;
@@ -44,12 +44,12 @@ public class ProtobufferDeviceTest {
 
     @Test
     public void testProtobufferDevice() {
-        Traccar.Device.Builder deviceBuilder = Samples.createDeviceWithPositionWithOneEvent();
+        Jeets.Device.Builder deviceBuilder = Samples.createDeviceWithPositionWithOneEvent();
         assertEquals(org.jeets.model.traccar.util.Samples.uniqueId, deviceBuilder.getUniqueid());
         
         String testId = "testId";
         deviceBuilder.setUniqueid(testId);
-        Traccar.Device deviceOrm = deviceBuilder.build();
+        Jeets.Device deviceOrm = deviceBuilder.build();
 
         assertEquals(testId, deviceOrm.getUniqueid());
         assertTrue(deviceOrm.getPositionCount()==1);
@@ -65,7 +65,7 @@ public class ProtobufferDeviceTest {
 //          Tracker.transmitTraccarDevice(deviceOrm, host, port);
             TraccarMessageHandler handler = clientChannel.pipeline().get(TraccarMessageHandler.class);
 //          Traccar.Acknowledge ack = handler.sendTraccarObject(deviceBuilder);
-            Traccar.Acknowledge ack = handler.sendTraccarObject(deviceOrm);
+            Jeets.Acknowledge ack = handler.sendTraccarObject(deviceOrm);
 //          assertEquals("..", ack.toString());
             
             log.info("Client received\n{}", ack.toString());
@@ -96,7 +96,7 @@ public class ProtobufferDeviceTest {
                         ch.pipeline().addLast(
                                 new LoggingHandler(LogLevel.INFO),
                                 new ProtobufVarint32FrameDecoder(),
-                                new ProtobufDecoder(Traccar.Device.getDefaultInstance()),
+                                new ProtobufDecoder(Jeets.Device.getDefaultInstance()),
                                 new ProtobufVarint32LengthFieldPrepender(),
                                 new ProtobufEncoder(),
                                 new TraccarServerHandler());

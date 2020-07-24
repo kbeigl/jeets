@@ -92,7 +92,7 @@
 		<protocols-traccar-jar-with-dependencies>${protocols-traccar-project-latest}-jar-with-dependencies.jar</protocols-traccar-jar-with-dependencies>
 
         <dcs-version-latest>1.3-SNAPSHOT</dcs-version-latest>
-        <dcs-project-latest>jeets-dcs-${dcs-version-latest}</dcs-project-latest>
+        <dcs-project-latest>jeets-dcs-manager-${dcs-version-latest}</dcs-project-latest>
 		<dcs-jar>${dcs-project-latest}-exec.jar</dcs-jar>
 
         <device-version-latest>1.3-SNAPSHOT</device-version-latest>

@@ -30,7 +30,7 @@
 	<version>1.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>--- ETL: Extract Transform Load Data    ---</name>
+	<name>--- ETL - Extract Transform and Load    ---</name>
 
 	<description>JeeTS Extract-, Transform- and Load Modules to extract data from the network format,
 		transform it into System Entities (Formats) and Load these to the System (DB, Frontend etc.).

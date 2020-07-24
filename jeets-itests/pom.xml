@@ -32,19 +32,25 @@
 	<name>--- Integration Tests                   ---</name>
 
 	<modules>
-		<!-- <module>common-itests</module> -->
-		<module>tracker2dcs</module>
+		<!-- <module>common-itests</module>
+		<module>tracker2dcs</module> -->
 		<module>device2protocols-traccar</module>
 		<module>jeets-dcs-itest</module>
 	</modules>
 
 	<profiles>
 		<profile>
+	<!-- currently this project is launching the Client Device for sending messages 
+		to the actual ITest, i.e. dcs-manager. Tracker launch in sub itest will be 
+		removed as soon as Device can send protobuffers. This pom launches processes 
+		for all itest children. Once we have tested DCS and ETL mechanisms we'll 
+		need a new set of ITests with a System Entities Sender / Player ... ! -->
 			<id>itests</id>
 			<build>
 				<pluginManagement>
 					<plugins>
 						<plugin>
+							<!-- Integration Tests vs surefire Unit Tests -->
 							<artifactId>maven-failsafe-plugin</artifactId>
 							<version>${maven-failsafe-plugin-version}</version>
 							<executions>
@@ -66,12 +72,37 @@
 							<version>${process-exec-maven-plugin-version}</version>
 							<executions>
 								<execution>
-									<id>start-jar</id>
+									<id>start-device</id>
+									<phase>pre-integration-test</phase>
+									<goals>
+										<goal>start</goal>
+									</goals>
+									<configuration>
+										<name>jeets-device</name>
+										<workingDir>${jeets.repo.directory}/jeets-clients/jeets-device/</workingDir>
+										<waitForInterrupt>false</waitForInterrupt>
+										<!-- <healthcheckUrl>http://localhost:8381/healthcheck</healthcheckUrl> -->
+										<waitAfterLaunch>10</waitAfterLaunch>
+										<processLogFile>${project.build.directory}\${project.name}\${device-project-latest}.log</processLogFile>
+										<arguments>
+											<argument>java</argument>
+											<argument>-jar</argument>
+											<argument>target/${device-exec-jar}</argument>
+										</arguments>
+									</configuration>
+								</execution>
+
+								<execution>
+									<!-- Tracker is initially launched for the initial test with jeets 
+										protobuffers and will be removed as soon as the Device will be able to send 
+										them. Note that this process is also executed on mvn install (?) -->
+									<id>start-tracker</id>
 									<phase>pre-integration-test</phase>
 									<goals>
 										<goal>start</goal>
 									</goals>
 								</execution>
+
 								<execution>
 									<id>stop-jar-process</id>
 									<phase>post-integration-test</phase>
