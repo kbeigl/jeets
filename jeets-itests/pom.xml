@@ -7,7 +7,7 @@
     under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
-    http://www.apache.org/licenses/LICENSE-2.0
+    	http://www.apache.org/licenses/LICENSE-2.0
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,25 +32,18 @@
 	<name>--- Integration Tests                   ---</name>
 
 	<modules>
-		<!-- <module>common-itests</module>
-		<module>tracker2dcs</module> -->
+	    <!-- <module>common-itests</module> -->
 		<module>device2protocols-traccar</module>
 		<module>jeets-dcs-itest</module>
 	</modules>
 
 	<profiles>
 		<profile>
-	<!-- currently this project is launching the Client Device for sending messages 
-		to the actual ITest, i.e. dcs-manager. Tracker launch in sub itest will be 
-		removed as soon as Device can send protobuffers. This pom launches processes 
-		for all itest children. Once we have tested DCS and ETL mechanisms we'll 
-		need a new set of ITests with a System Entities Sender / Player ... ! -->
 			<id>itests</id>
 			<build>
 				<pluginManagement>
 					<plugins>
 						<plugin>
-							<!-- Integration Tests vs surefire Unit Tests -->
 							<artifactId>maven-failsafe-plugin</artifactId>
 							<version>${maven-failsafe-plugin-version}</version>
 							<executions>
@@ -90,17 +83,6 @@
 											<argument>target/${device-exec-jar}</argument>
 										</arguments>
 									</configuration>
-								</execution>
-
-								<execution>
-									<!-- Tracker is initially launched for the initial test with jeets 
-										protobuffers and will be removed as soon as the Device will be able to send 
-										them. Note that this process is also executed on mvn install (?) -->
-									<id>start-tracker</id>
-									<phase>pre-integration-test</phase>
-									<goals>
-										<goal>start</goal>
-									</goals>
 								</execution>
 
 								<execution>
