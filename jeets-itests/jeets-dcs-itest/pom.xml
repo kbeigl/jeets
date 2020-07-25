@@ -32,12 +32,29 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>org.jeets</groupId>
+			<artifactId>jeets-dcs-manager</artifactId>
+		</dependency>
+		<dependency>
+<!--        
+			<groupId>org.apache.camel.springboot</groupId>
+            <artifactId>camel-spring-boot-starter-test</artifactId>
+ -->
+			<!-- independent of Camel ? ? ? -->
+	 		<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<version>${spring-boot-version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+		<!-- combine with above artifactId ? -->
 			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-test</artifactId>
+			<artifactId>camel-test-spring</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
+	<!-- move build into itests profile ? -->
 	<build>
 		<testResources>
 			<testResource>
@@ -54,55 +71,53 @@
 				<groupId>org.commonjava.maven.plugins</groupId>
 				<artifactId>directory-maven-plugin</artifactId>
 			</plugin>
-			<plugin>
-				<groupId>com.bazaarvoice.maven.plugins</groupId>
-				<artifactId>process-exec-maven-plugin</artifactId>
-				<version>${process-exec-maven-plugin-version}</version>
-				<executions>
-					<!-- strange: one of the exec ids HAS TO BE 'start-jar' without phase and goal only
-									the other runs with phase and goal only. Check parent!! -->
-					<execution>
-						<id>start-jar</id>
-						<configuration>
-							<name>jeets-dcs</name>
-							<!-- workDir is vital for relative path hidden in traccar.xml (see argument below) -->
-							<workingDir>${jeets.repo.directory}/jeets-server-jse/jeets-dcs/</workingDir>
-							<waitForInterrupt>false</waitForInterrupt>
-							<!-- <healthcheckUrl>http://localhost:8381/healthcheck</healthcheckUrl> -->
-							<waitAfterLaunch>10</waitAfterLaunch>
-							<!-- try logging client and server to one log file > parse and assert in IT !! -->
-							<processLogFile>${project.build.directory}\${project.name}\${dcs-project-latest}.log</processLogFile>
-							<arguments>
-								<argument>java</argument>
-								<argument>-jar</argument>
-								<argument>target/${dcs-jar}</argument>
-								<argument>./setup/traccar.xml</argument>
-							</arguments>
-						</configuration>
-					</execution>
-					<execution>
-						<id>start-device</id>
-						<phase>pre-integration-test</phase>
-						<goals>
-							<goal>start</goal>
-						</goals>
-						<configuration>
-							<name>jeets-device</name>
-							<workingDir>${jeets.repo.directory}/jeets-clients/jeets-device/</workingDir>
-							<waitForInterrupt>false</waitForInterrupt>
-							<!-- <healthcheckUrl>http://localhost:8381/healthcheck</healthcheckUrl> -->
-							<waitAfterLaunch>10</waitAfterLaunch>
-							<processLogFile>${project.build.directory}\${project.name}\${device-project-latest}.log</processLogFile>
-							<arguments>
-								<argument>java</argument>
-								<argument>-jar</argument>
-								<argument>target/${device-exec-jar}</argument>
-							</arguments>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>itests</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.bazaarvoice.maven.plugins</groupId>
+						<artifactId>process-exec-maven-plugin</artifactId>
+						<version>${process-exec-maven-plugin-version}</version>
+						<executions>
+							<execution>
+								<id>start-device</id>
+							</execution>
+
+							<execution>
+								<!-- Tracker is initially launched for the initial test with jeets 
+									protobuffers and will be removed as soon as the Device will be able to send 
+									them. -->
+								<id>start-tracker</id>
+								<phase>pre-integration-test</phase>
+								<goals>
+									<goal>start</goal>
+								</goals>
+								<configuration>
+									<name>jeets-tracker</name>
+									<workingDir>${jeets.repo.directory}/jeets-clients/jeets-tracker/</workingDir>
+									<waitForInterrupt>false</waitForInterrupt>
+									<!-- <healthcheckUrl>http://localhost:8381/healthcheck</healthcheckUrl> -->
+									<waitAfterLaunch>10</waitAfterLaunch>
+									<processLogFile>${project.build.directory}\${project.name}\${tracker-project-latest}.log</processLogFile>
+									<arguments>
+										<argument>java</argument>
+										<argument>-jar</argument>
+										<argument>${jeets.repo.directory}/jeets-clients/jeets-tracker/target/${tracker-jar-with-dependencies}</argument>
+										<argument>-props</argument>
+									</arguments>
+								</configuration>
+							</execution>
+
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>

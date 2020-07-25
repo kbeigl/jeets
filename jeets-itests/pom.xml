@@ -7,7 +7,7 @@
     under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
-    http://www.apache.org/licenses/LICENSE-2.0
+    	http://www.apache.org/licenses/LICENSE-2.0
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,8 +32,7 @@
 	<name>--- Integration Tests                   ---</name>
 
 	<modules>
-		<!-- <module>common-itests</module> -->
-		<module>tracker2dcs</module>
+	    <!-- <module>common-itests</module> -->
 		<module>device2protocols-traccar</module>
 		<module>jeets-dcs-itest</module>
 	</modules>
@@ -66,12 +65,26 @@
 							<version>${process-exec-maven-plugin-version}</version>
 							<executions>
 								<execution>
-									<id>start-jar</id>
+									<id>start-device</id>
 									<phase>pre-integration-test</phase>
 									<goals>
 										<goal>start</goal>
 									</goals>
+									<configuration>
+										<name>jeets-device</name>
+										<workingDir>${jeets.repo.directory}/jeets-clients/jeets-device/</workingDir>
+										<waitForInterrupt>false</waitForInterrupt>
+										<!-- <healthcheckUrl>http://localhost:8381/healthcheck</healthcheckUrl> -->
+										<waitAfterLaunch>10</waitAfterLaunch>
+										<processLogFile>${project.build.directory}\${project.name}\${device-project-latest}.log</processLogFile>
+										<arguments>
+											<argument>java</argument>
+											<argument>-jar</argument>
+											<argument>target/${device-exec-jar}</argument>
+										</arguments>
+									</configuration>
 								</execution>
+
 								<execution>
 									<id>stop-jar-process</id>
 									<phase>post-integration-test</phase>

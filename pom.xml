@@ -59,10 +59,13 @@
 		<module>jeets-parent</module>
 		<module>jeets-models</module>
 		<module>jeets-clients</module>
+		<module>jeets-server-etl</module>
 		<module>jeets-server-jse</module>
 		<module>jeets-server-jee</module>
+		<module>jeets-itests</module>
 	 </modules>
 
+	<!-- 
 	<profiles>
 	    <profile>
 	        <id>itests</id>
@@ -71,5 +74,6 @@
 			 </modules>
 	    </profile>
 	</profiles>
+    -->
 
 </project>
