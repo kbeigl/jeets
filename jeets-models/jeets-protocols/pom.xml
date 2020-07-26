@@ -60,7 +60,7 @@
 			<artifactId>jeets-protocols-traccar</artifactId>
 			<!-- remove explicit version, define in parent pom -->
 			<version>4.8.0316</version>
-			<scope>provided</scope>
+			<!-- <scope>provided</scope> -->
 		</dependency>
 
         <dependency>

@@ -4,8 +4,10 @@
 
 <properties>
 
-    <entry key='config.default'>C:/kris/virtex/github.jeets/jeets-models/jeets-protocols-traccar/setup/default.xml</entry>
+	<!-- only supply pathname to load from the same folder as traccar.xml, i.e. point directory ./ -->
+    <entry key='config.default'>default.xml</entry>
     <!--
+    <entry key='config.default'>C:/kris/virtex/github.jeets/jeets-models/jeets-protocols-traccar/setup/default.xml</entry>
     <entry key='config.default'>C:/kris/virtex/github.jeets/jeets-data/traccar/setup/default.xml</entry>
     <entry key='config.default'>${jeets.traccar....}/default.xml</entry>
     <entry key='config.default'>./setup/default.xml</entry>

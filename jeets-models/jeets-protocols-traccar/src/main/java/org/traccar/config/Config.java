@@ -15,14 +15,19 @@
  */
 package org.traccar.config;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Config {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Config.class);
     private final Properties properties = new Properties();
 
     private boolean useEnvironmentVariables;
@@ -31,13 +36,26 @@ public class Config {
     }
 
     public Config(String file) throws IOException {
+
+        LOGGER.info("setup Config with: " + file.toString());
+        File setupFile = new File(file);
+
         try {
             Properties mainProperties = new Properties();
-            try (InputStream inputStream = new FileInputStream(file)) {
+            try (InputStream inputStream = new FileInputStream(setupFile)) {
                 mainProperties.loadFromXML(inputStream);
             }
 
             String defaultConfigFile = mainProperties.getProperty("config.default");
+            LOGGER.info("   config.default: " + defaultConfigFile);
+            File configFile = new File(defaultConfigFile);
+
+            if (configFile.getName().equals(configFile.getPath())) { 
+                LOGGER.info("prepend path from traccar.xml to default.xml");
+                defaultConfigFile = setupFile.getCanonicalPath().replaceAll(setupFile.getName(), configFile.getName());
+                LOGGER.info("load config file: " + defaultConfigFile);
+            }
+            
             if (defaultConfigFile != null) {
                 try (InputStream inputStream = new FileInputStream(defaultConfigFile)) {
                     properties.loadFromXML(inputStream);
