@@ -10,7 +10,7 @@
 * `jeets-protocols` +
 ** automated generation of ProtoBuffers from *.proto files in Maven build +
 ** implemented jeets.proto/buffers as _the_ JeeTS Protocol +
-   compatible to Traccar Database Model
+   compatible to Traccar Database Model, i.e. ERM
 ** currently depends on `jeets-protocols-traccar` +
    to enable compiling additional protocols in Traccar style
 

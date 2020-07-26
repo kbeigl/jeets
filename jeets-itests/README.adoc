@@ -1,28 +1,19 @@
 
 = JeeTS Integration Tests
 
-The itests, i.e. JeeTS integration tests directory, can be run to test various
-JeeTS components against each other. This directory should 
-not include Unit Testing, which can be found in each individual component project.
+The itests, i.e. JeeTS integration tests directory `jeets-itests`, 
+can be run to test various JeeTS components against each other.
+Separate processes of different components, like client and server,
+simulate real system behavior and highlight problems on either side. 
 
 
 == Usage
 
 All tests, i.e. Unit and Integration tests can be launched for the complete repo. +
-Without the itests profile only JUnit tests are executed:
-
-    ...\github.jeets>
-	mvn test   -> surefire Unit for all aggregates (models, clients, ... )
-	mvn verify -> surefire Unit tests just like mvn test
-	
-With the itests profile only Integration tests are executed:
+With the itests profile `-Pitests` only Integration tests are executed:
 	
 	mvn test   -Pitests	 -> skips all  tests
-	mvn verify -Pitests	 -> skips Unit tests, run integration tests
-
-In order to keep it this way all aggregates - except itests - 
-should only implement Unit tests only itests should implement integration tests 
-to test JeeTS components against each other and should not implement Unit tests.
+	mvn verify -Pitests	 -> skip Unit tests, run integration tests
 
 
 == Integration Development
@@ -32,6 +23,59 @@ different components together and keep the repository consistent.
 
 Please check out this link:./device2protocols-traccar/README.adoc[sample integration test] for details.
 
+
+== Known Issue v1.3
+
+Currently (JeeTS v1.3) the last integration test `jeets-dcs-itest` FAILS, if you run 
+
+	 ...\github.jeets>mvn verify -Pitests
+
+over the complete Repository.
+
+	[INFO] --- Integration Tests                   --- 1.3 .... SUCCESS [  0.016 s]
+	[INFO] device2protocols-traccar-itest 4.8.0316 ............ SUCCESS [01:00 min]
+	[INFO] jeets-dcs-itest 1.3 ................................ FAILURE [ 22.861 s]
+	[INFO] ------------------------------------------------------------------------
+	[INFO] BUILD FAILURE
+
+This seems to be a 'Memory Effect' when running `@SpringBootTest` with `@RunWith(SpringJUnit4ClassRunner.class)`
+in one Maven run, i.e. one JVM twice.
+
+	-------------------------------------------------------------------------------
+	Test set: org.jeets.itests.DcsSingleMessagesIT
+	-------------------------------------------------------------------------------
+	initializationError  Time elapsed: 0.019 s  <<< ERROR!
+	java.lang.NoClassDefFoundError: 
+	Could not initialize class org.springframework.test.context.junit4.SpringJUnit4ClassRunner
+
+(Also check and validate the unlikely side effect of the static `traccar.Context`.)
+
+
+=== workarounds
+
+First you can simply continue the verification by simply re-starting
+
+	mvn verify -Pitests -rf :jeets-dcs-itest
+
+to run all the way as pointed out by Maven:
+
+	[ERROR] After correcting the problems, you can resume the build with the command
+	[ERROR]   mvn <goals> -rf :jeets-dcs-itest
+
+Or you can run a regular `mvn clean install` for the complete repository, +
+change inside the directory `jeets-itest` and then run `mvn verify -Pitests`:
+
+	 ...\github.jeets>mvn clean install
+	 cd jeets-itests
+	 ...\github.jeets\jeets-itests>mvn verify -Pitests
+
+Now the Integration Tests should SUCCEED:
+
+	[INFO] --- Integration Tests                   --- 1.3 .... SUCCESS [  0.032 s]
+	[INFO] device2protocols-traccar-itest 4.8.0316 ............ SUCCESS [ 57.565 s]
+	[INFO] jeets-dcs-itest 1.3-SNAPSHOT ....................... SUCCESS [01:31 min]
+	[INFO] ------------------------------------------------------------------------
+	[INFO] BUILD SUCCESS
 
 
 
