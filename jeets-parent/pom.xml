@@ -87,7 +87,7 @@
         <tracker-project-latest>jeets-tracker-${tracker-version-latest}</tracker-project-latest>
 		<tracker-jar-with-dependencies>${tracker-project-latest}-jar-with-dependencies.jar</tracker-jar-with-dependencies>
 
-        <protocols-traccar-version-latest>4.8.0316</protocols-traccar-version-latest>
+        <protocols-traccar-version-latest>4.10</protocols-traccar-version-latest>
         <protocols-traccar-project-latest>jeets-protocols-traccar-${protocols-traccar-version-latest}</protocols-traccar-project-latest>
 		<protocols-traccar-jar-with-dependencies>${protocols-traccar-project-latest}-jar-with-dependencies.jar</protocols-traccar-jar-with-dependencies>
 

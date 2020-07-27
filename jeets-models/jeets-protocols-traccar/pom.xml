@@ -11,7 +11,7 @@
 	</parent>
 
 	<artifactId>jeets-protocols-traccar</artifactId>
-	<version>4.8.0316</version>
+	<version>4.10</version>
 
 	<name>jeets-protocols-traccar</name>
 	<url>jeets.org</url>

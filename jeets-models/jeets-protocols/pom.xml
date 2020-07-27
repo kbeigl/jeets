@@ -59,7 +59,7 @@
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-protocols-traccar</artifactId>
 			<!-- remove explicit version, define in parent pom -->
-			<version>4.8.0316</version>
+			<version>4.10</version>
 			<!-- <scope>provided</scope> -->
 		</dependency>
 

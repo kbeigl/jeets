@@ -53,9 +53,9 @@ public class Config {
             if (configFile.getName().equals(configFile.getPath())) { 
                 LOGGER.info("prepend path from traccar.xml to default.xml");
                 defaultConfigFile = setupFile.getCanonicalPath().replaceAll(setupFile.getName(), configFile.getName());
-                LOGGER.info("load config file: " + defaultConfigFile);
             }
             
+            LOGGER.info("load config file: " + defaultConfigFile);
             if (defaultConfigFile != null) {
                 try (InputStream inputStream = new FileInputStream(defaultConfigFile)) {
                     properties.loadFromXML(inputStream);
