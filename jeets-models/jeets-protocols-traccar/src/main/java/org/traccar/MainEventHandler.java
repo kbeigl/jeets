@@ -45,32 +45,28 @@ public class MainEventHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+
         if (msg instanceof Position) {
             Position position = (Position) msg;
             Context.getDeviceManager().updateLatestPosition(position);
             String uniqueId = Context.getIdentityManager().getById(position.getDeviceId()).getUniqueId();
-            // Log position
-            StringBuilder s = new StringBuilder();
-            s.append(formatChannel(ctx.channel())).append(" ");
-            s.append("uniqueId: ").append(uniqueId);
-            s.append(" protocol: ").append(position.getProtocol());
-            s.append(" time: ").append(DateUtil.formatDate(position.getFixTime(), false));
-            s.append(" lat: ").append(String.format("%.5f", position.getLatitude()));
-            s.append(" lon: ").append(String.format("%.5f", position.getLongitude()));
-            if (position.getSpeed() > 0) {
-                s.append(" speed: ").append(String.format("%.1f", position.getSpeed()));
-            }
-            s.append(" course: ").append(String.format("%.1f", position.getCourse()));
-            if (position.getAccuracy() > 0) {
-                s.append(" accuracy: ").append(String.format("%.1f", position.getAccuracy()));
-            }
-            Object cmdResult = position.getAttributes().get(Position.KEY_RESULT);
-            if (cmdResult != null) {
-                s.append(" result: ").append(cmdResult);
-            }
-            LOGGER.info(s.toString());
 
-//          the Traccar Pipeline ends here, for Camel fire message upstream (in)
+            StringBuilder builder = new StringBuilder();
+            builder.append(formatChannel(ctx.channel())).append(" ");
+            builder.append("uniqueId: ").append(uniqueId);
+            builder.append(" protocol: ").append(position.getProtocol());
+            builder.append(" time: ").append(DateUtil.formatDate(position.getFixTime(), false));
+            builder.append(" lat: ").append(String.format("%.5f", position.getLatitude()));
+            builder.append(" lon: ").append(String.format("%.5f", position.getLongitude()));
+            if (position.getSpeed() > 0) {
+                builder.append(" speed: ").append(String.format("%.1f", position.getSpeed()));
+            }
+            builder.append(" course: ").append(String.format("%.1f", position.getCourse()));
+            if (position.getAccuracy() > 0) {
+                builder.append(" accuracy: ").append(String.format("%.1f", position.getAccuracy()));
+            }
+            LOGGER.info(builder.toString());
+//          Traccar Pipeline ends here, for Camel fire message upstream (in)
             if (!Context.legacy)
                 ctx.fireChannelRead(position);
         }
