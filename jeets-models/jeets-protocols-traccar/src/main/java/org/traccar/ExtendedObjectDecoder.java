@@ -60,12 +60,12 @@ public abstract class ExtendedObjectDecoder extends ChannelInboundHandlerAdapter
                 if (decodedMessage instanceof Collection) {
                     for (Object o : (Collection) decodedMessage) {
                         saveOriginal(o, originalMessage);
-                        addAttributes(o, ctx); // jeets-dcs
+                        addAttributes(o, ctx); // jeets
                         ctx.fireChannelRead(o);
                     }
                 } else {
                     saveOriginal(decodedMessage, originalMessage);
-                    addAttributes(decodedMessage, ctx); // jeets-dcs
+                    addAttributes(decodedMessage, ctx); // jeets
                     ctx.fireChannelRead(decodedMessage);
                 }
             }
@@ -99,6 +99,7 @@ public abstract class ExtendedObjectDecoder extends ChannelInboundHandlerAdapter
             position.set("org.jeets.dcs.device.uniqueid", device.getUniqueId());
             position.set("org.jeets.dcs.device.port",
                     ((InetSocketAddress) context.channel().localAddress()).getPort());
+//			also add remote IP to replace RemoteHostHandler
         }
     }
 

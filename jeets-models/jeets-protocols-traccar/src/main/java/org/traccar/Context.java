@@ -112,7 +112,7 @@ public final class Context {
         connectionManager = new ConnectionManager();
 
         if (config.getBoolean("sms.enable")) {
-            LOGGER.warn("SMS Manager was removed in ETL version");
+            LOGGER.warn("SMS Manager currently not implemented in JeeTS version");
         }
         if (config.getBoolean("event.enable")) {
             LOGGER.warn("initEventsModule is skipped - unclear operation");
@@ -128,7 +128,7 @@ public final class Context {
      * This causes a conflict when running Camel tests.
      * When the ClassFinder loads
      * *Test.class > BaseTest > Context.init(new TestIdentityManager())
-     * which overrides the Context (see below).
+     * which overrides the Context.
      * Camel tests sets up Context.init( traccar.xml ) from the real file.
      * Remodel provided tests to real Context incl IdentityManager?
      */

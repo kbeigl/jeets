@@ -40,7 +40,7 @@
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-protocols-traccar</artifactId>
 			<scope>provided</scope>
-			<version>4.8.0316</version>
+			<version>4.10</version>
 		</dependency>
 	    <dependency>
 	        <groupId>org.apache.camel</groupId>

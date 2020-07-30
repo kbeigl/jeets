@@ -32,14 +32,13 @@ import org.apache.camel.component.netty.ServerInitializerFactory;
 public abstract class TrackerServer {
 
     private final boolean datagram;
-    private AbstractBootstrap bootstrap = null;
+    private AbstractBootstrap bootstrap;
 
     public boolean isDatagram() {
         return datagram;
     }
 
     public TrackerServer(boolean datagram, String protocol) {
-
         this.datagram = datagram;
         if (Context.getConfig() != null) {
 //          required for Camel ?
@@ -59,16 +58,19 @@ public abstract class TrackerServer {
 //      bind in original context OR let Camel take control of the life cycle
         if (Context.legacy) {
             if (datagram) {
+            	
                 this.bootstrap = new Bootstrap()
                         .group(EventLoopGroupFactory.getWorkerGroup())
                         .channel(NioDatagramChannel.class)
                         .handler(pipelineFactory);
+
             } else {
+
                 this.bootstrap = new ServerBootstrap()
-                        .group(EventLoopGroupFactory.getBossGroup(), 
-                                EventLoopGroupFactory.getWorkerGroup())
+                        .group(EventLoopGroupFactory.getBossGroup(), EventLoopGroupFactory.getWorkerGroup())
                         .channel(NioServerSocketChannel.class)
                         .childHandler(pipelineFactory);
+
             }
         }
     }
