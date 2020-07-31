@@ -90,8 +90,8 @@ public class Device2protocolsIT extends CamelTestSupport {
     /**
      * Create (pseudo dynamic) Camel Route to move the specified fileName to the
      * device's send folder to be sent. Note that this builder is always using the
-     * same routeId. Using the same id again, will quietly stop and replace the
-     * earlier route. Therefore the developer should make sure that routes for
+     * file name as routeId. Using the same id again, will quietly stop and replace
+     * the earlier route. Therefore the developer should make sure that routes for
      * different files should be created sequentially after the predecessor has
      * actually moved its file.
      * <p>
@@ -109,10 +109,10 @@ public class Device2protocolsIT extends CamelTestSupport {
         public void configure() throws Exception {
             from("file://{{data.send.folder}}?noop=true&fileName=" + fileName)
 //          always reuse, i.e. override previous ID
-            .routeId("send-file")
+//          .routeId("send-file")
 //          don't use dynamic ID in production
-//          .routeId(fileName)
-//          .log("sending file ..")
+            .routeId(fileName)
+//          .log("sending file .. fileName ..")
             .to("file://{{device.send.folder}}");
             
 //          TODO: poll target folder to trigger next file
@@ -124,7 +124,7 @@ public class Device2protocolsIT extends CamelTestSupport {
 //          .log("sent folder ${body}"); camelFileName ..
 //          .to(done?) EP for NotifyBuilder!?
 
-//          .end both Routes after success to create new Routes .. !!
+//          TODO end/stop/remove Route after success to create new Routes .. !!
         }
     }
 

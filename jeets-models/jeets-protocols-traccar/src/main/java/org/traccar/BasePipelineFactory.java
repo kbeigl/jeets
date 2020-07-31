@@ -26,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.traccar.config.Keys;
 import org.traccar.handler.NetworkMessageHandler;
-import org.traccar.handler.OpenChannelHandler;
 import org.traccar.handler.StandardLoggingHandler;
 
 import java.util.Map;
@@ -128,7 +127,7 @@ public abstract class BasePipelineFactory extends ChannelInitializer<Channel> {
         if (timeout > 0 && !server.isDatagram()) {
             pipeline.addLast(new IdleStateHandler(timeout, 0, 0));
         }
-        pipeline.addLast(new OpenChannelHandler(server));
+//        pipeline.addLast(new OpenChannelHandler(server)); // remove?
         pipeline.addLast(new NetworkMessageHandler()); // begin
         pipeline.addLast(new StandardLoggingHandler(protocol));
         addProtocolHandlers(handler -> {

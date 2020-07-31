@@ -23,7 +23,7 @@ import org.traccar.database.ConnectionManager;
 import org.traccar.database.DeviceManager;
 import org.traccar.database.IdentityManager;
 import org.traccar.database.MediaManager;
-import org.traccar.helper.Log;
+//import org.traccar.helper.Log;
 
 /**
  * This Context is derived from Traccar. On a longer term it might be replaced
@@ -69,12 +69,6 @@ public final class Context {
         return connectionManager;
     }
 
-    private static ServerManager serverManager;
-
-    public static ServerManager getServerManager() {
-        return serverManager;
-    }
-
     /**
      * Distinguish original Traccar source, i.e. legacy, from Camel Spring approach.
      * Should be initialized explicitly to avoid unwanted default behavior.
@@ -89,21 +83,14 @@ public final class Context {
     public static void init(String configFile) throws Exception {
 //      fork for camel <-> traccar.Main (temporary for regression tests)
         String callerClassName = new Exception().getStackTrace()[1].getClassName();
-        legacy = callerClassName.equals("org.traccar.Main");
+//        legacy = callerClassName.equals("org.traccar.Main");
 
         try {
             config = new Config(configFile);
         } catch (Exception e) {
             config = new Config();
-            Log.setupDefaultLogger();
             throw e;
         }
-//      setup Logger analog to traccar in Camel ...
-        if ((legacy) && (config.getBoolean("logger.enable"))) {
-            Log.setupLogger(config);
-        }
-
-//      DataManager was removed -> remove database.url
 
         mediaManager = new MediaManager(config.getString("media.path"));
 //      deviceManager = new DeviceManager( dataManager );
@@ -118,9 +105,6 @@ public final class Context {
             LOGGER.warn("initEventsModule is skipped - unclear operation");
 //          initEventsModule();
 //          check Camel and/or Netty alternatives (Notifier.java?)
-        }
-        if (legacy) {
-            serverManager = new ServerManager();
         }
     }
 

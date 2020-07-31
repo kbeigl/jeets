@@ -27,6 +27,7 @@ import io.netty.buffer.ByteBufUtil;
 @SpringBootTest // (classes = Main.class)
 public class DcsSpringBootTests {
     
+ // TODO test on default.original.xml for all protocols and ports
 //  create exclusive Traccar Server Tests <> Jeets and Netty Decoder Tests
 
     @Autowired
@@ -34,7 +35,14 @@ public class DcsSpringBootTests {
     @Autowired
     private ConsumerTemplate server;
     private String host = "netty:tcp://localhost:";
-    
+
+//    @Test
+//    public void testRunAllServers() throws Exception {
+//        load traccar.all.xml
+//        from resources !!
+//        how to UN-init Context from earlier TraccarSetup.loadConfigured .. ?
+//    }
+
     /**
      * Test org.jeets.protocol.JeetsDecoder and -Protocol
      * 

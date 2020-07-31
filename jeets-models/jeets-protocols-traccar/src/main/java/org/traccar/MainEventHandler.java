@@ -67,8 +67,8 @@ public class MainEventHandler extends ChannelInboundHandlerAdapter {
             }
             LOGGER.info(builder.toString());
 //          Traccar Pipeline ends here, for Camel fire message upstream (in)
-            if (!Context.legacy)
-                ctx.fireChannelRead(position);
+//          if (!Context.legacy)
+            ctx.fireChannelRead(position);
         }
     }
 
