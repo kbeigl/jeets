@@ -6,11 +6,18 @@ import org.traccar.Context;
 
 public class ContextTest extends CamelTestSupport {
 
+//  hard coded paths and files, i.e. integral part of maven run !
+    public static final String configuredServers = "./setup/traccar.xml";
+
+//  TODO carefully implement allServers
+//  ensure that previous xml configuration is erased
+//  important to study static bahavior!
+    public static final String allServers = "./setup/traccar.all.xml";
+
     @Test
     public void testContextInit() throws Exception {
 
-        String configFile = "./setup/traccar.xml"; // ".\\setup\\traccar.xml"
-        Context.init(configFile);
+        Context.init(configuredServers);
 //      higher level ... more tests
 //      TraccarSetup.contextInit(configFile);
         

@@ -6,25 +6,11 @@
 
 	<!-- only supply pathname to load from the same folder as traccar.xml, i.e. point directory ./ -->
     <entry key='config.default'>default.xml</entry>
-    <!--
+    <!-- also allowed:
     <entry key='config.default'>C:/kris/virtex/github.jeets/jeets-models/jeets-protocols-traccar/setup/default.xml</entry>
     <entry key='config.default'>C:/kris/virtex/github.jeets/jeets-data/traccar/setup/default.xml</entry>
     <entry key='config.default'>${jeets.traccar....}/default.xml</entry>
     <entry key='config.default'>./setup/default.xml</entry>
     -->
-
-    <!--
-    This is the main configuration file. All your configuration parameters should be placed in this file.
-
-    Default configuration parameters are located in the "default.xml" file. You should not modify it to avoid issues
-    with upgrading to a new version. Parameters in the main config file override values in the default file. Do not
-    remove "config.default" parameter from this file unless you know what you are doing.
-
-    For list of available parameters see following page: https://www.traccar.org/configuration-file/
-    -->
-
-    <entry key='database.ignoreUnknown'>false</entry>
-    <entry key='database.registerUnknown'>true</entry>
-    <entry key='database.generateQueries'>false</entry>
 
 </properties>

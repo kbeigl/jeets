@@ -24,6 +24,21 @@ public class DcsTests extends CamelTestSupport {
     private static final Logger LOG = LoggerFactory.getLogger(DcsTests.class);
 
     @Test
+    public void testRunAllServers() throws Exception {
+//      load traccar.all.xml
+//      from resources !!
+//      how to UNinit Context from earlier TraccarSetup.loadConfigured .. ?
+    }
+
+    /**
+     * The term '-Configured-' refers to the reduced traccar.xml file. It only holds
+     * servers with additional testing material like protocols in the repos
+     * jeets-data/device.send folder. These tests become part of the JeeTS build,
+     * test and integration test runs. The test {@link #testRunAllServers() testrun
+     * all servers} is more shallow as it only starts a server and maybe sends a
+     * single message.
+     */
+    @Test
     public void testAllConfiguredServers() throws Exception {
         Map<Integer, Class<?>> protocolClasses = TraccarSetup.loadConfiguredBaseProtocolClasses();
 
@@ -73,11 +88,12 @@ public class DcsTests extends CamelTestSupport {
                 Class<?> clazz = protocolClasses.get(port);
                 String className = clazz.getSimpleName(); // TeltonikaProtocol > teltonika
                 String protocolName = className.substring(0, className.length() - 8).toLowerCase();
-                System.out.println("protocol: " + protocolName + "\tport#" + port + "\tclass: " + clazz);
+                LOG.info("protocol: " + protocolName + "\tport#" + port + "\tclass: " + clazz);
             }
         
         } else {
             LOG.warn("No classes found, which are configured in configFile");
+//          fail ?
         }
     }
     
@@ -109,6 +125,9 @@ public class DcsTests extends CamelTestSupport {
         testTeltonikaMessages();
     }
 
+//  create multi purpose JUnit test 
+//  for single messages with thorough tests
+//  and for protocols with message counts ..
 //  redundant to dcs > DcsSpringBootTests => prototype!
     public void testTeltonikaMessages() throws Exception {
         String protocol = "teltonika";
@@ -118,9 +137,8 @@ public class DcsTests extends CamelTestSupport {
 
 //      TODO: use teltonika.jdev test file for message content
         String hexMessage = "000f333536333037303432343431303133";
-        String hexResponse = sendHexMessage(port, hexMessage);
+        String hexResponse = sendHexMessage(port, hexMessage); // no dcs output!
         Assert.assertEquals("01", hexResponse);
-//      no server output!
 
         hexMessage = "000000000000003608010000016b40d8ea30010000000000000000000000000000000105021503010101425e0f01f10000601a014e0000000000000000010000c7cf";
         hexResponse = sendHexMessage(port, hexMessage);
@@ -162,21 +180,21 @@ public class DcsTests extends CamelTestSupport {
      */
     @BeforeClass
     public static void setup() {
-        LOG.info("startup - Context.init ...");
-        TraccarSetup.contextInit(".\\setup\\traccar.xml");
+        LOG.info("Before DcsTests ...");
+        TraccarSetup.contextInit(ContextTest.configuredServers);
     }
 
-    /**
-//  SHOULD BE HARD CODED FOR TRACCAR
-  * The from endpoint for each protocol must be set to false!
-  * <p>
-  * The Traccar Pipeline and -Decoders are implemented WITH ACK response, i.e.
-  * channel.writeAndFlush. Therefore the Camel endpoint, i.e. NettyConsumer,
-  * should NOT return a (addtional) response. This behavior should be observed ..
-  * <br>
-  * Note that this boolean variable is attached to the URI as String 'true' /
-  * 'false'. Maybe apply String for type safety.
- private boolean camelNettySync = false;
-  */
+    /*
+     * SHOULD BE HARD CODED FOR TRACCAR
+     * The from endpoint for each protocol must be set to false!
+     * <p>
+     * The Traccar Pipeline and -Decoders are implemented WITH ACK response, i.e.
+     * channel.writeAndFlush. Therefore the Camel endpoint, i.e. NettyConsumer,
+     * should NOT return a (additional) response. This behavior should be observed ..
+     * <br>
+     * Note that this boolean variable is attached to the URI as String 'true' /
+     * 'false'. Maybe apply String for type safety.
+    private boolean camelNettySync = false;
+     */
 
 }

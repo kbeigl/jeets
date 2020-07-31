@@ -62,7 +62,7 @@ public class Device2protocolsIT extends CamelTestSupport {
     private void testProtocolFile(String fileName) throws Exception, InterruptedException {
         context.addRoutes( new FileRouteBuilder(fileName) );
 //      currently 3 seconds seems to be the minimum, see notes in RouteBuilder
-        Thread.sleep(3000); // change to NotifyBuilder !! to save time for many many test files ..
+        Thread.sleep(5000); // change to NotifyBuilder !! to save time for many many test files ..
 
         File target = new File(sentFolder + fileName);
         assertTrue(fileName + " was not sent!", target.exists());

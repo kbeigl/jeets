@@ -126,9 +126,7 @@ public class TraccarSetup {
 //      String serverHost = (server.getAddress() == null) ? host : server.getAddress();
 //      uri += serverHost + ":" + server.getPort() + "?";
 //      serverInitializerName = (transport.equals("tcp")) ? protocolName : protocolName + "-" + transport;
-//      uri += "serverInitializerFactory=#" + serverInitializerName 
-//  ???      + "&sync=true";
-//      -------------------------------------------------------------
+//      uri += "serverInitializerFactory=#" + serverInitializerName   ???   + "&sync=true";
     }
 
     /**
