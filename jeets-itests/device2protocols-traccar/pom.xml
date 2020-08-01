@@ -84,30 +84,6 @@
 								<id>start-device</id>
 							</execution>
 							<execution>
-								<id>start-protocols-traccar</id>
-								<phase>pre-integration-test</phase>
-								<goals>
-									<goal>start</goal>
-								</goals>
-								<configuration>
-									<name>jeets-protocols-traccar</name>
-									<!-- workDir is vital for relative path hidden in traccar.xml -->
-									<workingDir>${jeets.repo.directory}/jeets-models/jeets-protocols-traccar/</workingDir>
-									<waitForInterrupt>false</waitForInterrupt>
-									<!-- <healthcheckUrl>http://localhost:8381/healthcheck</healthcheckUrl> -->
-									<waitAfterLaunch>10</waitAfterLaunch>
-									<processLogFile>${project.build.directory}\${project.name}\${protocols-traccar-project-latest}.log</processLogFile>
-									<arguments>
-										<argument>java</argument>
-										<argument>-cp</argument>
-										<argument>target/${protocols-traccar-jar-with-dependencies}</argument>
-										<argument>org.traccar.Main</argument>
-										<argument>.\setup\traccar.xml</argument>
-									</arguments>
-								</configuration>
-							</execution>
-
-							<execution>
 								<id>start-wliserver</id>
 								<phase>pre-integration-test</phase>
 								<goals>
