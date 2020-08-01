@@ -93,7 +93,7 @@ public class TraccarSetup {
      public static ServerInitializerFactory createServerInitializerFactory(Class<? extends BaseProtocol> protocolClass) {
         BaseProtocol protocolInstance = instantiateProtocol(protocolClass);
         String transport = "tcp";
-//      loop over "tcp" and "udp" - externally return 0-2 ServerInitFactories?
+//      loop over "tcp" and "udp" - externally return 0-2 ServerInitFactories, i.e. serverList?
         TrackerServer server = getProtocolServer(transport, protocolInstance);
         if (server == null) { // BaseProtocol.nameFromClass will be removed!
             LOG.warn("No server found for '{}:{}'", 

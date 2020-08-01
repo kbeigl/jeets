@@ -35,6 +35,7 @@ import org.apache.camel.component.netty.ServerInitializerFactory;
 import org.apache.camel.component.netty.handlers.ServerChannelHandler;
 
 public abstract class BasePipelineFactory extends ChannelInitializer<Channel> {
+    // rewrite class to extend ServerInitializerFactory and imply traccar logic
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BasePipelineFactory.class);
 
@@ -127,7 +128,6 @@ public abstract class BasePipelineFactory extends ChannelInitializer<Channel> {
         if (timeout > 0 && !server.isDatagram()) {
             pipeline.addLast(new IdleStateHandler(timeout, 0, 0));
         }
-//        pipeline.addLast(new OpenChannelHandler(server)); // remove?
         pipeline.addLast(new NetworkMessageHandler()); // begin
         pipeline.addLast(new StandardLoggingHandler(protocol));
         addProtocolHandlers(handler -> {
@@ -139,7 +139,7 @@ public abstract class BasePipelineFactory extends ChannelInitializer<Channel> {
                 }
             }
             pipeline.addLast(handler);
-        }); // end NetworkMessage
+        }); // end NetworkMessageHandler
         pipeline.addLast(new MainEventHandler());
         return pipeline;
     }
