@@ -21,6 +21,8 @@ import io.netty.channel.ChannelInboundHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOutboundHandler;
 import io.netty.channel.ChannelPipeline;
+import io.netty.handler.logging.LogLevel;
+import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.timeout.IdleStateHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +37,7 @@ import org.apache.camel.component.netty.ServerInitializerFactory;
 import org.apache.camel.component.netty.handlers.ServerChannelHandler;
 
 public abstract class BasePipelineFactory extends ChannelInitializer<Channel> {
-    // rewrite class to extend ServerInitializerFactory and imply traccar logic
+    // TODO rewrite class to extend ServerInitializerFactory and imply traccar logic
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BasePipelineFactory.class);
 
@@ -125,21 +127,25 @@ public abstract class BasePipelineFactory extends ChannelInitializer<Channel> {
      */
     private ChannelPipeline initTraccarPipeline(Channel channel) {
         final ChannelPipeline pipeline = channel.pipeline();
+//      conditional on/off for analysis: if (loglevel .. DEBUG)
+            pipeline.addLast(new LoggingHandler(LogLevel.INFO));
         if (timeout > 0 && !server.isDatagram()) {
             pipeline.addLast(new IdleStateHandler(timeout, 0, 0));
         }
-        pipeline.addLast(new NetworkMessageHandler()); // begin
-        pipeline.addLast(new StandardLoggingHandler(protocol));
-        addProtocolHandlers(handler -> {
-            if (!(handler instanceof BaseProtocolDecoder || handler instanceof BaseProtocolEncoder)) {
-                if (handler instanceof ChannelInboundHandler) {
-                    handler = new WrapperInboundHandler((ChannelInboundHandler) handler);
-                } else {
-                    handler = new WrapperOutboundHandler((ChannelOutboundHandler) handler);
+        { // NetworkMessageHandler
+            pipeline.addLast(new NetworkMessageHandler());
+            pipeline.addLast(new StandardLoggingHandler(protocol));
+            addProtocolHandlers(handler -> {
+                if (!(handler instanceof BaseProtocolDecoder || handler instanceof BaseProtocolEncoder)) {
+                    if (handler instanceof ChannelInboundHandler) {
+                        handler = new WrapperInboundHandler((ChannelInboundHandler) handler);
+                    } else {
+                        handler = new WrapperOutboundHandler((ChannelOutboundHandler) handler);
+                    }
                 }
-            }
-            pipeline.addLast(handler);
-        }); // end NetworkMessageHandler
+                pipeline.addLast(handler);
+            });
+        }
         pipeline.addLast(new MainEventHandler());
         return pipeline;
     }
