@@ -21,6 +21,11 @@ import io.github.classgraph.ScanResult;
  * <p>
  * Each -protocols- project should supply a dedicated RouteBuilder with a
  * Consumer Endpoint (DCS output) which can be picked up by a dcs-manager.
+ * <p>
+ * The term '-Configured-' refers to the reduced traccar.xml file. It only holds
+ * servers with additional testing material like protocols in the repos
+ * jeets-data/device.send folder. These tests become part of the JeeTS build,
+ * test and integration test runs.
  */
 public class TraccarSetup {
 
@@ -81,14 +86,14 @@ public class TraccarSetup {
                 }
             }
         }
-        return protocolClasses; // can be empty, size = 0
+        return protocolClasses; // can be empty, i.e. size = 0
     }
     
     /* Currently only creating "tcp" servers */
      public static ServerInitializerFactory createServerInitializerFactory(Class<? extends BaseProtocol> protocolClass) {
         BaseProtocol protocolInstance = instantiateProtocol(protocolClass);
         String transport = "tcp";
-//      loop over "tcp" and "udp" - externally return 0-2 ServerInitFactories?
+//      loop over "tcp" and "udp" - externally return 0-2 ServerInitFactories, i.e. serverList?
         TrackerServer server = getProtocolServer(transport, protocolInstance);
         if (server == null) { // BaseProtocol.nameFromClass will be removed!
             LOG.warn("No server found for '{}:{}'", 

@@ -27,8 +27,8 @@ import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
-import io.netty.handler.logging.LogLevel;
-import io.netty.handler.logging.LoggingHandler;
+//import io.netty.handler.logging.LogLevel;
+//import io.netty.handler.logging.LoggingHandler;
 
 public class ProtobufferDeviceTest {
 	
@@ -84,17 +84,17 @@ public class ProtobufferDeviceTest {
         server = new ServerBootstrap()
                 .group(group)
                 .channel(LocalServerChannel.class)
-                .handler(new ChannelInitializer<LocalServerChannel>() {
-                    @Override
-                    public void initChannel(LocalServerChannel ch) throws Exception {
-                        ch.pipeline().addLast(new LoggingHandler(LogLevel.INFO));
-                    }
-                })
+//                .handler(new ChannelInitializer<LocalServerChannel>() {
+//                    @Override
+//                    public void initChannel(LocalServerChannel ch) throws Exception {
+//                        ch.pipeline().addLast(new LoggingHandler(LogLevel.INFO));
+//                    }
+//                })
                 .childHandler(new ChannelInitializer<LocalChannel>() {
                     @Override
                     public void initChannel(LocalChannel ch) throws Exception {
                         ch.pipeline().addLast(
-                                new LoggingHandler(LogLevel.INFO),
+//                                new LoggingHandler(LogLevel.INFO),
                                 new ProtobufVarint32FrameDecoder(),
                                 new ProtobufDecoder(Jeets.Device.getDefaultInstance()),
                                 new ProtobufVarint32LengthFieldPrepender(),

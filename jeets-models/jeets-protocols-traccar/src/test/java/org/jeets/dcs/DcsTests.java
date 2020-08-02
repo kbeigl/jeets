@@ -17,27 +17,17 @@ import org.traccar.protocol.TeltonikaProtocol;
 
 import io.netty.buffer.ByteBufUtil;
 
-// TODO set all Tests on default.original.xml for all protocols and ports
+/**
+ * These JUnit Tests should only validate basic functionality and -messages to
+ * detect problems before running the dcs-manager. Its
+ * org.jeets.dcs.traccar.ServerManager is designed after the original
+ * org.traccar.ServerManager The dcs-itests should be used to test protocol
+ * sequences from files.
+ */
 public class DcsTests extends CamelTestSupport {
 
-//  compare org.jeets.dcs.DcsSpringBootTests with Context
     private static final Logger LOG = LoggerFactory.getLogger(DcsTests.class);
 
-    @Test
-    public void testRunAllServers() throws Exception {
-//      load traccar.all.xml
-//      from resources !!
-//      how to UNinit Context from earlier TraccarSetup.loadConfigured .. ?
-    }
-
-    /**
-     * The term '-Configured-' refers to the reduced traccar.xml file. It only holds
-     * servers with additional testing material like protocols in the repos
-     * jeets-data/device.send folder. These tests become part of the JeeTS build,
-     * test and integration test runs. The test {@link #testRunAllServers() testrun
-     * all servers} is more shallow as it only starts a server and maybe sends a
-     * single message.
-     */
     @Test
     public void testAllConfiguredServers() throws Exception {
         Map<Integer, Class<?>> protocolClasses = TraccarSetup.loadConfiguredBaseProtocolClasses();
