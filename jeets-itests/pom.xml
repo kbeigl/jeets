@@ -33,7 +33,7 @@
 
 	<modules>
 	    <!-- <module>common-itests</module> -->
-		<module>device2protocols-traccar</module>
+		<module>jeets-wli-itest</module>
 		<module>jeets-dcs-itest</module>
 	</modules>
 
