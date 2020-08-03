@@ -29,7 +29,7 @@
 	<version>1.2.0</version>
 	<packaging>pom</packaging>
 
-	<name>--- AppServer Tracking Components (JEE) ---</name>
+	<name>--- JEE - AppServer Tracking Components ---</name>
 	<description>WildFly JeeTS Components</description>
 
 	<licenses>
