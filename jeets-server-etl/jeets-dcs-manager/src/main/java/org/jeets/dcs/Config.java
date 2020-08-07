@@ -1,8 +1,6 @@
 package org.jeets.dcs;
 
 import org.jeets.protocol.JeetsClientProtocol;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,8 +13,6 @@ import io.netty.handler.codec.string.StringEncoder;
 @Configuration
 public class Config {
     
-    private static final Logger LOG = LoggerFactory.getLogger(Config.class);
-
 //  jeets-protocols -------------------------------------------------
 //  TODO provide prop file with protocols and ports
 
@@ -45,13 +41,11 @@ public class Config {
     /**
      * Note that this boolean variable is attached to the URI as String 'true' /
      * 'false'. Maybe apply String for type safety.
-     */
     private boolean camelNettySync = false;
-    /**
      * camel-netty and/or spring are/is tedious about localhost, which doesn't
      * accept external access (in ubuntu). On the remote system 0.0.0.0 should be
      * used instead of 127.0.0.1.
-     */
     private String host = "0.0.0.0";
+     */
 
 }

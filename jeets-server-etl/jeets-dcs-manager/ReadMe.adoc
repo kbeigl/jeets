@@ -1,20 +1,239 @@
 
 :toc:
 
-= JeeTS DCS Traccar
+= JeeTS-dcs-manager
+
+The JeeTS DCS Manager combines lower level JeeTS Components 
+to a single Spring Boot Application,
+which can be launched from the command line of any (production) environment
+or can be integrated to existing systems with Enterprise Integration Patterns.
+Therefore the `jeets-dcs-manager` can also be referred as ...
+
+= *The Traccar DCS MicroService*
 
 The JeeTS DCS Traccar is a stand alone `@SpringBootApplication` Microservice
-to run any or all Device Communication Servers of the Traccar GTS.
-The main idea was to create a stand alone application
-to explicitly run the Traccar Device Communication Servers on different
-configurable ports and to collect the Java System Entities 
-at a single Endpoint for further standardized processing in a Tracking System.
+to run any or all Device Communication Servers, i.e. Protocol Servers of the Traccar GTS.
+And to develop additional or alternative protocols in the `jeets-protocols` project.
+The main idea was to create a stand alone application to explicitly 
+run the Traccar Device Communication Servers on different ports 
+and to collect the Java System Entities at a single Consumer Endpoint 
+for subsequent standardized processing in a Tracking System.
 
-If you are not familiar with Camel or Spring you may want to check out the 
-link:../../jeets-models/jeets-protocols-traccar/jeets-protocols-traccar.adoc[jeets-protocols-traccar]
-with the
-link:../../jeets-itests/device2protocols-traccar/README.adoc[device2protocols] integration test first.
-The project is a stripped down JeeTS version of the Traccar GTS and can run stand alone.
+
+== The Spring Framework
+
+link:https://spring.io/[The Spring Framework] 
+can be considered as the _de facto_ successor of JEE:
+[quote]
+"Core support for dependency injection, transaction management, web
+applications, data access, messaging, testing and more.
+The Spring Framework provides a comprehensive programming and
+configuration model for modern Java-based enterprise applications - on
+any kind of deployment platform. +
+A key element of Spring is infrastructural
+support at the application level: Spring focuses on the "plumbing" of
+enterprise applications so that teams can focus on application-level business
+logic, without unnecessary ties to specific deployment environments. +
+Spring makes programming Java quicker, easier, and safer for everybody. Spring’s focus on speed, simplicity, and productivity has made it the world's most popular Java framework." 
+
+// What more can we say? +
+// Visit the Spring site and code anything you want.
+
+The `jeets-dcs-manager` project is opening the JeeTS world to all 
+Spring technologies described above and you can simply use 
+_the DCS Manager as a Component to hide the Camel and Netty details_ 
+of the `jeets-protocols-traccar` _subproject_.
+If you know Spring, little about Camel and even less about Netty
+then the DCS manager is exactly what you need and you will find many ways
+to seamlessly integrate it into your application. 
+That's what the JeeTS is for and you have more important stuff to do.
+
+TIP: If you are not familiar with the Netty and Camel Frameworks you should study 
+link:../../jeets-models/jeets-protocols-traccar/jeets-protocols-traccar.adoc[jeets-protocols-traccar] for more insights.
+
+
+=== SpringBoot
+
+[quote]
+"link:https://spring.io/projects/spring-boot[SpringBoot] makes it easy to create stand-alone, production-grade Spring based Applications that you can 'just run'. 
+We take an opinionated view of the Spring platform and third-party libraries so you can get started with minimum fuss. Most Spring Boot applications need minimal Spring configuration."
+
+=== Features
+
+* Create stand-alone Spring applications
+
+* Embed Tomcat, Jetty or Undertow directly (no need to deploy WAR files)
+
+* Provide opinionated 'starter' dependencies to simplify your build configuration
+
+* Automatically configure Spring and 3rd party libraries whenever possible
+
+* Provide production-ready features such as metrics, health checks, 
+  and externalized configuration
+
+* Absolutely no code generation and no requirement for XML configuration
+
+
+
+== DCS Manager Features
+
+The JeeTS DCS Traccar project is a production ready Microservice 
+_and_ it can serve as the starting point into _your_ Tracking System.
+It isolates the Traccar Protocol implementations from the monolithic Traccar GTS 
+and serves the messages in form of a Java Object at a single Consumer Endpoint.
+
+Embeddable:: the `jeets-protocols-traccar` project provides a classpath scanner
+to scan any environment, i.e. JVM, for protocol classes. This scanner works for 
+regular, traditional jar files and for more complex ones, 
+like the Spring Frameworks requires - and it works in the development phase
+when working with source files and classes distributed in the file system. +
+Therefore you can simply use the DCS Microservice as 'just another Component'.
+
+Consumer Endpoint:: a DC Server has the sole purpose to accept encoded messages
+from the network on a hardware port and to decode them and transform them
+into something for subsequent processing, like Java Objects. +
+If you are a Java Developer and want to enrich your system with life tracking messages
+you can pick up the Objects from the `NettyConsumer` 
+and process them any way you like - no strings attached.
+
+Enterprise Integration:: By providing a `NettyConsumer` for the application
+experienced programmers can apply any any 
+link:https://www.enterpriseintegrationpatterns.com/patterns/messaging/toc.html[Enterprise Integration Pattern] to hook up their own system easily. 
+Pick up all incoming messages to process them however you please. 
+
+scale / split performance:: you can launch _all_ JeeTS protocol servers 
+in a single application
+or launch different DCS managers for different customers or markets 
+on separate machines with different performance requirements. 
+This way you can make the best use of your system environment 
+and scale the DCS Managers on the hardware, cloud, .. or whatever level.
+
+collect / join messages:: If you execute various DCS Manager on different machines 
+you can still collect all of their data in one place, like a Message Broker,
+and process them logically as if they come from a single source. 
+// diagrams would help here
+
+Full Network Performance:: 
+Traccar is a complete Tracking System processed inside the Netty pipelines.
+This includes database access. A database is an independent external resource
+with hardware access to persist and retrieve data via a RDBMS.
+Every device lookup, find last position, store new position 
+slows down the performance .. +
+In other contexts, like self driving cars with car2car communication, 
+performance requirements can change and the database can become a system bottleneck.
+Think of many vehicles sending a load of canBUS data many times a minute. +
+Some systems don't even bother to persist raw data.
+They calculate, merge, aggregate .. the incoming data streams live in the RAM. 
+Therefore the DCS Manager does not involve any database handling at all 
+to let Netty do its job as fast as it can - _live_ tracking!
+
+IMPORTANT: This does not mean that the data cannot be persisted - it's simple. +
+You can pick up the message stream from the DCS Endpoint, 
+use your own database pool to persist the data any way you want. +
+There is a database-loader on the JeeTS roadmap to apply 
+the Java Persistence Architecture JPA with an `EntityManager`
+for optimal database performance .. stay tuned.
+
+
+== The ServerManager
+
+As described for the underlying `jeets-protocols-traccar` project the 
+link:../../jeets-models/jeets-protocols-traccar/jeets-protocols-traccar.adoc#\_traccar_setup[TraccarSetup] 
+// jump to bookmark - doesnt work - url is okay?
+class was created to replace the *methods of* the `org.traccar.ServerManager`: +
+"
+The `org.jeets.traccar` package was added to replace the stand alone functionality
+with a generalized Setup Procedure. In the `TraccarSetup` class you will find 
+everything to setup Traccar and start it up in your environment.
+"
+
+So let's see how we can achieve this for a Spring Boot application.
+The standard way to register a Bean in Spring is the @Bean annotation.
+If you want to register only a few servers you can find use code of the 
+link:../../jeets-models/jeets-protocols-traccar/jeets-protocols-traccar.adoc#_2_cameltestsupport_with_netty[single server test]
+and easily hard wire it yourself - as little exercise.
+For this (development) purpose the DCS Manager
+provides the `@Configuration class Config`
+where you can place your `@Bean` definitions.
+But we're up to more. 
+
+We want to replace the original `org.traccar.ServerManager` 
+with one that leverages the DCS management with SpringBoot:
+the `org.jeets.dcs.traccar.ServerManager`.
+Comparing these two `ServerManager` implementations is helpful to follow 
+the paradigm shift and get a grip on internal SpringBoot functionalities. 
+Although SpringBoot provides complete automation - 
+we still want to control what's going when, where and how.
+
+
+=== Traccar Setup
+
+The steps to take for a Traccar Setup were described in the 
+link:../../jeets-models/jeets-protocols-traccar/jeets-protocols-traccar.adoc#_traccar_setup[protocols-traccar] 
+project which is imported into the DCS manager as the main prerequisite.
+You can run the projects `org.jeets.dcs.DcsTests` 
+to see the Setup Process in action and better follow the steps below.
+
+In the DCS manager the `org.jeets.dcs.Main` class 
+simply runs the `@SpringBootApplication` 
+which fires up the `BeanFactory` 
+to collect `@Configuration` classes and so on.
+
+For the Traccar Setup we need to read the configuration file
+[source,java]
+----
+TraccarSetup.contextInit(traccarSetupFile);
+----
+then we can load only the required classes
+[source,java]
+----
+TraccarSetup.loadConfiguredBaseProtocolClasses();
+----
+and loop over the classes to create and register 
+the protocol's `*InitializerFactory`
+[source,java]
+----
+TraccarSetup.createServerInitializerFactory(clazz);
+----
+and finally compose the Netty URI for the Camel `TraccarRoute` 
+and register it.
+
+To create valid Beans in a loop you have to find the correct place
+to implement without disturbing the Spring 
+
+HIER BIN ICH
+
+. The method BeanFactoryPostProcessor.postProcessBeanFactory is called bySpring startup process just after all bean definitions have been loaded, 
+but no beans have been instantiated yet, i.e. @Bean definitions. 
+
+. Spring boot internally uses Binder APIs to "map" the resolved properties into the @ConfigurationProperties beans. This resolution happens during the springboot startup process AFTER the BeanFactoryPostProcessors get created. 
+Therefore the Binder API is applied EnvironmentAware to load the properties explicitly.
+
+
+
+
+
+
+
+
+
+
+=== re/move
+
+Starters: Netty Starter with prop file !? for finetuning dev/prod env ..
+
+since the DCS manager is a Spring application we can profit 
+from all (of the above and many more) Spring features with minimum coding:
+
+automatic, orchstrated Startup- and gracious, ordered Shutdown Strategies
+see `@SpringBootTest public class DcsSpringBootTests` ...
+
+health, logging (levels DEBUG vs production), testing levels
+
+the new ServerManager! applying TraccarSetup
+
+DCS Testing von protocols-traccar Seite vertiefen ...
+
 
 
 == Project Structure
@@ -48,6 +267,14 @@ Here's an extract of the major components, drivers and libraries with versions:
    |  +- (org.apache.camel:camel-netty4:jar:2.24.0
    |  +- com.google.protobuf:protobuf-java:jar:3.11.0
    |  +- com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:jar:2.9.8
+-----------------
+
+[source,text]
+-----------------
+ org.jeets:jeets-dcs-manager:jar:1.3
+ +- org.jeets:jeets-protocols:jar:1.3
+ |  \- org.jeets:jeets-pu-traccar:jar:4.2
+ +- org.jeets:jeets-protocols-traccar:jar:4.10
 -----------------
 
 As you can see the Traccar Protocols are embedded in many different framework and starter components

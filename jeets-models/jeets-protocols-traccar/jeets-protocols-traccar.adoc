@@ -1,39 +1,379 @@
 
 :toc:
 
-
+// rename main project files to ReadMe - to be recognized by github
 [[jeets-protocols-traccar]]
 = JeeTS-protocols-traccar
 
-This project is a stripped down version of the http://traccar.org[Traccar GTS] 
-i.e. Traccar light, to run the Device Communication Servers (DCS) exclusively.
-All DCS servers provide the same output format being 
-the `org.traccar.model.Position` java class.
+If you are a Java GPS/GTS Developer you must know Traccar and have probably snatched some
+Protocol snippets for your own Tracker implementations ;) +
+Traccar is a great 'out of the box' Tracking System. The problem re/using its Source Code 
+is that you can't just copy and paste the code as it is part 
+of the complete monolithic Traccar GTS and makes upgrades extremely tedious. +
 
-== overview
+
+//= The JeeTS Distribution of Traccar Protocols
+
+= The Traccar Protocols Component
+
+This project is a stripped down version of the http://traccar.org[Traccar GTS]'s Protocol Servers in a single Java Jar. 
+
+
+== Introduction
+
+Wouldn't it be nice to have the `org.traccar.protocol` package as an isolated Jar file? +
+This is exactly the idea of this project: an (imaginary) `protocols-traccar.jar`
+which could be part of the original Traccar build cycle in a Multi Module Project in Maven, 
+i.e. tested, standardized and fully compatible.
 
 The main effort of the code reduction was to conserve the original 
-`org.traccar.protocol` package for regression tests etc. 
+`org.traccar.protocol` package for regression and integration tests, upgrades etc. 
 Please consult traccar.org for protocol details. 
-Anton Tananaev is doing an incredible job maintaining
-about 200 protocols on a daily basis.
+Anton Tananaev is doing an incredible job maintaining about 200 protocols on a daily basis.
 
-The main purpose of this project is to provide all Traccar protocols for your own Tracking Application.
-The `jeets-dcs` project demos how to use the protocols with the Spring/Boot/Starter- and Camel Frameworks
+The purpose of this project is to provide Traccar protocols for your own Tracking Application
+with all DC Servers providing the same output format:
+the `org.traccar.model.Position` Java Object holding the message content.
+
+// link to javadoc, picture from book?
+
+
+== Traccar Setup
+// create separate sub page/s
+
+If you look at the `org.traccar` package you will note the missing `ServerManager`, 
+`Main` and other Classes from the official Traccar Releases. 
+You can not 'run' the `jeets-protocols-traccar.jar` just like that.
+First you have to consume the messages from its Consumer Endpoint as we will see.
+The reason behind this is that it makes a lot of sense to integrate 
+the Traccar Protocols into an existing Application to process the Message output in.
+This application can be a Tracking System - or any other software.
+
+The `org.jeets.traccar` package was added to replace the stand alone functionality
+with a generalized Setup Procedure. In the `TraccarSetup` class you will find 
+everything you need to setup Traccar and start it up in your environment.
+
+TIP: Please have a look at the `org.jeets.dcs.DcsTests` for a demonstration
+and as a quick start template as we go through the `TraccarSetup` class 
+(while you can compare the original Traccar code).
+
+
+=== 1. Traccar Context
+
+One of the central Traccar classes is the `org.traccar.Context`, 
+since it is referenced 'everywhere' in Traccar to glue 'everthing' together.
+Most frameworks bring along their own Context to keep control over their responsibilities -
+so we'll keep Traccar's.
+
+One thing to note about the `org.traccar.Context` is the the `static` usage.
+It implies that it is accessible from everywhere in the JVM and 
+you should take special care, if you want to re/load or even replace the Context.
+The place for testing is the `org.jeets.dcs.ContextTest` 
+where you can load different external resources 
+(standard is `traccar-` and `default.xml`) for testing and 
+execute the init method `Context.init(configFile)` - repeatedly, if needed.
+
+As a general rule - and by common sense - you have to invoke `Context.init(configFile)`
+with path and configuration file. 
+This can be triggered from any application the protocols jar is part of.
+For the `org.jeets.dcs.DcsTests` this is done once for all tests
+with a hard coded configuration file which is part of the repository.
+
+[source,java]
+----
+    @BeforeClass
+    public static void setup() {
+        TraccarSetup.contextInit(ContextTest.configuredServers);
+    }
+----
+
+For your application you should provide an explicit path and configuration file.
+You can use the one you are using for your Traccar Installation 
+and stick to the protocols you are familiar with.
+
+
+=== 2. Protocol Server Initializer Factory
+
+The original Traccar distribution searches for all `org.traccar.protocol.*Protocol` 
+classes, aligns them with the configuration and then sets up each DC Server in a loop.
+We'll look at the loop a bit later. First let's look at the first test to execute 
+_one device communication server for one protocol_:
+
+[source,java]
+----
+    @Test
+    public void testTeltonikaServer() throws Exception {
+
+        String protocolName = "teltonika";
+        Class<? extends BaseProtocol> protocolClass = TeltonikaProtocol.class;
+        ServerInitializerFactory teltonikaPipeline = 
+                TraccarSetup.createServerInitializerFactory(protocolClass);
+        context.getRegistry().bind(protocolName, teltonikaPipeline);
+        
+        int port = TraccarSetup.getConfiguredProtocolPort(protocolName);
+        String uri = "netty:tcp://" + host + ":" + port + 
+                "?serverInitializerFactory=#" + protocolName + "&sync=false";
+        context.addRoutes(new TraccarRoute(uri, protocolName));
+        
+//      now start the actual test
+        testTeltonikaMessages();
+    }
+----
+
+In this test the `protocolName` and `protocolClass` are hard coded 
+and don't have to be determined. Once you have a protocol pair with <name, class> 
+you can create the `ServerInitializerFactory` with the method
+`TraccarSetup.createServerInitializerFactory(protocolClass)` 
+and bind it to your IoC Framework by name - in this case the `CamelContext`.
+
+If you don't know the `ServerInitializerFactory` yet, don't worry.
+It currently extends and will eventually replace Traccar's `BasePipelineFactory` 
+with a Camel Extension to initialize a Netty Pipeline 
+and attach a `NettyConsumer` Endpoint.
+
+If you look at the details of the `createServerInitializerFactory()` method
+you should recognize the reverse engineered Traccar process to 
+
+. `instantiateProtocol(org.traccar.protocol.*Protocol.class)`
+. instantiate a `org.traccar.TrackerServer` with `getProtocolServer`
+. `return server.getServerInitializerFactory()` -
+  formerly known as `BasePipelineFactory`.
+
+After `TraccarSetup` is initialized you can always look for a configured port number 
+with `TraccarSetup.getConfiguredProtocolPort(protocolName)`.
+
+
+=== 3. TraccarRoute to NettyConsumer
+
+And finally you can create the Netty Server with a `camel-netty` URI
+and add the `TraccarRoute` to the context:
+
+[source,java]
+----
+        String uri = "netty:tcp://" + host + ":" + port + 
+                "?serverInitializerFactory=#" + protocolName + "&sync=false";
+        context.addRoutes(new TraccarRoute(uri, protocolName));
+----
+
+Now the Protocol Server will immediately poll `host:port` 
+to supply decoded messages via `NettyConsumer` 
+at the Route's Endpoint `direct:traccar.model`.
+
+
+=== 4. Classpath Scanning
+
+After going through a single server setup we want to see how to setup 
+all servers or all servers defined in the configuration files.
+For every server we need the protocols name, port and class to set it up.
+
+Let's have another look at the original `org.traccar.ServerManager` 
+starting with the method `loadPackage("org.traccar.protocol")`
+to load all available protocol classes in the `tracker-server.jar`.
+The method distinguishes between classes in the Jar File or classes
+in the File System, i.e. when developing with your IDE.
+
+This works fine for the monolithic Traccar Application, but we want more. 
+We want to _embed the Traccar Protocols_ in most any (given) environment,
+which can be complex Uber-, Fat-, Ear- Jars or whatever format your Framework requires.
+In order to achieve this the 
+link:https://github.com/classgraph/classgraph[ClassGraph Library] (500 kB) is utilized.
+With it you can search the complete classpath and the load, initialize 
+or instantiate classes explicitly as required.
+
+Note that the Spring Framework also brings its own Class Loader,
+but we wanted a solution for any or no Framework.
+
+The first line of the `testAllConfiguredServers()` test
+introduces the convenience method
+
+[source,java]
+----
+Map<Integer, Class<?>> protocolClasses = TraccarSetup.loadConfiguredBaseProtocolClasses();
+----
+
+creates a `Map<port, protocolClass>`.
+The term `-Configured-` in the methods refers to the provided configuration. 
+Note that the method is hard coded to the package `org.traccar.protocol` 
+where all Traccar protocol classes must reside
+and subclass the `org.traccar.BaseProtocol`.
+If you run the test you can check the output (for your configuration)
+
+[source]
+----
+INFO  org.jeets.traccar.TraccarSetup 
+- found 210 BaseProtocol classes in 504 millis
+- loaded class: RuptelaProtocol   name: ruptela   port#5046
+- loaded class: TeltonikaProtocol name: teltonika port#5027
+- loaded class: WliProtocol       name: wli       port#5209
+- loaded 3 configured classes
+----
+
+After all configured protocol classes are located, the `TraccarRoute`
+was added to the CamelContext you can see Camel take control over Netty
+to start up every server:
+
+[source]
+----
+org.apache.camel.component.netty.NettyComponent 
+      - Creating shared NettyConsumerExecutorGroup with 9 threads
+org.apache.camel.component.netty.SingleTCPNettyServerBootstrapFactory 
+      - ServerBootstrap binding to 0.0.0.0:5027
+org.apache.camel.component.netty.NettyConsumer 
+      - Netty consumer bound to: 0.0.0.0:5027
+org.apache.camel.impl.engine.AbstractCamelContext 
+      - Route: teltonikaRoute started and consuming from: netty://tcp://0.0.0.0:5027
+----
+
+So we don't have to take care of the bootstrapping, binding and running the servers anymore :) 
+
+Servers are up and running, let's send some messages to test scenarios with rising complexity,
+before we proceed to the Traccar MicroService - a multi DC Server manager out of the box
+and ready for production from command line.
+
+
+== Test Scenarios
+
+Device Communication Servers are responsible to handle incoming messages to a Tracking System.
+You can never test enough and in the JeeTS repositories are Traccar Protocols tested 
+in various Protocol-, Unit- and Integrations Tests over different projects.
+
+
+=== 1. Original Traccar Protocol Tests
+
+The original Traccar Release comes with tests for each protocol.
+These tests are executed with every build of the jeets-protocols-traccar project.
+Anyhow these tests are focused on testing the actual en/decoding algorithms 
+of network messages. The tests are not running a Netty client or server.
+
+
+=== 2. CamelTestSupport with Netty
+
+Since we are using the Camel Integration Framework, 
+we should also make use of the `CamelTestSupport` facilities.
+We have gone through the process to setup and run servers
+by applying the `TraccarSetup` methods and saw the log output above.
+
+Let's stick to the `org.jeets.dcs.DcsTests` and 
+look at the single server test `testTeltonikaServer()`.
+After the server is up and running, we would like to send some messages,
+assert their integrity and content with the test method `testTeltonikaMessages()`.
+ 
+How can we simulate client and server communication over the network?
+
+Camel is an Integration Framework and since Integrated Systems are not easily tested
+it provides a built-in test kit that allows you to treat integration points 
+as components that can be switched out with local test cases.
+Instead of using the low-level Java to send messages Camel provides 
+a `ProducerTemplate` to send, and a `ConsumerTemplate` to receive
+messages for each Camel Component like Netty.
+
+The method `testTeltonikaMessages()` was designed to accept 
+the original HEX messages that you can copy from your Traccar log files.
+With HEX you can format _any_ network message! 
+These messages are converted to `byte[]` messages and sent with
+the build in producer `template` 
+in the method `sendHexMessage(port, hexMessage)`:
+
+[source,java]
+----
+byte[] response = template.requestBody( serverUri )
+----
+
+Now the client, i.e. `template`, actually sends the message via network
+and should receive a `byte[] response` message from the server.
+This response, i.e. Acknowledge, can easily be asserted 
+and the client behavior can be tested for _any_ message. +
+But wait a minute! +
+How do we know, if the server has received the transformed system entity
+`org.traccar.model.Position` and if the content is correct?
+Actually we have to do a `Three Way Testing`:
+client request and response plus server output!
+
+Again the `CamelTestSupport` provides a `ConsumerTemplate` to consume
+messages from a defined Endpoint. For all Traccar Protocols we have 
+defined _one single Endpoint_ `direct:traccar.model` 
+to receive system entities from _all_ protocol servers:
+
+[source,java]
+----
+Position position = consumer.receiveBody("direct:traccar.model", Position.class);
+----
+
+With a single line of code you pick up the system entity `Position`
+in a type safe manner and then you can test its content.
+
+The above testing facilities are well suited to test protocol en/decoding,
+send messages and ensure their integrity on server side. 
+So can we verify each protocol for any message? 
+Well .. Yes for single messages, but No for production-like behavior.
+
+If you comment the initial `hexMessage`, `hexResponse` and `Assert..` 
+in the method `testTeltonikaMessages()` and run the test again
+you will experience a communication problem and the test hangs.
+
+The reason behind this failure can only be found in the vendors protocol specification.
+In this case the first message we commented above is an 
+_initial client identification message_ . Only then a new channel is established 
+and will be used by all succeeding messages until the connection is closed.
+
+So now you can comment the lines of the identification messages,
+set your debug points inside the jeets-protocols-traccar classes
+and run the test in debug mode to find out, if the server behaves as expected.
+
+What more can you ask as a Developer?
+
+Well .. it is good that the original Traccar Protocols come with tests
+for de/encoding and that we can send and receive messages via network.
+Sufficient to actually release the project artifact for other projects to use.
+While the `DcsTests` can serve as a template to setup the protocol servers
+in a different environment.
+
+
+=== 3. DCS tests with Spring/Boot/Starters and Netty
+
+In the tests described above we have seen how to make use of the Camel Testing facilities
+to run a server, send a message from a client and assert the server input.
+But how do we actually start all configured servers in one single application?
+
+The link:../../jeets-server-etl/jeets-dcs-manager/ReadMe.adoc[*jeets-dcs-manager*] project 
+demonstrates how to use the protocols with the Spring/Boot/Starter- and Camel Frameworks
 to create Netty Camel Routes directly from the hardware Endpoint, i.e. port.
+Please proceed to the DCS Manager _after_ you have studied this page
+to model the embedding process for your favorite Java Framework.
+
+Every Framework provides Helpers and Tools to verify its functionality.
+Traccar is designed around the Netty Framework and the jeets-protocols-traccar project
+has added Camel to provide some higher level Netty functionality
+and a `NettyConsumer` Endpoint to receive Java Objects.
+
+The `jeets-dcs-manager` adds the Spring Framework to profit from its 
+build in functionalities and keep the business code to a minimum.
+The `DcsSpringBootTests` take testing a bit further by utilizing
+the `@SpringBootTest` for the Main `@SpringBootApplication`.
+These tests come close to integration testing, but not all the way.
+
+To complete the test cycle the JeeTS repository provides real Integration Tests.
+These can be used at development time and extended for performance testing etc.
 
 
-== instructions for running
+=== 4. Integration Testing
 
-After successful compilation please go to the jeets-protocols-traccar main directory
-to run the Traccar light GTS with your own configuration file
+Remember that the ClassGraph Library was introduced to scan complex environments.
+It works fine when developing code on the file system with your IDE. +
+But how do you know that it will work with the deployed Jar file? +
+If it doesn't, it would be a bad surprise popping up at deployment time
+and could mess up the complete product life cycle 
+with release milestones negotiated with your customers!
 
-[source,text]
-----
- java -jar target\jeets-protocols-traccar-x.y-jar-with-dependencies.jar setup\traccar.xml
-----
+Therefore the JeeTS is supplying link:../../jeets-itests/README.adoc[Integration Tests]
+that can be very useful, especially at development time,  
+to run different components together and keep the repository consistent.
+By starting different Jar files in separate processes 
+you can actually simulate a production system. 
 
-and you can send messages to the protocols and associated ports defined in your xml file.
+The `jeets-protocols-traccar` artifact is tested along the complete
+JeeTS build life cycle as described here in four Test Scenarios.
+If you plan to develop your own protocol make sure to test them in a complete build.
+Check out the link:../../jeets-itests/jeets-dcs-itest/README.adoc[jeets-dcs-itest]
+(TODO: rewrite from old protocols to new dcs)
 
-To observe the complete process you can proceed to the 
-link:../../jeets-itests/device2protocols-traccar/README.adoc[device2protocols integration test].
