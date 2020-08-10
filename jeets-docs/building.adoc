@@ -102,8 +102,8 @@ developer can restrict subsequent builds by going into lower levels
 and into the project folders to compile only this one project.
 
 WARNING: Be aware that `SNAPSHOT` releases may be volatile and the repository
-         may _not_ compile successful, since the stable releases may not have
-         been installed in your local Maven Repository. +
+         may _not_ compile successful, if the stable releases were not 
+         preinstalled in your local Maven Repository. +
          Please always compile the last major release, 
          before you work with `-SNAPSHOT` versions!
 
