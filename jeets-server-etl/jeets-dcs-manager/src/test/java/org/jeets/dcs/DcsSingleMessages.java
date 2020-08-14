@@ -1,4 +1,4 @@
-package org.jeets.itests;
+package org.jeets.dcs;
 
 import org.apache.camel.ConsumerTemplate;
 import org.apache.camel.ProducerTemplate;
@@ -19,7 +19,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.traccar.model.Position;
 import io.netty.buffer.ByteBufUtil;
 
-// run this test from command line: mvn -Dit.test=DcsSpringBootIT verify -Pitests
+// run from command line: mvn -Dit.test=DcsSingleMessagesIT verify -Pitests
 
 /**
  * Bootstrap the entire container to start complete DCS component, send
@@ -33,7 +33,7 @@ import io.netty.buffer.ByteBufUtil;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Main.class)
-public class DcsSingleMessagesIT {
+public class DcsSingleMessages {
     
     /*
      * Note that these tests are sending and asserting explicit single messages
@@ -53,7 +53,7 @@ public class DcsSingleMessagesIT {
     
 //  TODO implement testJeetsServer with Camel ACK, implement properties
     
-    private static final Logger LOG = LoggerFactory.getLogger(DcsSingleMessagesIT.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DcsSingleMessages.class);
     @Autowired
     private ProducerTemplate client;
     @Autowired
@@ -67,7 +67,7 @@ public class DcsSingleMessagesIT {
      * 
      * @throws Exception
      */
-    @Test
+//  @Test
     public void testJeetsServer() throws Exception {
 
 //      currently this explicit jeets server is not launched automatically

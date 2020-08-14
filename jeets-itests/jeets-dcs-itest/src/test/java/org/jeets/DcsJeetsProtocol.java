@@ -22,18 +22,19 @@ import org.slf4j.LoggerFactory;
 public class DcsJeetsProtocol extends CamelTestSupport {
 
     /*
-     * This test is not an IT and should be moved to dcs or protocols.
-     * Currently is has its own dcs.properties > generalize
-     * Then add IT for explicit JeetsProtocol with Camel ACK
+     * This test is not an IT and should be moved to dcs or protocols. 
+     * It is still invoked with 0 test runs, not to forget it ;)
+     * Currently is has its own dcs.properties > generalize Then add IT for explicit
+     * JeetsProtocol with Camel ACK 
+     * currently no Producer for Consumer Endpoint 
+     * turn into a SpringBootTest with DCS ?
      */
 
     private static final Logger LOG = LoggerFactory.getLogger(DcsJeetsProtocol.class);
 
-//    @Test
+//  @Test
     public void testDcsRoute() throws Exception {
 
-//      currently no Producer for Consumer Endpoint
-//      make it a SpringBootTest with DCS ?
         context.addRoutes(new RouteBuilder() {
             public void configure() throws Exception {
                 from("direct:traccar.model") // "seda:jeets-dcs"
