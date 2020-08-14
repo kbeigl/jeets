@@ -33,7 +33,7 @@ public class DcsTests extends CamelTestSupport {
         Map<Integer, Class<?>> protocolClasses = TraccarSetup.loadConfiguredBaseProtocolClasses();
 
         if (protocolClasses.size() > 0) {
-            LOG.info("found " + protocolClasses.size() + " classes configured in configFile");
+            LOG.info("found " + protocolClasses.size() + " classes from configFile");
 
             for (int port : protocolClasses.keySet()) {
                 @SuppressWarnings("unchecked")
@@ -72,7 +72,6 @@ public class DcsTests extends CamelTestSupport {
         Map<Integer, Class<?>> protocolClasses = TraccarSetup.loadConfiguredBaseProtocolClasses();
 
         if (protocolClasses.size() > 0) {
-            LOG.info("found " + protocolClasses.size() + " classes configured in configFile");
 
             for (int port : protocolClasses.keySet()) {
                 Class<?> clazz = protocolClasses.get(port);
@@ -93,23 +92,23 @@ public class DcsTests extends CamelTestSupport {
      */
     @Test
     public void testTeltonikaServer() throws Exception {
-        String protocol = "teltonika";
+        String protocolName = "teltonika";
 
         Class<? extends BaseProtocol> protocolClass = TeltonikaProtocol.class;
         ServerInitializerFactory teltonikaPipeline = 
                 TraccarSetup.createServerInitializerFactory(protocolClass);
 
 //      SpringBoot: @Bean(name = "teltonika")
-        context.getRegistry().bind(protocol, teltonikaPipeline);
+        context.getRegistry().bind(protocolName, teltonikaPipeline);
         
-        int port = TraccarSetup.getConfiguredProtocolPort(protocol);
+        int port = TraccarSetup.getConfiguredProtocolPort(protocolName);
 //      catch port = 0 ?
 //      int port = getPort(protocol + ".port");
-        LOG.info(protocol + " port: " + port);
+        LOG.info(protocolName + " port: " + port);
         
         String uri = "netty:tcp://" + host + ":" + port + 
-                "?serverInitializerFactory=#" + protocol + "&sync=false";
-        context.addRoutes(new TraccarRoute(uri, protocol));
+                "?serverInitializerFactory=#" + protocolName + "&sync=false";
+        context.addRoutes(new TraccarRoute(uri, protocolName));
         
 //      now start the actual test
         testTeltonikaMessages();
@@ -125,14 +124,16 @@ public class DcsTests extends CamelTestSupport {
         int port = TraccarSetup.getConfiguredProtocolPort(protocol);
 //      catch port = 0 ?
 
+        String hexMessage, hexResponse;
 //      TODO: use teltonika.jdev test file for message content
-        String hexMessage = "000f333536333037303432343431303133";
-        String hexResponse = sendHexMessage(port, hexMessage); // no dcs output!
+        hexMessage = "000f333536333037303432343431303133";
+        hexResponse = sendHexMessage(port, hexMessage); // no dcs output!
         Assert.assertEquals("01", hexResponse);
 
         hexMessage = "000000000000003608010000016b40d8ea30010000000000000000000000000000000105021503010101425e0f01f10000601a014e0000000000000000010000c7cf";
         hexResponse = sendHexMessage(port, hexMessage);
         Assert.assertEquals("00000001", hexResponse);
+
         Position position = consumer.receiveBody("direct:traccar.model", Position.class);
         Assert.assertEquals("356307042441013", position.getAttributes().get("org.jeets.dcs.device.uniqueid"));
         Assert.assertEquals("356307042441013", position.getString("org.jeets.dcs.device.uniqueid"));
@@ -142,6 +143,7 @@ public class DcsTests extends CamelTestSupport {
         hexMessage = "000000000000002808010000016b40d9ad80010000000000000000000000000000000103021503010101425e100000010000f22a";
         hexResponse = sendHexMessage(port, hexMessage);
         Assert.assertEquals("00000001", hexResponse);
+
         position = consumer.receiveBody("direct:traccar.model", Position.class);
         Assert.assertEquals("356307042441013", position.getAttributes().get("org.jeets.dcs.device.uniqueid"));
         Assert.assertEquals("356307042441013", position.getString("org.jeets.dcs.device.uniqueid"));

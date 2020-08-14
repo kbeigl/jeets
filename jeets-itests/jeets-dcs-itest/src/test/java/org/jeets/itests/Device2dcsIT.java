@@ -16,11 +16,6 @@ import org.slf4j.LoggerFactory;
  * via JeeTS. Basically all tests are sending hex messages to the associated
  * protocol port where they can be processed.
  * <p>
- * For example jeets-protocols-traccar and jeets-dcs-traccar use the same Netty
- * pipelines to decode binary messages. The first project holds the packages
- * originating from Traccar and the latter adds Spring. This should point you to
- * the problems on their first occurrence.
- * <p>
  * Currently this integration test (IT) can be copied into other ITs without
  * changes. In the long run a separate test-jar might be created for maven
  * import.
@@ -39,7 +34,8 @@ import org.slf4j.LoggerFactory;
  * OR: create vm:// Endpoints for Device, Server and ITest
  */
 /*
- * see java docs, comments and developer notes in DcsSingleMessagesIT
+ * see java docs, comments and developer notes in DcsSingleMessages
+ * TODO move from dcs-mgr to dcsIT
  */
 // MUST RUN AFTER DcsSingleMessagesIT !! alphabetical order ?
 // currently also waiting for Tracker protobuffer messages!
@@ -50,7 +46,7 @@ public class Device2dcsIT extends CamelTestSupport { // pure Camel, no Spring
 
     private String sendFolder, sentFolder;
 
-    @Test
+//  @Test
     public void testProtocolFiles() throws Exception {
 //      make sure to remove files from previous tests
         Assert.assertTrue(deleteDirectory(sendFolder));

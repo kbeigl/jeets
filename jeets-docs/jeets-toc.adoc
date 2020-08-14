@@ -10,8 +10,8 @@
 
 = JeeTS Inline Documentation
 
-This documentation should provide a quick start to run and test the JeeTS repository
-and use the compiled artifacts for your own purposes.
+This documentation provides a Quick Start to run and test the JeeTS repository +
+and use the compiled JeeTS artifacts for your own projects.
 
 == Building the JeeTS Repository
 
@@ -31,6 +31,10 @@ Instructions to import the complete repository
 or individual projects into Eclipse
 
 
+// create a readme file for Maven aggregate poms: models, clients, etl, jse, jee, itests
+// and link them from here to proceed into the actual projects readme (move texts there)
+
+
 == jeets-models
 
 === The Data Model
@@ -42,20 +46,31 @@ and as the Standard Model of the JEE JPA specification.
 
 * link:../jeets-models/jeets-pu-traccar/README.adoc[jeets-pu-traccar] +
 represents the Traccar Entity Relation Model specified 
-with a JPA Persistence Unit and related Java Entities.
+with a JPA Persistence Unit and related Java *System Entities*.
 
 
 === GPS Protocols
 
-The System Data Model actually defines all pieces of information
+The System Data Model defines all pieces of information
 a Tracking System can accept and process. 
 GPS messages form 'sentences' encoded by a dedicated protocol
 to be sent to the system. 
-The *jeets-protocols* project is supplying Protobuffers 
-for effective binary encoding and decoding.
+
+* link:../jeets-models/jeets-protocols-traccar/jeets-protocols-traccar.adoc[jeets-protocols-traccar] +
+is derived from Traccar and isolates the link:www.traccar.org/protocols/[Traccar Protocols]
+into a single Java Jar, which can be used for your own Tracking Projects to receive 
+a single Java Entity Format from all link:https://www.traccar.org/devices/[Devices supported by Traccar].
+The JeeTS project supplies a single Endpoint where you can pick up all incoming messages
+to process them however you please. Apply any 
+link:https://www.enterpriseintegrationpatterns.com/patterns/messaging/toc.html[Enterprise Integration Pattern] 
+to hook up your own system easily.
 
 * link:../jeets-models/jeets-protocols/README.adoc[jeets-protocols] +
-adds Protocol Buffers to send Traccar Messages in binary format. 
+is a project to define any GPS Protocol and run it in conjunction with JeeTS components. 
+Protocols can be implemented 'the Traccar way', compiled together with - and into - 
+the jeets-protocols-traccar project. 
+You can also define your own protocols with Netty, add a Camel Endpoint 
+and run them in a Spring Framework or whatever is appropriate for you.
 
 
 == jeets-clients
@@ -75,6 +90,49 @@ to their requirements.
 is the successor of the jeets-tracker applying Camel's Producer 
 Template to send byte or hex messages and collect the response.
 
+
+
+== jeets-server-etl
+
+*ETL Components* are important entry points to standardize a system.
+
+They *Extract, Transform and Load* Data to other JeeTS Components.
+*Device Communication Servers* receive encoded data from the network, 
+*Extract* the proprietary format, 
+*Transform* it into a standard *System Entity* and 
+finally *Loaders* load it to a Database, a Message Broker or any existing resource.
+
+=== Device Communication
+
+The core of a GPS Tracking System is the reception of encoded protocol data
+and the decoding and transformation to a general System Data Format,
+like JPA Entities aligned with the Data/base Model.
+The complete process is usually referred to as Device Communication 
+and each Protocol has one or more *Device Communication Servers*.
+
+
+=== Managing DC Servers
+
+The link:../jeets-server-etl/jeets-dcs-manager/ReadMe.adoc[*jeets-dcs-manager*] 
+is a stand alone application to run a large number
+of Device Communication Servers. You can run all Traccar Protocols out of the box,
+add your own protocol implementations with Netty Standard En/Decoders.
+
+The DCS Manager combines existing protocols and DC Servers to collect
+all of their data at a single Consumer Endpoint. 
+A pure Spring Application controlled by SpringBoot- and Netty Starters! 
+
+TODOcument
+
+. link:../jeets-server-etl/jeets-etl/[*jeets-etl*]
+
+. link:../jeets-server-etl/my-etl-traccar/[*my-etl-traccar*]
+
+. link:../jeets-server-etl/jeets-dcs-amq/[*jeets-dcs-amq*]
+
+. and more Loaders and ETL Modules ...
+
+
 == jeets-server-jse
 
 The *jeets-server-jse* folder is holding the server components
@@ -83,30 +141,8 @@ The components are build with the Java Standard
 Edition combined with various Frameworks and can be launched
 from command line.
 
-=== Device Communication
 
-The core of a GPS Tracking System is the reception of encoded protocol data
-and the decoding and transformation to a general System Data Format,
-being JPA Entities aligned with the Data/base Model.
-The complete process is usually referred to as Device Communication 
-and each Protocol has one or more Device Communication Server.
-
-
-=== Running Traccar Device Communication Servers
-
-Build the stand alone application *jeets-dcs.jar* 
-to receive Tracker Messages from any Tracker supported by Traccar!
-
-. link:../jeets-models/jeets-protocols-traccar/jeets-protocols-traccar.adoc[jeets-protocols-traccar] +
-provides all protocols from the (main releases of) Traccar GTS 
-
-. link:../jeets-server-jse/jeets-dcs/ReadMe.adoc[jeets-dcs] +
-combines the above projects to receive messages from any Tracker
-supported by Traccar protocol implementations.
-Combine with jeets-protocols to receive binary Protobuffer messages 
-and transform them to Java Entities.
-The application applies the Camel Framework to create Routes 
-from each protocol port to one unified output of Traccar Entities.
+== jeets-server-jee
 
 
 == jeets-itests

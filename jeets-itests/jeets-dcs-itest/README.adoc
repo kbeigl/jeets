@@ -1,16 +1,41 @@
 
-= JeeTS itest device2protocols
+= JeeTS DCS integration test
 
-This test should serve as a guideline for JeeTS development and testing.
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-Let's say you want to do some development on the `jeets-protocols-traccar`
-project and open it in your IDE. The general prerequisite is that you have
-successfully installed the complete `jeets-` repository with `mvn install` 
-to install all required components in your local Maven Repository.  
+Again the associated integration test provides a complete setup with device and server 
+and you should switch to the `device2dcs/` directory and run it:
+[source,text]
+-----------------
+  device2dcs> mvn clean verify -Pitests
+-----------------
+Then you can look into the DCS log file in
+[source,text]
+-----------------
+  .../device2dcs-itest/jeets-dcs-manager-1.2.4.log
+-----------------
+to see Spring and Camel start up and setup the routes for different ports and protocols:
+[source,text]
+-----------------
+SingleTCPNettyServerBootstrapFactory : ServerBootstrap binding to 0.0.0.0:5027
+component.netty4.NettyConsumer : Netty consumer bound to: 0.0.0.0:5027
+camel.spring.SpringCamelContext: Route: teltonika started and consuming from: tcp://0.0.0.0:5027
+-----------------
+then you can find the familiar `org.traccar` output from the incoming messages:
+[source,text]
+-----------------
+org.traccar.MainEventHandler      : [33aa712f] connected
+o.t.handler.StandardLoggingHandler: [33aa712f: teltonika < 127.0.0.1] 
+                                               HEX: 000f333536333037303432343431303133
+o.t.handler.StandardLoggingHandler: [33aa712f: teltonika > 127.0.0.1] HEX: 01
+-----------------
 
-Now open an external console, go to the directory
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-    ...\jeets-itests\device2protocols-traccar
+
+Open an external console, go to the directory
+
+    ...\jeets-itests\jeets-dcs-itest
 
 and after every substantial change you can install the project (vital!)
 and then run the integration test with

@@ -26,18 +26,15 @@ import org.traccar.BaseProtocol;
  * <p>
  * Currently the ServerManager starts Traccar Protocols, Jeets Protocols
  * compiled into Traccar and/or separately and a sample of a Netty En/Decoder.
- * <p>
- * Context.Config does not provide the Properties object to traverse the *.port
- * entries to find protocol classes by protocol name. The ServerManager methods
- * to list classes of a package either for directories or jar files does not
- * work for nested SpringBoot jars. Neither does the ClassFinder implementation
- * from torsten horn.
  */
 @Configuration
 public class ServerManager implements BeanFactoryPostProcessor, EnvironmentAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(ServerManager.class);
 
+//  TODO: BeanFactoryPostProcessor javadoc:
+//  See PropertyResourceConfigurer and its concrete implementations 
+//  for out-of-the-box solutions that address such configuration needs.
     private Environment environment;
     @Override
     public void setEnvironment(Environment environment) {
@@ -68,13 +65,11 @@ public class ServerManager implements BeanFactoryPostProcessor, EnvironmentAware
         LOG.debug("using traccar.setupfile: {}", traccarSetupFile);
 
         try {
-//          if (setupFile is bad) skip setupTraccarServers
-//          Traccar Context is mandatory (hard coded in *Protocol classes!)
-//          TraccarSetup.contextInit("./setup/traccar.xml");
+//          if (setupFile is bad) > see catch
             TraccarSetup.contextInit(traccarSetupFile);
             setupTraccarServers(beanFactory);
             
-//          then setup other servers in any case .. (here?)
+//          then setup other servers in any case .. 
             
         } catch (Exception e) { 
 //          this catch is not Traccar specific

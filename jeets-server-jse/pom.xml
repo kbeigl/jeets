@@ -30,7 +30,7 @@
 	<version>1.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>--- Server Tracking Components (JSE)    ---</name>
+	<name>--- JSE - Server Tracking Components    ---</name>
 
 	<modules>
 		<module>jeets-db-managers</module>

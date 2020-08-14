@@ -17,7 +17,7 @@ import io.github.classgraph.ClassInfoList;
 import io.github.classgraph.ScanResult;
 
 /**
- * Proprietary setup for Traccar Netty Pipelines.
+ * Proprietary setup for Traccar Camel Netty Pipelines.
  * <p>
  * Each -protocols- project should supply a dedicated RouteBuilder with a
  * Consumer Endpoint (DCS output) which can be picked up by a dcs-manager.
@@ -26,6 +26,8 @@ import io.github.classgraph.ScanResult;
  * servers with additional testing material like protocols in the repos
  * jeets-data/device.send folder. These tests become part of the JeeTS build,
  * test and integration test runs.
+ * <p>
+ * add link to adoc!
  */
 public class TraccarSetup {
 
@@ -82,10 +84,11 @@ public class TraccarSetup {
                      */
                     protocolClasses.put(port, protocolClassInfo.loadClass());
 //                  class is loaded, but not yet initialized, nor instantiated!
-                    LOG.info("loaded class: {}\tprotocol: {}\tport#{}", className, protocolName, port);
+                    LOG.info("loaded class: {}\tname: {}\tport#{}", className, protocolName, port);
                 }
             }
         }
+        LOG.info("loaded " + protocolClasses.size() + " configured classes.");
         return protocolClasses; // can be empty, i.e. size = 0
     }
     

@@ -3,9 +3,7 @@
 
 = Release Notes - JeeTS repository
 
-=== v1.3 - ?? 2020
-
-* Camel Migration 2.24.x to 3.3.0
+=== v1.3 - 2020, August
 
 * `jeets-protocols` +
 ** automated generation of ProtoBuffers from *.proto files in Maven build +
@@ -16,7 +14,8 @@
 
 * generalized `jeets-dcs-traccar` to `jeets-dcs-manager` +
 ** includes `jeets-protocols` with additional / alternate protocols to Traccar protocols
-*** includes `jeets-protocols-traccar`
+*** includes `jeets-pu-traccar`
+*** and `jeets-protocols-traccar`
 
 * added `my-etl-traccar` 
 for Maven Archetype generation of custom Traccar ETL MicroService
@@ -24,12 +23,14 @@ for Maven Archetype generation of custom Traccar ETL MicroService
 * moved all project data to jeets-data folder +
  applied variable replacement for traccar/setup folder 
 
-( * restructure repository: create section Extract Transform & Load Data includes DCS and Loaders)
+* Camel Migration 2.24.x to 3.3.0
+
+* restructured repository with explicit ETL section to Extract Transform & Load Data
  
 
 
 
-=== v1.2.4 - March 2020
+=== v1.2.4 - 2020, March
 
 * updated Device Communication Servers for all Traccar Protocols! +
 ** `jeets-protocols-traccar 4.8.0316` 
@@ -47,7 +48,7 @@ for Maven Archetype generation of custom Traccar ETL MicroService
 ** `jeets-protocols-dcs` to test Traccar protocols as Spring Boot Microservice
 
 
-=== v1.2.3 - January 2020
+=== v1.2.3 - 2020, January
 
 * added `jeets-device` as successor of jeets-tracker
 
@@ -64,7 +65,7 @@ for Maven Archetype generation of custom Traccar ETL MicroService
 to reduce explicit versioning for postgres etc. .. ongoing
 
 
-=== v1.2.2 - May 2019
+=== v1.2.2 - 2019, May
 
 * updated Device Communication Servers for all Traccar Protocols! +
 For details goto the link:../jeets-server-jse/jeets-dcs-traccar/ReadMe.adoc[project's readme file]
@@ -79,7 +80,7 @@ For details goto the link:../jeets-server-jse/jeets-dcs-traccar/ReadMe.adoc[proj
   #3 org.xml.sax.SAXParseException bug
 
 
-=== v1.2.1 - March 2019
+=== v1.2.1 - 2019, March
 
 * Device Communication Servers for all Traccar Protocols! +
 For details goto the link:../jeets-server-jse/jeets-dcs-traccar/ReadMe.adoc[project's readme file]
@@ -88,7 +89,7 @@ For details goto the link:../jeets-server-jse/jeets-dcs-traccar/ReadMe.adoc[proj
 ** includes `jeets-pu-traccar 4.2`
 
 
-=== v1.2.0 - December 2018
+=== v1.2.0 - 2018, December
 
 * update `jeets-pu-traccar` _complete repository_ to v4.2	!
 * original traccar ERM 4.1 was _not_ modified for Traccar 4.2 +
@@ -109,7 +110,7 @@ For details goto the link:../jeets-server-jse/jeets-dcs-traccar/ReadMe.adoc[proj
   repo is not consistent, 
   since required version 3.14 is not pre-compiled
 
-=== v1.1.0 - November 2018
+=== v1.1.0 - 2018, November
 
 * added `jeets.properties` to configure complete repo and tests +
   `jeets-pu-traccar-jpa` is fully configurable
@@ -135,7 +136,7 @@ For details goto the link:../jeets-server-jse/jeets-dcs-traccar/ReadMe.adoc[proj
        in `jeets-pu-traccar-jpa` version 3.14.3 +
        two persistence units jpa and jee in one `persistence.xml`!
 
-=== v1.0-Final - August 2018
+=== v1.0-Final - 2018, August 
 
 This is the version developed during writing of the book.
 The Final release is cleaned from some issues 
