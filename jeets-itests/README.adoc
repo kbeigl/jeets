@@ -19,9 +19,8 @@ With the itests profile `-Pitests` only Integration tests are executed:
 == Integration Development
 
 Integration Tests can be very useful at development time in order to run 
-different components together and keep the repository consistent.
+different components together and keep the repository consistent ..
 
-Please check out this link:./device2protocols-traccar/README.adoc[sample integration test] for details.
 
 
 == Known Issue v1.3
@@ -57,16 +56,16 @@ First you can simply continue the verification by simply re-starting
 
 	mvn verify -Pitests -rf :jeets-dcs-itest
 
-to run all the way as pointed out by Maven:
+to run all the way as recommended by Maven:
 
 	[ERROR] After correcting the problems, you can resume the build with the command
 	[ERROR]   mvn <goals> -rf :jeets-dcs-itest
 
-Or you can run a regular `mvn clean install` for the complete repository, +
+OR you can run a regular `mvn clean install` for the complete repository, +
 change inside the directory `jeets-itest` and then run `mvn verify -Pitests`:
 
 	 ...\github.jeets>mvn clean install
-	 cd jeets-itests
+	 ...\github.jeets>cd jeets-itests
 	 ...\github.jeets\jeets-itests>mvn verify -Pitests
 
 Now the Integration Tests should SUCCEED:

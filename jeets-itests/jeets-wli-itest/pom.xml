@@ -22,11 +22,10 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-itests</artifactId>
-		<version>1.3-SNAPSHOT</version>
+		<version>1.3</version>
 	</parent>
 
 	<artifactId>jeets-wli-itest</artifactId>
-	<version>1.3</version>
 	<packaging>jar</packaging>
 
 	<name>jeets-wli-itest</name>

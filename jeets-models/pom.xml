@@ -23,14 +23,14 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-parent</artifactId>
-		<version>1.3-SNAPSHOT</version>
+		<version>1.3</version>
 		<relativePath>../jeets-parent</relativePath>
 	</parent>
 
 	<artifactId>jeets-models</artifactId>
 	<packaging>pom</packaging>
 
-	<name>--- System Dataformats and Models       ---</name>
+	<name>--- JeeTS - Dataformats and Models      ---</name>
 
 	<modules>
 		<module>jeets-pu-traccar</module>
