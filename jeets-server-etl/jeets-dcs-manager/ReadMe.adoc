@@ -7,7 +7,7 @@ The JeeTS DCS Manager combines JeeTS and Traccar Protocols
 to a single Spring Boot Application,
 which can be launched from the command line of any (production) environment
 or can be integrated to existing systems with Enterprise Integration Patterns.
-Therefore the `jeets-dcs-manager` can also be referred as ...
+Therefore the `jeets-dcs-manager` can also be referred to as ...
 
 = *The Traccar DCS MicroService*
 
@@ -113,8 +113,8 @@ on separate machines with different performance requirements.
 This way you can make fine grained use of your system environment 
 and scale the DCS Managers on the hardware, cloud, .. or whatever level.
 
-collect / join messages:: If you do execute various DCS Manager on different machines 
-you can still collect all of their data in one place, like a Message Broker,
+collect / join messages:: If you do execute various DCS Managers on different machines 
+you can still collect all of their data in one place - like a Message Broker -
 and process them logically as if they come from a single source. 
 // diagrams would help here
 
@@ -128,7 +128,7 @@ slows down the performance and in the worst case the database doesn't
 react at all and the GTS can not work. +
 In other contexts, like self driving cars with car2car communication, 
 performance requirements are higher and the database 
-can become _the_ system bottleneck.
+can easily (and typically) become _the_ system bottleneck.
 Think of many vehicles sending a load of canBUS data many times a minute
 for an online analysis of the engine's performance. +
 Some systems don't even bother to persist raw data.
@@ -138,12 +138,12 @@ And the challenge rises when car's need external feedback
 to avoid a collision - fast.
 Therefore the DCS Manager does not involve any external resources 
 with unpredictable behavior at all. 
-Let Netty do its job as fast as it can - _live_ !
+Let Netty do its job as fast as it can - _live processing and tracking_ !
 
 IMPORTANT: This does not mean that the data cannot be persisted - it's simple. +
 You can pick up the message stream from the DCS Endpoint, 
 use your own database pool to persist the data any way you want. 
-From plain JDBS with SQL statements of with JPA. 
+From plain JDBS with SQL statements or with JPA. 
 Please visit the `my-etl` project to setup your database loader environment
 and start coding. +
 There is a database-loader on the JeeTS roadmap to apply 
@@ -254,7 +254,8 @@ To create valid Beans in a loop you have to find the correct place to implement,
 instantiate and register without disturbing the Spring functionalities.
 We have extended the `ServerManager` with the `BeanFactoryPostProcessor` 
 
-see javadoc: +
+see javadoc: 
+[quote]
 "Factory hook that allows for custom modification of an application context's
 bean definitions, adapting the bean property values of the context's 
 underlying bean factory. +
@@ -270,8 +271,8 @@ Ok, now we know where to create our Beans programmatically.
 But we run into another problem when we want to look up 
 the path and name of the configuration file to filter the loop.
 
-"
-Spring boot internally uses Binder APIs to 'map' the resolved properties 
+[quote]
+"Spring boot internally uses Binder APIs to 'map' the resolved properties 
 into the @ConfigurationProperties beans. This resolution happens during the 
 springboot startup process AFTER the BeanFactoryPostProcessors get created. 
 Therefore the Binder API is applied EnvironmentAware to load the properties explicitly.

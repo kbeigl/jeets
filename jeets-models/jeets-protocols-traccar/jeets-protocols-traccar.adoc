@@ -47,7 +47,7 @@ You can not 'run' the `jeets-protocols-traccar.jar` just like that.
 First you have to consume the messages from its Consumer Endpoint as we will see.
 The reason behind this is that it makes a lot of sense to integrate 
 the Traccar Protocols into an existing Application to process the Message output in.
-This application can be a Tracking System - or any other software.
+This application can be a Tracking System - or any other software enriched with live data.
 
 The `org.jeets.traccar` package was added to replace the stand alone functionality
 with a generalized Setup Procedure. In the `TraccarSetup` class you will find 
@@ -97,7 +97,7 @@ and stick to the protocols you are familiar with.
 The original Traccar distribution searches for all `org.traccar.protocol.*Protocol` 
 classes, aligns them with the configuration and then sets up each DC Server in a loop.
 We'll look at the loop a bit later. First let's look at the first test to execute 
-_one device communication server for one protocol_:
+_one single device communication server for one single protocol_:
 
 [source,java]
 ----
@@ -181,7 +181,7 @@ With it you can search the complete classpath and the load, initialize
 or instantiate classes explicitly as required.
 
 Note that the Spring Framework also brings its own Class Loader,
-but we wanted a solution for any or no Framework.
+but we wanted a solution for any or no Framework at all.
 
 The first line of the `testAllConfiguredServers()` test
 introduces the convenience method
@@ -224,10 +224,10 @@ org.apache.camel.impl.engine.AbstractCamelContext
       - Route: teltonikaRoute started and consuming from: netty://tcp://0.0.0.0:5027
 ----
 
-So we don't have to take care of the bootstrapping, binding and running the servers anymore :) 
+So we don't have to take care of the bootstrapping, binding and starting the servers anymore :) 
 
 Servers are up and running, let's send some messages to test scenarios with rising complexity,
-before we proceed to the Traccar MicroService - a multi DC Server manager out of the box
+before we proceed to the Traccar DCS MicroService - a multi Server manager out of the box
 and ready for production from command line.
 
 
@@ -243,7 +243,8 @@ in various Protocol-, Unit- and Integrations Tests over different projects.
 The original Traccar Release comes with tests for each protocol.
 These tests are executed with every build of the jeets-protocols-traccar project.
 Anyhow these tests are focused on testing the actual en/decoding algorithms 
-of network messages. The tests are not running a Netty client or server.
+of network messages. The tests are not running any client or server.
+Let's do that.
 
 
 === 2. CamelTestSupport with Netty
@@ -265,7 +266,7 @@ it provides a built-in test kit that allows you to treat integration points
 as components that can be switched out with local test cases.
 Instead of using the low-level Java to send messages Camel provides 
 a `ProducerTemplate` to send, and a `ConsumerTemplate` to receive
-messages for each Camel Component like Netty.
+messages for any Camel Component, like Netty.
 
 The method `testTeltonikaMessages()` was designed to accept 
 the original HEX messages that you can copy from your Traccar log files.
@@ -286,7 +287,7 @@ and the client behavior can be tested for _any_ message. +
 But wait a minute! +
 How do we know, if the server has received the transformed system entity
 `org.traccar.model.Position` and if the content is correct?
-Actually we have to do a `Three Way Testing`:
+Actually we have to do a _Three Way Testing_ :
 client request and response plus server output!
 
 Again the `CamelTestSupport` provides a `ConsumerTemplate` to consume
@@ -305,8 +306,8 @@ in a type safe manner and then you can test its content.
 The above testing facilities are well suited to test protocol en/decoding,
 send messages and ensure their integrity on server side. 
 So can we verify each protocol for any message? 
-Well .. Yes for single messages, but No for production-like behavior.
 
+Well .. Yes for single messages, but No for production-like behavior.
 If you comment the initial `hexMessage`, `hexResponse` and `Assert..` 
 in the method `testTeltonikaMessages()` and run the test again
 you will experience a communication problem and the test hangs.
@@ -362,7 +363,7 @@ Remember that the ClassGraph Library was introduced to scan complex environments
 It works fine when developing code on the file system with your IDE. +
 But how do you know that it will work with the deployed Jar file? +
 If it doesn't, it would be a bad surprise popping up at deployment time
-and could mess up the complete product life cycle 
+and could mess up the complete road map  
 with release milestones negotiated with your customers!
 
 Therefore the JeeTS is supplying link:../../jeets-itests/README.adoc[Integration Tests]
@@ -374,6 +375,7 @@ you can actually simulate a production system.
 The `jeets-protocols-traccar` artifact is tested along the complete
 JeeTS build life cycle as described here in four Test Scenarios.
 If you plan to develop your own protocol make sure to test them in a complete build.
-Check out the link:../../jeets-itests/jeets-dcs-itest/README.adoc[jeets-dcs-itest]
-(TODO: rewrite from old protocols to new dcs)
+
+// Check out the link:../../jeets-itests/jeets-dcs-itest/README.adoc[jeets-dcs-itest]
+// (TODO: rewrite from old protocols to new dcs)
 
