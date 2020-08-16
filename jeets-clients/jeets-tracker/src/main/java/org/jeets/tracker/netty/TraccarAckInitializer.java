@@ -15,7 +15,7 @@
  */
 package org.jeets.tracker.netty;
 
-import org.jeets.protocol.Traccar.Acknowledge;
+import org.jeets.protobuf.Jeets.Acknowledge;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;

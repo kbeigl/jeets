@@ -1,0 +1,91 @@
+
+= JeeTS DCS integration test
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+Again the associated integration test provides a complete setup with device and server 
+and you should switch to the `device2dcs/` directory and run it:
+[source,text]
+-----------------
+  device2dcs> mvn clean verify -Pitests
+-----------------
+Then you can look into the DCS log file in
+[source,text]
+-----------------
+  .../device2dcs-itest/jeets-dcs-manager-1.2.4.log
+-----------------
+to see Spring and Camel start up and setup the routes for different ports and protocols:
+[source,text]
+-----------------
+SingleTCPNettyServerBootstrapFactory : ServerBootstrap binding to 0.0.0.0:5027
+component.netty4.NettyConsumer : Netty consumer bound to: 0.0.0.0:5027
+camel.spring.SpringCamelContext: Route: teltonika started and consuming from: tcp://0.0.0.0:5027
+-----------------
+then you can find the familiar `org.traccar` output from the incoming messages:
+[source,text]
+-----------------
+org.traccar.MainEventHandler      : [33aa712f] connected
+o.t.handler.StandardLoggingHandler: [33aa712f: teltonika < 127.0.0.1] 
+                                               HEX: 000f333536333037303432343431303133
+o.t.handler.StandardLoggingHandler: [33aa712f: teltonika > 127.0.0.1] HEX: 01
+-----------------
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+Open an external console, go to the directory
+
+    ...\jeets-itests\jeets-dcs-itest
+
+and after every substantial change you can install the project (vital!)
+and then run the integration test with
+
+    device2protocols-traccar> mvn clean verify -Pitests
+
+As you can see the integration test starts by running the phases
+
+    <phase>pre-integration-test</phase>
+    
+to launch the external processes required for this test
+
+        :
+    Full command line: java -cp target/jeets-protocols-traccar-x.y-jar-with-dependencies.jar ..
+     Starting process: jeets-protocols-traccar
+        :
+    Full command line: java -jar target/jeets-device-1.2.4-jar-with-dependencies.jar
+     Starting process: jeets-device
+        :
+
+and then the actual integration tests are executed. +
+This listing is only showing the important messages for brevity: 
+
+    [INFO] -------------------------------------------------------
+    [INFO]  T E S T S
+    [INFO] -------------------------------------------------------
+    [INFO] Running org.jeets.itests.Device2protocolsIT
+    INFO  Device2protocolsIT             + testProtocolFiles(org.jeets.itests.Device2protocolsIT)
+    INFO  DefaultCamelContext            + Apache Camel 2.24.0 (CamelContext: camel-1) started
+    INFO  DefaultCamelContext            + Route: send-file started and consuming from:
+                                    file://jeets-data/device.send?fileName=teltonika.jdev&noop=true
+    INFO  DefaultShutdownStrategy        + Starting to graceful shutdown 1 routes
+    INFO  DefaultShutdownStrategy        + Route: send-file shutdown complete, was consuming from: ..
+    INFO  DefaultShutdownStrategy        + Graceful shutdown of 1 routes completed in 0 seconds
+
+This concrete integration test is simple but effective.
+
+First the server `jeets-protocols-traccar` and device `jeets-device` are launched
+in separate JVMs (could be separate computers anywhere in the net).
+
+Then the actual test `Device2protocolsIT` is simply creating a Camel Route 
+to move a sample file from `jeets-data\device.send` to `jeets-device\send`
+and the device will automatically send all messages to the specified `ip:port`
+and the server will respond to every message.
+
+Currently the test is only checking, if the file was sent.
+The developer can view details by going through the individual log files for this test:
+
+    jeets\jeets-itests\device2protocols-traccar\target\device2protocols-traccar-itest
+          jeets-protocols-traccar-4.8.0316.log
+          jeets-device-1.2.4.log
+
+In the long run both processes could be logged in a single file to check messages and responses etc.

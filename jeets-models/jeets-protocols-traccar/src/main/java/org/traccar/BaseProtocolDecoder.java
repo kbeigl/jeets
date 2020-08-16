@@ -21,12 +21,11 @@ import io.netty.handler.codec.http.HttpRequestDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.traccar.config.Config;
-//import org.traccar.database.CommandsManager;
 import org.traccar.database.ConnectionManager;
 import org.traccar.database.IdentityManager;
+// apply external Spring/Camel/hawt .. tools for stats
 //import org.traccar.database.StatisticsManager;
 import org.traccar.helper.UnitsConverter;
-import org.traccar.model.Command;
 import org.traccar.model.Device;
 import org.traccar.model.Position;
 
@@ -35,7 +34,9 @@ import java.net.SocketAddress;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 
 public abstract class BaseProtocolDecoder extends ExtendedObjectDecoder {
@@ -47,7 +48,6 @@ public abstract class BaseProtocolDecoder extends ExtendedObjectDecoder {
     private final Config config = Context.getConfig();
     private final IdentityManager identityManager = Context.getIdentityManager();
     private final ConnectionManager connectionManager = Context.getConnectionManager();
-//    private final StatisticsManager statisticsManager = Context.getStatisticsManager();
     private final Protocol protocol;
 
     public BaseProtocolDecoder(Protocol protocol) {
@@ -220,43 +220,32 @@ public abstract class BaseProtocolDecoder extends ExtendedObjectDecoder {
     @Override
     protected void onMessageEvent(
             Channel channel, SocketAddress remoteAddress, Object originalMessage, Object decodedMessage) {
-//      if (statisticsManager != null) {
-//          statisticsManager.registerMessageReceived();
-//      }
-        Position position = null;
+        Set<Long> deviceIds = new HashSet<>();
         if (decodedMessage != null) {
             if (decodedMessage instanceof Position) {
-                position = (Position) decodedMessage;
+                deviceIds.add(((Position) decodedMessage).getDeviceId());
             } else if (decodedMessage instanceof Collection) {
-                Collection<Position> positions = (Collection) decodedMessage;
-                if (!positions.isEmpty()) {
-                    position = positions.iterator().next();
+                @SuppressWarnings("unchecked")
+                Collection<Position> positions = (Collection<Position>) decodedMessage;
+                for (Position position : positions) {
+                    deviceIds.add(position.getDeviceId());
                 }
             }
         }
-        long deviceId = 0;
-        if (position != null) {
-            deviceId = position.getDeviceId();
-        } else {
+        if (deviceIds.isEmpty()) {
             DeviceSession deviceSession = getDeviceSession(channel, remoteAddress);
             if (deviceSession != null) {
-                deviceId = deviceSession.getDeviceId();
+                deviceIds.add(deviceSession.getDeviceId());
             }
         }
-        if (deviceId > 0) {
+        for (long deviceId : deviceIds) {
             connectionManager.updateDevice(deviceId, Device.STATUS_ONLINE, new Date());
+            sendQueuedCommands(channel, remoteAddress, deviceId);
         }
-        sendQueuedCommands(channel, remoteAddress, deviceId);
     }
 
     protected void sendQueuedCommands(Channel channel, SocketAddress remoteAddress, long deviceId) {
-        System.err.println("sendQueuedCommands: CommandsManager not implemented in jeets yet.");
-//        CommandsManager commandsManager = Context.getCommandsManager();
-//        if (commandsManager != null) {
-//            for (Command command : commandsManager.readQueuedCommands(deviceId)) {
-//                protocol.sendDataCommand(channel, remoteAddress, command);
-//            }
-//        }
+        LOGGER.warn("sendQueuedCommands: CommandsManager currently not implemented in JeeTS.");
     }
 
     @Override

@@ -13,7 +13,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.apache.activemq.camel.component.ActiveMQComponent;
+//import org.apache.activemq.camel.component.ActiveMQComponent;
+import org.apache.camel.component.activemq.ActiveMQComponent;
 
 public class AmqTileMapperTest extends CamelTestSupport {
     
@@ -61,7 +62,7 @@ public class AmqTileMapperTest extends CamelTestSupport {
         
         Thread.sleep(1000);
         
-        context.stopRoute(routeName);
+//      context.stopRoute(routeName);
         context.removeRoute(routeName);
     }
 

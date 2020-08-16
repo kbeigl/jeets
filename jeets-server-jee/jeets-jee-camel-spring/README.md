@@ -1,3 +1,10 @@
+
+
+
+# Please read about the [Application Server project](../ReadMe.adoc) before you continue to read.
+
+ 
+
 WildFly Camel Spring XML Web Application
 =============
 

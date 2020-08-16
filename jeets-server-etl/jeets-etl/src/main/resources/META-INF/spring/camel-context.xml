@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  * Copyright 2017 The Java EE Tracking System
+  * Copyright 2017 Kristof Beiglböck kbeigl@jeets.org
+  *
+  * The JeeTS Project licenses this file to you under the Apache License,
+  * version 2.0 (the "License"); you may not use this file except in compliance
+  * with the License. You may obtain a copy of the License at:
+  *
+  *   http://www.apache.org/licenses/LICENSE-2.0
+  *
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  * License for the specific language governing permissions and limitations
+  * under the License.
+  -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans     http://www.springframework.org/schema/beans/spring-beans.xsd  http://camel.apache.org/schema/spring  http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <!-- Bean to simulate incoming Device Protobuffer message
+  <bean id="protoBean" class="org.jeets.server.etl.ProtoBean"/>	
+   -->
+    <camelContext id="camel" trace="true" xmlns="http://camel.apache.org/schema/spring">
+        <!-- this is only a first approach to combine DCS and (empty!) ETL properties -->
+        <propertyPlaceholder id="properties" location="dcs.properties,etl.properties"/>
+        <!-- we can use property placeholders when we define the JMX agent
+		<jmxAgent id="agent" registryPort="{{myjmx.port}}" usePlatformMBeanServer="{{myjmx.usePlatform}}" 
+			createConnector="true" statisticsLevel="RoutesOnly" /> -->
+        <routeBuilder ref="EtlRoute"/>
+        <routeBuilder ref="DcsRoute"/>
+        <!-- or list packages to look for routes: 
+	    <package>org.jeets.etl</package>
+	    <package>org.jeets.dcs</package> -->
+    </camelContext>
+    <bean class="org.jeets.etl.EtlRoute" id="EtlRoute"/>
+    <bean class="org.jeets.dcs.DcsRoute" id="DcsRoute"/>
+    <!-- Bean to extract incoming Device Protobuffer message
+	<bean id="device" class="org.jeets.etl.DeviceProtoExtractor"> 
+  	id, i.e. protocol name should be retrieved from DCS (props) -->
+    <bean class="org.jeets.dcs.steps.DeviceProtoExtractor" id="protobuffer">
+        <constructor-arg name="consumer">
+            <null/>
+        </constructor-arg>
+    </bean>
+    <bean class="org.apache.camel.component.jpa.JpaComponent" id="jpa">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+        <property name="transactionManager" ref="transactionManager"/>
+    </bean>
+    <bean
+        class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean" id="entityManagerFactory">
+        <property name="persistenceUnitName" value="jeets-pu-traccar-jpa"/>
+        <property name="jpaVendorAdapter" ref="jpaAdapter"/>
+    </bean>
+    <bean
+        class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" id="jpaAdapter">
+        <!-- 
+    <property name="databasePlatform" value="org.apache.openjpa.jdbc.sql.DerbyDictionary" />
+    <property name="database" value="DERBY" />
+    -->
+    </bean>
+    <bean class="org.springframework.orm.jpa.JpaTransactionManager" id="transactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+    <bean
+        class="org.springframework.transaction.support.TransactionTemplate" id="transactionTemplate">
+        <property name="transactionManager" ref="transactionManager"/>
+    </bean>
+</beans>

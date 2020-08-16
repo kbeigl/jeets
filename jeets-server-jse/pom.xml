@@ -22,44 +22,41 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-parent</artifactId>
-		<version>1.2.4</version>
+		<version>1.3</version>
 		<relativePath>../jeets-parent</relativePath>
 	</parent>
 
 	<artifactId>jeets-server-jse</artifactId>
 	<packaging>pom</packaging>
 
-	<name>--- Server Tracking Components (JSE)    ---</name>
+	<name>--- JSE - Server Tracking Components    ---</name>
 
 	<modules>
-		<module>jeets-dcs</module>
-		<module>jeets-dcs-traccar</module>
-		<module>jeets-etl</module>
 		<module>jeets-db-managers</module>
-		<module>jeets-dcs-amq</module>
 		<module>jeets-geo-router</module>
 	</modules>
 
+	<!-- logging runtime <> test !
 	<dependencies>
-		<!-- logging runtime <> test ! -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-slf4j-impl</artifactId>
 			<scope>test</scope>
-			<!-- <scope>runtime</scope> -->
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
 			<scope>test</scope>
-			<!-- <scope>runtime</scope> -->
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
 			<scope>test</scope>
-			<!-- <scope>runtime</scope> -->
+			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
+	 -->
 
 </project>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 - 2018 Anton Tananaev (anton@traccar.org)
+ * Copyright 2012 - 2019 Anton Tananaev (anton@traccar.org)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,57 +21,43 @@ import io.netty.channel.ChannelInboundHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOutboundHandler;
 import io.netty.channel.ChannelPipeline;
-//import io.netty.channel.socket.DatagramChannel;
-//import io.netty.channel.socket.DatagramPacket;
+import io.netty.handler.logging.LogLevel;
+import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.timeout.IdleStateHandler;
-
-import org.apache.camel.component.netty4.NettyConsumer;
-import org.apache.camel.component.netty4.ServerInitializerFactory;
-import org.apache.camel.component.netty4.handlers.ServerChannelHandler;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.traccar.config.Keys;
 import org.traccar.handler.NetworkMessageHandler;
-import org.traccar.handler.OpenChannelHandler;
-import org.traccar.handler.RemoteAddressHandler;
 import org.traccar.handler.StandardLoggingHandler;
 
 import java.util.Map;
 
-public abstract class BasePipelineFactory extends ChannelInitializer<Channel> {
+import org.apache.camel.component.netty.NettyConsumer;
+import org.apache.camel.component.netty.ServerInitializerFactory;
+import org.apache.camel.component.netty.handlers.ServerChannelHandler;
 
-//  private static final Logger LOGGER = LoggerFactory.getLogger(BasePipelineFactory.class);
+public abstract class BasePipelineFactory extends ChannelInitializer<Channel> {
+    // TODO rewrite class to extend ServerInitializerFactory and imply traccar logic
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(BasePipelineFactory.class);
+
     private final TrackerServer server;
     private final String protocol;
     private int timeout;
-//  Shared Handler/s
-    private RemoteAddressHandler remoteAddressHandler;
 
     /* construct BPF for registration only, i.e. without NettyConsumer */
     public BasePipelineFactory(TrackerServer server, String protocol) {
         this.server = server;
         this.protocol = protocol;
-        timeout = 0;
-        timeout = Context.getConfig().getInteger(protocol + ".timeout");
+        timeout = Context.getConfig().getInteger(Keys.PROTOCOL_TIMEOUT.withPrefix(protocol));
         if (timeout == 0) {
-            timeout = Context.getConfig().getInteger(protocol + ".resetDelay"); // temporary
-            if (timeout == 0) {
-                timeout = Context.getConfig().getInteger("server.timeout");
-            }
-        }
-        if (Context.getConfig().getBoolean("processing.remoteAddress.enable")) {
-            remoteAddressHandler = new RemoteAddressHandler();
+            timeout = Context.getConfig().getInteger(Keys.SERVER_TIMEOUT);
         }
     }
 
     protected abstract void addProtocolHandlers(PipelineBuilder pipeline);
 
-    private void addHandlers(ChannelPipeline pipeline, ChannelHandler... handlers) {
-        for (ChannelHandler handler : handlers) {
-            if (handler != null) {
-                pipeline.addLast(handler);
-            }
-        }
-    }
-
+    @SuppressWarnings("unchecked")
     public static <T extends ChannelHandler> T getHandler(ChannelPipeline pipeline, Class<T> clazz) {
         for (Map.Entry<String, ChannelHandler> handlerEntry : pipeline) {
             ChannelHandler handler = handlerEntry.getValue();
@@ -118,7 +104,7 @@ public abstract class BasePipelineFactory extends ChannelInitializer<Channel> {
          */
         @Override
         protected void initChannel(Channel channel) throws Exception {
-//          log.info("append nettyHandler to Traccar pipeline");
+            LOGGER.debug("append nettyHandler to Traccar pipeline");
             initTraccarPipeline(channel)
             .addLast("nettyHandler", new ServerChannelHandler(consumer));          
         }
@@ -141,16 +127,15 @@ public abstract class BasePipelineFactory extends ChannelInitializer<Channel> {
      */
     private ChannelPipeline initTraccarPipeline(Channel channel) {
         final ChannelPipeline pipeline = channel.pipeline();
+//      conditional on/off for analysis: if (loglevel .. DEBUG)
+            pipeline.addLast(new LoggingHandler(LogLevel.INFO));
         if (timeout > 0 && !server.isDatagram()) {
             pipeline.addLast(new IdleStateHandler(timeout, 0, 0));
         }
-        pipeline.addLast(new OpenChannelHandler(server));
-//      Begin NetworkMessage ------------------------------
-        pipeline.addLast(new NetworkMessageHandler());
-        pipeline.addLast(new StandardLoggingHandler(protocol));
-        addProtocolHandlers(new PipelineBuilder() { // from TrackerServer, i.e. protocol specific
-            @Override
-            public void addLast(ChannelHandler handler) {
+        { // NetworkMessageHandler
+            pipeline.addLast(new NetworkMessageHandler());
+            pipeline.addLast(new StandardLoggingHandler(protocol));
+            addProtocolHandlers(handler -> {
                 if (!(handler instanceof BaseProtocolDecoder || handler instanceof BaseProtocolEncoder)) {
                     if (handler instanceof ChannelInboundHandler) {
                         handler = new WrapperInboundHandler((ChannelInboundHandler) handler);
@@ -159,19 +144,10 @@ public abstract class BasePipelineFactory extends ChannelInitializer<Channel> {
                     }
                 }
                 pipeline.addLast(handler);
-            }
-        });
-//      End NetworkMessage --------------------------------
-        addHandlers(pipeline, remoteAddressHandler);
+            });
+        }
         pipeline.addLast(new MainEventHandler());
         return pipeline;
-    }
-
-    /* Create a consumer linked channel pipeline factory */
-    @Deprecated
-    public ServerInitializerFactory createPipelineFactory(NettyConsumer nettyConsumer) {
-        System.err.println("createPipelineFactory for " + nettyConsumer + " DEactivated !!!");
-        return null;
     }
 
 }

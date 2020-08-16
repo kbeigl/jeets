@@ -19,7 +19,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.string.StringEncoder;
-// import org.traccar.database.ActiveDevice;
 import org.traccar.helper.DataConverter;
 import org.traccar.model.Command;
 
@@ -40,6 +39,7 @@ public abstract class BaseProtocol implements Protocol {
 
     private StringProtocolEncoder textCommandEncoder = null;
 
+    @Deprecated
     public static String nameFromClass(Class<?> clazz) {
         String className = clazz.getSimpleName();
         return className.substring(0, className.length() - 8).toLowerCase();
@@ -126,7 +126,8 @@ public abstract class BaseProtocol implements Protocol {
 
     @Override
     public void sendTextCommand(String destAddress, Command command) throws Exception {
-            throw new RuntimeException("SMS is not enabled in ETL version");
+        // RuntimeException! too radical?
+        throw new RuntimeException("SMS is currently not enabled in JeeTS version.");
     }
 
 }

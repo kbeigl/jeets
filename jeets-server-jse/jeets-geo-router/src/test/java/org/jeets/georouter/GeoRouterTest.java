@@ -18,7 +18,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.activemq.camel.component.ActiveMQComponent;
+//import org.apache.activemq.camel.component.ActiveMQComponent;
+import org.apache.camel.component.activemq.ActiveMQComponent;
 
 public class GeoRouterTest extends CamelTestSupport {
     
@@ -74,7 +75,7 @@ public class GeoRouterTest extends CamelTestSupport {
 
         testEndpoint.assertIsSatisfied();
         
-        context.stopRoute(routeName);
+//      context.stopRoute(routeName);
         context.removeRoute(routeName);
     }
     

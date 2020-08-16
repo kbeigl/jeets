@@ -1,13 +1,23 @@
 package org.jeets.device;
 
-public final class Main {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+// import org.springframework.context.annotation.ComponentScan;
 
-    public Main() {}
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-    public static void main(String[] args) throws Exception {
-        org.apache.camel.spring.Main main = new org.apache.camel.spring.Main();
-        main.setApplicationContextUri("META-INF/spring/device.xml");
-        main.run();
+@SpringBootApplication
+// @ComponentScan(basePackages="org.jeets.device")
+public class Main {
+
+//  private Main() {};
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
+
+    public static void main(String[] args) {
+        LOGGER.info("run SpringApplication ...");
+        SpringApplication.run(Main.class, args);
     }
 
 }

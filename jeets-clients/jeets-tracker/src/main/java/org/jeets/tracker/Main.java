@@ -7,8 +7,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
-import org.jeets.protocol.Traccar;
-import org.jeets.protocol.Traccar.Position.Builder;
+import org.jeets.protobuf.Jeets;
+import org.jeets.protobuf.Jeets.Position.Builder;
 import org.jeets.protocol.util.Samples;
 
 /**
@@ -162,36 +162,36 @@ public class Main {
 //      "2017-05-20 15:56:58";49.03296471;12.11323104;381
 //      "2017-05-20 15:58:58";49.03363147;12.12226451;392
 //      "2017-05-20 16:02:55";49.03797380;12.13681046;388
-        List<Traccar.Position.Builder> positions = new ArrayList<>();
+        List<Jeets.Position.Builder> positions = new ArrayList<>();
 
-        Traccar.Position.Builder positionBuilder = Traccar.Position.newBuilder();
+        Jeets.Position.Builder positionBuilder = Jeets.Position.newBuilder();
         positionBuilder.setValid(true)
         .setLatitude(49.03097993d).setLongitude(12.10312854d).setAltitude(407d);
         positions.add(positionBuilder);
 
-        positionBuilder = Traccar.Position.newBuilder();
+        positionBuilder = Jeets.Position.newBuilder();
         positionBuilder.setValid(true)
         .setLatitude(49.02847401d).setLongitude(12.10734587d).setAltitude(370d);
-        Traccar.Event.Builder eventBuilder = Samples.createAlarmEventProto();
+        Jeets.Event.Builder eventBuilder = Samples.createAlarmEventProto();
         positionBuilder.addEvent(eventBuilder);
         positions.add(positionBuilder);
 
-        positionBuilder = Traccar.Position.newBuilder();
+        positionBuilder = Jeets.Position.newBuilder();
         positionBuilder.setValid(true)
         .setLatitude(49.02865676d).setLongitude(12.11003339d).setAltitude(383d);
         positions.add(positionBuilder);
 
-        positionBuilder = Traccar.Position.newBuilder();
+        positionBuilder = Jeets.Position.newBuilder();
         positionBuilder.setValid(true)
         .setLatitude(49.03296471d).setLongitude(12.11323104d).setAltitude(381d);
         positions.add(positionBuilder);
 
-        positionBuilder = Traccar.Position.newBuilder();
+        positionBuilder = Jeets.Position.newBuilder();
         positionBuilder.setValid(true)
         .setLatitude(49.03363147d).setLongitude(12.12226451d).setAltitude(392d);
         positions.add(positionBuilder);
 
-        positionBuilder = Traccar.Position.newBuilder();
+        positionBuilder = Jeets.Position.newBuilder();
         positionBuilder.setValid(true)
         .setLatitude(49.03797380d).setLongitude(12.13681046d).setAltitude(388d);
         positions.add(positionBuilder);

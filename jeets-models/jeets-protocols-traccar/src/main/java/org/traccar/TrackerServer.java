@@ -15,36 +15,20 @@
  */
 package org.traccar;
 
-import io.netty.bootstrap.AbstractBootstrap;
-import io.netty.bootstrap.Bootstrap;
-import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.group.ChannelGroup;
-import io.netty.channel.group.DefaultChannelGroup;
-import io.netty.channel.socket.nio.NioDatagramChannel;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.util.concurrent.GlobalEventExecutor;
-
-import java.net.InetSocketAddress;
-
-import org.apache.camel.component.netty4.ServerInitializerFactory;
+import org.apache.camel.component.netty.ServerInitializerFactory;
 
 public abstract class TrackerServer {
 
     private final boolean datagram;
-    private AbstractBootstrap bootstrap = null;
-
     public boolean isDatagram() {
         return datagram;
     }
 
     public TrackerServer(boolean datagram, String protocol) {
-
         this.datagram = datagram;
-        address = Context.getConfig().getString(protocol + ".address");
-        port = Context.getConfig().getInteger(protocol + ".port");
 
 //      one factory instance for each TrackerServer instance
+//      set breakpoint and check for multiple calls
         pipelineFactory = new BasePipelineFactory(this, protocol) {
             @Override
             protected void addProtocolHandlers(PipelineBuilder pipeline) {
@@ -52,21 +36,6 @@ public abstract class TrackerServer {
             }
         };
 
-//      bind in original context OR let Camel take control of the life cycle
-        if (Context.legacy) {
-            if (datagram) {
-                this.bootstrap = new Bootstrap()
-                        .group(EventLoopGroupFactory.getWorkerGroup())
-                        .channel(NioDatagramChannel.class)
-                        .handler(pipelineFactory);
-            } else {
-                this.bootstrap = new ServerBootstrap()
-                        .group(EventLoopGroupFactory.getBossGroup(), 
-                                EventLoopGroupFactory.getWorkerGroup())
-                        .channel(NioServerSocketChannel.class)
-                        .childHandler(pipelineFactory);
-            }
-        }
     }
 
     private BasePipelineFactory pipelineFactory = null;
@@ -84,42 +53,5 @@ public abstract class TrackerServer {
     }
 
     protected abstract void addProtocolHandlers(PipelineBuilder pipeline);
-
-    private int port;
-    public int getPort() {
-        return port;
-    }
-
-    private String address;
-    public String getAddress() {
-        return address;
-    }
-
-    private final ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
-
-    public ChannelGroup getChannelGroup() {
-        return channelGroup;
-    }
-
-    /**
-     * Only apply start() and stop() methods in original Traccar context.
-     */
-    public void start() throws Exception {
-        InetSocketAddress endpoint;
-        if (address == null) {
-            endpoint = new InetSocketAddress(port);
-        } else {
-            endpoint = new InetSocketAddress(address, port);
-        }
-
-        Channel channel = bootstrap.bind(endpoint).sync().channel();
-        if (channel != null) {
-            getChannelGroup().add(channel);
-        }
-    }
-
-    public void stop() {
-        channelGroup.close().awaitUninterruptibly();
-    }
 
 }

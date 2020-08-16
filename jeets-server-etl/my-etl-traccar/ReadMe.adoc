@@ -1,0 +1,98 @@
+:toc:
+
+= jeets-dcs-traccar to my-etl-traccar
+
+You are not interested in JeeTS, Netty and Camel and simply want to code in plain old Java? +
+You simply want to receive GPS POJOs from Traccar?
+
+Then you should use Maven Archetyping to setup your own Traccar ETL Microservice in five minutes.
+
+	- bootstrapping projects faster.
+	- project shell for your own project, software or system
+	- Maven wrapper
+	- compiles only your code
+	 - use your original traccar xml files for ports and protocols
+	- attaches the dcs exe
+
+	common missconception
+	DCS does not know your system, so you HAVE TO implement it ..
+
+== Setup
+
+regular repo 'install'
+	
+change to any directory on your PC
+
+	mvn archetype:generate -DarchetypeGroupId=org.jeets 
+	                       -DarchetypeArtifactId=my-etl-traccar
+	                       -DarchetypeVersion=1.3-SNAPSHOT
+
+	Define value for property 'groupId': de.ptc
+	Define value for property 'artifactId': ptc-etl
+	Define value for property 'version' 1.0-SNAPSHOT: :
+	Define value for property 'package' de.ptc: : de.ptc
+
+	Using following parameters for creating project from Archetype: my-etl-traccar:1.3-SNAPSHOT
+	----------------------------------------------------------------------------
+	Parameter: groupId, Value: de.ptc
+	Parameter: artifactId, Value: ptc-etl
+	Parameter: version, Value: 1.0-SNAPSHOT
+	Parameter: package, Value: de.ptc
+	Parameter: packageInPathFormat, Value: de/ptc
+	Parameter: package, Value: de.ptc
+	Parameter: version, Value: 1.0-SNAPSHOT
+	Parameter: groupId, Value: de.ptc
+	Parameter: artifactId, Value: ptc-etl
+	Project created from Archetype in dir: C:\kris\virtex\my-etl-traccar-trial\ptc-etl
+	------------------------------------------------------------------------
+	BUILD SUCCESS
+	------------------------------------------------------------------------
+
+	C:\kris\virtex\my-etl-traccar-trial>cd ptc-etl
+	C:\kris\virtex\my-etl-traccar-trial\ptc-etl>mvn clean install
+	---------------------------< de.ptc:ptc-etl >---------------------------
+	Building ptc-etl 1.0-SNAPSHOT
+	--------------------------------[ jar ]---------------------------------
+	
+Now you should see your jar file in the target folder (vital!)
+
+	C:\kris\virtex\my-etl-traccar-trial\ptc-etl>run-dcs2etl.cmd
+
+	org.jeets.dcs.traccar.Main               : Starting Main on DESKTOP-DB3MIII with PID 12764 
+	     (C:\kris\virtex\my-etl-traccar-trial\ptc-etl\jeets-dcs-traccar-1.3-SNAPSHOT-exec.jar
+		 started by E540-User in C:\kris\virtex\my-etl-traccar-trial\ptc-etl)
+	                                         :                                                               
+	c.n.SingleTCPNettyServerBootstrapFactory : ServerBootstrap binding to 0.0.0.0:5046
+	o.a.c.component.netty4.NettyConsumer     : Netty consumer bound to: 0.0.0.0:5046
+	o.a.camel.spring.SpringCamelContext      : Route: ruptela started and consuming from: tcp://0.0.0.0:5046
+	                                         :                                                               
+	org.jeets.dcs.traccar.Main               : Started Main in 6.325 seconds (JVM running for 8.311)
+
+Now you can launch the jeets-device and send a ruptela test file ...
+
+
+==== dev notes: Creating Archetypes from projects
+
+	cd ...\jeets-dcs-traccar
+	mvn archetype:create-from-project
+	=> check folder jeets-dcs-traccar\target\generated-sources\archetype
+	
+	check generation with IT and goal.txt:
+	[INFO]    maven-archetype-plugin:3.1.2:integration-test (default-integration-test) @ my-etl-traccar ---
+	[WARNING] No Archetype IT projects: no directory with goal.txt found.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -15,46 +15,93 @@
   * License for the specific language governing permissions and limitations
   * under the License.
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-models</artifactId>
-		<version>1.2.4</version>
+		<version>1.3</version>
 	</parent>
 
 	<artifactId>jeets-protocols</artifactId>
-	<version>1.2.0</version>
 	<packaging>jar</packaging>
 
-    <properties>
-        <protobuf.version>3.11.0</protobuf.version>
-    </properties>
-
 	<dependencies>
+		<!-- reduce by internal deps to jeets-protocols-traccar -->
 		<dependency>
-			<groupId>com.google.protobuf</groupId>
-			<artifactId>protobuf-java</artifactId>
-			<version>${protobuf-version}</version>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-core</artifactId>
+		</dependency>
+		<!-- we'll see ..
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-endpointdsl</artifactId>
+		</dependency>
+		 -->
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-netty</artifactId>
 		</dependency>
 		<dependency>
-			<!-- exclude hibernate/jpa implementation? -->
-			<!-- inherits logging setup -->
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-protobuf</artifactId>
+		</dependency>
+		<!-- for jpa.Device -->
+		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-pu-traccar</artifactId>
 		</dependency>
+		<dependency>
+			<!-- long term: replace with traccar model exclusively -->
+			<groupId>org.jeets</groupId>
+			<artifactId>jeets-protocols-traccar</artifactId>
+			<!-- remove explicit version, define in parent pom -->
+			<version>4.10</version>
+			<!-- <scope>provided</scope> -->
+		</dependency>
+
+        <dependency>
+			<!-- spring for protobuf un/marshal -->
+			<!-- NO spring in project artifact! only in Test! -->
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-test-spring</artifactId>
+            <scope>test</scope>
+        </dependency>
 	</dependencies>
 
     <build>
-	<!-- Useful in development time, remove to hide source. -->
-        <sourceDirectory>src/main/java</sourceDirectory>
-        <resources>
-            <resource>
-                <directory>protobuffers</directory>
-            </resource>
-        </resources>
+		<plugins>
+			<!-- Protobuf Java code generator plugin from camel-protobuf 
+				different approach than in protocols-traccar pom
+				see camel-protobuf pom to skip assembly and launch  -->
+			<plugin>
+				<groupId>org.xolstice.maven.plugins</groupId>
+				<artifactId>protobuf-maven-plugin</artifactId>
+				<version>${protobuf-maven-plugin-version}</version>
+				<extensions>true</extensions>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+						<configuration>
+							<protocArtifact>
+								com.google.protobuf:protoc:${protobuf-version}:exe:${os.detected.classifier}
+							</protocArtifact>
+							<!-- <checkStaleness>true</checkStaleness> -->
+							<skip>${skipTests}</skip>
+							<clearOutputDirectory>false</clearOutputDirectory>
+							<outputDirectory>src/main/java</outputDirectory>
+							<attachProtoSources>true</attachProtoSources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+    
     </build>
 
 </project>

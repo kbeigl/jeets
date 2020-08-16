@@ -1,3 +1,10 @@
+
+
+
+# Please read about the [Application Server project](../ReadMe.adoc) before you continue to read.
+
+ 
+
 # ejb-in-ear: Deployment of an EAR Containing a JSF WAR and EJB JAR
 
 Author: Paul Robinson  

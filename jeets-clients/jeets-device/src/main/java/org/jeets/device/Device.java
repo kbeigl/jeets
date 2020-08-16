@@ -101,7 +101,7 @@ public class Device {
      */
     private String composeServerUri(DeviceConfig config) {
 
-        return "netty4:" + config.getProtocol() + "://" + config.getHost() + ":" + config.getPort()
+        return "netty:" + config.getProtocol() + "://" + config.getHost() + ":" + config.getPort()
             + "?sync=" + (config.isSync() ? "true" : "false")
             + "&allowDefaultCodec=" + (config.isAllowDefaultCodec() ? "true" : "false")
 //          DEBUG NettyConfiguration + No encoders and decoders will be used
