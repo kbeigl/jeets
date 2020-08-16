@@ -1,3 +1,10 @@
+
+
+
+# Please read about the [Application Server project](../ReadMe.adoc) before you continue to read.
+
+ 
+
 WildFly Camel CDI Web Application
 =============
 

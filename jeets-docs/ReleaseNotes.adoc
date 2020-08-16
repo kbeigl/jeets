@@ -25,8 +25,11 @@ for Maven Archetype generation of custom Traccar ETL MicroService
 
 * Camel Migration 2.24.x to 3.3.0
 
-* restructured repository with explicit ETL section to Extract Transform & Load Data
- 
+* restructured repository 
+** added explicit ETL section to Extract Transform & Load Data
+** detached JEE section for application server support
+   Please read 
+   link:../jeets-server-jee/ReadMe.adoc#Support[this], if you are affected. 
 
 
 

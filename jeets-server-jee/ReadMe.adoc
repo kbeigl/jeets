@@ -1,0 +1,52 @@
+
+= Application Server project is deprecated
+
+As of JeeTS v1.3 the `jeets-server-jee` 'branch' is deprecated +
+and will eventually be removed.
+
+Please read on if you need support to provide GPS live tracking information
+to your application server.
+
+== Last productive version
+
+The JeeTS repository is a loose collection of GTS components.
+These components are running in actual production systems at customers systems
+to improve code quality.
+The customer system running with 
+
+[source,text]
+-----------------
+[INFO] --- AppServer Tracking Components (JEE) --- 1.2.0
+[INFO] jeets-wildfly-activemq-adapter 1.0 ..............
+[INFO] jeets-jee-app 1.2.0 .............................
+[INFO] > jeets-jee-ejb 1.2.0 ...........................
+[INFO] > jeets-jee-web 1.2.0 ...........................
+[INFO] > jeets-jee-ear 1.2.0 ...........................
+-----------------
+
+is not using WildFly any more and 
+therefore not validating the JeeTS code in real life situations.
+
+With the JeeTS release v1.3 Camel was upgraded from major version 2 to 3
+and we have no reference project to further support the above version.
+
+
+== Support
+
+Some consider Application Servers to be old fashioned as most functionalities
+can be created with newer technologies like the Spring Framework.
+That is not the reason for the deprecation and we continue to support
+any customer project working with JeeTS components.
+_And_ we can develop any JeeTS component for _your system_ .
+
+If you need support to feed your application server with live GPS tracking data
+please send your constellation to mailto:support@jeets.org[JeeTS Support].
+We can update the project according to your requirements.
+
+The link:https://github.com/wildfly-extras/wildfly-camel/blob/master/README.md[WildFly Camel Subsystem]
+is still very active and can be reconnected to the JeeTS upon request.
+
+[quote]
+Provides Apache Camel integration with the WildFly Application Server. +
+The WildFly-Camel Subsystem allows you to add Camel Routes as part of the WildFly configuration. Routes can be deployed as part of JavaEE applications. JavaEE components can access the Camel Core API and various Camel Component APIs. +
+Your Enterprise Integration Solution can be architected as a combination of JavaEE and Camel functionality.
