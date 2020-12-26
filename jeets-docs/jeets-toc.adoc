@@ -13,28 +13,6 @@
 This documentation provides a Quick Start to run and test the JeeTS repository +
 and use the compiled JeeTS artifacts for your own projects.
 
-== Building the JeeTS Repository
-
-* link:./building.adoc[Building the JeeTS Repository] +
-Instructions to compile and test the complete repository.
-
-* link:https://github.com/kbeigl/jeets/issues[JeeTS issue management] +
-In case of problems please report issues here.
-
-* link:./ReleaseNotes.adoc[Release Notes] +
-Major improvements and development steps.
-
-=== Developing JeeTS with Eclipse
-
-* link:./eclipse.adoc[Import JeeTS Repository in Eclipse] +
-Instructions to import the complete repository 
-or individual projects into Eclipse
-
-
-// create a readme file for Maven aggregate poms: models, clients, etl, jse, jee, itests
-// and link them from here to proceed into the actual projects readme (move texts there)
-
-
 == jeets-models
 
 === The Data Model

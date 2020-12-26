@@ -16,7 +16,6 @@ import javax.persistence.Persistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.hibernate.engine.jdbc.internal.DDLFormatterImpl;
-import org.junit.Test;
 
 /**
  * This class provides different methods to create a schema in a database.

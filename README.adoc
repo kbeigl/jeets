@@ -1,0 +1,136 @@
+[[JeeTS-Source-Repositories]]
+
+:toc:
+
+= The JeeTS Source Repositories
+
+The Name JeeTS reflects "GPS Tracking Software with Java EE", 
+i.e. "Jee" T.S. like in G.T.S. +
+JeeTS components are developed against the Traccar GTS as de facto standard
+and can be combined with it in many - including complimentary - ways
+to create individual Tracking Solutions and integrate them into existing Systems.
+
+== Overview
+
+The JeeTS Source Code is hosted in the two Repositories
+// absolute paths to github server, use internal relative paths!
+// define base path before /jeets and /jeets-web
+
+ * https://github.com/kbeigl/jeets/[*/jeets*] +
+  Tracking Components compatible with the Traccar Backend customizable
+   for individual Tracking Solutions
+
+ * https://github.com/kbeigl/jeets-web/[*/jeets-web*] +
+  In its core a Spring MVC Component to rapidly develop individual Frontends 
+  with different Spring-Boot Starters against the Traccar REST API
+
+When developers tackle a new software they first try to identify the System Model. +
+In case of Traccar the Model is provided in two ways:
+
+ * Traccar Entities are coded in the `org.traccar.model` package 
+   and are related to each other in the program flow.
+
+ * Traccar's REST API provides role based access to the Entities and
+  the Client programer can collect these informations to form another model.
+
+
+With the next releases the JeeTS will provide a JPA specified Persistence Unit
+with Entities _and_ Relations. This model can be used on server side (with
+an `EntityManager`) and on client side (without `EntityManager`)
+for easy ORM navigation over the instantiated Entities.
+
+
+Both repositories are compiled, build and installed in the same manner
+described on this page. +
+For individual documentations please follow the individual links above.
+
+
+=== News
+
+Check out the NEW link:.jeets-server-etl/jeets-dcs-manager/ReadMe.adoc[Traccar DCS Microservice] !!
+
+
+=== Release Notes
+
+Major improvements and development states are listed in the 
+
+ * link:./jeets-docs/ReleaseNotes.adoc[JeeTS Release Notes]
+
+ * link:https://github.com/kbeigl/jeets-web/jeets-docs/ReleaseNotes.adoc[JeeTS Web Release Notes]
+
+== Building the JeeTS Repositories
+
+Instructions to compile and test each repository.
+Please note that the two repositories are build independent of each other.
+Their structures are updated and synchronized continuously 
+and the installation process is the same for each repository.
+The link above is describing how to compile the JeeTS repository
+but also applies to the JeeTS Web repository.
+Generally the regular JeeTS repository should be compiled first
+to supply artifacts for the JeeTS Web build.
+
+goto link:./jeets-docs/building.adoc[Building the JeeTS Repositories] 
+
+
+=== Developing JeeTS with Eclipse
+
+Instructions to import the complete JeeTS repository 
+or individual projects into Eclipse.
+These instructions also hold for the JeeTS Web repository.
+
+goto link:./jeets-docs/eclipse.adoc[Import JeeTS Repositories in Eclipse] +
+
+
+=== Issue Tracking
+
+In case of problems please report your issues here:
+
+* link:https://github.com/kbeigl/jeets/issues[JeeTS issues]
+
+* link:https://github.com/kbeigl/jeets-web/issues[JeeTS Web issues]
+
+
+
+== JeeTS Inline Documentation
+
+On the link:./jeets-docs/jeets-toc.adoc[JeeTS table of content] page 
+you will find links to this repositories inline documentation to get started.
+
+
+
+== Literature
+
+The complete building process of a GPS Tracking System with JeeTS components  
+is described in the supplementary book to this repository:
+
+image::JeeTS-Book.jpg[GPS Tracking with Java EE Components]
+
+//	[#img-book]
+//	.GPS Tracking with Java EE Components
+//	[link:https://www.amazon.com/GPS-Tracking-Java-Components-Challenges/dp/1138313823]
+//	image::JeeTS-Book.jpg[GPS Tracking with Java EE Components]
+
+You can find more details and look inside at
+link:https://www.amazon.com/GPS-Tracking-Java-Components-Challenges/dp/1138313823[amazon]
+
+
+
+== Contact
+
+Please login to github to find my email in my link:https://github.com/kbeigl[profile]
+
+
+
+== License
+
+    Apache License, Version 2.0
+    
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+        http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Copyright 2020 The Java EE Tracking System - JeeTS
-    Copyright 2020 Kristof Beiglböck kbeigl@jeets.org
+    Copyright 2021 The Java EE Tracking System - JeeTS
+    Copyright 2021 Kristof Beiglböck kbeigl@jeets.org
     
     The JEE Tracking System licenses this file to you 
     under the Apache License, Version 2.0 (the "License");
@@ -30,6 +30,19 @@
 	<packaging>jar</packaging>
 
 	<dependencies>
+		<!-- upgrade java 8 to 11 needs this to run clean (?) -->
+		<dependency>
+			<groupId>org.javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>3.25.0-GA</version>
+		</dependency>
+		<!-- upgrade Java 8 to 11 -->
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
