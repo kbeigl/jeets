@@ -21,10 +21,11 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-server-etl</artifactId>
-		<version>1.3</version>
+		<version>1.3.1</version>
 	</parent>
 
 	<artifactId>jeets-dcs-manager</artifactId>
+	<version>1.3</version>
 
 	<name>jeets-dcs-manager</name>
 	<description>DCS manager with Spring/Boot/Netty4/Starter and Camel Endpoint
