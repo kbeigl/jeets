@@ -137,7 +137,7 @@
 	
     <dependencyManagement>
 		<dependencies>
-            <!-- Camel BOM -->
+            <!-- Camel BOM (maybe move to main repo pom as global <parent> !!) -->
 			<dependency>
 				<groupId>org.apache.camel.springboot</groupId>
 				<artifactId>camel-spring-boot-dependencies</artifactId>

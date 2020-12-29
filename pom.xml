@@ -65,9 +65,9 @@
 		<!-- 'jee' branch is deprecated please check ReadMe.adoc
 		in jeets-server-jee folder for support
 		<module>jeets-server-jee</module> -->
-		<!-- <module>jeets-itests</module> -->
+		<module>jeets-itests</module>
 	 </modules>
-
+<!-- 
 	<profiles>
 	    <profile>
 	        <id>itests</id>
@@ -76,5 +76,5 @@
 			 </modules>
 	    </profile>
 	</profiles>
-
+ -->
 </project>
