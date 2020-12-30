@@ -11,7 +11,8 @@
 	</parent>
 
 	<artifactId>jeets-protocols-traccar</artifactId>
-	<version>4.10</version>
+	<!-- traccar-4.11-SNAP-201226 -->
+	<version>4.11</version>
 
 	<name>jeets-protocols-traccar</name>
 	<url>jeets.org</url>
@@ -25,6 +26,14 @@
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-netty</artifactId>
 		</dependency>
+		<!-- external to camel-netty ? not part of netty-all ? -->
+		<dependency>
+		    <groupId>io.netty</groupId>
+		    <artifactId>netty-codec-mqtt</artifactId>
+		    <!-- adjust to internal camel-netty version 4.1.49 -->
+		    <version>4.1.56.Final</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-netty-http</artifactId>
