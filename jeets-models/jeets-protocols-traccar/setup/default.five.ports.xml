@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE properties SYSTEM 'http://java.sun.com/dtd/properties.dtd'>
+
+<properties>
+
+    <entry key='database.registerUnknown'>true</entry>
+
+    <entry key='teltonika.port'>5027</entry>
+    <entry key='ruptela.port'>5046</entry>
+    <entry key='wli.port'>5209</entry>
+
+	<!-- TODO resolve conflicts with traccar v4.10 in dcs-mgr -->
+	<!-- implicitly ignored in protocols-traccar, honored in dcs-mgr -->
+	<entry key='jeets.port'>5200</entry>
+	<entry key='jeets.traccar.port'>5201</entry>
+	
+</properties>
