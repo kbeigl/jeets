@@ -21,7 +21,8 @@ This project is a stripped down version of the http://traccar.org[Traccar GTS]'s
 
 == Introduction
 
-Wouldn't it be nice to have the `org.traccar.protocol` package as an isolated Jar file? +
+Wouldn't it be nice to have the `org.traccar.protocol` package as an isolated Jar file?
+
 This is exactly the idea of this project: an (imaginary) `protocols-traccar.jar`
 which could be part of the original Traccar build cycle in a Multi Module Project in Maven, 
 i.e. tested, standardized and fully compatible.

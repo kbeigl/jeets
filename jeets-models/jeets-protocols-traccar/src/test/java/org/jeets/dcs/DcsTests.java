@@ -31,34 +31,50 @@ public class DcsTests extends CamelTestSupport {
     @Test
     public void testAllConfiguredServers() throws Exception {
         Map<Integer, Class<?>> protocolClasses = TraccarSetup.loadConfiguredBaseProtocolClasses();
+        int servers = 0;
 
         if (protocolClasses.size() > 0) {
-            LOG.info("found " + protocolClasses.size() + " classes from configFile");
-
             for (int port : protocolClasses.keySet()) {
+
                 @SuppressWarnings("unchecked")
                 Class<? extends BaseProtocol> clazz = (Class<? extends BaseProtocol>) protocolClasses.get(port);
                 String className = clazz.getSimpleName(); // TeltonikaProtocol > teltonika
                 String protocolName = className.substring(0, className.length() - 8).toLowerCase();
                 
-                ServerInitializerFactory pipeline = TraccarSetup.createServerInitializerFactory(clazz);
-//              pipeline can be registered with Camel ..
-                context.getRegistry().bind(protocolName, pipeline);
-//              .. or SpringBoot: @Bean(name = protocolName)
-//              beanFactory.registerSingleton(protocolName, pipeline);
+                Map<String, ServerInitializerFactory> serverInitializerFactories = 
+                		TraccarSetup.createServerInitializerFactories(clazz);
 
-//              register netty as jeets-dcs ;)
-                String uri = "netty:tcp://" + host + ":" + port 
-                        + "?serverInitializerFactory=#" + protocolName + "&sync=false";
-//              "&workerPool=#sharedPool&usingExecutorService=false" register in XML,
+                //            <transport, factory>
+                for (Map.Entry<String, ServerInitializerFactory> factory : serverInitializerFactories.entrySet()) {
 
-                context.addRoutes(new TraccarRoute(uri, protocolName)); // id=teltonikaRoute
-//              SpringBoot: @Bean(name = protocolName + "Route")
-//              beanFactory.registerSingleton(protocolName + "Route", new TraccarRoute(uri, protocolName));
+                	// TODO handle java.net.BindException: Address already in use: bind
+                	//      and provide free port with port finder !?
+                    // netstat -ant > PID > Dienste: Plattformdienst für verbundene Geräte
+                	if (port == 5040) // move up and change inner loop break to outer continue
+                		break;
 
-                LOG.info("added server: " + uri);
+                    String protocolSpec = protocolName + "-" + factory.getKey(); // append transport
+                    System.out.println(protocolSpec + ": " + factory.getValue());
+//                  pipeline can be registered with Camel ..
+                    context.getRegistry().bind(protocolSpec, factory.getValue());
+//                  .. or SpringBoot: @Bean(name = protocolName)
+//                  beanFactory.registerSingleton(protocolName, pipeline);
+
+//                  register netty as jeets-dcs ;)
+                    String uri = "netty:" + factory.getKey() + "://" + host + ":" + port
+                    		+ "?serverInitializerFactory=#" + protocolSpec + "&sync=false";
+//                  		  "&workerPool=#sharedPool&usingExecutorService=false" etc.
+
+                    context.addRoutes(new TraccarRoute(uri, protocolSpec)); // id=teltonikaRoute
+//                  SpringBoot: @Bean(name = protocolName + "Route")
+//                  beanFactory.registerSingleton(protocolName + "Route", new TraccarRoute(uri, protocolName));
+
+                    servers++; // separate udp and tcp ?
+                    LOG.info("added server: " + uri);
+                }
             }
-        
+            LOG.info("added {} servers", servers);
+            
 //          now start the individual server tests
             testTeltonikaMessages();
 
@@ -95,20 +111,27 @@ public class DcsTests extends CamelTestSupport {
         String protocolName = "teltonika";
 
         Class<? extends BaseProtocol> protocolClass = TeltonikaProtocol.class;
-        ServerInitializerFactory teltonikaPipeline = 
-                TraccarSetup.createServerInitializerFactory(protocolClass);
+        Map<String, ServerInitializerFactory> serverInitializerFactories = 
+        		TraccarSetup.createServerInitializerFactories(protocolClass);
 
-//      SpringBoot: @Bean(name = "teltonika")
-        context.getRegistry().bind(protocolName, teltonikaPipeline);
-        
-        int port = TraccarSetup.getConfiguredProtocolPort(protocolName);
-//      catch port = 0 ?
-//      int port = getPort(protocol + ".port");
-        LOG.info(protocolName + " port: " + port);
-        
-        String uri = "netty:tcp://" + host + ":" + port + 
-                "?serverInitializerFactory=#" + protocolName + "&sync=false";
-        context.addRoutes(new TraccarRoute(uri, protocolName));
+        for (Map.Entry<String, ServerInitializerFactory> factory : serverInitializerFactories.entrySet()) {
+        	if (factory.getKey().equals("tcp")) {
+        		
+                String protocolSpec = protocolName + "-" + factory.getKey(); // append transport
+
+//              SpringBoot: @Bean(name = "teltonika")
+                context.getRegistry().bind(protocolSpec, factory.getValue());
+                
+                int port = TraccarSetup.getConfiguredProtocolPort(protocolName);
+//              catch port = 0 ?
+//              int port = getPort(protocol + ".port");
+                LOG.info(protocolName + " port: " + port);
+                
+                String uri = "netty:tcp://" + host + ":" + port + 
+                        "?serverInitializerFactory=#" + protocolSpec + "&sync=false";
+                context.addRoutes(new TraccarRoute(uri, protocolSpec));
+        	}
+        }
         
 //      now start the actual test
         testTeltonikaMessages();
@@ -118,6 +141,7 @@ public class DcsTests extends CamelTestSupport {
 //  for single messages with thorough tests
 //  and for protocols with message counts ..
 //  redundant to dcs > DcsSpringBootTests => prototype!
+
     public void testTeltonikaMessages() throws Exception {
         String protocol = "teltonika";
 //      int port = getPort(protocol + ".port");
@@ -172,8 +196,9 @@ public class DcsTests extends CamelTestSupport {
      */
     @BeforeClass
     public static void setup() {
-        LOG.info("Before DcsTests ...");
         TraccarSetup.contextInit(ContextTest.configuredServers);
+//      add member for all tests - and remove from tests
+//      Map<Integer, Class<?>> protocolClasses = TraccarSetup.loadConfiguredBaseProtocolClasses();
     }
 
     /*

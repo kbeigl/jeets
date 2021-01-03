@@ -20,14 +20,12 @@ import io.github.classgraph.ScanResult;
  * Proprietary setup for Traccar Camel Netty Pipelines.
  * <p>
  * Each -protocols- project should supply a dedicated RouteBuilder with a
- * Consumer Endpoint (DCS output) which can be picked up by a dcs-manager.
+ * Consumer Endpoint (DCS output) which can be picked up by a DCS Manager.
  * <p>
  * The term '-Configured-' refers to the reduced traccar.xml file. It only holds
  * servers with additional testing material like protocols in the repos
  * jeets-data/device.send folder. These tests become part of the JeeTS build,
  * test and integration test runs.
- * <p>
- * add link to adoc!
  */
 public class TraccarSetup {
 
@@ -54,7 +52,7 @@ public class TraccarSetup {
                 ScanResult result = new ClassGraph()
 //              this would also init unused protocols
 //              .initializeLoadedClasses()
-//              .verbose() // very verbose! Only turn on if DEBUG .. ?
+//              .verbose() // very verbose! Only use at dev time?
 //              .enableClassInfo() // implied below
                 .acceptPackages("org.traccar.protocol") // with subpackages
                 .acceptJars("jeets*.jar") // scan only jeets* sources !! verify with dcs.jar libs
@@ -63,28 +61,26 @@ public class TraccarSetup {
             ClassInfoList classInfos = result.getSubclasses("org.traccar.BaseProtocol").directOnly();
             LOG.info("found {} BaseProtocol classes in {} millis", classInfos.size(), (System.currentTimeMillis() - start));
 
-            String protocolName = null;
-            int port = -1;
             for (ClassInfo protocolClassInfo : classInfos) {
-
                 String className = protocolClassInfo.getSimpleName(); // TeltonikaProtocol
+                String protocolName = null;
                 protocolName = className.substring(0, className.length() - 8).toLowerCase(); // teltonika
-//              load class only, if port exists
+                int port = -1;
                 port = TraccarSetup.getConfiguredProtocolPort(protocolName);
-
-                if (port == -1) { // LOG.warn ?
-                    LOG.debug("port# for '{}' protocol is not defined in configuration file.", protocolName);
+//              load class only, if port exists
+                if (port == -1) {
+                    LOG.warn("port# for '{}' protocol is not defined in configuration file.", protocolName);
                 } else {
-                    /*
-                     * ClassGraph: You should do all class loading through ClassGraph, using
-                     * ClassInfo#loadClass() or ClassInfoList#loadClasses(), and never using
-                     * Class.forName(className), otherwise you may end up with some classes loaded
-                     * by the context classloader, and some by another classloader. This can cause
-                     * ClassCastException or other problems at weird places in your code.
-                     */
+					/*
+					 * ClassGraph: You should do all class loading through ClassGraph, using
+					 * ClassInfo#loadClass() or ClassInfoList#loadClasses(), and never using
+					 * Class.forName(className), otherwise you may end up with some classes loaded
+					 * by the context class loader, and some by another class loader. This can cause
+					 * ClassCastException or other problems at weird places in your code.
+					 */
                     protocolClasses.put(port, protocolClassInfo.loadClass());
 //                  class is loaded, but not yet initialized, nor instantiated!
-                    LOG.info("loaded class: {}\tname: {}\tport#{}", className, protocolName, port);
+                    LOG.debug("loaded class: {}\tname: {}\tport#{}", className, protocolName, port);
                 }
             }
         }
@@ -92,55 +88,37 @@ public class TraccarSetup {
         return protocolClasses; // can be empty, i.e. size = 0
     }
     
-    /* Currently only creating "tcp" servers */
-     public static ServerInitializerFactory createServerInitializerFactory(Class<? extends BaseProtocol> protocolClass) {
-        BaseProtocol protocolInstance = instantiateProtocol(protocolClass);
-        String transport = "tcp";
-//      loop over "tcp" and "udp" - externally return 0-2 ServerInitFactories, i.e. serverList?
-        TrackerServer server = getProtocolServer(transport, protocolInstance);
-        if (server == null) { // BaseProtocol.nameFromClass will be removed!
-            LOG.warn("No server found for '{}:{}'", 
-                    transport, BaseProtocol.nameFromClass(protocolClass));
-            return null;
+    /**
+	 * Each BaseProtocol class provides one or two TrackerServer instances for tcp
+	 * and/or udp transport. After object instantiation each server holds a
+	 * configured BasePipelineFactory and is used to get a ServerInitializerFactory
+	 * and register the instance for the camel-netty life cycle.
+	 * <p>
+	 * Note that the ServerInitializerFactory is not registered and not associated
+	 * to a port# at this point.
+	 * 
+	 * @param protocolClass - a Traccar *Protocol class
+	 * @return Map&lt;transport: "udp" or "tcp", ServerInitializerFactory>
+	 */
+    public static Map<String, ServerInitializerFactory> createServerInitializerFactories(Class<? extends BaseProtocol> protocolClass) {
+//    	maybe add/replace method to create one Map for all protocols ?
+    	BaseProtocol protocolInstance = instantiateProtocol(protocolClass);
+    	LOG.info("get servers for '{}' protocol", BaseProtocol.nameFromClass(protocolClass));
+
+		final Map<String, ServerInitializerFactory> serverInitializerFactories = new HashMap<String, ServerInitializerFactory>();
+    	for (TrackerServer server : protocolInstance.getServerList()) {
+    		String transport = server.isDatagram() ? "udp" : "tcp";
+    		serverInitializerFactories.put(transport, server.getServerInitializerFactory());
+//    		what about possible server hosts in the configuration?
+//          String serverHost = (server.getAddress() == null) ? host : server.getAddress();
         }
-        return server.getServerInitializerFactory();
+    	return serverInitializerFactories;
     }
 
     /**
-     * Pick udp or tcp server, if exists.
-     * <p>
-     * Each BaseProtocol instance provides one or two TrackerServer instances for
-     * tcp and/or udp transport. Each server holds a configured BasePipelineFactory
-     * which is used to get a ServerInitializerFactory and register the instance for
-     * the camel-netty life cycle.
-     * 
-     * @param transport - tcp or udp
-     * @param protocol - protocol name as defined in configFile
-     * @return
-     */
-    public static TrackerServer getProtocolServer(String transport, BaseProtocol protocol) {
-        for (TrackerServer server : protocol.getServerList()) {
-            if (transport.equals("udp") && server.isDatagram()) {
-                return server;
-            } else if (transport.equals("tcp") && !server.isDatagram()) {
-                return server;
-            }
-        }
-        return null;
-//      old code ----------------------------------------------------
-//      String transport = server.isDatagram() ? "udp" : "tcp";
-//      String uri = "netty:" + transport + "://";
-//      configure host for individual host
-//      String serverHost = (server.getAddress() == null) ? host : server.getAddress();
-//      uri += serverHost + ":" + server.getPort() + "?";
-//      serverInitializerName = (transport.equals("tcp")) ? protocolName : protocolName + "-" + transport;
-//      uri += "serverInitializerFactory=#" + serverInitializerName   ???   + "&sync=true";
-    }
-
-    /**
-     * Loading and instantiating the Protocol class is clearly separated in order to
-     * apply ClassGraph.
-     */
+	 * Loading and instantiating the Protocol class is separated in order to apply
+	 * ClassGraph.
+	 */
     private static BaseProtocol instantiateProtocol(Class<? extends BaseProtocol> protocolClass) {
         BaseProtocol protocol = null;
         try {
@@ -218,6 +196,7 @@ public class TraccarSetup {
         try {
 //          Context.getConfig().getString("event.enable");
             Context.getConfig().getString("whatever");
+//      !?  Context.getConfig();
         } catch (NullPointerException npe) {
             return false;
         }
