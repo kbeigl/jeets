@@ -2,7 +2,6 @@ package org.jeets.dcs;
 
 import org.apache.camel.ConsumerTemplate;
 import org.apache.camel.ProducerTemplate;
-import org.jeets.dcs.Main;
 import org.jeets.protobuf.Jeets;
 import org.jeets.protobuf.Jeets.Acknowledge;
 import org.jeets.protobuf.Jeets.Device.Builder;
@@ -83,7 +82,7 @@ public class DcsSingleMessages {
     @Test
     public void testTraccarJeetsServer() throws Exception {
         String protocol = "jeets";
-        int port = TraccarSetup.getConfiguredProtocolPort(protocol);
+        int port = TraccarSetup.getProtocolPort(protocol);
 
         Builder protoMessage = Samples.createDeviceWithPositionWithOneEvent();
 //      TODO: change proto uniqueId to String
@@ -115,7 +114,7 @@ public class DcsSingleMessages {
     @Test
     public void testTeltonikaServer() throws Exception {
         String protocol = "teltonika";
-        int port = TraccarSetup.getConfiguredProtocolPort(protocol);
+        int port = TraccarSetup.getProtocolPort(protocol);
 //      catch port = -1 ?
 
 //      TODO: use teltonika.jdev test file for message content
@@ -149,7 +148,7 @@ public class DcsSingleMessages {
     @Test
     public void testRuptelaServer() throws Exception {
         String protocol = "ruptela";
-        int port = TraccarSetup.getConfiguredProtocolPort(protocol);
+        int port = TraccarSetup.getProtocolPort(protocol);
 //      catch port = 0 ?
 
 //      from ruptela.jdev test file for message content

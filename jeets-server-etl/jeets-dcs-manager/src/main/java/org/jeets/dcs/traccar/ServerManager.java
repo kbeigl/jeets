@@ -22,7 +22,7 @@ import org.traccar.BaseProtocol;
  * <p>
  * The org.traccar.ServerManager logic first reads all eligible
  * *Protocol.classes. Then it traverses the classes, checks for *name*Protocol
- * entries (protocolname.port) in Context.Config to setup the Protocol server.
+ * entries &ltprotocolname.port> in Context.Config to setup the Protocol server.
  * <p>
  * Currently the ServerManager starts Traccar Protocols, Jeets Protocols
  * compiled into Traccar and/or separately and a sample of a Netty En/Decoder.
@@ -97,7 +97,7 @@ public class ServerManager implements BeanFactoryPostProcessor, EnvironmentAware
     private void setupTraccarServers(ConfigurableListableBeanFactory beanFactory) throws Exception {
 
         long start = System.currentTimeMillis();
-        Map<Integer, Class<?>> protocolClasses = TraccarSetup.loadConfiguredBaseProtocolClasses();
+        Map<Integer, Class<?>> protocolClasses = TraccarSetup.loadProtocolClasses();
         int protocolClassesSize = protocolClasses.size();
         if (protocolClassesSize > 0) {
 
@@ -108,9 +108,35 @@ public class ServerManager implements BeanFactoryPostProcessor, EnvironmentAware
                 Class<? extends BaseProtocol> clazz = (Class<? extends BaseProtocol>) protocolClasses.get(port);
                 String className = clazz.getSimpleName(); // TeltonikaProtocol > teltonika
                 String protocolName = className.substring(0, className.length() - 8).toLowerCase();
-                
+
                 ServerInitializerFactory pipeline = 
                         TraccarSetup.createServerInitializerFactory(clazz);
+// ------------------------------------
+                Map<String, ServerInitializerFactory> serverInitializerFactories = 
+                		TraccarSetup.createServerInitializerFactories(clazz);
+
+                for (Map.Entry<String, ServerInitializerFactory> factory : serverInitializerFactories.entrySet()) {
+
+                    String protocolSpec = protocolName + "-" + factory.getKey(); // append transport
+                    System.out.println(protocolSpec + ": " + factory.getValue());
+                    
+//                  pipeline can be registered with Camel ..
+                    context.getRegistry().bind(protocolSpec, factory.getValue());
+//                  .. or SpringBoot: @Bean(name = protocolName)
+//                  beanFactory.registerSingleton(protocolName, pipeline);
+
+//                  register netty as jeets-dcs ;)
+                    String uri = "netty:" + factory.getKey() + "://" + host + ":" + port
+                    		+ "?serverInitializerFactory=#" + protocolSpec + "&sync=false";
+//                  		  "&workerPool=#sharedPool&usingExecutorService=false" etc.
+
+                    context.addRoutes(new TraccarRoute(uri, protocolSpec)); // id=teltonikaRoute
+//                  SpringBoot: @Bean(name = protocolName + "Route")
+//                  beanFactory.registerSingleton(protocolName + "Route", new TraccarRoute(uri, protocolName));
+
+                    LOG.info("added server: " + uri);
+                }
+// ------------------------------------
                 beanFactory.registerSingleton(protocolName, pipeline);
                 /*
                  * The Consumer Endpoint (from) for each Traccar protocol must be set to

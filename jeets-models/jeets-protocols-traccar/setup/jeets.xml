@@ -4,6 +4,10 @@
 
 <properties>
 
+	<!-- TESTS PENDING !! -->
+	<!-- self reference !! -->
+    <entry key='config.default'>jeets.xml</entry>
+
     <entry key='database.registerUnknown'>true</entry>
 
     <entry key='teltonika.port'>5027</entry>

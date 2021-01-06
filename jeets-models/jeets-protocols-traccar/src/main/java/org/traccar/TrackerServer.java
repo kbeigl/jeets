@@ -19,11 +19,6 @@ import org.apache.camel.component.netty.ServerInitializerFactory;
 
 public abstract class TrackerServer {
 
-    private final boolean datagram;
-    public boolean isDatagram() {
-        return datagram;
-    }
-
     public TrackerServer(boolean datagram, String protocol) {
         this.datagram = datagram;
 
@@ -35,10 +30,16 @@ public abstract class TrackerServer {
                 TrackerServer.this.addProtocolHandlers(pipeline);
             }
         };
-
     }
 
     private BasePipelineFactory pipelineFactory = null;
+
+    protected abstract void addProtocolHandlers(PipelineBuilder pipeline);
+
+    private final boolean datagram;
+    public boolean isDatagram() {
+        return datagram;
+    }
 
     /**
      * Each protocol has its own factory a returned pipeline should be named after.
@@ -51,7 +52,5 @@ public abstract class TrackerServer {
     public ServerInitializerFactory getServerInitializerFactory() {
         return pipelineFactory.new CamelPipelineFactory(null);
     }
-
-    protected abstract void addProtocolHandlers(PipelineBuilder pipeline);
 
 }

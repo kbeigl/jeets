@@ -27,7 +27,7 @@ import io.netty.buffer.ByteBufUtil;
 @SpringBootTest // (classes = Main.class)
 public class DcsSpringBootTests {
     
- // TODO test on default.original.xml for all protocols and ports
+//	TODO test on default.original.xml for all protocols and ports
 //  create exclusive Traccar Server Tests <> Jeets and Netty Decoder Tests
 
     @Autowired
@@ -61,7 +61,7 @@ public class DcsSpringBootTests {
     @Test
     public void testTraccarJeetsServer() throws Exception {
         String protocol = "jeets";
-        int port = TraccarSetup.getConfiguredProtocolPort(protocol);
+        int port = TraccarSetup.getProtocolPort(protocol);
 
         Builder protoMessage = Samples.createDeviceWithPositionWithOneEvent();
 //      TODO: change proto uniqueId to String
@@ -92,7 +92,7 @@ public class DcsSpringBootTests {
     @Test
     public void testTeltonikaServer() throws Exception {
         String protocol = "teltonika";
-        int port = TraccarSetup.getConfiguredProtocolPort(protocol);
+        int port = TraccarSetup.getProtocolPort(protocol);
 //      catch port = -1 ?
 
 //      TODO: use teltonika.jdev test file for message content
@@ -123,7 +123,7 @@ public class DcsSpringBootTests {
     @Test
     public void testRuptelaServer() throws Exception {
         String protocol = "ruptela";
-        int port = TraccarSetup.getConfiguredProtocolPort(protocol);
+        int port = TraccarSetup.getProtocolPort(protocol);
 //      catch port = 0 ?
 
 //      from ruptela.jdev test file for message content
