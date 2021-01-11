@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Samples {
 	
-	private static final Logger log = LoggerFactory.getLogger(Samples.class);
+//	private static final Logger log = LoggerFactory.getLogger(Samples.class);
     // use original test members / values from PU Samples
     public static double lat = org.jeets.model.traccar.util.Samples.lat;
     public static double lon = org.jeets.model.traccar.util.Samples.lon;
@@ -80,7 +80,8 @@ public class Samples {
         
         deviceBuilder.addPosition(positionBuilder);
         deviceBuilder.setUniqueid(uniqueId);
-    	log.debug("created Protobuffer:\n{}", deviceBuilder);
+        System.out.println("created Protobuffer:\n" + deviceBuilder);
+//      log.info("created Protobuffer:\n" + deviceBuilder);
         return deviceBuilder;
         // createAckForDeviceMessage();
     }

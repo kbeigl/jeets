@@ -34,7 +34,6 @@ public class JeetsProtocol extends ServerInitializerFactory {
 //              System.out.println("responded with ack:\n" + ackBuilder.toString());
 //          }
 //      }
-
     }
 
     private NettyConsumer consumer;

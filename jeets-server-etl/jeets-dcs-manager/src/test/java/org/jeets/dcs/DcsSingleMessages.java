@@ -14,11 +14,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.traccar.model.Position;
 import io.netty.buffer.ByteBufUtil;
 
 // run from command line: mvn -Dit.test=DcsSingleMessagesIT verify -Pitests
+
+// these tests are skipped by mvn test ???
 
 /**
  * Bootstrap the entire container to start complete DCS component, send
@@ -31,13 +35,16 @@ import io.netty.buffer.ByteBufUtil;
  * explicit testing. This occurs asynchronously and should not effect the tests.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = Main.class)
+@SpringBootTest // (classes = Main.class)
+@DirtiesContext(classMode=ClassMode.AFTER_CLASS)
 public class DcsSingleMessages {
     
     /*
      * Note that these tests are sending and asserting explicit single messages
      * without the need of external processes.
+     * 
      * 1. Therefore this test should run inside mvn install without -IT > doesn't work ?
+     * 
      * on the other hand:
      * 2. This test is booting the DCS and keeps it alive for following Device2dcsIT
      *    which makes use of device.send - only makes sense if DCS is running (?)

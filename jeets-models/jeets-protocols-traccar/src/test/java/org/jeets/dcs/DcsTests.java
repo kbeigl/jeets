@@ -33,9 +33,9 @@ public class DcsTests extends CamelTestSupport {
 	 * available protocols and ports.
 	 */
     @Test
-	public void testAllConfiguredServers() throws Exception {
+	public void testAllServers() throws Exception {
 
-    	Map<String, NettyServer> servers = TraccarSetup.createServers(protocolClasses);
+    	Map<String, NettyServer> servers = TraccarSetup.prepareServers(protocolClasses);
     	LOG.info("created {} servers for {} protocols", servers.size(), protocolClasses.size());
 
     	int count = 0;
@@ -49,7 +49,11 @@ public class DcsTests extends CamelTestSupport {
 //              .. or SpringBoot: @Bean(name = protocolSpec)
 //              beanFactory.registerSingleton(protocolSpec, server.factory);
 
-//              register netty as jeets-dcs ;)
+                // register netty as jeets-dcs ;)
+                // The Consumer Endpoint (from) for each Traccar protocol must be set to
+                // sync=false! The Traccar Pipeline and -Decoders are implemented WITH ACK
+                // response, i.e. channel.writeAndFlush. Therefore the Camel Endpoint, i.e.
+                // NettyConsumer, should NOT return a (additional) response.
                 String uri = "netty:" + server.transport + "://" + host + ":" + server.port
                 		+ "?serverInitializerFactory=#" + protocolSpec + "&sync=false";
 //              		  "&workerPool=#sharedPool&usingExecutorService=false" etc.

@@ -3,7 +3,6 @@ package org.jeets.protocol.util;
 import static org.junit.Assert.*;
 
 import org.jeets.protobuf.Jeets;
-import org.jeets.protocol.util.Samples;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

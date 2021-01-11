@@ -1,4 +1,4 @@
-package org.jeets;
+package org.jeets.dcs;
 
 import java.util.Date;
 import java.util.List;
@@ -19,20 +19,14 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DcsJeetsProtocol extends CamelTestSupport {
+public class DcsJeetsProtocolTest extends CamelTestSupport {
 
-    /*
-     * This test is not an IT and should be moved to dcs or protocols. 
-     * It is still invoked with 0 test runs, not to forget it ;)
-     * Currently is has its own dcs.properties > generalize Then add IT for explicit
-     * JeetsProtocol with Camel ACK 
-     * currently no Producer for Consumer Endpoint 
-     * turn into a SpringBootTest with DCS ?
-     */
+    private static final Logger LOG = LoggerFactory.getLogger(DcsJeetsProtocolTest.class);
 
-    private static final Logger LOG = LoggerFactory.getLogger(DcsJeetsProtocol.class);
-
-//  @Test
+//    no messages are being sent !!
+//    test is only waiting to receive messages - from where?
+    
+//    @Test
     public void testDcsRoute() throws Exception {
 
         context.addRoutes(new RouteBuilder() {
@@ -98,11 +92,6 @@ public class DcsJeetsProtocol extends CamelTestSupport {
         return registry;
     }
 
-//    @Override
-//    protected RouteBuilder createRouteBuilder() throws Exception {
-//        return new DcsRoute(); deprecated initial simple jeets-dcs
-//    }
-
     protected CamelContext createCamelContext() throws Exception {  
         CamelContext context = super.createCamelContext();  
 
@@ -117,5 +106,4 @@ public class DcsJeetsProtocol extends CamelTestSupport {
   
         return context;  
     }  
-
 }

@@ -1,7 +1,8 @@
-package org.jeets.dcs;
+package org.jeets.itests;
 
 import org.apache.camel.ConsumerTemplate;
 import org.apache.camel.ProducerTemplate;
+import org.jeets.dcs.Main;
 import org.jeets.protobuf.Jeets;
 import org.jeets.protobuf.Jeets.Acknowledge;
 import org.jeets.protobuf.Jeets.Device.Builder;
@@ -20,15 +21,15 @@ import io.netty.buffer.ByteBufUtil;
 
 /**
  * Bootstrap the entire container to start complete DCS component, send
- * messages, receive responses and evaluate server input.
+ * messages, receive responses and evaluate server input and output.
  * <p>
  * Two way testing: client sends hex, asserts ack while test case additionally
  * validates and asserts the system entity provided as DCS output.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest // (classes = Main.class)
+@SpringBootTest(classes = Main.class)
 @DirtiesContext(classMode=ClassMode.AFTER_CLASS)
-public class DcsSpringBootTests {
+public class DcsSpringBootIT {
     
 //	TODO test on default.original.xml for all protocols and ports
 //  create exclusive Traccar Server Tests <> Jeets and Netty Decoder Tests

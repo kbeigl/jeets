@@ -32,7 +32,8 @@ public class TraccarSetup {
 
     private static final Logger LOG = LoggerFactory.getLogger(TraccarSetup.class);
 
-    public static Map<String, NettyServer> createServers(Map<Integer, Class<?>> protocolClasses) {
+    // TODO change return value to LinkedList>NettyServer> (ordered by ..)
+    public static Map<String, NettyServer> prepareServers(Map<Integer, Class<?>> protocolClasses) {
 		
         // <"protocolName-transport", server>
 		Map<String, NettyServer> servers = new HashMap<String, NettyServer>();
