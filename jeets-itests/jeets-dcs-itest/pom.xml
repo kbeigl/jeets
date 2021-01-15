@@ -90,10 +90,9 @@
 								<id>start-device</id>
 							</execution>
 
+							<!-- Tracker is initially launched for the initial test with jeets 
+								protobuffers and will be removed ...
 							<execution>
-								<!-- Tracker is initially launched for the initial test with jeets 
-									protobuffers and will be removed as soon as the Device will be able to send 
-									them. -->
 								<id>start-tracker</id>
 								<phase>pre-integration-test</phase>
 								<goals>
@@ -103,7 +102,6 @@
 									<name>jeets-tracker</name>
 									<workingDir>${jeets.repo.directory}/jeets-clients/jeets-tracker/</workingDir>
 									<waitForInterrupt>false</waitForInterrupt>
-									<!-- <healthcheckUrl>http://localhost:8381/healthcheck</healthcheckUrl> -->
 									<waitAfterLaunch>10</waitAfterLaunch>
 									<processLogFile>${project.build.directory}\${project.name}\${tracker-project-latest}.log</processLogFile>
 									<arguments>
@@ -114,7 +112,7 @@
 									</arguments>
 								</configuration>
 							</execution>
-
+							 -->
 						</executions>
 					</plugin>
 				</plugins>

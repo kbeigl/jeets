@@ -1,10 +1,10 @@
 package org.jeets.protocol.util;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.jeets.protobuf.Jeets;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * These samples demonstrate how to create Protobuffer messages 
@@ -151,6 +151,54 @@ public class Samples {
         Jeets.Acknowledge.Builder ackBuilder = Jeets.Acknowledge.newBuilder();
         ackBuilder.setDeviceid(deviceId);
         return ackBuilder;
+    }
+
+    /**
+     * Create a track of six positions to be added to a Device Builder.
+     */
+    public static List<Jeets.Position.Builder> createSampleTrack() {
+//      actual trace with real fixtimes
+//      "2017-05-20 15:49:01";49.03097993;12.10312854;407
+//      "2017-05-20 15:52:57";49.02847401;12.10734587;370
+//      "2017-05-20 15:54:57";49.02865676;12.11003339;383
+//      "2017-05-20 15:56:58";49.03296471;12.11323104;381
+//      "2017-05-20 15:58:58";49.03363147;12.12226451;392
+//      "2017-05-20 16:02:55";49.03797380;12.13681046;388
+        List<Jeets.Position.Builder> positions = new ArrayList<>();
+
+        Jeets.Position.Builder positionBuilder = Jeets.Position.newBuilder();
+        positionBuilder.setValid(true)
+        .setLatitude(49.03097993d).setLongitude(12.10312854d).setAltitude(407d);
+        positions.add(positionBuilder);
+
+        positionBuilder = Jeets.Position.newBuilder();
+        positionBuilder.setValid(true)
+        .setLatitude(49.02847401d).setLongitude(12.10734587d).setAltitude(370d);
+        Jeets.Event.Builder eventBuilder = Samples.createAlarmEventProto();
+        positionBuilder.addEvent(eventBuilder);
+        positions.add(positionBuilder);
+
+        positionBuilder = Jeets.Position.newBuilder();
+        positionBuilder.setValid(true)
+        .setLatitude(49.02865676d).setLongitude(12.11003339d).setAltitude(383d);
+        positions.add(positionBuilder);
+
+        positionBuilder = Jeets.Position.newBuilder();
+        positionBuilder.setValid(true)
+        .setLatitude(49.03296471d).setLongitude(12.11323104d).setAltitude(381d);
+        positions.add(positionBuilder);
+
+        positionBuilder = Jeets.Position.newBuilder();
+        positionBuilder.setValid(true)
+        .setLatitude(49.03363147d).setLongitude(12.12226451d).setAltitude(392d);
+        positions.add(positionBuilder);
+
+        positionBuilder = Jeets.Position.newBuilder();
+        positionBuilder.setValid(true)
+        .setLatitude(49.03797380d).setLongitude(12.13681046d).setAltitude(388d);
+        positions.add(positionBuilder);
+
+        return positions;
     }
 
 }

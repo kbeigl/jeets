@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
+/*
  * These tests can be executed on various stages assembling a Tracking System
  * via JeeTS. Basically all tests are sending hex messages to the associated
  * protocol port where they can be processed.
@@ -19,8 +19,7 @@ import org.slf4j.LoggerFactory;
  * Currently this integration test (IT) can be copied into other ITs without
  * changes. In the long run a separate test-jar might be created for maven
  * import.
- */
-/*
+ * <p>
  * developer note, i.e. road map: the dev2server ITests should have a common
  * test-jar which can be compiled before ITests and shared amongst them (can be
  * achieved with Maven). This jar can even hold JUnit @Tests which can be
@@ -33,13 +32,6 @@ import org.slf4j.LoggerFactory;
  * OR: create IT with only Device as external process and go inside server
  * OR: create vm:// Endpoints for Device, Server and ITest
  */
-/*
- * see java docs, comments and developer notes in DcsSingleMessages
- * TODO move from dcs-mgr to dcsIT
- */
-// MUST RUN AFTER DcsSingleMessagesIT !! alphabetical order ?
-// currently also waiting for Tracker protobuffer messages!
-// .. disconnecting after each message ?
 public class Device2dcsIT extends CamelTestSupport { // pure Camel, no Spring
 
     private static final Logger LOG = LoggerFactory.getLogger(Device2dcsIT.class);
@@ -89,6 +81,7 @@ public class Device2dcsIT extends CamelTestSupport { // pure Camel, no Spring
 //      assertTrue(notify.matchesMockWaitTime());
 //      boolean matches = notify.matches(5, TimeUnit.SECONDS);
 //      assertTrue(matches);
+//      remove Route with filename
         
 //      scan log files - for all tests:
 //      try logging client and server to one log file > parse and assert in IT !!

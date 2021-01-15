@@ -8,10 +8,13 @@
 
     DO NOT MODIFY THIS FILE. Use traccar.xml instead.
 
+    -->
+
     <entry key='web.enable'>true</entry>
     <entry key='web.port'>8082</entry>
     <entry key='web.path'>./web</entry>
     <entry key='web.cacheControl'>max-age=3600,public</entry>
+    <entry key='web.healthCheck'>true</entry>
 
     <entry key='geocoder.enable'>false</entry>
     <entry key='geocoder.type'>google</entry>
@@ -24,29 +27,19 @@
     <entry key='filter.enable'>true</entry>
     <entry key='filter.future'>86400</entry>
 
+    <entry key='event.enable'>true</entry>
     <entry key='event.ignoreDuplicateAlerts'>true</entry>
     <entry key='processing.computedAttributes.enable'>true</entry>
     <entry key='processing.engineHours.enable'>true</entry>
 
-    <entry key='notificator.types'>web,mail</entry>
-    <entry key='server.statistics'>https://www.traccar.org/analytics/</entry>
-    <entry key='commands.queueing'>true</entry>
-
-    -->
-
-    <entry key='database.ignoreUnknown'>true</entry>
-    <entry key='database.registerUnknown'>true</entry>
-
-    <entry key='event.enable'>false</entry>
     <entry key='media.path'>./media</entry>
 
-	<!-- familiar protocols with explicit (integration) tests -->
-	<!-- teltonika provides udp and tcp -->
-    <entry key='teltonika.port'>5027</entry>
-    <entry key='ruptela.port'>5046</entry>
-	<!-- additional protocols +1000 -->
-    <entry key='jeets.port'>6001</entry>
-<!-- 
+    <entry key='notificator.types'>web,mail</entry>
+
+    <entry key='server.statistics'>https://www.traccar.org/analytics/</entry>
+
+    <entry key='commands.queueing'>true</entry>
+
     <entry key='gps103.port'>5001</entry>
     <entry key='tk103.port'>5002</entry>
     <entry key='gl100.port'>5003</entry>
@@ -74,7 +67,7 @@
     <entry key='megastek.port'>5024</entry>
     <entry key='navigil.port'>5025</entry>
     <entry key='gpsgate.port'>5026</entry>
-
+    <entry key='teltonika.port'>5027</entry>
     <entry key='mta6.port'>5028</entry>
     <entry key='tzone.port'>5029</entry>
     <entry key='tlt2h.port'>5030</entry>
@@ -93,7 +86,7 @@
     <entry key='globalsat.port'>5043</entry>
     <entry key='atrack.port'>5044</entry>
     <entry key='pt3000.port'>5045</entry>
-
+    <entry key='ruptela.port'>5046</entry>
     <entry key='topflytech.port'>5047</entry>
     <entry key='laipac.port'>5048</entry>
     <entry key='aplicom.port'>5049</entry>
@@ -259,13 +252,5 @@
     <entry key='wli.port'>5209</entry>
     <entry key='niot.port'>5210</entry>
     <entry key='portman.port'>5211</entry>
-    <entry key='moovbox.port'>5212</entry>
-    <entry key='futureway.port'>5213</entry>
-    <entry key='polte.port'>5214</entry>
-    <entry key='net.port'>5215</entry>
-    <entry key='mobilogix.port'>5216</entry>
-    <entry key='swiftech.port'>5217</entry>
-    <entry key='iotm.port'>5218</entry>
-    <entry key='dolphin.port'>5219</entry>
- -->
+
 </properties>

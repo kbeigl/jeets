@@ -20,9 +20,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.traccar.model.Position;
 import io.netty.buffer.ByteBufUtil;
 
-// run from command line: mvn -Dit.test=DcsSingleMessagesIT verify -Pitests
+// run from command line: mvn -Dit.test=DcsSingleMessages verify -Pitests
 
-// these tests are skipped by mvn test ???
+// these tests are skipped by mvn test  ???
 
 /**
  * Bootstrap the entire container to start complete DCS component, send
