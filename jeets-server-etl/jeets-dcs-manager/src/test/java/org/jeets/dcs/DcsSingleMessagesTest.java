@@ -35,31 +35,12 @@ import io.netty.buffer.ByteBufUtil;
  * explicit testing. This occurs asynchronously and should not effect the tests.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest // (classes = Main.class)
+@SpringBootTest(classes = Main.class)
 @DirtiesContext(classMode=ClassMode.AFTER_CLASS)
-public class DcsSingleMessages {
+public class DcsSingleMessagesTest {
     
-    /*
-     * Note that these tests are sending and asserting explicit single messages
-     * without the need of external processes.
-     * 
-     * 1. Therefore this test should run inside mvn install without -IT > doesn't work ?
-     * 
-     * on the other hand:
-     * 2. This test is booting the DCS and keeps it alive for following Device2dcsIT
-     *    which makes use of device.send - only makes sense if DCS is running (?)
-     * a. while the Tracker protobuffer messages keep coming in
-     *    currently without test, generally also test chronological order !
-     * 3. setup tests for protocol files sent by Device > long integration tests 
-     *    (i.e. move file > test nr or msgs ..)
-     */
+    private static final Logger LOG = LoggerFactory.getLogger(DcsSingleMessagesTest.class);
 
-//  TODO harmonize / adjust with jeets-dcs DcsSpringBootTests
-//  create exclusive Traccar Server Tests <> Jeets and Netty Decoder Tests
-    
-//  TODO implement testJeetsServer with Camel ACK, implement properties
-    
-    private static final Logger LOG = LoggerFactory.getLogger(DcsSingleMessages.class);
     @Autowired
     private ProducerTemplate client;
     @Autowired
@@ -67,21 +48,6 @@ public class DcsSingleMessages {
     private String host = "netty:tcp://localhost:";
     private String threading = "direct:"; // TO TEST: seda
     private String dcsConsumer = threading + "traccar.model";
-    
-    /**
-     * Test org.jeets.protocol.JeetsDecoder and -Protocol
-     * 
-     * @throws Exception
-     */
-//  @Test
-    public void testJeetsServer() throws Exception {
-
-//      currently this explicit jeets server is not launched automatically
-//      implement with Camel ACK mechanism
-//      implement config mechanism with props file
-//      see template DcsJeetsProtocolIT for a start (with Camel LoadTypeConverters ..)
-
-    }
 
     /**
      * Test org.traccar.protocol.JeetsDecoder and -Protocol

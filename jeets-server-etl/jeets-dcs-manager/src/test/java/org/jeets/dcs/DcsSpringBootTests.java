@@ -39,25 +39,6 @@ public class DcsSpringBootTests {
     private ConsumerTemplate server;
     private String host = "netty:tcp://localhost:";
 
-//    @Test
-//    public void testRunAllServers() throws Exception {
-//        load traccar.all.xml
-//        from resources !!
-//        how to UN-init Context from earlier TraccarSetup.loadConfigured .. ?
-//    }
-
-    /**
-     * Test org.jeets.protocol.JeetsDecoder and -Protocol
-     * 
-     * @throws Exception
-     */
-//    @Test
-    public void testJeetsServer() throws Exception {
-        
-//      no config mechanism yet, use props file
-        
-    }
-
     /**
      * Test org.traccar.protocol.JeetsDecoder and -Protocol
      */
