@@ -13,20 +13,19 @@ import org.apache.camel.builder.RouteBuilder;
  * A single dynamic route via .pollEnrich is an alternative: <br>
  * stackoverflow.com/questions/36948005/how-do-dynamic-from-endpoints-and-exchanges-work-in-camel
  */
-public class FileRoute extends RouteBuilder {
+public class SendFileRoute extends RouteBuilder {
     private final String fileName;
 
 //  temporary variables to work around props config problem, TO BE REMOVED
-    String dataSendFolder  ="C:\\kris\\virtex\\github.jeets\\jeets-clients\\jeets-device\\send";
-    String deviceSendFolder="C:\\kris\\virtex\\github.jeets\\jeets-data\\device.send";
-    		
-    public FileRoute(String fileName) {
+//    String dataSendFolder  ="C:\\kris\\virtex\\github.jeets\\jeets-clients\\jeets-device\\send";
+//    String deviceSendFolder="C:\\kris\\virtex\\github.jeets\\jeets-data\\device.send";
+
+    public SendFileRoute(String fileName) {
         this.fileName = fileName;
     }
 
     @Override
     public void configure() throws Exception {
-
         from("file://C:\\kris\\virtex\\github.jeets\\jeets-data\\device.send?noop=true&fileName=" + fileName)
 //      from("file://{data.send.folder}?noop=true&fileName=" + fileName)
 //      from("file://" + dataSendFolder + "?noop=true&fileName=" + fileName)

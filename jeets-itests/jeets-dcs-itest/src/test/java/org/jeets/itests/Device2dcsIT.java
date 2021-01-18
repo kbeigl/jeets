@@ -5,7 +5,7 @@ import java.io.File;
 import org.apache.camel.CamelContext;
 import org.apache.camel.test.spring.CamelSpringBootRunner;
 import org.apache.camel.test.spring.MockEndpoints;
-import org.jeets.dcs.FileRoute;
+import org.jeets.dcs.SendFileRoute;
 import org.jeets.dcs.Main;
 import org.junit.Assert;
 import org.junit.Test;
@@ -38,7 +38,7 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 @SpringBootTest(classes = Main.class)
 @DirtiesContext(classMode=ClassMode.AFTER_CLASS)
 @MockEndpoints
-//@EnableAutoConfiguration	???
+//@EnableAutoConfiguration
 public class Device2dcsIT { // extends Camel/TestSupport 
 
     private static final Logger LOG = LoggerFactory.getLogger(Device2dcsIT.class);
@@ -78,7 +78,7 @@ public class Device2dcsIT { // extends Camel/TestSupport
 
     private void testProtocolFile(String fileName) throws Exception, InterruptedException {
     	
-        context.addRoutes( new FileRoute(fileName) );
+        context.addRoutes( new SendFileRoute(fileName) );
     	
 //      currently 5 seconds seems to be the minimum, see notes in RouteBuilder
         Thread.sleep(20*1000); // change to NotifyBuilder !! to save time for many many test files ..
