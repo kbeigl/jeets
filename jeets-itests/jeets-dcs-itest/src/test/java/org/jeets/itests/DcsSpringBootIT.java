@@ -21,13 +21,20 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
+// run single IT: mvn verify -Dit.test=DcsSpringBootIT -Pitests
+
+/**
+ * Send single (jeets protobuffer) messages and assert each message, if needed.
+ * Camels ProducerTemplate is used to send messages instead of an external
+ * tracker.
+ */
 //@RunWith(SpringJUnit4ClassRunner.class)
 @RunWith(CamelSpringBootRunner.class)
 @SpringBootTest(classes = Main.class)
 @DirtiesContext(classMode=ClassMode.AFTER_CLASS)
 @MockEndpoints
 public class DcsSpringBootIT { 
-//	also see dcs DcsSpringBootTests
+//	compare dcs DcsSpringBootTests
 
 	@Autowired
     private ProducerTemplate client;
@@ -36,16 +43,15 @@ public class DcsSpringBootIT {
     
     @Test
     public void testJeetsMessages() throws Exception {
-    	
-        mockDcs.expectedMessageCount(sendJeetsMessages());
+    	int positionCount = sendJeetsMessages();
+        mockDcs.expectedMessageCount(positionCount);
         mockDcs.assertIsSatisfied();
 //      empty method as of now
         validateMessages(mockDcs.getExchanges());
-
-        mockDcs.reset();
+        mockDcs.reset(); // for next test
     }
     
-//  @Test
+    @Test
     public void testJeetsMessagesAgain() throws Exception {
         mockDcs.expectedMessageCount(sendJeetsMessages());
         mockDcs.assertIsSatisfied();

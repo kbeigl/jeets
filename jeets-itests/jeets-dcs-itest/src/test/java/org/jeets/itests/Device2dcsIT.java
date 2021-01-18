@@ -3,24 +3,26 @@ package org.jeets.itests;
 import java.io.File;
 
 import org.apache.camel.CamelContext;
-import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.properties.PropertiesComponent;
-import org.apache.camel.test.junit4.CamelTestSupport;
+import org.apache.camel.test.spring.CamelSpringBootRunner;
+import org.apache.camel.test.spring.MockEndpoints;
+import org.jeets.dcs.FileRoute;
+import org.jeets.dcs.Main;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 /*
  * These tests can be executed on various stages assembling a Tracking System
  * via JeeTS. Basically all tests are sending hex messages to the associated
  * protocol port where they can be processed.
  * <p>
- * Currently this integration test (IT) can be copied into other ITs without
- * changes. In the long run a separate test-jar might be created for maven
- * import.
- * <p>
- * developer note, i.e. road map: the dev2server ITests should have a common
+ * road map: the dev2dcs ITests should have a common
  * test-jar which can be compiled before ITests and shared amongst them (can be
  * achieved with Maven). This jar can even hold JUnit @Tests which can be
  * scanned. see
@@ -32,16 +34,35 @@ import org.slf4j.LoggerFactory;
  * OR: create IT with only Device as external process and go inside server
  * OR: create vm:// Endpoints for Device, Server and ITest
  */
-public class Device2dcsIT extends CamelTestSupport { // pure Camel, no Spring
+@RunWith(CamelSpringBootRunner.class)
+@SpringBootTest(classes = Main.class)
+@DirtiesContext(classMode=ClassMode.AFTER_CLASS)
+@MockEndpoints
+//@EnableAutoConfiguration	???
+public class Device2dcsIT { // extends Camel/TestSupport 
 
     private static final Logger LOG = LoggerFactory.getLogger(Device2dcsIT.class);
 
     private String sendFolder, sentFolder;
 
-//    @Test
+	@Autowired
+	private CamelContext context;
+
+    @Test
     public void testProtocolFiles() throws Exception {
+    	
+//        PropertiesComponent props = (PropertiesComponent) context.getPropertiesComponent();
+//        props.setLocation("classpath:folders.properties");
+//        sendFolder = context.resolvePropertyPlaceholders("{device.send.folder}");
+        
+    	sendFolder = "C:\\kris\\virtex\\github.jeets\\jeets-clients\\jeets-device\\send";
+        System.out.println("SENDFOLDER: " + sendFolder);
+        
+//      sync as parameters with device uri (external? -> via jeets.props)
+        sentFolder = sendFolder + "/.sending/.sent/";
+
 //      make sure to remove files from previous tests
-        Assert.assertTrue(deleteDirectory(sendFolder));
+//        Assert.assertTrue(deleteDirectory(sendFolder));
 
         String[] testfiles = new String[] { "teltonika.jdev" };
 //              , "ruptela.jdev", "ruptela-teltonika.jdev" };
@@ -56,9 +77,11 @@ public class Device2dcsIT extends CamelTestSupport { // pure Camel, no Spring
     }
 
     private void testProtocolFile(String fileName) throws Exception, InterruptedException {
-        context.addRoutes( new FileRouteBuilder(fileName) );
+    	
+        context.addRoutes( new FileRoute(fileName) );
+    	
 //      currently 5 seconds seems to be the minimum, see notes in RouteBuilder
-        Thread.sleep(60*1000); // change to NotifyBuilder !! to save time for many many test files ..
+        Thread.sleep(20*1000); // change to NotifyBuilder !! to save time for many many test files ..
 
 //      FIXME
 //      60 seconds works to wait for delivery problem
@@ -69,12 +92,9 @@ public class Device2dcsIT extends CamelTestSupport { // pure Camel, no Spring
         LOG.info("Check if " + fileName + " was processed ..");
         File target = new File(sentFolder + fileName);
 //      hack: wait until file exists
-        assertTrue(fileName + " was not sent!", target.exists());
-        assertTrue(fileName + " was not sent!", target.isFile());
+//        assertTrue(fileName + " was not sent!", target.exists());
+//        assertTrue(fileName + " was not sent!", target.isFile());
 
-//      consider logging to a single log for device and protocols
-//      logFileScanner (use timestamps to sync msg with ack ..)
-        
 //      actually we're waiting for the second Device route !
 //      how to sync NB with 'device done'?
 //      NotifyBuilder notify = new NotifyBuilder(context).whenDone(1).create();
@@ -92,58 +112,16 @@ public class Device2dcsIT extends CamelTestSupport { // pure Camel, no Spring
 //      use logging timestamps (time window) to verify in-out
     }
 
-    /**
-     * Create (pseudo dynamic) Camel Route to move the specified fileName to the
-     * device's send folder to be sent. Note that this builder is always using the
-     * file name as routeId. Using the same id again, will quietly stop and replace
-     * the earlier route. Therefore the developer should make sure that routes for
-     * different files should be created sequentially after the predecessor has
-     * actually moved its file.
-     * <p>
-     * A single dynamic route via .pollEnrich is an alternative: <br>
-     * stackoverflow.com/questions/36948005/how-do-dynamic-from-endpoints-and-exchanges-work-in-camel
-     */
-    private final class FileRouteBuilder extends RouteBuilder {
-        private final String fileName;
-
-        private FileRouteBuilder(String fileName) {
-            this.fileName = fileName;
-        }
-
-        @Override
-        public void configure() throws Exception {
-//          TODO modify files timestamps to 'now'
-//          with PropertyPlaceholder!
-            from("file://{{data.send.folder}}?noop=true&fileName=" + fileName)
-//          always reuse, i.e. override previous ID
-//          .routeId("send-file")
-//          don't use dynamic ID in production
-            .routeId(fileName)
-//          .log("sending file .. fileName ..")
-            .to("file://{{device.send.folder}}");
-//          TODO: poll target folder to trigger next file
-//          stackoverflow.com/questions/33542002/wait-for-all-files-to-be-consumed-before-triggering-next-route
-//          camel.apache.org/components/latest/file-component.html
-//          BATCH CONSUMER > EXCHANGE PROPERTIES
-//          CamelBatchSize, CamelBatchComplete
-//          from("file://" + sentFolder + "?noop=true&fileName=" + fileName)
-//          .log("sent folder ${body}"); camelFileName ..
-//          .to(done?) EP for NotifyBuilder!?
-
-//          TODO end/stop/remove Route after success to create new Routes .. !!
-        }
-    }
-
-    @Override
-    protected CamelContext createCamelContext() throws Exception {
-        CamelContext context = super.createCamelContext();
-//      PropertiesComponent props = context.getComponent("properties", PropertiesComponent.class); // Camel 2 
-        PropertiesComponent props = (PropertiesComponent) context.getPropertiesComponent();        // Camel 3  
-        props.setLocation("classpath:folders.properties");
-        sendFolder = context.resolvePropertyPlaceholders("{{device.send.folder}}");
-//      sync as parameters with device uri (external? -> via jeets.props)
-        sentFolder = sendFolder + "/.sending/.sent/";
-        return context;
-    }
+//    @Override
+//    protected CamelContext createCamelContext() throws Exception {
+//        CamelContext context = super.createCamelContext();
+////      PropertiesComponent props = context.getComponent("properties", PropertiesComponent.class); // Camel 2 
+//        PropertiesComponent props = (PropertiesComponent) context.getPropertiesComponent();        // Camel 3  
+//        props.setLocation("classpath:folders.properties");
+//        sendFolder = context.resolvePropertyPlaceholders("{{device.send.folder}}");
+////      sync as parameters with device uri (external? -> via jeets.props)
+//        sentFolder = sendFolder + "/.sending/.sent/";
+//        return context;
+//    }
 
 }

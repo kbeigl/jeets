@@ -73,6 +73,12 @@
 				<groupId>org.commonjava.maven.plugins</groupId>
 				<artifactId>directory-maven-plugin</artifactId>
 			</plugin>
+			<!-- ???
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+			</plugin>
+			 -->
 		</plugins>
 	</build>
 
@@ -89,30 +95,6 @@
 							<execution>
 								<id>start-device</id>
 							</execution>
-
-							<!-- Tracker is initially launched for the initial test with jeets 
-								protobuffers and will be removed ...
-							<execution>
-								<id>start-tracker</id>
-								<phase>pre-integration-test</phase>
-								<goals>
-									<goal>start</goal>
-								</goals>
-								<configuration>
-									<name>jeets-tracker</name>
-									<workingDir>${jeets.repo.directory}/jeets-clients/jeets-tracker/</workingDir>
-									<waitForInterrupt>false</waitForInterrupt>
-									<waitAfterLaunch>10</waitAfterLaunch>
-									<processLogFile>${project.build.directory}\${project.name}\${tracker-project-latest}.log</processLogFile>
-									<arguments>
-										<argument>java</argument>
-										<argument>-jar</argument>
-										<argument>${jeets.repo.directory}/jeets-clients/jeets-tracker/target/${tracker-jar-with-dependencies}</argument>
-										<argument>-props</argument>
-									</arguments>
-								</configuration>
-							</execution>
-							 -->
 						</executions>
 					</plugin>
 				</plugins>
