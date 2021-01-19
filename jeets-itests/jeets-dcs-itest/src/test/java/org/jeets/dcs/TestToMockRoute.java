@@ -13,9 +13,9 @@ import org.traccar.model.Position;
  * the messages can be counted and inspected.
  */
 @Component
-public class TestRouteToMock extends RouteBuilder {
+public class TestToMockRoute extends RouteBuilder {
 	
-    private static final Logger LOG = LoggerFactory.getLogger(TestRouteToMock.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TestToMockRoute.class);
 
 	@Override
     public void configure() throws Exception {

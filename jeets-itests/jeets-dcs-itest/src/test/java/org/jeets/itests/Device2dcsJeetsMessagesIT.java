@@ -33,8 +33,10 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 @SpringBootTest(classes = Main.class)
 @DirtiesContext(classMode=ClassMode.AFTER_CLASS)
 @MockEndpoints
-public class DcsSpringBootIT { 
-//	compare dcs DcsSpringBootTests
+public class Device2dcsJeetsMessagesIT {
+	// compare dcs DcsSpringBootTests
+	// replaces tracker project
+	// to be moved to Device.send(protobuffer)
 
 	@Autowired
     private ProducerTemplate client;
