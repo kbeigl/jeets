@@ -37,9 +37,11 @@ import io.netty.buffer.ByteBufUtil;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Main.class)
 @DirtiesContext(classMode=ClassMode.AFTER_CLASS)
-public class DcsSingleMessagesTest {
+public class DcsMessagesTest {
     
-    private static final Logger LOG = LoggerFactory.getLogger(DcsSingleMessagesTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DcsMessagesTest.class);
+//	TODO test on default.original.xml for all protocols and ports
+//  create exclusive Traccar Server Tests <> Jeets and Netty Decoder Tests
 
     @Autowired
     private ProducerTemplate client;

@@ -7,12 +7,14 @@ import org.apache.camel.support.SimpleRegistry;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.jeets.protocol.JeetsProtocol;
 
-public class DcsJeetsProtocolTest extends CamelTestSupport {
+public class DcsJeetsProtocolTest extends CamelTestSupport { // no spring
 
 //	TODO check dcs.properties before deleting this class
 	
 //    @Test
-    public void testDcsRoute() throws Exception {}
+    public void testDcsRoute() throws Exception {
+    	/* see git history to recreate test with processor */
+    }
 
     @Override
     protected Registry createCamelRegistry() throws Exception {
