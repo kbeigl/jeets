@@ -38,6 +38,12 @@ public class Device2dcsJeetsMessagesIT {
 	// replaces tracker project
 	// to be moved to Device.send(protobuffer)
 
+//	test gps103 message
+//  int port = 5001;            //  traccar default gps103.port
+//  String messageString =      //  valid gps103 sample
+//          "imei:359587010124999,help me,1710021201,," +
+//          "F,120100.000,A,4900.0000,N,1200.0000,E,0.00,;";  
+
 	@Autowired
     private ProducerTemplate client;
     @EndpointInject(uri = "mock:result")
@@ -70,6 +76,7 @@ public class Device2dcsJeetsMessagesIT {
         
 //      msg#1 - 1 Position
     	int positionCount = 1;
+//    	use any of the prepared Samples here
         Jeets.Device.Builder protoDeviceBuilder = Samples.createDeviceWithPositionWithOneEvent();
 //      System.out.println("sending " + protoMessage);
         Jeets.Acknowledge ack = sendProtoDevice(port, protoDeviceBuilder);

@@ -32,8 +32,8 @@
 	<name>--- Client Tracker Components           ---</name>
 
 	<modules>
-		<!-- tracker to be replaced by device -->
-		<module>jeets-tracker</module>
+		<!-- tracker to be replaced by device
+		<module>jeets-tracker</module> -->
 		<!-- device is successor of tracker -->
 		<module>jeets-device</module>
 		<module>jeets-player</module>

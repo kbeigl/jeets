@@ -63,7 +63,8 @@ public class Device2dcsProtocolsIT { // extends Camel/TestSupport
 //      start from scratch (include in mvn clean <device project> ?
         Assert.assertTrue(TestSupport.deleteDirectory(deviceSentFolder));
 
-		String[] testfiles = new String[] { "teltonika.jdev", "ruptela.jdev", "ruptela-teltonika.jdev" };
+		String[] testfiles = new String[] 
+				{ "teltonika.jdev", "ruptela.jdev", "ruptela-teltonika.jdev" };
 //		TODO: wireless-login.jdev, wireless-ruptela.jdev ... one file with all?
         for (int i = 0; i < testfiles.length; i++) {
             testProtocolFile(testfiles[i]);
@@ -77,12 +78,15 @@ public class Device2dcsProtocolsIT { // extends Camel/TestSupport
 
     @SuppressWarnings("unused")
 	private void testProtocolFile(String fileName) throws Exception, InterruptedException {
+        LOG.info("sending " + fileName + " to DCS ...");
+
+//      parameter 2 (msgs) works for current test files, improve, generalize ..
 		NotifyBuilder notify = new NotifyBuilder(context).whenDone(2).create();
 //    	see TODO in SendFileRoute
         context.addRoutes( new SendFileRoute(fileName, dataSendFolder, deviceSendFolder) );
 //    	implicit generalization! fine tune for different file length ..
         Assert.assertTrue(notify.matches(20, TimeUnit.SECONDS));
-//      wait a little until file is moved from .sending to .sent
+//      wait a bit until file is moved from .sending to .sent
         Thread.sleep(2*1000);
         context.removeRoute(fileName);
 
@@ -90,6 +94,7 @@ public class Device2dcsProtocolsIT { // extends Camel/TestSupport
 //      hack: wait until file exists
         Assert.assertTrue(fileName + " was not sent!", target.exists());
         Assert.assertTrue(fileName + " was not sent!", target.isFile());
+        LOG.info(fileName + " was tested!");
 
 //      scan log files - for all tests:
 //      try logging client and server to one log file > parse and assert in IT !!

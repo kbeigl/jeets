@@ -2,12 +2,10 @@ package org.jeets.tracker;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
-import org.jeets.protobuf.Jeets;
 import org.jeets.protobuf.Jeets.Position.Builder;
 import org.jeets.protocol.util.Samples;
 
@@ -27,10 +25,8 @@ public class Main {
 
     private static String uniqueId = "pb.device";
     private static String host = "127.0.0.1";  // "localhost" default
-    private static int port = 5001;            //  traccar default gps103.port
-    private static String messageString =      //  valid gps103 sample
-            "imei:359587010124999,help me,1710021201,," +
-            "F,120100.000,A,4900.0000,N,1200.0000,E,0.00,;";  
+    private static int port;
+    private static String messageString;
     private static int sendInMillis = 10000;
     
     public static void main(String[] args) {
@@ -93,7 +89,7 @@ public class Main {
     }
 
     private static void sendSampleMessages(Tracker tracker) {
-        List<Builder> posBuilderList = createSampleTrack();
+        List<Builder> posBuilderList = Samples.createSampleTrack();
         System.out.println("created list with " + posBuilderList.size() + " positions.");
         for (int pos = 0; pos < posBuilderList.size(); pos++) {
             Builder posBuilder = posBuilderList.get(pos);
@@ -152,51 +148,6 @@ public class Main {
                 + "\n                   send sample Protobuffer Messages"
                 + "\n host port       - send sample Protobuffer Messages" 
                 + "\n host port \"messageString\" - send any String message (for testing)" ;
-    }
-
-    private static List<Builder> createSampleTrack() {
-//      actual trace with real fixtimes
-//      "2017-05-20 15:49:01";49.03097993;12.10312854;407
-//      "2017-05-20 15:52:57";49.02847401;12.10734587;370
-//      "2017-05-20 15:54:57";49.02865676;12.11003339;383
-//      "2017-05-20 15:56:58";49.03296471;12.11323104;381
-//      "2017-05-20 15:58:58";49.03363147;12.12226451;392
-//      "2017-05-20 16:02:55";49.03797380;12.13681046;388
-        List<Jeets.Position.Builder> positions = new ArrayList<>();
-
-        Jeets.Position.Builder positionBuilder = Jeets.Position.newBuilder();
-        positionBuilder.setValid(true)
-        .setLatitude(49.03097993d).setLongitude(12.10312854d).setAltitude(407d);
-        positions.add(positionBuilder);
-
-        positionBuilder = Jeets.Position.newBuilder();
-        positionBuilder.setValid(true)
-        .setLatitude(49.02847401d).setLongitude(12.10734587d).setAltitude(370d);
-        Jeets.Event.Builder eventBuilder = Samples.createAlarmEventProto();
-        positionBuilder.addEvent(eventBuilder);
-        positions.add(positionBuilder);
-
-        positionBuilder = Jeets.Position.newBuilder();
-        positionBuilder.setValid(true)
-        .setLatitude(49.02865676d).setLongitude(12.11003339d).setAltitude(383d);
-        positions.add(positionBuilder);
-
-        positionBuilder = Jeets.Position.newBuilder();
-        positionBuilder.setValid(true)
-        .setLatitude(49.03296471d).setLongitude(12.11323104d).setAltitude(381d);
-        positions.add(positionBuilder);
-
-        positionBuilder = Jeets.Position.newBuilder();
-        positionBuilder.setValid(true)
-        .setLatitude(49.03363147d).setLongitude(12.12226451d).setAltitude(392d);
-        positions.add(positionBuilder);
-
-        positionBuilder = Jeets.Position.newBuilder();
-        positionBuilder.setValid(true)
-        .setLatitude(49.03797380d).setLongitude(12.13681046d).setAltitude(388d);
-        positions.add(positionBuilder);
-
-        return positions;
     }
 
     public static int getSendInMillis() {

@@ -174,7 +174,7 @@ public class Samples {
         positionBuilder = Jeets.Position.newBuilder();
         positionBuilder.setValid(true)
         .setLatitude(49.02847401d).setLongitude(12.10734587d).setAltitude(370d);
-        Jeets.Event.Builder eventBuilder = Samples.createAlarmEventProto();
+        Jeets.Event.Builder eventBuilder = createAlarmEventProto();
         positionBuilder.addEvent(eventBuilder);
         positions.add(positionBuilder);
 
@@ -200,5 +200,4 @@ public class Samples {
 
         return positions;
     }
-
 }
