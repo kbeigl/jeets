@@ -33,11 +33,12 @@
 
 	<modules>
 		<!-- tracker to be replaced by device
-		<module>jeets-tracker</module> -->
+		<module>jeets-tracker</module> 
+		<module>my-jeets-client</module>
+		-->
 		<!-- device is successor of tracker -->
 		<module>jeets-device</module>
 		<module>jeets-player</module>
-		<module>my-jeets-client</module>
 	</modules>
 
 </project>
