@@ -7,7 +7,7 @@
 
 * updated Device Communication Servers for all Traccar Protocols! +
 ** `jeets-protocols-traccar 4.11` 
-** added Map to distinguish UDP vs TCP protocol transport
+*** added Map to distinguish UDP from TCP protocol transport
 ** `jeets-dcs-manager 1.3.1` 
 
  * Repository development and build with *Java-11*-OpenJDK-11.0.8-1 under Windows 10 :
@@ -39,6 +39,9 @@ which will be curated as we move on.
 * removed projects that will be replaced by the `jeets-device` project
 ** `jeets-tracker` - plain java tracker
 ** `my-jeets-client` - client artifact to create a client with a built in tracker
+
+* Introduced Google Code Format/ter (in some projects)
+
 
 
 === 2020 Aug - v1.3
