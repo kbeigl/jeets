@@ -92,7 +92,7 @@ public class Device2dcsProtocolsIT { // extends Camel/TestSupport
     // hack: wait until file exists
     Assert.assertTrue(fileName + " was not sent!", target.exists());
     Assert.assertTrue(fileName + " was not sent!", target.isFile());
-    LOG.info(fileName + " was tested!");
+    LOG.info(fileName + " was sent!");
 
     // scan log files - for all tests:
     // try logging client and server to one log file > parse and assert in IT !!

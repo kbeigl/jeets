@@ -35,12 +35,13 @@
 	<url>jeets.org/</url>
 
 	<properties>
-		<camel.version>3.3.0</camel.version>
-	    <spring-boot-version>2.2.7.RELEASE</spring-boot-version>
+		<!-- 3.7.1 LTS, latest Jan, 2021 (removed 3.3.0) -->
+		<camel.version>3.7.1</camel.version>
+		<!-- 2.4.2 JANUARY 14, 2021 (removed 2.2.7.RELEASE) -->
+	    <spring-boot-version>2.4.2</spring-boot-version>
 		<!-- 'link to' camel-spring-boot-starter version !!
 			 or how to use camel-ized plugin ? target: mvn spring-boot:run 
 			 required for repackaging phase to -exec.jar -->
-		<!-- align with JEE (i.e WildFly branch) -->
 
         <!-- matches traccar 4.2
         <postgresql.version> managed by spring boot bom, but version explicitly 
@@ -102,10 +103,9 @@
         <data-send-folder>${jeets.repo.directory}/jeets-data/device.send</data-send-folder>
 
 		<!-- maven settings -->
-		<!-- <jdk.version>1.8</jdk.version> -->
-		<!-- <java.version>1.8</java.version> -->
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.9</maven.compiler.source>
+		<maven.compiler.target>1.9</maven.compiler.target>
+		<maven.compiler.release>9</maven.compiler.release>
 
         <!-- maven plugins -->
         <maven-compiler-plugin-version>3.8.0</maven-compiler-plugin-version>
@@ -227,6 +227,15 @@
 	            <skip.integration.tests>false</skip.integration.tests>
 	        </properties>
 	    </profile>
+	    <!-- TODO: keep repo in java 8 and automatically kick in java 9 on higher versions
+		<profile>
+			<id>java-9</id>
+			<activation>
+				<jdk>9</jdk>
+			</activation>
+			.. add Java 9 specific configuration
+		</profile>
+		 -->
 	</profiles>
 
 	<build>
@@ -257,12 +266,11 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>${maven-compiler-plugin-version}</version>
 	                <configuration>
+	                    <!-- 
 	                    <source>${maven.compiler.source}</source>
 	                    <target>${maven.compiler.target}</target>
-	                    <!-- docs.oracle.com/javase/6/docs/technotes/tools/solaris/javac.html#nonstandard -->
-	                    <!-- <compilerArgument>-Xlint:unchecked</compilerArgument>
-						<maxmem>512M</maxmem>
-						<showDeprecation>true</showDeprecation> -->
+	                     -->
+	                    <release>${maven.compiler.release}</release>
 	                </configuration>
 				</plugin>
 				<plugin>

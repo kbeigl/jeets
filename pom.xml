@@ -48,7 +48,6 @@
 
 <!-- alternative to spring boot bom with additional plugin versioning
 	causing problems. Fall back to bom ..
-	use spring initializr to generate project with this parent
  	<parent>
 	    <groupId>org.springframework.boot</groupId>
 	    <artifactId>spring-boot-starter-parent</artifactId>
