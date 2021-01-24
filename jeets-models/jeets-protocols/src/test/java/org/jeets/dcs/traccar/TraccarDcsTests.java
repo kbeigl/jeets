@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.traccar.BaseProtocol;
+import org.traccar.TrackerServer;
 import org.traccar.model.Position;
 import org.traccar.protocol.TeltonikaProtocol;
 
@@ -25,34 +26,40 @@ public class TraccarDcsTests extends CamelTestSupport {
      * Example of how to setup a single BaseProtocol server
      */
     @Test
-    public void testTeltonikaServer() throws Exception {
-        String protocol = "teltonika";
+    public void testTeltonikaTcpServer() throws Exception {
 
         Class<? extends BaseProtocol> protocolClass = TeltonikaProtocol.class;
-        ServerInitializerFactory teltonikaPipeline = 
-                TraccarSetup.createServerInitializerFactory(protocolClass);
+        String protocolName = "teltonika";
+    	BaseProtocol protocolInstance = TraccarSetup.instantiateProtocol(protocolClass);
 
-//      SpringBoot: @Bean(name = "teltonika")
-        context.getRegistry().bind(protocol, teltonikaPipeline);
-        
-        int port = TraccarSetup.getConfiguredProtocolPort(protocol);
-//      catch port = 0 ?
-//      int port = getPort(protocol + ".port");
-        LOG.info(protocol + " port: " + port);
-        
-        String uri = "netty:tcp://" + host + ":" + port + 
-                "?serverInitializerFactory=#" + protocol + "&sync=" + camelNettySync;
-        context.addRoutes(new TraccarRoute(uri, protocol));
-        
+		for (TrackerServer server : protocolInstance.getServerList()) {
+			if (!server.isDatagram()) {
+				String transport = "tcp";
+                String protocolSpec = protocolName + "-" + transport; // append transport
+				ServerInitializerFactory factory = server.getServerInitializerFactory();
+
+//              SpringBoot: @Bean(name = "teltonika")
+                context.getRegistry().bind(protocolSpec, factory);
+                
+                int port = TraccarSetup.getProtocolPort(protocolName);
+//              catch port = 0 ?
+//              int port = getPort(protocol + ".port");
+                LOG.info(protocolName + " port: " + port);
+                
+                String uri = "netty:tcp://" + host + ":" + port + 
+                        "?serverInitializerFactory=#" + protocolSpec + "&sync=false";
+                context.addRoutes(new TraccarRoute(uri, protocolSpec));
+			}
+    	}
 //      now start the actual test
-        testingTeltonikaServer();
+        testTeltonikaMessages();
     }
 
 //  redundant to dcs > DcsSpringBootTests => prototype!
-    public void testingTeltonikaServer() throws Exception {
+    public void testTeltonikaMessages() throws Exception {
         String protocol = "teltonika";
 //      int port = getPort(protocol + ".port");
-        int port = TraccarSetup.getConfiguredProtocolPort(protocol);
+        int port = TraccarSetup.getProtocolPort(protocol);
 //      catch port = 0 ?
 
 //      TODO: use teltonika.jdev test file for message content

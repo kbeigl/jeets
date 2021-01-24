@@ -39,7 +39,7 @@
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-protocols</artifactId>
-			<version>1.3</version>
+			<version>1.3.1</version>
 		</dependency>
 		<!-- above already should include below? doesn't work without? -->
 		<dependency>
@@ -60,11 +60,9 @@
 			<version>${spring-boot-version}</version>
 			<scope>test</scope>
 		</dependency>
-		
-		<!-- only for ParseTraccarPropsTest ? remove ? -->
 		<dependency>
 			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-test-spring</artifactId>
+			<artifactId>camel-test-spring-junit5</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

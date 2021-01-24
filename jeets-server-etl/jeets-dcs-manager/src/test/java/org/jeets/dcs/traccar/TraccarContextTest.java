@@ -1,7 +1,9 @@
 package org.jeets.dcs.traccar;
 
-import org.apache.camel.test.junit4.CamelTestSupport;
-import org.junit.Test;
+import org.apache.camel.test.junit5.CamelTestSupport;
+// import org.apache.camel.test.junit4.CamelTestSupport;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.traccar.Context;
 
 public class TraccarContextTest extends CamelTestSupport {
@@ -19,17 +21,17 @@ public class TraccarContextTest extends CamelTestSupport {
     Context.init(
         "C:/kris/virtex/github.jeets/jeets-models/jeets-protocols-traccar/setup/traccar.xml");
 
-    assertNotNull("Config was not loaded", Context.getConfig());
+    Assertions.assertNotNull(Context.getConfig(), "Config was not loaded");
     // validate if default values are overridden
     // check if ports are available and other required props
 
-    assertNotNull("DeviceManager was not loaded", Context.getDeviceManager());
-    assertNotNull("IdentityManager was not loaded", Context.getIdentityManager());
+    Assertions.assertNotNull(Context.getDeviceManager(), "DeviceManager was not loaded");
+    Assertions.assertNotNull(Context.getIdentityManager(), "IdentityManager was not loaded");
 
-    assertNotNull("MediaManager was not loaded", Context.getMediaManager());
+    Assertions.assertNotNull(Context.getMediaManager(), "MediaManager was not loaded");
     System.out.println("media.path: " + Context.getConfig().getString("media.path"));
 
-    assertNotNull("ConnectionManager was not loaded", Context.getConnectionManager());
+    Assertions.assertNotNull(Context.getConnectionManager(), "ConnectionManager was not loaded");
     // ServerManager should NOT be started (in addition to camel-netty)
     // assertNull("ServerManager should NOT be loaded", Context.getServerManager());
   }

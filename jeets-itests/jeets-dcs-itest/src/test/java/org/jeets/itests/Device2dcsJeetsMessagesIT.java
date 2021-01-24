@@ -6,29 +6,30 @@ import org.apache.camel.EndpointInject;
 import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.camel.test.spring.CamelSpringBootRunner;
-import org.apache.camel.test.spring.MockEndpoints;
+import org.apache.camel.test.spring.junit5.CamelSpringBootTest;
+import org.apache.camel.test.spring.junit5.MockEndpoints;
 import org.jeets.dcs.Main;
 import org.jeets.protobuf.Jeets; // Acknowledge, Device, Position
 import org.jeets.protocol.util.Samples;
 import org.jeets.traccar.TraccarSetup;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.context.ContextConfiguration;
 
-// run single IT: mvn verify -Dit.test=DcsSpringBootIT -Pitests
+// run single IT: mvn verify -Dit.test=Device2dcsJeetsMessagesIT -Pitests
 
 /**
  * Send single (jeets protobuffer) messages and assert each message, if needed. Camels
  * ProducerTemplate is used to send messages instead of an external tracker.
  */
-// @RunWith(SpringJUnit4ClassRunner.class)
-@RunWith(CamelSpringBootRunner.class)
-@SpringBootTest(classes = Main.class)
+// @SpringBootTest(classes = Main.class)
+@CamelSpringBootTest
+// @SpringBootApplication
+@ContextConfiguration(classes = Main.class)
+// @EnableAutoConfiguration
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 @MockEndpoints
 public class Device2dcsJeetsMessagesIT {
@@ -57,7 +58,7 @@ public class Device2dcsJeetsMessagesIT {
     mockDcs.reset(); // for next test
   }
 
-  @Test
+  //  @Test
   public void testJeetsMessagesAgain() throws Exception {
     mockDcs.expectedMessageCount(sendJeetsMessages());
     mockDcs.assertIsSatisfied();
@@ -78,7 +79,7 @@ public class Device2dcsJeetsMessagesIT {
     Jeets.Acknowledge ack = sendProtoDevice(port, protoDeviceBuilder);
     // System.out.println("received " + ack);
     // Assert.assertEquals(ack.getDeviceid(), protoDevice);
-    Assert.assertEquals(ack.getDeviceid(), 123);
+    Assertions.assertEquals(ack.getDeviceid(), 123);
 
     List<Jeets.Position.Builder> posBuilderList = Samples.createSampleTrack();
     System.out.println("created list with " + posBuilderList.size() + " positions.");

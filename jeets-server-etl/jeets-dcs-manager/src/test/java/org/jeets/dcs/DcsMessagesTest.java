@@ -20,8 +20,6 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.traccar.model.Position;
 
-// run from command line: mvn -Dit.test=DcsSingleMessages verify -Pitests
-
 /**
  * Bootstrap the entire container to start complete DCS component, send messages, receive responses
  * and evaluate server input.
