@@ -15,9 +15,9 @@ import org.jeets.traccar.TraccarSetup;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
-import org.springframework.test.context.ContextConfiguration;
 
 // run single IT: mvn verify -Dit.test=Device2dcsJeetsMessagesIT -Pitests
 
@@ -25,11 +25,8 @@ import org.springframework.test.context.ContextConfiguration;
  * Send single (jeets protobuffer) messages and assert each message, if needed. Camels
  * ProducerTemplate is used to send messages instead of an external tracker.
  */
-// @SpringBootTest(classes = Main.class)
 @CamelSpringBootTest
-// @SpringBootApplication
-@ContextConfiguration(classes = Main.class)
-// @EnableAutoConfiguration
+@SpringBootTest(classes = Main.class)
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 @MockEndpoints
 public class Device2dcsJeetsMessagesIT {
@@ -42,6 +39,8 @@ public class Device2dcsJeetsMessagesIT {
   //  String messageString =      //  valid gps103 sample
   //          "imei:359587010124999,help me,1710021201,," +
   //          "F,120100.000,A,4900.0000,N,1200.0000,E,0.00,;";
+
+  // TODO: validateMessages and add more Assertions
 
   @Autowired private ProducerTemplate client;
 
