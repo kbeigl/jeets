@@ -12,22 +12,26 @@ import org.slf4j.LoggerFactory;
 @Converter
 public final class DeviceProtoToEntityTransformer {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DeviceProtoToEntityTransformer.class);
+  private static final Logger LOG = LoggerFactory.getLogger(DeviceProtoToEntityTransformer.class);
 
-    private DeviceProtoToEntityTransformer() {}
+  private DeviceProtoToEntityTransformer() {}
 
-    @Converter
-    public static Device toDevice(Jeets.Device deviceProto, Exchange exchange) throws Exception {
-        LOG.info("Transformer receives device proto: {} at {}", 
-                deviceProto.getUniqueid(), new Date().getTime());
+  @Converter
+  public static Device toDevice(Jeets.Device deviceProto, Exchange exchange) throws Exception {
+    LOG.info(
+        "Transformer receives device proto: {} at {}",
+        deviceProto.getUniqueid(),
+        new Date().getTime());
 
-        Device deviceEntity = Transformer.protoToEntityDevice(deviceProto);
-        LOG.info("Transformer returns device entity {} with {} positions at {}", 
-                deviceEntity.getUniqueid(), deviceEntity.getPositions().size(), new Date().getTime());
+    Device deviceEntity = Transformer.protoToEntityDevice(deviceProto);
+    LOG.info(
+        "Transformer returns device entity {} with {} positions at {}",
+        deviceEntity.getUniqueid(),
+        deviceEntity.getPositions().size(),
+        new Date().getTime());
 
-        return deviceEntity;
-//      a single line would do without logging!
-//      return Transformer.protoToEntityDevice(deviceProto);
-    }
-
+    return deviceEntity;
+    //      a single line would do without logging!
+    //      return Transformer.protoToEntityDevice(deviceProto);
+  }
 }

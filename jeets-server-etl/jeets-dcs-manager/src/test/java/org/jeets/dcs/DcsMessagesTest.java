@@ -29,7 +29,6 @@ import org.traccar.model.Position;
  * <p>Currently the Tracker additionally sends six jeets protobuffers without explicit testing. This
  * occurs asynchronously and should not effect the tests.
  */
-
 @CamelSpringBootTest
 @SpringBootTest(classes = Main.class)
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
@@ -66,7 +65,8 @@ public class DcsMessagesTest {
     // lat: 49,03091    lon: 12,10283 ...
     // jeetsRoute - DCS jeets output: position (   time: Fri Jul 24 11:53:38 CEST 2020
     // lat: 49.03091228 lon: 12.10282818 )
-    Assertions.assertEquals(position.getAttributes().get("org.jeets.dcs.device.uniqueid"), "395389");
+    Assertions.assertEquals(
+        position.getAttributes().get("org.jeets.dcs.device.uniqueid"), "395389");
     Assertions.assertEquals(position.getString("org.jeets.dcs.device.uniqueid"), "395389");
     Assertions.assertEquals(position.getInteger("org.jeets.dcs.device.port"), port);
     Assertions.assertEquals(position.getProtocol(), protocol);

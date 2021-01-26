@@ -1,124 +1,138 @@
 package org.jeets.model.traccar.jpa;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.*;
 
-import java.util.Date;
-
 @Entity
-@Table(name="tc_events")
+@Table(name = "tc_events")
 public class Event implements Serializable {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    // TODO: create GeofenceManager/Test with positionid and geofenceid 
-	// with entity relations (see device) .. Georouter (introduced before Geofences)
-    
-	@Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="tc_events_id_gen")
-    @SequenceGenerator(name="tc_events_id_gen", sequenceName="tc_events_id_seq", allocationSize=1)
-    @Column(name = "id", unique = true, nullable = false)
-	private Integer id;
-	private String type;
-	private Date servertime;
-	private Geofence geofence;
-	private String attributes;
-	private Integer maintenanceid;
+  // TODO: create GeofenceManager/Test with positionid and geofenceid
+  // with entity relations (see device) .. Georouter (introduced before Geofences)
 
-	public Event() {
-	}
+  @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tc_events_id_gen")
+  @SequenceGenerator(
+      name = "tc_events_id_gen",
+      sequenceName = "tc_events_id_seq",
+      allocationSize = 1)
+  @Column(name = "id", unique = true, nullable = false)
+  private Integer id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="deviceid")
-	private Device device;
+  private String type;
+  private Date servertime;
+  private Geofence geofence;
+  private String attributes;
+  private Integer maintenanceid;
 
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="positionid")
-	private Position position;
+  public Event() {}
 
-	public Integer getId() {
-		return this.id;
-	}
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "deviceid")
+  private Device device;
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "positionid")
+  private Position position;
 
-	public Device getDevice() {
-		return this.device;
-	}
+  public Integer getId() {
+    return this.id;
+  }
 
-	public void setDevice(Device device) {
-		this.device = device;
-	}
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    public Position getPosition() {
-        return this.position;
-    }
+  public Device getDevice() {
+    return this.device;
+  }
 
-    public void setPosition(Position position) {
-        this.position = position;
-    }
+  public void setDevice(Device device) {
+    this.device = device;
+  }
 
-	/* former relation with field
-	 * @Column(name = "positionid") 
-	 * public Integer getPositionid() { return this.positionid; }
-	 * public void setPositionid(Integer positionid) { this.positionid = positionid; }
-	 */
-    
-    @Column(name = "geofenceid")
-	public Geofence getGeofence() {
-		return this.geofence;
-	}
+  public Position getPosition() {
+    return this.position;
+  }
 
-    public void setGeofence(Geofence geofence) {
-        this.geofence = geofence;
-    }
+  public void setPosition(Position position) {
+    this.position = position;
+  }
 
-	/* @Column(name = "geofenceid") 
-	 * public Integer getGeofenceid() { return this.geofenceid; }
-	 * public void setGeofenceid(Integer geofenceid) { this.geofenceid = geofenceid; }
-	 */
+  /* former relation with field
+   * @Column(name = "positionid")
+   * public Integer getPositionid() { return this.positionid; }
+   * public void setPositionid(Integer positionid) { this.positionid = positionid; }
+   */
 
-    @Column(name = "type", nullable = false, length = 128)
-	public String getType() {
-		return this.type;
-	}
+  @Column(name = "geofenceid")
+  public Geofence getGeofence() {
+    return this.geofence;
+  }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+  public void setGeofence(Geofence geofence) {
+    this.geofence = geofence;
+  }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "servertime", nullable = false, length = 29)
-	public Date getServertime() {
-		return this.servertime;
-	}
+  /* @Column(name = "geofenceid")
+   * public Integer getGeofenceid() { return this.geofenceid; }
+   * public void setGeofenceid(Integer geofenceid) { this.geofenceid = geofenceid; }
+   */
 
-	public void setServertime(Date servertime) {
-		this.servertime = servertime;
-	}
+  @Column(name = "type", nullable = false, length = 128)
+  public String getType() {
+    return this.type;
+  }
 
-    @Column(name = "attributes", length = 4000)
-	public String getAttributes() {
-		return this.attributes;
-	}
+  public void setType(String type) {
+    this.type = type;
+  }
 
-	public void setAttributes(String attributes) {
-		this.attributes = attributes;
-	}
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column(name = "servertime", nullable = false, length = 29)
+  public Date getServertime() {
+    return this.servertime;
+  }
 
-	public Integer getMaintenanceid() {
-		return this.maintenanceid;
-	}
+  public void setServertime(Date servertime) {
+    this.servertime = servertime;
+  }
 
-	public void setMaintenanceid(Integer maintenanceid) {
-		this.maintenanceid = maintenanceid;
-	}
+  @Column(name = "attributes", length = 4000)
+  public String getAttributes() {
+    return this.attributes;
+  }
 
-	@Override
-	public String toString() {
-		return "Event [id=" + id + ", type=" + type + ", servertime=" + servertime + ", position=" + position
-				+ ", geofence=" + geofence + ", device=" + device.getName() + "(" + device.getUniqueid() + ")]";
-	}
+  public void setAttributes(String attributes) {
+    this.attributes = attributes;
+  }
 
+  public Integer getMaintenanceid() {
+    return this.maintenanceid;
+  }
+
+  public void setMaintenanceid(Integer maintenanceid) {
+    this.maintenanceid = maintenanceid;
+  }
+
+  @Override
+  public String toString() {
+    return "Event [id="
+        + id
+        + ", type="
+        + type
+        + ", servertime="
+        + servertime
+        + ", position="
+        + position
+        + ", geofence="
+        + geofence
+        + ", device="
+        + device.getName()
+        + "("
+        + device.getUniqueid()
+        + ")]";
+  }
 }
