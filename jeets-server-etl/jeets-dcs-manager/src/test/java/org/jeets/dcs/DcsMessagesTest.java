@@ -3,21 +3,20 @@ package org.jeets.dcs;
 import io.netty.buffer.ByteBufUtil;
 import org.apache.camel.ConsumerTemplate;
 import org.apache.camel.ProducerTemplate;
+import org.apache.camel.test.spring.junit5.CamelSpringBootTest;
 import org.jeets.protobuf.Jeets;
 import org.jeets.protobuf.Jeets.Acknowledge;
 import org.jeets.protobuf.Jeets.Device.Builder;
 import org.jeets.protocol.util.Samples;
 import org.jeets.traccar.TraccarSetup;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.traccar.model.Position;
 
 /**
@@ -30,7 +29,8 @@ import org.traccar.model.Position;
  * <p>Currently the Tracker additionally sends six jeets protobuffers without explicit testing. This
  * occurs asynchronously and should not effect the tests.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+
+@CamelSpringBootTest
 @SpringBootTest(classes = Main.class)
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class DcsMessagesTest {
@@ -58,7 +58,7 @@ public class DcsMessagesTest {
     LOG.info("sending " + protoMessage);
     Jeets.Acknowledge ack = sendProtoMessage(port, protoMessage);
     LOG.info("received " + ack); // add duration !
-    Assert.assertEquals(ack.getDeviceid(), 123);
+    Assertions.assertEquals(123, ack.getDeviceid());
 
     Position position = server.receiveBody(dcsConsumer, Position.class);
     // Note: different outputs for traccar and jeetsRoute: time, lat-lon precision!?
@@ -66,10 +66,10 @@ public class DcsMessagesTest {
     // lat: 49,03091    lon: 12,10283 ...
     // jeetsRoute - DCS jeets output: position (   time: Fri Jul 24 11:53:38 CEST 2020
     // lat: 49.03091228 lon: 12.10282818 )
-    Assert.assertEquals("395389", position.getAttributes().get("org.jeets.dcs.device.uniqueid"));
-    Assert.assertEquals("395389", position.getString("org.jeets.dcs.device.uniqueid"));
-    Assert.assertEquals(port, position.getInteger("org.jeets.dcs.device.port"));
-    Assert.assertEquals(protocol, position.getProtocol());
+    Assertions.assertEquals(position.getAttributes().get("org.jeets.dcs.device.uniqueid"), "395389");
+    Assertions.assertEquals(position.getString("org.jeets.dcs.device.uniqueid"), "395389");
+    Assertions.assertEquals(position.getInteger("org.jeets.dcs.device.port"), port);
+    Assertions.assertEquals(position.getProtocol(), protocol);
   }
 
   private Jeets.Acknowledge sendProtoMessage(int port, Builder protoMessage) {
@@ -89,32 +89,32 @@ public class DcsMessagesTest {
     // TODO: use teltonika.jdev test file for message content
     String hexMessage = "000f333536333037303432343431303133";
     String hexResponse = sendHexMessage(port, hexMessage);
-    Assert.assertEquals("01", hexResponse);
+    Assertions.assertEquals(hexResponse, "01");
     //      no server output!
 
     hexMessage =
         "000000000000003608010000016b40d8ea30010000000000000000000000000000000105021503010101425e0f01f10000601a014e0000000000000000010000c7cf";
     hexResponse = sendHexMessage(port, hexMessage);
     // assert ACK on client
-    Assert.assertEquals("00000001", hexResponse);
+    Assertions.assertEquals(hexResponse, "00000001");
     // assert position on server's DCS consumer
     Position position = server.receiveBody(dcsConsumer, Position.class);
-    Assert.assertEquals(
+    Assertions.assertEquals(
         "356307042441013", position.getAttributes().get("org.jeets.dcs.device.uniqueid"));
-    Assert.assertEquals("356307042441013", position.getString("org.jeets.dcs.device.uniqueid"));
-    Assert.assertEquals(port, position.getInteger("org.jeets.dcs.device.port"));
-    Assert.assertEquals(protocol, position.getProtocol());
+    Assertions.assertEquals("356307042441013", position.getString("org.jeets.dcs.device.uniqueid"));
+    Assertions.assertEquals(port, position.getInteger("org.jeets.dcs.device.port"));
+    Assertions.assertEquals(protocol, position.getProtocol());
 
     hexMessage =
         "000000000000002808010000016b40d9ad80010000000000000000000000000000000103021503010101425e100000010000f22a";
     hexResponse = sendHexMessage(port, hexMessage);
-    Assert.assertEquals("00000001", hexResponse);
+    Assertions.assertEquals("00000001", hexResponse);
     position = server.receiveBody(dcsConsumer, Position.class);
-    Assert.assertEquals(
+    Assertions.assertEquals(
         "356307042441013", position.getAttributes().get("org.jeets.dcs.device.uniqueid"));
-    Assert.assertEquals("356307042441013", position.getString("org.jeets.dcs.device.uniqueid"));
-    Assert.assertEquals(port, position.getInteger("org.jeets.dcs.device.port"));
-    Assert.assertEquals(protocol, position.getProtocol());
+    Assertions.assertEquals("356307042441013", position.getString("org.jeets.dcs.device.uniqueid"));
+    Assertions.assertEquals(port, position.getInteger("org.jeets.dcs.device.port"));
+    Assertions.assertEquals(protocol, position.getProtocol());
   }
 
   @Test
@@ -127,17 +127,17 @@ public class DcsMessagesTest {
     String hexMessage =
         "002f0003142b0bae2b9b0100015de029a6000004872bb81e0387440328316a090000090703ad00fb011b0b011e0ff300001d8d";
     String hexResponse = sendHexMessage(port, hexMessage);
-    Assert.assertEquals("0002640113bc", hexResponse);
+    Assertions.assertEquals("0002640113bc", hexResponse);
 
     Position position = server.receiveBody(dcsConsumer, Position.class);
-    Assert.assertEquals(50.35477d, position.getLatitude(), 0.00001d);
-    Assert.assertEquals(7.59674d, position.getLongitude(), 0.00001d);
+    Assertions.assertEquals(50.35477d, position.getLatitude(), 0.00001d);
+    Assertions.assertEquals(7.59674d, position.getLongitude(), 0.00001d);
     // course: 126.5
-    Assert.assertEquals(
+    Assertions.assertEquals(
         "866600042245019", position.getAttributes().get("org.jeets.dcs.device.uniqueid"));
-    Assert.assertEquals("866600042245019", position.getString("org.jeets.dcs.device.uniqueid"));
-    Assert.assertEquals(protocol, "ruptela");
-    Assert.assertEquals(port, position.getInteger("org.jeets.dcs.device.port"));
+    Assertions.assertEquals("866600042245019", position.getString("org.jeets.dcs.device.uniqueid"));
+    Assertions.assertEquals("ruptela", protocol);
+    Assertions.assertEquals(position.getInteger("org.jeets.dcs.device.port"), port);
   }
 
   //  compare jeets-device and jeets-protocols redundant code
@@ -156,6 +156,6 @@ public class DcsMessagesTest {
     System.out.println("request : " + stringMessage);
     String result = (String) client.requestBody(host + port + nettyParams, stringMessage);
     System.out.println("response: " + result);
-    Assert.assertEquals("ACK: " + stringMessage, result);
+    Assertions.assertEquals("ACK: " + stringMessage, result);
   }
 }

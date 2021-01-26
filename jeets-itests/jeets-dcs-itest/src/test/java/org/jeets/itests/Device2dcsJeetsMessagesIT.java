@@ -79,7 +79,7 @@ public class Device2dcsJeetsMessagesIT {
     Jeets.Acknowledge ack = sendProtoDevice(port, protoDeviceBuilder);
     // System.out.println("received " + ack);
     // Assert.assertEquals(ack.getDeviceid(), protoDevice);
-    Assertions.assertEquals(ack.getDeviceid(), 123);
+    Assertions.assertEquals(123, ack.getDeviceid());
 
     List<Jeets.Position.Builder> posBuilderList = Samples.createSampleTrack();
     System.out.println("created list with " + posBuilderList.size() + " positions.");

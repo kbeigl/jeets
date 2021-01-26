@@ -1,7 +1,6 @@
 package org.jeets.dcs.traccar;
 
 import org.apache.camel.test.junit5.CamelTestSupport;
-// import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.traccar.Context;
@@ -15,11 +14,9 @@ public class TraccarContextTest extends CamelTestSupport {
   @Test
   public void testContextInit() throws Exception {
 
-    // TODO use TraccarSetup.. !
-    // Context.init("./setup/traccar.xml");
-    // Context.init({{{jeets.traccar.path}}}/setup/traccar.xml);
-    Context.init(
-        "C:/kris/virtex/github.jeets/jeets-models/jeets-protocols-traccar/setup/traccar.xml");
+    // TODO use TraccarSetup.. (and dcs.properties?)!
+    // work around with relativ path
+    Context.init("../../jeets-models/jeets-protocols-traccar/setup/traccar.xml");
 
     Assertions.assertNotNull(Context.getConfig(), "Config was not loaded");
     // validate if default values are overridden

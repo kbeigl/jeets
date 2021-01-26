@@ -14,13 +14,16 @@
 ** `jeets-tracker` - plain java tracker
 ** `my-jeets-client` - client artifact to create a client with a built in tracker
 
-* Camel upgrade to 3.7.1 LTS, latest Jan, 2021 (from 3.3.0)
+* Camel upgrade from 3.3.0 to `3.7.1 LTS`, Jan, 2021
 
-* Spring Boot upgrade to 2.4.2 Jan 14, 2021 (from 2.2.7.RELEASE)
+* Spring Boot upgrade from 2.2.7.RELEASE to `2.4.2` Jan 14, 2021
+** implies Spring Framework `5.3.3`
+** introducing JUnit 5 "Jupiter API"
 
 * Introduced Google Code Format/ter (in some projects)
 
-* Repository development and build with *Java-11*-OpenJDK-11.0.8-1 under Windows 10
+* Repository development and build with *Java-11*-OpenJDK-11.0.8-1 
+  (and 11.0.9-2) under Windows 10
 ** switched repository compilation from <source> and <target> to *<release>9</release>*
 
  
@@ -44,6 +47,13 @@ OS name: "windows 10", version: "10.0", arch: "amd64", family: "windows"
 [INFO] os.detected.classifier: windows-x86_64
 [INFO] ---------------------------------------------------
 -----------------
+
+WARNING: Please note that the Maven command line is the relevant build
+and should finish with a `BUILD SUCCESS`. 
+Please run `mvn clean install` as reference build
+before importing into your IDE! 
+The configuration of your IDE may raise problems 
+with respect to different Java Releases 1.8 and 9+ etc. 
 
 
 

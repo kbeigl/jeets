@@ -88,11 +88,11 @@
         <tracker-version-latest>1.3</tracker-version-latest>
         <tracker-project-latest>jeets-tracker-${tracker-version-latest}</tracker-project-latest>
 		<tracker-jar-with-dependencies>${tracker-project-latest}-jar-with-dependencies.jar</tracker-jar-with-dependencies>
-		 -->
+
         <protocols-traccar-version-latest>4.11</protocols-traccar-version-latest>
         <protocols-traccar-project-latest>jeets-protocols-traccar-${protocols-traccar-version-latest}</protocols-traccar-project-latest>
 		<protocols-traccar-jar-with-dependencies>${protocols-traccar-project-latest}-jar-with-dependencies.jar</protocols-traccar-jar-with-dependencies>
-
+		 -->
         <dcs-version-latest>1.3.1</dcs-version-latest>
         <dcs-project-latest>jeets-dcs-manager-${dcs-version-latest}</dcs-project-latest>
 		<dcs-jar>${dcs-project-latest}-exec.jar</dcs-jar>
@@ -103,9 +103,10 @@
         <device-send-folder>${jeets.repo.directory}/jeets-clients/jeets-device/send</device-send-folder>
         <data-send-folder>${jeets.repo.directory}/jeets-data/device.send</data-send-folder>
 
-		<!-- maven settings -->
+		<!-- maven settings
 		<maven.compiler.source>1.9</maven.compiler.source>
 		<maven.compiler.target>1.9</maven.compiler.target>
+		 -->
 		<maven.compiler.release>9</maven.compiler.release>
 
         <!-- maven plugins -->
@@ -158,7 +159,7 @@
 			<dependency>
 				<groupId>org.jeets</groupId>
 				<artifactId>jeets-protocols</artifactId>
-				<version>1.3</version>
+				<version>1.3.1</version>
 			</dependency>
 			<!-- 
 			<dependency>
