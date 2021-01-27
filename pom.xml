@@ -22,7 +22,7 @@
 	<groupId>org.jeets</groupId>
 	<artifactId>jeets</artifactId>
 	<!-- main JeeTS repo version -->
-	<version>1.3</version>
+	<version>1.3.1</version>
 	<packaging>pom</packaging>
 
 	<name>=== JeeTS - Java EE Tracking Software   ===</name>
@@ -48,7 +48,6 @@
 
 <!-- alternative to spring boot bom with additional plugin versioning
 	causing problems. Fall back to bom ..
-	use spring initializr to generate project with this parent
  	<parent>
 	    <groupId>org.springframework.boot</groupId>
 	    <artifactId>spring-boot-starter-parent</artifactId>
@@ -65,9 +64,9 @@
 		<!-- 'jee' branch is deprecated please check ReadMe.adoc
 		in jeets-server-jee folder for support
 		<module>jeets-server-jee</module> -->
-		<!-- <module>jeets-itests</module> -->
+		<module>jeets-itests</module>
 	 </modules>
-
+<!-- 
 	<profiles>
 	    <profile>
 	        <id>itests</id>
@@ -76,5 +75,5 @@
 			 </modules>
 	    </profile>
 	</profiles>
-
+ -->
 </project>

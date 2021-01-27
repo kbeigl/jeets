@@ -21,7 +21,8 @@ This project is a stripped down version of the http://traccar.org[Traccar GTS]'s
 
 == Introduction
 
-Wouldn't it be nice to have the `org.traccar.protocol` package as an isolated Jar file? +
+Wouldn't it be nice to have the `org.traccar.protocol` package as an isolated Jar file?
+
 This is exactly the idea of this project: an (imaginary) `protocols-traccar.jar`
 which could be part of the original Traccar build cycle in a Multi Module Project in Maven, 
 i.e. tested, standardized and fully compatible.
@@ -29,7 +30,7 @@ i.e. tested, standardized and fully compatible.
 The main effort of the code reduction was to conserve the original 
 `org.traccar.protocol` package for regression and integration tests, upgrades etc. 
 Please consult traccar.org for protocol details. 
-Anton Tananaev is doing an incredible job maintaining about 200 protocols on a daily basis.
+Anton Tananaev is doing an incredible job maintaining more than 200 protocols on a daily basis.
 
 The purpose of this project is to provide Traccar protocols for your own Tracking Application
 with all DC Servers providing the same output format:
@@ -53,7 +54,7 @@ The `org.jeets.traccar` package was added to replace the stand alone functionali
 with a generalized Setup Procedure. In the `TraccarSetup` class you will find 
 everything you need to setup Traccar and start it up in your environment.
 
-TIP: Please have a look at the `org.jeets.dcs.DcsTests` for a demonstration
+TIP: Please have a look at the `org.jeets.dcs` tests for a demonstration
 and as a quick start template as we go through the `TraccarSetup` class 
 (while you can compare the original Traccar code).
 

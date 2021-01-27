@@ -59,10 +59,7 @@ When developing GPS Tracking Components it can be very helpful
 to send messages as needed. 
 This is exactly what the JeeTS Tracker Software was created for:
 
-* link:../jeets-clients/jeets-tracker/README.adoc[jeets-tracker] +
-is a simple client software to send messages to a specified host 
-and port. Developers should find it easy to adopt this 'sender'
-to their requirements.
+* jeets-tracker was removed to be replace with the .. +
 
 * link:../jeets-clients/jeets-device/README.adoc[jeets-device] +
 is the successor of the jeets-tracker applying Camel's Producer 
@@ -120,7 +117,10 @@ Edition combined with various Frameworks and can be launched
 from command line.
 
 
-== jeets-server-jee
+== jeets-server-jee ..
+
+was depecated removed. +
+Please let us know if you require Application Server code.
 
 
 == jeets-itests

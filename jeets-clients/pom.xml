@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-parent</artifactId>
-		<version>1.3</version>
+		<version>1.3.1</version>
 		<relativePath>../jeets-parent</relativePath>
 	</parent>
 
@@ -32,12 +32,13 @@
 	<name>--- Client Tracker Components           ---</name>
 
 	<modules>
-		<!-- tracker to be replaced by device -->
-		<module>jeets-tracker</module>
+		<!-- tracker to be replaced by device
+		<module>jeets-tracker</module> 
+		<module>my-jeets-client</module>
+		-->
 		<!-- device is successor of tracker -->
 		<module>jeets-device</module>
 		<module>jeets-player</module>
-		<module>my-jeets-client</module>
 	</modules>
 
 </project>

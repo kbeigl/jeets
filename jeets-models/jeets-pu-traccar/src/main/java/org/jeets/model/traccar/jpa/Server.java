@@ -4,169 +4,196 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 @Entity
-@Table(name="tc_servers")
-@NamedQuery(name="Server.findAll", query="SELECT s FROM Server s")
+@Table(name = "tc_servers")
+@NamedQuery(name = "Server.findAll", query = "SELECT s FROM Server s")
 public class Server implements Serializable {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="tc_servers_id_gen")
-	@SequenceGenerator(name="tc_servers_id_gen", sequenceName="tc_servers_id_seq")
-	private Integer id;
-	private String attributes;
-	private String bingkey;
-	private String coordinateformat;
-	private Boolean devicereadonly;
-	private Boolean forcesettings;
-	private double latitude;
-	private Boolean limitcommands;
-	private double longitude;
-	private String map;
-	private String mapurl;
-	private String poilayer;
-	private Boolean readonly;
-	private Boolean registration;
-	private Boolean twelvehourformat;
-	private Integer zoom;
+  @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tc_servers_id_gen")
+  @SequenceGenerator(name = "tc_servers_id_gen", sequenceName = "tc_servers_id_seq")
+  private Integer id;
 
-	public Server() {
-	}
+  private String attributes;
+  private String bingkey;
+  private String coordinateformat;
+  private Boolean devicereadonly;
+  private Boolean forcesettings;
+  private double latitude;
+  private Boolean limitcommands;
+  private double longitude;
+  private String map;
+  private String mapurl;
+  private String poilayer;
+  private Boolean readonly;
+  private Boolean registration;
+  private Boolean twelvehourformat;
+  private Integer zoom;
 
-	public Integer getId() {
-		return this.id;
-	}
+  public Server() {}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+  public Integer getId() {
+    return this.id;
+  }
 
-	public String getAttributes() {
-		return this.attributes;
-	}
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-	public void setAttributes(String attributes) {
-		this.attributes = attributes;
-	}
+  public String getAttributes() {
+    return this.attributes;
+  }
 
-	public String getBingkey() {
-		return this.bingkey;
-	}
+  public void setAttributes(String attributes) {
+    this.attributes = attributes;
+  }
 
-	public void setBingkey(String bingkey) {
-		this.bingkey = bingkey;
-	}
+  public String getBingkey() {
+    return this.bingkey;
+  }
 
-	public String getCoordinateformat() {
-		return this.coordinateformat;
-	}
+  public void setBingkey(String bingkey) {
+    this.bingkey = bingkey;
+  }
 
-	public void setCoordinateformat(String coordinateformat) {
-		this.coordinateformat = coordinateformat;
-	}
+  public String getCoordinateformat() {
+    return this.coordinateformat;
+  }
 
-	public Boolean getDevicereadonly() {
-		return this.devicereadonly;
-	}
+  public void setCoordinateformat(String coordinateformat) {
+    this.coordinateformat = coordinateformat;
+  }
 
-	public void setDevicereadonly(Boolean devicereadonly) {
-		this.devicereadonly = devicereadonly;
-	}
+  public Boolean getDevicereadonly() {
+    return this.devicereadonly;
+  }
 
-	public Boolean getForcesettings() {
-		return this.forcesettings;
-	}
+  public void setDevicereadonly(Boolean devicereadonly) {
+    this.devicereadonly = devicereadonly;
+  }
 
-	public void setForcesettings(Boolean forcesettings) {
-		this.forcesettings = forcesettings;
-	}
+  public Boolean getForcesettings() {
+    return this.forcesettings;
+  }
 
-	public double getLatitude() {
-		return this.latitude;
-	}
+  public void setForcesettings(Boolean forcesettings) {
+    this.forcesettings = forcesettings;
+  }
 
-	public void setLatitude(double latitude) {
-		this.latitude = latitude;
-	}
+  public double getLatitude() {
+    return this.latitude;
+  }
 
-	public Boolean getLimitcommands() {
-		return this.limitcommands;
-	}
+  public void setLatitude(double latitude) {
+    this.latitude = latitude;
+  }
 
-	public void setLimitcommands(Boolean limitcommands) {
-		this.limitcommands = limitcommands;
-	}
+  public Boolean getLimitcommands() {
+    return this.limitcommands;
+  }
 
-	public double getLongitude() {
-		return this.longitude;
-	}
+  public void setLimitcommands(Boolean limitcommands) {
+    this.limitcommands = limitcommands;
+  }
 
-	public void setLongitude(double longitude) {
-		this.longitude = longitude;
-	}
+  public double getLongitude() {
+    return this.longitude;
+  }
 
-	public String getMap() {
-		return this.map;
-	}
+  public void setLongitude(double longitude) {
+    this.longitude = longitude;
+  }
 
-	public void setMap(String map) {
-		this.map = map;
-	}
+  public String getMap() {
+    return this.map;
+  }
 
-	public String getMapurl() {
-		return this.mapurl;
-	}
+  public void setMap(String map) {
+    this.map = map;
+  }
 
-	public void setMapurl(String mapurl) {
-		this.mapurl = mapurl;
-	}
+  public String getMapurl() {
+    return this.mapurl;
+  }
 
-	public String getPoilayer() {
-		return this.poilayer;
-	}
+  public void setMapurl(String mapurl) {
+    this.mapurl = mapurl;
+  }
 
-	public void setPoilayer(String poilayer) {
-		this.poilayer = poilayer;
-	}
+  public String getPoilayer() {
+    return this.poilayer;
+  }
 
-	public Boolean getReadonly() {
-		return this.readonly;
-	}
+  public void setPoilayer(String poilayer) {
+    this.poilayer = poilayer;
+  }
 
-	public void setReadonly(Boolean readonly) {
-		this.readonly = readonly;
-	}
+  public Boolean getReadonly() {
+    return this.readonly;
+  }
 
-	public Boolean getRegistration() {
-		return this.registration;
-	}
+  public void setReadonly(Boolean readonly) {
+    this.readonly = readonly;
+  }
 
-	public void setRegistration(Boolean registration) {
-		this.registration = registration;
-	}
+  public Boolean getRegistration() {
+    return this.registration;
+  }
 
-	public Boolean getTwelvehourformat() {
-		return this.twelvehourformat;
-	}
+  public void setRegistration(Boolean registration) {
+    this.registration = registration;
+  }
 
-	public void setTwelvehourformat(Boolean twelvehourformat) {
-		this.twelvehourformat = twelvehourformat;
-	}
+  public Boolean getTwelvehourformat() {
+    return this.twelvehourformat;
+  }
 
-	public Integer getZoom() {
-		return this.zoom;
-	}
+  public void setTwelvehourformat(Boolean twelvehourformat) {
+    this.twelvehourformat = twelvehourformat;
+  }
 
-	public void setZoom(Integer zoom) {
-		this.zoom = zoom;
-	}
+  public Integer getZoom() {
+    return this.zoom;
+  }
 
-	@Override
-	public String toString() {
-		return "Server [id=" + id + ", attributes=" + attributes + ", bingkey=" + bingkey + ", coordinateformat="
-				+ coordinateformat + ", devicereadonly=" + devicereadonly + ", forcesettings=" + forcesettings
-				+ ", latitude=" + latitude + ", limitcommands=" + limitcommands + ", longitude=" + longitude + ", map="
-				+ map + ", mapurl=" + mapurl + ", poilayer=" + poilayer + ", readonly=" + readonly + ", registration="
-				+ registration + ", twelvehourformat=" + twelvehourformat + ", zoom=" + zoom + "]";
-	}
+  public void setZoom(Integer zoom) {
+    this.zoom = zoom;
+  }
 
+  @Override
+  public String toString() {
+    return "Server [id="
+        + id
+        + ", attributes="
+        + attributes
+        + ", bingkey="
+        + bingkey
+        + ", coordinateformat="
+        + coordinateformat
+        + ", devicereadonly="
+        + devicereadonly
+        + ", forcesettings="
+        + forcesettings
+        + ", latitude="
+        + latitude
+        + ", limitcommands="
+        + limitcommands
+        + ", longitude="
+        + longitude
+        + ", map="
+        + map
+        + ", mapurl="
+        + mapurl
+        + ", poilayer="
+        + poilayer
+        + ", readonly="
+        + readonly
+        + ", registration="
+        + registration
+        + ", twelvehourformat="
+        + twelvehourformat
+        + ", zoom="
+        + zoom
+        + "]";
+  }
 }

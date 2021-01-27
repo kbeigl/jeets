@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Copyright 2020 The Java EE Tracking System - JeeTS
-    Copyright 2020 Kristof Beiglböck kbeigl@jeets.org
+    Copyright 2021 The Java EE Tracking System - JeeTS
+    Copyright 2021 Kristof Beiglböck kbeigl@jeets.org
     
     The JEE Tracking System licenses this file to you 
     under the Apache License, Version 2.0 (the "License");
@@ -21,10 +21,11 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-itests</artifactId>
-		<version>1.3</version>
+		<version>1.3.1</version>
 	</parent>
 
 	<artifactId>jeets-dcs-itest</artifactId>
+	<!-- <version>1.3</version> -->
 	<packaging>jar</packaging>
 
 	<name>jeets-dcs-itest</name>
@@ -34,22 +35,17 @@
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-dcs-manager</artifactId>
+			<version>1.3.1</version>
 		</dependency>
 		<dependency>
-<!--        
-			<groupId>org.apache.camel.springboot</groupId>
-            <artifactId>camel-spring-boot-starter-test</artifactId>
- -->
-			<!-- independent of Camel ? ? ? -->
 	 		<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<version>${spring-boot-version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-		<!-- combine with above artifactId ? -->
 			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-test-spring</artifactId>
+			<artifactId>camel-test-spring-junit5</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -71,6 +67,12 @@
 				<groupId>org.commonjava.maven.plugins</groupId>
 				<artifactId>directory-maven-plugin</artifactId>
 			</plugin>
+			<!-- ???
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+			</plugin>
+			 -->
 		</plugins>
 	</build>
 
@@ -87,32 +89,6 @@
 							<execution>
 								<id>start-device</id>
 							</execution>
-
-							<execution>
-								<!-- Tracker is initially launched for the initial test with jeets 
-									protobuffers and will be removed as soon as the Device will be able to send 
-									them. -->
-								<id>start-tracker</id>
-								<phase>pre-integration-test</phase>
-								<goals>
-									<goal>start</goal>
-								</goals>
-								<configuration>
-									<name>jeets-tracker</name>
-									<workingDir>${jeets.repo.directory}/jeets-clients/jeets-tracker/</workingDir>
-									<waitForInterrupt>false</waitForInterrupt>
-									<!-- <healthcheckUrl>http://localhost:8381/healthcheck</healthcheckUrl> -->
-									<waitAfterLaunch>10</waitAfterLaunch>
-									<processLogFile>${project.build.directory}\${project.name}\${tracker-project-latest}.log</processLogFile>
-									<arguments>
-										<argument>java</argument>
-										<argument>-jar</argument>
-										<argument>${jeets.repo.directory}/jeets-clients/jeets-tracker/target/${tracker-jar-with-dependencies}</argument>
-										<argument>-props</argument>
-									</arguments>
-								</configuration>
-							</execution>
-
 						</executions>
 					</plugin>
 				</plugins>

@@ -132,7 +132,7 @@ public abstract class BasePipelineFactory extends ChannelInitializer<Channel> {
         if (timeout > 0 && !server.isDatagram()) {
             pipeline.addLast(new IdleStateHandler(timeout, 0, 0));
         }
-        { // NetworkMessageHandler
+        {   // wrap NetworkMessage
             pipeline.addLast(new NetworkMessageHandler());
             pipeline.addLast(new StandardLoggingHandler(protocol));
             addProtocolHandlers(handler -> {

@@ -1,36 +1,35 @@
 package org.jeets.dcs.traccar;
 
-import org.apache.camel.test.junit4.CamelTestSupport;
-import org.junit.Test;
+import org.apache.camel.test.junit5.CamelTestSupport;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.traccar.Context;
 
 public class TraccarContextTest extends CamelTestSupport {
 
-    /**
-     * Initialize static traccar.Context. The Context class is static and can be
-     * accessed from Traccar's original code.
-     */
-    @Test
-    public void testContextInit() throws Exception {
+  /**
+   * Initialize static traccar.Context. The Context class is static and can be accessed from
+   * Traccar's original code.
+   */
+  @Test
+  public void testContextInit() throws Exception {
 
-//      TODO use TraccarSetup.. !
-//      Context.init("./setup/traccar.xml");
-//      Context.init({{{jeets.traccar.path}}}/setup/traccar.xml);
-        Context.init("C:/kris/virtex/github.jeets/jeets-models/jeets-protocols-traccar/setup/traccar.xml");
-        
-        assertNotNull("Config was not loaded", Context.getConfig());
-//      validate if default values are overridden
-//      check if ports are available and other required props
+    // TODO use TraccarSetup.. (and dcs.properties?)!
+    // work around with relativ path
+    Context.init("../../jeets-models/jeets-protocols-traccar/setup/traccar.xml");
 
-        assertNotNull("DeviceManager was not loaded", Context.getDeviceManager());
-        assertNotNull("IdentityManager was not loaded", Context.getIdentityManager());
+    Assertions.assertNotNull(Context.getConfig(), "Config was not loaded");
+    // validate if default values are overridden
+    // check if ports are available and other required props
 
-        assertNotNull("MediaManager was not loaded", Context.getMediaManager());
-        System.out.println("media.path: " + Context.getConfig().getString("media.path"));
+    Assertions.assertNotNull(Context.getDeviceManager(), "DeviceManager was not loaded");
+    Assertions.assertNotNull(Context.getIdentityManager(), "IdentityManager was not loaded");
 
-        assertNotNull("ConnectionManager was not loaded", Context.getConnectionManager());
-//      ServerManager should NOT be started (in addition to camel-netty)
-//      assertNull("ServerManager should NOT be loaded", Context.getServerManager());
-    }
+    Assertions.assertNotNull(Context.getMediaManager(), "MediaManager was not loaded");
+    System.out.println("media.path: " + Context.getConfig().getString("media.path"));
 
+    Assertions.assertNotNull(Context.getConnectionManager(), "ConnectionManager was not loaded");
+    // ServerManager should NOT be started (in addition to camel-netty)
+    // assertNull("ServerManager should NOT be loaded", Context.getServerManager());
+  }
 }

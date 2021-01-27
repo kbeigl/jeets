@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Copyright 2020 The Java EE Tracking System - JeeTS
-    Copyright 2020 Kristof Beiglböck kbeigl@jeets.org
+    Copyright 2021 The Java EE Tracking System - JeeTS
+    Copyright 2021 Kristof Beiglböck kbeigl@jeets.org
     
     The JEE Tracking System licenses this file to you 
     under the Apache License, Version 2.0 (the "License");
@@ -21,10 +21,11 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-server-etl</artifactId>
-		<version>1.3</version>
+		<version>1.3.1</version>
 	</parent>
 
 	<artifactId>jeets-dcs-manager</artifactId>
+	<!-- <version>1.3</version>  -->
 
 	<name>jeets-dcs-manager</name>
 	<description>DCS manager with Spring/Boot/Netty4/Starter and Camel Endpoint
@@ -38,13 +39,14 @@
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-protocols</artifactId>
+			<!-- <version>1.3.1</version> -->
 		</dependency>
 		<!-- above already should include below? doesn't work without? -->
 		<dependency>
 			<groupId>org.jeets</groupId>
 			<artifactId>jeets-protocols-traccar</artifactId>
 			<!-- remove explicit version, define in parent pom -->
-			<version>4.10</version>
+			<version>4.11</version>
 		</dependency>
 
 		<dependency>
@@ -58,11 +60,9 @@
 			<version>${spring-boot-version}</version>
 			<scope>test</scope>
 		</dependency>
-		
-		<!-- only for ParseTraccarPropsTest ? remove ? -->
 		<dependency>
 			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-test-spring</artifactId>
+			<artifactId>camel-test-spring-junit5</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -103,6 +103,10 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>properties-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>com.coveo</groupId>
+				<artifactId>fmt-maven-plugin</artifactId>
 			</plugin>
 
 		</plugins>

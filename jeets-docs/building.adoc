@@ -61,34 +61,32 @@ level components.
 
 [source,text]
 -----------------
-[INFO] === JeeTS - Java EE Tracking Software   === 1.3 .... SUCCESS [  0.017 s]
-[INFO] --- JeeTS - Global Definitions          --- 1.3 .... SUCCESS [  0.016 s]
-[INFO] --- JeeTS - Dataformats and Models      --- 1.3 .... SUCCESS [  0.011 s]
-[INFO] jeets-pu-traccar 4.2 ............................... SUCCESS [  6.875 s]
-[INFO] jeets-pu-gtfs 1.1.1 ................................ SUCCESS [  0.404 s]
-[INFO] jeets-protocols-traccar 4.10 ....................... SUCCESS [ 25.930 s]
-[INFO] jeets-protocols 1.3 ................................ SUCCESS [  3.991 s]
-[INFO] --- Client Tracker Components           --- 1.3 .... SUCCESS [  0.009 s]
-[INFO] jeets-tracker 1.3 .................................. SUCCESS [ 20.701 s]
-[INFO] jeets-device 1.3 ................................... SUCCESS [  2.103 s]
-[INFO] jeets-player 1.2.0 ................................. SUCCESS [  0.372 s]
-[INFO] my-jeets-client 1.2.3 .............................. SUCCESS [ 10.719 s]
-[INFO] --- ETL - Extract Transform and Load    --- 1.3 .... SUCCESS [  0.011 s]
-[INFO] jeets-dcs-manager 1.3 .............................. SUCCESS [  2.780 s]
-[INFO] my-etl-traccar 1.3-SNAPSHOT ........................ SUCCESS [  2.022 s]
-[INFO] jeets-etl 1.3 ...................................... SUCCESS [  3.746 s]
-[INFO] jeets-dcs-amq 1.3 .................................. SUCCESS [ 17.809 s]
-[INFO] --- JSE - Server Tracking Components    --- 1.3 .... SUCCESS [  0.009 s]
-[INFO] jeets-db-managers 1.3 .............................. SUCCESS [  0.227 s]
-[INFO] jeets-geo-router 1.3 ............................... SUCCESS [  1.418 s]
-[INFO] --- Integration Tests                   --- 1.3 .... SUCCESS [  0.009 s]
-[INFO] jeets-wli-itest 1.3 ................................ SUCCESS [ 33.651 s]
-[INFO] jeets-dcs-itest 1.3 ................................ SUCCESS [ 22.436 s]
+[INFO] === JeeTS - Java EE Tracking Software   === 1.3.1 .. SUCCESS [  0.683 s]
+[INFO] --- JeeTS - Global Definitions          --- 1.3.1 .. SUCCESS [  0.149 s]
+[INFO] --- JeeTS - Dataformats and Models      --- 1.3.1 .. SUCCESS [  0.072 s]
+[INFO] jeets-pu-traccar 4.2 ............................... SUCCESS [ 13.409 s]
+[INFO] jeets-pu-gtfs 1.1.1 ................................ SUCCESS [  1.341 s]
+[INFO] jeets-protocols-traccar 4.11 ....................... SUCCESS [ 53.387 s]
+[INFO] jeets-protocols 1.3.1 .............................. SUCCESS [ 21.231 s]
+[INFO] --- Client Tracker Components           --- 1.3.1 .. SUCCESS [  0.098 s]
+[INFO] jeets-device 1.3.1 ................................. SUCCESS [  4.201 s]
+[INFO] jeets-player 1.2.0 ................................. SUCCESS [  0.745 s]
+[INFO] --- ETL - Extract Transform and Load    --- 1.3.1 .. SUCCESS [  0.056 s]
+[INFO] jeets-dcs-manager 1.3.1 ............................ SUCCESS [ 15.559 s]
+[INFO] my-etl-traccar 1.3-SNAPSHOT ........................ SUCCESS [  3.988 s]
+[INFO] jeets-etl 1.3.1 .................................... SUCCESS [ 24.343 s]
+[INFO] jeets-dcs-amq 1.3 .................................. SUCCESS [ 49.423 s]
+[INFO] --- JSE - Server Tracking Components    --- 1.3.1 .. SUCCESS [  0.046 s]
+[INFO] jeets-db-managers 1.3 .............................. SUCCESS [ 15.686 s]
+[INFO] jeets-geo-router 1.3 ............................... SUCCESS [ 15.492 s]
+[INFO] --- Integration Tests                   --- 1.3.1 .. SUCCESS [  0.099 s]
+[INFO] jeets-wli-itest 1.3.1 .............................. SUCCESS [  0.845 s]
+[INFO] jeets-dcs-itest 1.3.1 .............................. SUCCESS [  3.209 s]
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  02:37 min
-[INFO] Finished at: 2020-08-16T19:50:44+02:00
+[INFO] Total time:  03:46 min
+[INFO] Finished at: 2021-01-26T11:51:34+01:00
 [INFO] ------------------------------------------------------------------------
 -----------------
 
@@ -97,10 +95,11 @@ developer can restrict subsequent builds by going into lower levels
 and into the project folders to compile only this one project.
 
 WARNING: Be aware that `SNAPSHOT` releases may be volatile and the repository
-         may _not_ compile successful, if the stable releases were not 
-         preinstalled in your local Maven Repository. +
-         Please always compile the last major release, 
-         before you work with `-SNAPSHOT` versions!
+may _not_ compile successful, if the stable releases were not 
+preinstalled in your local Maven Repository. +
+Please always compile the last major release, 
+before you work with `-SNAPSHOT` versions!
+
 
 [[Building-Anormalbuildwithoutrunningtests]]
 == A build with integration tests
@@ -119,7 +118,7 @@ to run (relevant) integration tests _before_ they release something.
 _After a successful build_ the command line 
 [source,text]
 -------------------------------
-mvn verify -Pitests
+mvn <clean> verify -Pitests
 -------------------------------
 skips the regular unit tests and previous compilations to verify the existence
 of the latest artifacts in the `/target` folders of the relevant projects.
@@ -127,12 +126,14 @@ Then it runs the integration tests by launching various artifacts
 and now you should see the Integration Tests at the end of the listing 
 [source,text]
 -----------------
-[INFO] --- Integration Tests                   --- 1.2.4 .. SUCCESS [  0.235 s]
-[INFO] tracker2dcs-itest 1.2.3 ............................ SUCCESS [ 44.626 s]
-[INFO] device2protocols-traccar-itest 1.2.4 ............... SUCCESS [ 53.691 s]
-[INFO] device2dcs-traccar-itest 1.2.4 ..................... SUCCESS [01:23 min]
+[INFO] --- Integration Tests                   --- 1.3.1 .. SUCCESS [  0.600 s]
+[INFO] jeets-wli-itest 1.3.1 .............................. SUCCESS [ 36.405 s]
+[INFO] jeets-dcs-itest 1.3.1 .............................. SUCCESS [ 49.140 s]
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  01:27 min
+[INFO] Finished at: 2021-01-26T11:56:02+01:00
 [INFO] ------------------------------------------------------------------------
 -----------------
 
@@ -155,9 +156,9 @@ dynamic variables:
 	mvn resources:resources -Djeets.jdbc.url="jdbc:postgresql://localhost:5432/traccar4.1"
 
 Variables can be included in your resources. 
-	These variables, denoted by the `${...}` delimiters, 
-	can come from the system properties, your project properties, 
-	from your filter resources and from the command line.
+These variables, denoted by the `${...}` delimiters, 
+can come from the system properties, your project properties, 
+from your filter resources and from the command line.
 	
 	<!-- replace default settings in repo root (without external path) -->
 	mvn initialize -Djeets.properties.file=mycompany.properties 
@@ -206,24 +207,3 @@ mvn dependency:resolve -Dclassifier=sources
 // -------------------------------
 // mvn -Psourcecheck clean install
 // -------------------------------
-
-// [[Building-ExecutingunittestsusingEkstazi]]
-// == Executing unit tests using Ekstazi
-
-// Normally, when you execute the unit tests during your development cycle
-// for a particular component, you are executing all the tests each time.
-// This may become inefficient, when you are changing one class and the
-// effect of this change is limited within the component having many unit
-// tests. Ekstazi is a regression testing tool that can keep track of the
-// test results and the changed classes so that unaffected tests can be
-// skipped during the subsequent testing. For more details of Ekstazi,
-// please refer to the http://www.ekstazi.org[Ekstazi] page.
-
-// To use Ekstazi, you can run the tests with the maven profile ekstazi.
-
-// [source,text]
-// ------------------
-// mvn test -Pekstazi
-// ------------------
-
-

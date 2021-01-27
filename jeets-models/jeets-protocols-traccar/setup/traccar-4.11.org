@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE properties SYSTEM 'http://java.sun.com/dtd/properties.dtd'>
+
+<properties>
+
+    <entry key='config.default'>./conf/default.xml</entry>
+
+    <!--
+
+    This is the main configuration file. All your configuration parameters should be placed in this file.
+
+    Default configuration parameters are located in the "default.xml" file. You should not modify it to avoid issues
+    with upgrading to a new version. Parameters in the main config file override values in the default file. Do not
+    remove "config.default" parameter from this file unless you know what you are doing.
+
+    For list of available parameters see following page: https://www.traccar.org/configuration-file/
+
+    -->
+
+<<<<<<< .merge_file_a04300
+  
+<entry key='database.driver'>org.postgresql.Driver</entry>
+<entry key='database.url'>jdbc:postgresql://127.0.0.1:5432/gts</entry>
+<entry key='database.user'>gts</entry>
+<entry key='database.password'>GTS@2020</entry>
+
+
+<entry key='geocoder.enable'>true</entry>
+<entry key='geocoder.type'>opencage</entry>
+<entry key='geocoder.url'>http://api.opencagedata.com/geocode/v1</entry>
+<entry key='geocoder.key'>9d8c16c386b04ed895f988e23c7ad2ea</entry>
+
+=======
+    <entry key='database.driver'>org.h2.Driver</entry>
+    <entry key='database.url'>jdbc:h2:./data/database</entry>
+    <entry key='database.user'>sa</entry>
+    <entry key='database.password'></entry>
+>>>>>>> .merge_file_a16316
+
+</properties>

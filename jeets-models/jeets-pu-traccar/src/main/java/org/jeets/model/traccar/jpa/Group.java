@@ -1,198 +1,201 @@
 package org.jeets.model.traccar.jpa;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.util.List;
+import javax.persistence.*;
 
 @Entity
-@Table(name="tc_groups")
-@NamedQuery(name="Group.findAll", query="SELECT g FROM Group g")
+@Table(name = "tc_groups")
+@NamedQuery(name = "Group.findAll", query = "SELECT g FROM Group g")
 public class Group implements Serializable {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="tc_groups_id_gen")
-	@SequenceGenerator(name="tc_groups_id_gen", sequenceName="tc_groups_id_seq")
-	private Integer id;
-	private String attributeString;
-	private String name;
+  @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tc_groups_id_gen")
+  @SequenceGenerator(name = "tc_groups_id_gen", sequenceName = "tc_groups_id_seq")
+  private Integer id;
 
-	public Group() {
-	}
+  private String attributeString;
+  private String name;
 
-	@OneToMany(mappedBy="group")
-	private List<Device> devices;
+  public Group() {}
 
-	@ManyToMany
-	@JoinTable(name = "tc_group_attribute", 
-		joinColumns = { @JoinColumn(name = "groupid") }, 
-		inverseJoinColumns = { @JoinColumn(name = "attributeid") })
-	private List<Attribute> attributes;
+  @OneToMany(mappedBy = "group")
+  private List<Device> devices;
 
-	@ManyToMany
-	@JoinTable(name = "tc_group_command", 
-		joinColumns = { @JoinColumn(name = "groupid") }, 
-		inverseJoinColumns = { @JoinColumn(name = "commandid") })
-	private List<Command> commands;
+  @ManyToMany
+  @JoinTable(
+      name = "tc_group_attribute",
+      joinColumns = {@JoinColumn(name = "groupid")},
+      inverseJoinColumns = {@JoinColumn(name = "attributeid")})
+  private List<Attribute> attributes;
 
-	@ManyToMany
-	@JoinTable(name = "tc_group_driver", 
-		joinColumns = { @JoinColumn(name = "groupid") }, 
-		inverseJoinColumns = { @JoinColumn(name = "driverid") })
-	private List<Driver> drivers;
+  @ManyToMany
+  @JoinTable(
+      name = "tc_group_command",
+      joinColumns = {@JoinColumn(name = "groupid")},
+      inverseJoinColumns = {@JoinColumn(name = "commandid")})
+  private List<Command> commands;
 
-	@ManyToMany
-	@JoinTable(name = "tc_group_geofence", 
-		joinColumns = { @JoinColumn(name = "groupid") }, 
-		inverseJoinColumns = { @JoinColumn(name = "geofenceid") })
-	private List<Geofence> geofences;
+  @ManyToMany
+  @JoinTable(
+      name = "tc_group_driver",
+      joinColumns = {@JoinColumn(name = "groupid")},
+      inverseJoinColumns = {@JoinColumn(name = "driverid")})
+  private List<Driver> drivers;
 
-	@ManyToMany(mappedBy="groups")
-	private List<Maintenance> maintenances;
+  @ManyToMany
+  @JoinTable(
+      name = "tc_group_geofence",
+      joinColumns = {@JoinColumn(name = "groupid")},
+      inverseJoinColumns = {@JoinColumn(name = "geofenceid")})
+  private List<Geofence> geofences;
 
-	@ManyToMany(mappedBy="groups")
-	private List<Notification> notifications;
+  @ManyToMany(mappedBy = "groups")
+  private List<Maintenance> maintenances;
 
-	@ManyToOne
-	@JoinColumn(name="groupid")
-	private Group group;
+  @ManyToMany(mappedBy = "groups")
+  private List<Notification> notifications;
 
-	@OneToMany(mappedBy="group")
-	private List<Group> groups;
+  @ManyToOne
+  @JoinColumn(name = "groupid")
+  private Group group;
 
-	@ManyToMany(mappedBy="groups")
-	private List<User> users;
+  @OneToMany(mappedBy = "group")
+  private List<Group> groups;
 
-	public Integer getId() {
-		return this.id;
-	}
+  @ManyToMany(mappedBy = "groups")
+  private List<User> users;
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+  public Integer getId() {
+    return this.id;
+  }
 
-	public String getAttributeString() {
-		return attributeString;
-	}
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-	public void setAttributeString(String attributeString) {
-		this.attributeString = attributeString;
-	}
+  public String getAttributeString() {
+    return attributeString;
+  }
 
-	public String getName() {
-		return this.name;
-	}
+  public void setAttributeString(String attributeString) {
+    this.attributeString = attributeString;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public String getName() {
+    return this.name;
+  }
 
-	public List<Device> getDevices() {
-		return this.devices;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public void setDevices(List<Device> devices) {
-		this.devices = devices;
-	}
+  public List<Device> getDevices() {
+    return this.devices;
+  }
 
-	public Device addDevice(Device device) {
-		getDevices().add(device);
-		device.setGroup(this);
+  public void setDevices(List<Device> devices) {
+    this.devices = devices;
+  }
 
-		return device;
-	}
+  public Device addDevice(Device device) {
+    getDevices().add(device);
+    device.setGroup(this);
 
-	public Device removeDevice(Device device) {
-		getDevices().remove(device);
-		device.setGroup(null);
+    return device;
+  }
 
-		return device;
-	}
+  public Device removeDevice(Device device) {
+    getDevices().remove(device);
+    device.setGroup(null);
 
-	public List<Attribute> getAttributes() {
-		return this.attributes;
-	}
+    return device;
+  }
 
-	public void setAttributes(List<Attribute> attributes) {
-		this.attributes = attributes;
-	}
+  public List<Attribute> getAttributes() {
+    return this.attributes;
+  }
 
-	public List<Command> getCommands() {
-		return this.commands;
-	}
+  public void setAttributes(List<Attribute> attributes) {
+    this.attributes = attributes;
+  }
 
-	public void setCommands(List<Command> commands) {
-		this.commands = commands;
-	}
+  public List<Command> getCommands() {
+    return this.commands;
+  }
 
-	public List<Driver> getDrivers() {
-		return this.drivers;
-	}
+  public void setCommands(List<Command> commands) {
+    this.commands = commands;
+  }
 
-	public void setDrivers(List<Driver> drivers) {
-		this.drivers = drivers;
-	}
+  public List<Driver> getDrivers() {
+    return this.drivers;
+  }
 
-	public List<Geofence> getGeofences() {
-		return this.geofences;
-	}
+  public void setDrivers(List<Driver> drivers) {
+    this.drivers = drivers;
+  }
 
-	public void setGeofences(List<Geofence> geofences) {
-		this.geofences = geofences;
-	}
+  public List<Geofence> getGeofences() {
+    return this.geofences;
+  }
 
-	public List<Maintenance> getMaintenances() {
-		return this.maintenances;
-	}
+  public void setGeofences(List<Geofence> geofences) {
+    this.geofences = geofences;
+  }
 
-	public void setMaintenances(List<Maintenance> maintenances) {
-		this.maintenances = maintenances;
-	}
+  public List<Maintenance> getMaintenances() {
+    return this.maintenances;
+  }
 
-	public List<Notification> getNotifications() {
-		return this.notifications;
-	}
+  public void setMaintenances(List<Maintenance> maintenances) {
+    this.maintenances = maintenances;
+  }
 
-	public void setNotifications(List<Notification> notifications) {
-		this.notifications = notifications;
-	}
+  public List<Notification> getNotifications() {
+    return this.notifications;
+  }
 
-	public Group getGroup() {
-		return this.group;
-	}
+  public void setNotifications(List<Notification> notifications) {
+    this.notifications = notifications;
+  }
 
-	public void setGroup(Group group) {
-		this.group = group;
-	}
+  public Group getGroup() {
+    return this.group;
+  }
 
-	public List<Group> getGroups() {
-		return this.groups;
-	}
+  public void setGroup(Group group) {
+    this.group = group;
+  }
 
-	public void setGroups(List<Group> groups) {
-		this.groups = groups;
-	}
+  public List<Group> getGroups() {
+    return this.groups;
+  }
 
-	public Group addGroup(Group group) {
-		getGroups().add(group);
-		group.setGroup(this);
+  public void setGroups(List<Group> groups) {
+    this.groups = groups;
+  }
 
-		return group;
-	}
+  public Group addGroup(Group group) {
+    getGroups().add(group);
+    group.setGroup(this);
 
-	public Group removeGroup(Group group) {
-		getGroups().remove(group);
-		group.setGroup(null);
+    return group;
+  }
 
-		return group;
-	}
+  public Group removeGroup(Group group) {
+    getGroups().remove(group);
+    group.setGroup(null);
 
-	public List<User> getUsers() {
-		return this.users;
-	}
+    return group;
+  }
 
-	public void setUsers(List<User> users) {
-		this.users = users;
-	}
+  public List<User> getUsers() {
+    return this.users;
+  }
 
+  public void setUsers(List<User> users) {
+    this.users = users;
+  }
 }

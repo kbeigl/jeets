@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Copyright 2020 The Java EE Tracking System - JeeTS
-    Copyright 2020 Kristof Beiglböck kbeigl@jeets.org
+    Copyright 2021 The Java EE Tracking System - JeeTS
+    Copyright 2021 Kristof Beiglböck kbeigl@jeets.org
     
     The JEE Tracking System licenses this file to you 
     under the Apache License, Version 2.0 (the "License");
@@ -22,11 +22,12 @@
 	<parent>
 		<groupId>org.jeets</groupId>
 		<artifactId>jeets-parent</artifactId>
-		<version>1.3</version>
+		<version>1.3.1</version>
 		<relativePath>../jeets-parent</relativePath>
 	</parent>
 
 	<artifactId>jeets-server-jse</artifactId>
+	<version>1.3.1</version>
 	<packaging>pom</packaging>
 
 	<name>--- JSE - Server Tracking Components    ---</name>
