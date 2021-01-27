@@ -200,8 +200,8 @@ If you want to register only a few servers you can find use code of the
 link:../../jeets-models/jeets-protocols-traccar/jeets-protocols-traccar.adoc#_2_cameltestsupport_with_netty[single server test]
 and easily hard wire it yourself - as little exercise.
 For this (development) purpose the DCS Manager
-provides the `@Configuration class Config`
-where you can place your `@Bean` definitions.
+provides the class `@Configuration Config`
+where you can place your `@Bean` definitions. +
 But we're up to more. 
 
 We want to replace the original `org.traccar.ServerManager` 
@@ -218,12 +218,8 @@ we still want to control what's going when, where and how.
 The steps to take for a Traccar Setup were described in the 
 link:../../jeets-models/jeets-protocols-traccar/jeets-protocols-traccar.adoc#_traccar_setup[protocols-traccar] 
 project which is imported into the DCS manager as the main prerequisite.
-You can run and compare the tests
-[source,java]
-----
-jeets-protocols-traccar org.jeets.dcs.DcsTests
-jeets-dcs-manager       org.jeets.dcs.DcsSpringBootTests
-----
+You can run and compare the tests in the `org.jeets.dcs` *test packages*
+of the two projects `jeets-protocols-traccar` and `jeets-dcs-manager`
 to see the Setup Process in action and better follow the steps below.
 
 In the DCS manager the `org.jeets.dcs.Main` class 
@@ -346,8 +342,6 @@ to the installed and configured DCS Manager.
 
 This integration test should serve as a guideline for JeeTS development, 
 testing and as a proof of concept before checking in new code.
-
-Please proceed to the next section to compile, run and test your protocols.
 
 
 == Compile and Run

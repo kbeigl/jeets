@@ -2,6 +2,7 @@
 
 = jeets-dcs-traccar to my-etl-traccar
 
+
 You are not interested in JeeTS, Netty and Camel and simply want to code in plain old Java? +
 You simply want to receive GPS POJOs from Traccar?
 
@@ -14,8 +15,9 @@ Then you should use Maven Archetyping to setup your own Traccar ETL Microservice
 	 - use your original traccar xml files for ports and protocols
 	- attaches the dcs exe
 
-	common missconception
-	DCS does not know your system, so you HAVE TO implement it ..
+//	common missconception
+//	DCS does not know your system, so you HAVE TO implement it ..
+
 
 == Setup
 
@@ -27,40 +29,40 @@ change to any directory on your PC
 	                       -DarchetypeArtifactId=my-etl-traccar
 	                       -DarchetypeVersion=1.3-SNAPSHOT
 
-	Define value for property 'groupId': de.ptc
-	Define value for property 'artifactId': ptc-etl
+	Define value for property 'groupId': de.mycompany
+	Define value for property 'artifactId': mycompany-etl
 	Define value for property 'version' 1.0-SNAPSHOT: :
-	Define value for property 'package' de.ptc: : de.ptc
+	Define value for property 'package' de.mycompany: : de.mycompany
 
 	Using following parameters for creating project from Archetype: my-etl-traccar:1.3-SNAPSHOT
 	----------------------------------------------------------------------------
-	Parameter: groupId, Value: de.ptc
-	Parameter: artifactId, Value: ptc-etl
+	Parameter: groupId, Value: de.mycompany
+	Parameter: artifactId, Value: mycompany-etl
 	Parameter: version, Value: 1.0-SNAPSHOT
-	Parameter: package, Value: de.ptc
-	Parameter: packageInPathFormat, Value: de/ptc
-	Parameter: package, Value: de.ptc
+	Parameter: package, Value: de.mycompany
+	Parameter: packageInPathFormat, Value: de/mycompany
+	Parameter: package, Value: de.mycompany
 	Parameter: version, Value: 1.0-SNAPSHOT
-	Parameter: groupId, Value: de.ptc
-	Parameter: artifactId, Value: ptc-etl
-	Project created from Archetype in dir: C:\kris\virtex\my-etl-traccar-trial\ptc-etl
+	Parameter: groupId, Value: de.mycompany
+	Parameter: artifactId, Value: mycompany-etl
+	Project created from Archetype in dir: C:\kris\virtex\my-etl-traccar-trial\mycompany-etl
 	------------------------------------------------------------------------
 	BUILD SUCCESS
 	------------------------------------------------------------------------
 
-	C:\kris\virtex\my-etl-traccar-trial>cd ptc-etl
-	C:\kris\virtex\my-etl-traccar-trial\ptc-etl>mvn clean install
-	---------------------------< de.ptc:ptc-etl >---------------------------
-	Building ptc-etl 1.0-SNAPSHOT
+	C:\kris\virtex\my-etl-traccar-trial>cd mycompany-etl
+	C:\kris\virtex\my-etl-traccar-trial\mycompany-etl>mvn clean install
+	---------------------------< de.mycompany:mycompany-etl >---------------------------
+	Building mycompany-etl 1.0-SNAPSHOT
 	--------------------------------[ jar ]---------------------------------
 	
 Now you should see your jar file in the target folder (vital!)
 
-	C:\kris\virtex\my-etl-traccar-trial\ptc-etl>run-dcs2etl.cmd
+	C:\kris\virtex\my-etl-traccar-trial\mycompany-etl>run-dcs2etl.cmd
 
 	org.jeets.dcs.traccar.Main               : Starting Main on DESKTOP-DB3MIII with PID 12764 
-	     (C:\kris\virtex\my-etl-traccar-trial\ptc-etl\jeets-dcs-traccar-1.3-SNAPSHOT-exec.jar
-		 started by E540-User in C:\kris\virtex\my-etl-traccar-trial\ptc-etl)
+	     (C:\kris\virtex\my-etl-traccar-trial\mycompany-etl\jeets-dcs-traccar-1.3-SNAPSHOT-exec.jar
+		 started by E540-User in C:\kris\virtex\my-etl-traccar-trial\mycompany-etl)
 	                                         :                                                               
 	c.n.SingleTCPNettyServerBootstrapFactory : ServerBootstrap binding to 0.0.0.0:5046
 	o.a.c.component.netty4.NettyConsumer     : Netty consumer bound to: 0.0.0.0:5046
